@@ -26,6 +26,12 @@ There are no build, lint, or test commands to run here.
   - `documentación/` — the prórroga (extension) request form, plus thesis-proposal material built with
     Claude Code: a comparative document of 5 candidate thesis ideas, a detailed proposal for the chosen
     one, and a companion slide deck (`.pptx`) for advisors.
+  - `arquitectura/` — **the live design doc for the approved thesis topic**, now in active use: an
+    entry-point vision doc, ADRs under `decisiones/` (one file per architecture decision, sequentially
+    numbered, never edited retroactively — a superseding decision gets a new ADR), and diagrams under
+    `diagramas/` written as Mermaid inside Markdown (versionable as text, not static images). See
+    `arquitectura/README.md` for the conventions. This is where architecture work should land going
+    forward, not `documentación/` (which is the frozen, already-approved proposal).
   - `referencias/` — other students' theses, kept as reference models.
   - `tesis/` — the institution's official thesis-structure guide.
 
@@ -39,8 +45,8 @@ There are no build, lint, or test commands to run here.
   aren't backed by a stated source. Numbers/dates tied to a cutoff are historical snapshots, not things
   to silently recompute or extrapolate. The other profile docs in `experiencia/` don't carry this
   constraint.
-- The chosen thesis topic in `itz/documentación/` (a repo-agnostic skill + infrastructure that uses user
-  stories and prototypes as context to automate code review and test generation) was deliberately
-  generalized away from any single employer's system, specifically so it doesn't need third-party data
-  authorization — when editing that material, don't reintroduce employer-specific names or metrics into
-  it.
+- The chosen thesis topic (a repo-agnostic skill + infrastructure that uses user stories and prototypes
+  as context to automate code review and test generation) was deliberately generalized away from any
+  single employer's system, specifically so it doesn't need third-party data authorization — when
+  editing `itz/documentación/` or `itz/arquitectura/`, don't reintroduce employer-specific names or
+  metrics into it.
