@@ -26,12 +26,15 @@ There are no build, lint, or test commands to run here.
   - `documentación/` — the prórroga (extension) request form, plus thesis-proposal material built with
     Claude Code: a comparative document of 5 candidate thesis ideas, a detailed proposal for the chosen
     one, and a companion slide deck (`.pptx`) for advisors.
-  - `arquitectura/` — **the live design doc for the approved thesis topic**, now in active use: an
-    entry-point vision doc, ADRs under `decisiones/` (one file per architecture decision, sequentially
-    numbered, never edited retroactively — a superseding decision gets a new ADR), and diagrams under
-    `diagramas/` written as Mermaid inside Markdown (versionable as text, not static images). See
-    `arquitectura/README.md` for the conventions. This is where architecture work should land going
-    forward, not `documentación/` (which is the frozen, already-approved proposal).
+  - `arquitectura/` — **the live design doc for "Telar"**, the system the approved thesis topic builds
+    (an orchestrator + skills that turn a HU into verified, reviewed code — see `00-vision-general.md`).
+    "Telar" names the tool; "Proyecto" (ADR-0009) names the target application Telar builds/evaluates —
+    don't conflate the two names. Structure: an entry-point vision doc, ADRs under `decisiones/` (one
+    file per architecture decision, sequentially numbered, never edited retroactively — a superseding
+    decision gets a new ADR), per-skill specs under `skills/`, and diagrams under `diagramas/` written
+    as Mermaid inside Markdown (versionable as text, not static images). See `arquitectura/README.md`
+    for the conventions. This is where architecture work should land going forward, not
+    `documentación/` (which is the frozen, already-approved proposal).
   - `referencias/` — other students' theses, kept as reference models.
   - `tesis/` — the institution's official thesis-structure guide.
 

@@ -1,9 +1,11 @@
-# Documentación de arquitectura — proyecto de tesis
+# Documentación de arquitectura — Telar
 
-Carpeta para documentar el diseño de la solución del proyecto de tesis aprobado por los asesores:
-**Skill + infraestructura para automatizar revisión de código y pruebas a partir de historias de
-usuario y prototipos** (ver la propuesta completa en
+Carpeta para documentar el diseño de **Telar**, el sistema del proyecto de tesis aprobado por los
+asesores: un orquestador y un conjunto de skills que, a partir de historias de usuario, automatizan
+generación de pruebas, diseño, código, revisión y validación (ver la propuesta completa en
 [`../documentación/propuesta-tesis-idea-elegida.pdf`](../documentación/propuesta-tesis-idea-elegida.pdf)).
+Telar es la herramienta; el **Proyecto** es la aplicación objetivo que Telar construye o evalúa
+(ADR-0009) — no confundir los dos nombres al leer esta carpeta.
 
 Esta carpeta es la fuente viva del diseño: la propuesta en `documentación/` describe el *qué* y el
 *por qué* a nivel de anteproyecto; aquí se documenta el *cómo*, y se espera que evolucione conforme
