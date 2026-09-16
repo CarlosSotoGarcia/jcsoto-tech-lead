@@ -154,3 +154,6 @@ Esta especificación cubre lo que ya está decidido. Lo que sigue pendiente en `
 (formato de serialización de la configuración, mecanismo de notificación a aprobadores, mecanismo
 concreto de autenticación — proveedor propio, OAuth, SSO — ADR-0031, etc.) es trabajo de diseño de
 detalle/implementación, no de esta especificación funcional.
+
+El perfil de pantallas/módulos concretos que implementan estos requisitos está en
+[`pantallas-plataforma-telar.md`](pantallas-plataforma-telar.md).

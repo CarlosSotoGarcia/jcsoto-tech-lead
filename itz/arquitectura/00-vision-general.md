@@ -104,9 +104,10 @@
   varias HUs en paralelo dentro de un Proyecto, salvo que una dependa explícitamente de otra
   (`depende_de` a nivel HU).
 - [ADR-0031](decisiones/0031-stack-tecnologico-de-la-plataforma-loom.md) — la plataforma Loom (ver
-  [especificación de la plataforma](especificacion-plataforma-telar.md)) se construye como monorepo:
-  backend en Python + Pydantic, MongoDB con driver compatible con Firestore de GCP, frontend en
-  Angular; login obligatorio para todo actor humano.
+  [especificación de la plataforma](especificacion-plataforma-telar.md) y su
+  [perfil de pantallas](pantallas-plataforma-telar.md)) se construye como monorepo: backend en
+  Python + Pydantic, MongoDB con driver compatible con Firestore de GCP, frontend en Angular; login
+  obligatorio para todo actor humano.
 
 ## Problema
 
