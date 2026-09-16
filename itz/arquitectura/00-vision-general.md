@@ -112,6 +112,10 @@
   concreto de la credencial de la cuenta de desarrollo (ADR-0013) para repositorios en GitHub: PAT de
   grano fino desde una cuenta de servicio como mecanismo por defecto, GitHub App como evolución cuando
   Loom opera muchos Proyectos a la vez.
+- [ADR-0033](decisiones/0033-primera-implementacion-skill-01-descubrimiento.md) — primera skill del
+  pipeline (no solo de la plataforma) implementada en código real: descubrimiento y análisis de HU
+  para fuente Jira, con Claude vía tool-use estructurado; `spec.md` persistido en Mongo mientras no
+  hay integración de escritura al repositorio de control.
 
 ## Problema
 

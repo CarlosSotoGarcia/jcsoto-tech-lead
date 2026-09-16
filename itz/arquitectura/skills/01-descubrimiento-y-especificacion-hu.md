@@ -129,11 +129,15 @@ resuelta en silencio — por cada HU procesable encontrada en la fuente configur
   [ADR-0011](../decisiones/0011-supuestos-no-bloquean-se-resuelven-en-revision-de-codigo.md): el
   pipeline avanza sin bloquear, y el supuesto se resuelve visiblemente en la revisión de código (S5).
 - Cómo se detectan HUs ya procesadas antes vs. nuevas/modificadas, para no reprocesar todo el backlog
-  en cada corrida (¿fecha de modificación en la fuente?, ¿hash del contenido?).
-- Formato mínimo esperado de un archivo Markdown de HU cuando la fuente es `markdown` — ¿una
-  convención propia del sistema, o se acepta cualquier estructura razonable?
-- Mapeo exacto de campos de Jira (resumen, descripción, criterios de aceptación — ¿campo custom o
-  convención dentro de la descripción?) al `spec.md` interno.
+  en cada corrida — sigue abierto; la primera implementación (ADR-0033) reprocesa todo el backlog en
+  cada corrida y empareja por `fuente_ref` para no duplicar, pero no distingue "sin cambios" de
+  "modificada".
+- Formato mínimo esperado de un archivo Markdown de HU cuando la fuente es `markdown` — sigue abierto;
+  fuente `markdown` todavía no está implementada (ADR-0033).
+- ~~Mapeo exacto de campos de Jira... al `spec.md` interno~~ — resuelto en
+  [ADR-0033](../decisiones/0033-primera-implementacion-skill-01-descubrimiento.md): resumen y
+  descripción (aplanada desde Atlassian Document Format) se pasan al LLM, que hace el análisis
+  completo — no hay mapeo campo-a-campo de criterios de aceptación, se infieren del texto.
 - Mapeo exacto de un Issue de GitHub (título, cuerpo, labels, sub-issues) al `spec.md` interno, y qué
   convención de labels/milestones se asume cuando el repositorio no usa sub-issues nativos (ADR-0010).
 - Modo de ejecución: ¿corrida bajo demanda sobre todo el backlog, o descubrimiento continuo/incremental
