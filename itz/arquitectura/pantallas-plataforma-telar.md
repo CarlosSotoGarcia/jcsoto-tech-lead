@@ -67,6 +67,10 @@ pantallas de solo lectura (lista/detalle de HU, reportes).
   4. **Arquitectura base** (solo si modo `con_arquitectura`): referencia al `plan.md` existente
      (RF-06).
   5. **Fuente de HUs**: ver 3.4 — puede ir integrada aquí o diferirse a la pantalla de detalle.
+- **Ayuda visual:** cada campo lleva un tooltip explicando qué es y de dónde sale (p. ej. "Repositorio
+  de control" aclara que es un repo aparte del código, ADR-0012). Junto al campo de cuenta de
+  desarrollo, un panel plegable "¿Cómo doy de alta esta cuenta?" con los pasos concretos para generar
+  el PAT de grano fino (ADR-0032) — la plataforma no genera el secreto por el usuario, solo lo guía.
 - **Acciones:** Guardar (crea el Proyecto); Cancelar.
 
 ### 3.4 Detalle / configuración de Proyecto

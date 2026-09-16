@@ -108,6 +108,10 @@
   [perfil de pantallas](pantallas-plataforma-telar.md)) se construye como monorepo: backend en
   Python + Pydantic, MongoDB con driver compatible con Firestore de GCP, frontend en Angular; login
   obligatorio para todo actor humano.
+- [ADR-0032](decisiones/0032-mecanismo-de-credencial-de-la-cuenta-de-desarrollo.md) — mecanismo
+  concreto de la credencial de la cuenta de desarrollo (ADR-0013) para repositorios en GitHub: PAT de
+  grano fino desde una cuenta de servicio como mecanismo por defecto, GitHub App como evolución cuando
+  Loom opera muchos Proyectos a la vez.
 
 ## Problema
 
