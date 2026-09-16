@@ -37,9 +37,14 @@ abiertas:
   de sus campos estructurados — **no** se escribe todavía al repositorio de control real (ADR-0012).
   Es una simplificación deliberada, no un cambio de diseño: el contrato de `spec.md` se respeta al
   pie de la letra, solo cambia dónde vive mientras no exista integración de escritura a Git.
-- **Credenciales globales de entorno**: igual que ADR-0032, mientras no exista un gestor de secretos
-  real por Proyecto, el backend lee `LOOM_JIRA_EMAIL` / `LOOM_JIRA_API_TOKEN` /
-  `LOOM_ANTHROPIC_API_KEY` de variables de entorno globales del backend, no por Proyecto.
+- **Credenciales de Jira por Proyecto, no globales**: cada Proyecto trae su propia cuenta de Jira
+  (correo + API token, capturados en su formulario) — refuerza ADR-0009: la fuente de HUs es
+  configuración pluggable *por Proyecto*, no un ajuste único del backend. El API token se guarda tal
+  cual (sin gestor de secretos real todavía, mismo pendiente que ADR-0032) pero nunca se vuelve a
+  exponer por la API una vez guardado: se trata como un campo de contraseña — el formulario lo deja en
+  blanco al editar, y dejarlo en blanco conserva el valor ya guardado. La única credencial global del
+  backend es `LOOM_ANTHROPIC_API_KEY`, porque el LLM de análisis es una capacidad de Loom mismo, no
+  una credencial de un sistema externo del cliente.
 - **Sin re-descubrimiento incremental todavía**: cada corrida de "Descubrir HUs" reprocesa todo el
   backlog de Jira; para no duplicar HUs ya existentes, se empareja por `fuente_ref` (la clave del issue)
   y se sobrescribe el análisis — no hay detección de "solo lo nuevo/modificado" (pendiente original de
@@ -64,5 +69,5 @@ abiertas:
 - Integración de escritura real a Git para el repositorio de control (bloquea fuente `markdown` y el
   cierre de la deuda técnica de persistencia mencionada arriba).
 - Re-descubrimiento incremental (detectar HUs nuevas/modificadas sin reprocesar todo el backlog).
-- Gestor de secretos real por Proyecto, en vez de credenciales globales de entorno (comparte el mismo
-  pendiente que ADR-0032).
+- Gestor de secretos real (el API token de Jira se guarda tal cual en Mongo, sin cifrar — comparte el
+  mismo pendiente que ADR-0032).
