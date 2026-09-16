@@ -15,6 +15,16 @@ que una persona interactúa: da de alta los Proyectos sobre los que Telar va a o
 opera cada uno, y muestra qué está pasando y qué requiere su atención — sin ejecutar ella misma ninguna
 fase del pipeline (eso es trabajo del orquestador y las skills).
 
+## 1.1 Stack tecnológico (ADR-0031)
+
+Loom se construye como **monorepo** con backend y frontend separados:
+
+| Capa | Tecnología |
+|---|---|
+| Backend | Python + Pydantic |
+| Base de datos | MongoDB, con driver compatible con Firestore de GCP |
+| Frontend | Angular |
+
 ## 2. Actores
 
 | Actor | Qué hace en la plataforma |
@@ -25,6 +35,17 @@ fase del pipeline (eso es trabajo del orquestador y las skills).
 | **Orquestador (actor automatizado)** | Lee y escribe el estado de HUs/paquetes de trabajo en el repositorio de control; es quien realmente "usa" la configuración que la plataforma expone — no es un usuario humano, pero es el consumidor principal de lo que la plataforma gestiona. |
 
 ## 3. Requisitos funcionales
+
+### 3.0 Autenticación (ADR-0015, ADR-0031)
+
+- **RF-00**: Todo actor humano (Administrador de Proyecto, Aprobador autorizado, Observador) debe
+  iniciar sesión para usar la plataforma — no hay acceso anónimo.
+- **RF-00b**: El login es **obligatorio** para aprobar un PR cuando `requiere_revision_manual` está
+  activo (ADR-0015): la plataforma debe poder verificar que la persona autenticada pertenece a
+  `usuarios_autorizados_a_aprobar` antes de registrar la aprobación. Sin esta verificación de
+  identidad, la aprobación no queda válida.
+- **RF-00c**: Consultar avance/reportes (rol Observador) también requiere sesión iniciada, aunque no
+  tenga permisos de configuración — la plataforma no expone estado de Proyectos sin autenticación.
 
 ### 3.1 Gestión de Proyectos (ADR-0009, ADR-0014, ADR-0017)
 
@@ -118,6 +139,7 @@ fase del pipeline (eso es trabajo del orquestador y las skills).
 
 | Requisito | ADR(s) |
 |---|---|
+| RF-00, RF-00b, RF-00c | ADR-0015, ADR-0031 |
 | RF-01 a RF-07 | ADR-0009, ADR-0013, ADR-0014, ADR-0017 |
 | RF-08, RF-09 | ADR-0009, ADR-0010, ADR-0019 |
 | RF-10 a RF-13 | ADR-0015, ADR-0016 |
@@ -129,5 +151,6 @@ fase del pipeline (eso es trabajo del orquestador y las skills).
 ## 7. Pendiente
 
 Esta especificación cubre lo que ya está decidido. Lo que sigue pendiente en `00-vision-general.md`
-(formato de serialización de la configuración, mecanismo de notificación a aprobadores, framework de
-UI, etc.) es trabajo de diseño de detalle/implementación, no de esta especificación funcional.
+(formato de serialización de la configuración, mecanismo de notificación a aprobadores, mecanismo
+concreto de autenticación — proveedor propio, OAuth, SSO — ADR-0031, etc.) es trabajo de diseño de
+detalle/implementación, no de esta especificación funcional.
