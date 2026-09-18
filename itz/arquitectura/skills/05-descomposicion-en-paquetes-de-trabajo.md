@@ -78,7 +78,17 @@ externa equivalente — `id_externo` queda `null` y `paquetes/PT-0N.md` en el re
 6. Deja la fase de la HU en `descompuesta` — el orquestador puede empezar a despachar paquetes de
    trabajo individuales a la skill de generación de código.
 
+## Estado de implementación
+
+Implementada para Proyectos en modo `nuevo` a partir de la arquitectura fundacional aprobada (no de un
+`plan.md` por HU): planea el esqueleto (grupo `BASE`) y el orden de las HUs, y parte cada HU en
+paquetes — ADR-0045. El modo extensión, las rondas de fixes y la creación en Jira/GitHub siguen
+pendientes.
+
 ## ADRs relacionados
+
+- [ADR-0045](../decisiones/0045-skill-05-descomposicion-desde-arquitectura-fundacional.md) — adaptación
+  al flujo fundacional.
 
 - [ADR-0004](../decisiones/0004-flujo-orientado-a-hus-generacion-de-codigo-y-autorrevision.md) —
   descomposición en paquetes de trabajo como fase del flujo.
@@ -107,7 +117,7 @@ explícitas en `depende_de`.
 ## Pendientes propios de esta skill
 
 - Qué tan grande puede ser un paquete de trabajo antes de considerarse que debería partirse más — falta
-  un criterio de "tamaño de PR razonable".
+  un criterio de "tamaño de PR razonable" (hoy: 1 a 4 paquetes por HU, un solo objetivo cada uno).
 - ~~Si `depende_de` implica orden estricto o generación en paralelo~~ — resuelto en
   [ADR-0029](../decisiones/0029-orden-secuencial-de-paquetes-de-trabajo-dependientes.md): orden
   estricto (p. ej. backend antes que frontend cuando el frontend depende de él).

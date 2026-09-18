@@ -162,6 +162,10 @@
   modo fundacional: un documento de arquitectura por repositorio (capas, módulos, modelo de datos,
   frontend, despliegue, decisiones y preguntas abiertas, citando las HUs) que la persona aprueba antes
   de descomponer; la Fase 2 corre casos de prueba y arquitectura.
+- [ADR-0045](decisiones/0045-skill-05-descomposicion-desde-arquitectura-fundacional.md) — skill 05 desde la
+  arquitectura aprobada: planea el esqueleto (grupo BASE) y el orden de las HUs, y parte cada HU en
+  paquetes de una sola capa y un solo repositorio que cubren todos sus TCs; `tasks.md` y `PT-0N.md` en
+  el repositorio de control y la lista en la pestaña Desarrollo.
 
 ## Problema
 
