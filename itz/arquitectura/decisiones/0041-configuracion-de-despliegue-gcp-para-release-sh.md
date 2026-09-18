@@ -51,7 +51,7 @@ gcloud run deploy "$SERVICE" --project "$PROJECT_ID" --region "$REGION" --image 
 5. **Guía en la plataforma**: la sección incluye un paso a paso de lo que hay que preparar en GCP
    (proyecto con facturación, APIs `run`, `artifactregistry`, `cloudbuild`, `iam`,
    `iamcredentials`, `sts`; repositorio de Artifact Registry; service account con
-   `run.admin`, `artifactregistry.writer`, `cloudbuild.builds.editor`, `iam.serviceAccountUser` y,
+   `run.admin`, `artifactregistry.writer`, `cloudbuild.builds.editor`, `iam.serviceAccountUser` (ADR-0042 agrega `storage.objectAdmin` y `serviceusage.serviceUsageConsumer`) y,
    si aplica, `firebasehosting.admin`) y muestra qué campos faltan para poder armarlo.
 
 ## Consecuencias
@@ -66,8 +66,9 @@ gcloud run deploy "$SERVICE" --project "$PROJECT_ID" --region "$REGION" --image 
 
 ## Pendiente
 
-- La skill que genera `release.sh`, el workflow de GitHub Actions o el trigger de Cloud Build, y los
-  escribe en el repositorio.
+- ~~La skill que genera `release.sh`, el workflow o el trigger~~ — resuelto en
+  [ADR-0042](0042-skill-de-release-generacion-de-release-sh.md); sigue pendiente publicarlos en el
+  repositorio del código.
 - Variables de entorno y secretos de la aplicación (cadena de conexión a la base de datos, etc.).
 - Base de datos gestionada (Cloud SQL), redes y dominios: no cubiertos.
 - App Engine, GKE y Cloud Storage + CDN aparecen en el formulario como "próximamente".

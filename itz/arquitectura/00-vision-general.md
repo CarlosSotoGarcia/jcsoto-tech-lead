@@ -150,6 +150,10 @@
   Implementación captura lo necesario para armar el release.sh de GCP (proyecto, región, servicios,
   Artifact Registry, disparador, autenticación —Workload Identity Federation recomendada— y solo
   *nombres* de secretos), con una guía de lo que hay que preparar en GCP.
+- [ADR-0042](decisiones/0042-skill-de-release-generacion-de-release-sh.md) — skill 10 (Fase 4): genera
+  `release.sh`, el workflow de GitHub Actions o `cloudbuild.yaml` y un LEEME con los pasos únicos de
+  GCP, de forma determinista y sin credenciales; quedan en el repositorio de control, pendiente
+  publicarlos en el repositorio del código.
 
 ## Problema
 

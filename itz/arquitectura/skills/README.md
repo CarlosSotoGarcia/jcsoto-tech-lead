@@ -38,6 +38,10 @@ sola vez — evitar inventar campos que ninguna skill vaya a usar todavía.
 9. [09-generacion-de-fixes.md](09-generacion-de-fixes.md) — ante un TC fallido en smoke testing, crea
    un paquete de trabajo de fix vinculado a su origen y lo reenvía al ciclo normal de código y revisión.
 
+10. [10-generacion-de-release.md](10-generacion-de-release.md) — Fase 4: a partir de la configuración de
+    despliegue en GCP, genera `release.sh`, su disparador (GitHub Actions o Cloud Build) y un LEEME con
+    los pasos de una sola vez; determinista, sin credenciales (ADR-0042).
+
 Con el orquestador (`00`), quedan documentadas las 9 skills de fase y el despachador que las coordina —
 el diseño de Telar está completo a este nivel de detalle. Lo que sigue son los pendientes ya anotados en
 cada ficha y en `00-vision-general.md` (framework de agentes, mecanismo de indexación de código, etc.),
