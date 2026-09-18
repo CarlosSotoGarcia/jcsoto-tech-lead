@@ -114,12 +114,17 @@
   Loom opera muchos Proyectos a la vez.
 - [ADR-0033](decisiones/0033-primera-implementacion-skill-01-descubrimiento.md) — primera skill del
   pipeline (no solo de la plataforma) implementada en código real: descubrimiento y análisis de HU
-  para fuente Jira, con Claude vía tool-use estructurado; `spec.md` persistido en Mongo mientras no
-  hay integración de escritura al repositorio de control.
+  para fuente Jira, con Claude vía tool-use estructurado; `spec.md` persistido en Mongo, con la
+  escritura al repositorio de control resuelta después en ADR-0035.
 - [ADR-0034](decisiones/0034-fases-de-desarrollo-y-configuracion-minima-por-fase.md) — las 9 skills se
   agrupan en 4 fases de desarrollo (Requerimientos, Diseño, Desarrollo, Implementación — esta última
   incluye Test/Smoke Test), cada una con su propia configuración mínima; activar un Proyecto en la
   plataforma ya no exige toda la configuración, solo la de la Fase 1.
+- [ADR-0035](decisiones/0035-carpeta-local-estatica-como-repositorio-de-control.md) — para la
+  implementación actual, el repositorio de control deja de ser una URL de Git declarada por la
+  persona (ADR-0017) y pasa a ser una carpeta local estática y no configurable
+  (`loom/loom_target/<proyecto_id>/`), con su propio repo Git local por Proyecto que Loom inicializa
+  y commitea — sin remoto todavía.
 
 ## Problema
 
@@ -237,7 +242,8 @@ Esta sección se vacía a medida que las decisiones se documentan como ADRs en
 - ~~Cómo se declara/valida el modo de arranque~~ — resuelto en ADR-0017: se declara explícito, sin
   validar contra el estado real del repo (el diagnóstico de ADR-0007 ya tolera la discrepancia).
 - ~~Si el repositorio de control se declara explícito o se crea por default~~ — resuelto en ADR-0017:
-  explícito y obligatorio, igual que los repos objetivo.
+  explícito y obligatorio, igual que los repos objetivo; para la implementación actual, ADR-0035
+  reemplaza esto por una carpeta local estática, ninguna de las dos.
 - ~~Formato de la arquitectura ya definida en modo `con_arquitectura`~~ — resuelto en ADR-0017: el
   mismo formato SDD (`plan.md`) que produce la skill 04 en modo fundacional, no un formato nuevo.
 - Mecanismo de reconstrucción de `spec.md`/`plan.md`/`tasks.md` para HUs/código preexistentes en modo

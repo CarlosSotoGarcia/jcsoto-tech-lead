@@ -54,8 +54,9 @@ Loom se construye como **monorepo** con backend y frontend separados:
 - **RF-02**: Registrar los repositorios objetivo del Proyecto (N backend/frontend), cada uno con tipo,
   URL y rama base (ADR-0005).
 - **RF-03**: Registrar la URL del ambiente de desarrollo del Proyecto (ADR-0005).
-- **RF-04**: Registrar el repositorio de control del Proyecto — explícito, obligatorio, no se crea por
-  default (ADR-0012, ADR-0017).
+- **RF-04**: ~~Registrar el repositorio de control del Proyecto~~ — para la implementación actual ya no
+  aplica: el repositorio de control es una carpeta local estática que Loom gestiona por su cuenta, no
+  un campo que la persona registre (ADR-0012, ADR-0017, ADR-0035).
 - **RF-05**: Registrar la credencial de la cuenta de desarrollo dedicada, como referencia a un secreto
   gestionado aparte — nunca en texto plano (ADR-0013, ADR-0017). Para repositorios en GitHub, el
   mecanismo concreto recomendado es un PAT de grano fino desde una cuenta de servicio, con los permisos

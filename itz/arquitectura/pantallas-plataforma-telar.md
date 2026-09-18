@@ -60,15 +60,15 @@ pantallas de solo lectura (lista/detalle de HU, reportes).
 - **Contenido:** formulario por secciones (no necesariamente wizard de varios pasos, puede ser un
   formulario con acordeones):
   1. **General**: nombre, tipo (`web`), modo de arranque (`nuevo`/`con_arquitectura`/`avanzado`).
-  2. **Repositorios**: N repos objetivo (tipo, URL, rama base — RF-02), repositorio de control
-     (RF-04), URL del ambiente de desarrollo (RF-03).
+  2. **Repositorios**: N repos objetivo (tipo, URL, rama base — RF-02), URL del ambiente de
+     desarrollo (RF-03). El repositorio de control ya no se declara aquí — es una carpeta local
+     estática que Loom gestiona por su cuenta (ADR-0035).
   3. **Cuenta de desarrollo**: referencia al secreto gestionado aparte, nunca la credencial en texto
      plano (RF-05, RNF-02).
   4. **Arquitectura base** (solo si modo `con_arquitectura`): referencia al `plan.md` existente
      (RF-06).
   5. **Fuente de HUs**: ver 3.4 — puede ir integrada aquí o diferirse a la pantalla de detalle.
-- **Ayuda visual:** cada campo lleva un tooltip explicando qué es y de dónde sale (p. ej. "Repositorio
-  de control" aclara que es un repo aparte del código, ADR-0012). Junto al campo de cuenta de
+- **Ayuda visual:** cada campo lleva un tooltip explicando qué es y de dónde sale. Junto al campo de cuenta de
   desarrollo, un panel plegable "¿Cómo doy de alta esta cuenta?" con los pasos concretos para generar
   el PAT de grano fino (ADR-0032) — la plataforma no genera el secreto por el usuario, solo lo guía.
 - **Acciones:** Guardar (crea el Proyecto); Cancelar.
