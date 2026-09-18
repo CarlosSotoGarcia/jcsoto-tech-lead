@@ -46,3 +46,7 @@ externo.
   distinguible en los commits/PRs.
 - Pendiente (implementación, no de esta tesis): flujo de intercambio de JWT→token de instalación para
   la variante GitHub App, si se decide implementarla más adelante.
+
+> **Nota posterior:** en la implementación, [ADR-0043](0043-copias-locales-cuenta-de-desarrollo-y-publicacion-por-pr.md)
+> sustituye la "referencia a un secreto" por usuario y token capturados por Proyecto (guardados sin
+> exponerse por la API, como el token de Jira), mientras no exista un gestor de secretos real.

@@ -154,6 +154,10 @@
   `release.sh`, el workflow de GitHub Actions o `cloudbuild.yaml` y un LEEME con los pasos únicos de
   GCP, de forma determinista y sin credenciales; quedan en el repositorio de control, pendiente
   publicarlos en el repositorio del código.
+- [ADR-0043](decisiones/0043-copias-locales-cuenta-de-desarrollo-y-publicacion-por-pr.md) — la cuenta
+  de desarrollo (usuario + token de GitHub) se captura por Proyecto en la pestaña Desarrollo, con
+  botón para probar conexión y permisos; los repositorios se clonan en `loom/loom_repos/` y se trabaja
+  en ramas dentro de worktrees; primer uso: publicar el release.sh por Pull Request.
 
 ## Problema
 

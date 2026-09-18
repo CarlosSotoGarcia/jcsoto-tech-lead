@@ -53,7 +53,8 @@ de texto), así que **no puede clonar los repositorios del código ni escribir e
 
 ## Pendiente
 
-- Publicar los archivos en el repositorio del código (PR con la cuenta de desarrollo).
+- ~~Publicar los archivos en el repositorio del código (PR con la cuenta de desarrollo)~~ — resuelto en
+  [ADR-0043](0043-copias-locales-cuenta-de-desarrollo-y-publicacion-por-pr.md).
 - Verificar el despliegue tras el release (ADR-0025) y el smoke testing contra el ambiente.
 - Variables de entorno y secretos de la aplicación, base de datos gestionada, dominios.
 - Otros destinos (App Engine, GKE, Cloud Storage + CDN) y otras nubes.

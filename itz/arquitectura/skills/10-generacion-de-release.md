@@ -55,7 +55,8 @@ válidos y ninguno contiene una llave o token.
 
 ## Pendientes propios de esta skill
 
-- Publicar los archivos en el repositorio del código vía PR (requiere el mecanismo real de la
-  cuenta de desarrollo).
+- ~~Publicar los archivos en el repositorio del código vía PR~~ — resuelto en
+  [ADR-0043](../decisiones/0043-copias-locales-cuenta-de-desarrollo-y-publicacion-por-pr.md): botón
+  "Publicar en el repositorio (PR)", con la cuenta de desarrollo del Proyecto.
 - Destinos distintos de Cloud Run (App Engine, GKE) y otras nubes.
 - Que el orquestador la despache como parte del flujo de la Fase 4.
