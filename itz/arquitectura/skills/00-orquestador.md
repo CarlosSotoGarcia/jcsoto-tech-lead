@@ -73,6 +73,11 @@ fusionados"). En este modo:
   entrada (p. ej. no se puede pedir "solo revisión de código" sobre algo que nunca tuvo `plan.md`) — si
   no existen porque el trabajo se hizo fuera de Telar antes de adoptarlo, hace falta reconstruirlos
   primero (pendiente, ver ADR-0014).
+- Cada fase exige solo *su propia* configuración de Proyecto, no toda — las 9 skills se agrupan en 4
+  fases de desarrollo (Requerimientos, Diseño, Desarrollo, Implementación) con su config mínima
+  documentada en [ADR-0034](../decisiones/0034-fases-de-desarrollo-y-configuracion-minima-por-fase.md).
+  Si se pide despachar una fase sin su config lista, el orquestador falla señalando específicamente qué
+  le falta a esa fase, no un checklist del Proyecto completo.
 
 ## Modo fundacional (Proyecto en modo `nuevo`, ADR-0014)
 

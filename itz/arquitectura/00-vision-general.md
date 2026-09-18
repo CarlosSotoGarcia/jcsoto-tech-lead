@@ -116,6 +116,10 @@
   pipeline (no solo de la plataforma) implementada en código real: descubrimiento y análisis de HU
   para fuente Jira, con Claude vía tool-use estructurado; `spec.md` persistido en Mongo mientras no
   hay integración de escritura al repositorio de control.
+- [ADR-0034](decisiones/0034-fases-de-desarrollo-y-configuracion-minima-por-fase.md) — las 9 skills se
+  agrupan en 4 fases de desarrollo (Requerimientos, Diseño, Desarrollo, Implementación — esta última
+  incluye Test/Smoke Test), cada una con su propia configuración mínima; activar un Proyecto en la
+  plataforma ya no exige toda la configuración, solo la de la Fase 1.
 
 ## Problema
 
