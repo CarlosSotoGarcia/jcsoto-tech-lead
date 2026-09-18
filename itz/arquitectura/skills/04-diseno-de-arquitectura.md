@@ -118,6 +118,9 @@ justificarlo.
   cómo se documenta la arquitectura de este mismo sistema, ADR-0001) o si `plan.md` basta.
 - Formato exacto del artefacto de arquitectura fundacional (modo fundacional, ADR-0014): ¿un `plan.md`
   especial a nivel de repositorio, o algo distinto?
-- Cómo se decide el stack/framework en modo fundacional cuando el tipo de Proyecto (ADR-0009, solo
-  "web" por ahora) no basta para elegirlo por sí solo (web se puede construir con muchas combinaciones
-  de stack).
+- ~~Cómo se decide el stack/framework en modo fundacional cuando el tipo de Proyecto (ADR-0009, solo
+  "web" por ahora) no basta para elegirlo por sí solo~~ — resuelto en
+  [ADR-0038](../decisiones/0038-stack-microservicios-y-autenticacion-declarados-en-fase-2.md): la
+  persona puede declarar tecnología de backend/frontend, número de microservicios y tipo de
+  autenticación al configurar el Proyecto; cuando vienen llenos, esta skill los usa como restricción
+  en vez de decidir desde cero.

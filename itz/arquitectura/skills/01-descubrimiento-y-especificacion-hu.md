@@ -101,8 +101,18 @@ depende_de: []               # IDs de otras HUs de las que esta depende, si apli
    testing, ADR-0026) — una HU con `tiene_supuestos: true` puede necesitar una regla especial de qué
    hacer con esos supuestos antes de avanzar (ver Pendientes).
 
+## Paso adicional en Proyectos nuevos
+
+Cuando `modo_arranque` es `nuevo`, al terminar de especificar todas las HUs la skill hace un último
+análisis como arquitecto sobre lo leído y guarda una **propuesta de stack** (tecnología y
+herramientas de backend y frontend, autenticación, estructura de repositorios, microservicios) con
+su justificación, que la pantalla de Diseño precarga (ADR-0039). No genera archivos SDD; es estado
+del Proyecto, y su falla no invalida el descubrimiento.
+
 ## ADRs relacionados
 
+- [ADR-0039](../decisiones/0039-catalogo-de-stack-y-propuesta-del-arquitecto.md) — propuesta de
+  stack al terminar el descubrimiento en Proyectos nuevos.
 - [ADR-0008](../decisiones/0008-adopcion-de-sdd-y-nombres-de-artefactos.md) — formato y ubicación de
   `spec.md`.
 - [ADR-0009](../decisiones/0009-proyecto-como-entidad-de-configuracion-y-fuente-de-hus-pluggable.md) —
@@ -128,10 +138,10 @@ resuelta en silencio — por cada HU procesable encontrada en la fuente configur
 - ~~Qué hace el orquestador con una HU marcada `tiene_supuestos: true`~~ — resuelto en
   [ADR-0011](../decisiones/0011-supuestos-no-bloquean-se-resuelven-en-revision-de-codigo.md): el
   pipeline avanza sin bloquear, y el supuesto se resuelve visiblemente en la revisión de código (S5).
-- Cómo se detectan HUs ya procesadas antes vs. nuevas/modificadas, para no reprocesar todo el backlog
-  en cada corrida — sigue abierto; la primera implementación (ADR-0033) reprocesa todo el backlog en
-  cada corrida y empareja por `fuente_ref` para no duplicar, pero no distingue "sin cambios" de
-  "modificada".
+- ~~Cómo se detectan HUs ya procesadas antes vs. nuevas/modificadas~~ — resuelto en
+  [ADR-0040](../decisiones/0040-deteccion-de-cambios-en-la-fuente-y-regeneracion-selectiva.md): huella
+  del título+descripción de la fuente; revisión sin LLM y regeneración solo de lo nuevo/modificado o
+  de HUs puntuales. Sigue abierto el descubrimiento automático (polling/webhook).
 - Formato mínimo esperado de un archivo Markdown de HU cuando la fuente es `markdown` — sigue abierto;
   fuente `markdown` todavía no está implementada (ADR-0033).
 - ~~Mapeo exacto de campos de Jira... al `spec.md` interno~~ — resuelto en

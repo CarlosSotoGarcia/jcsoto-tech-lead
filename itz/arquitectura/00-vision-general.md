@@ -125,6 +125,31 @@
   persona (ADR-0017) y pasa a ser una carpeta local estática y no configurable
   (`loom/loom_target/<proyecto_id>/`), con su propio repo Git local por Proyecto que Loom inicializa
   y commitea — sin remoto todavía.
+- [ADR-0036](decisiones/0036-ambiente-de-desarrollo-solo-hasta-fase-4.md) — el ambiente de
+  desarrollo que ADR-0034 exigía tanto en Fase 2 como en Fase 4 se queda solo como requisito de
+  Fase 4 (Implementación, donde realmente se usa para smoke testing) — Fase 2 deja de pedirlo, para
+  cualquier modo de arranque.
+- [ADR-0037](decisiones/0037-bitacora-y-resumen-de-ejecucion-por-fase-en-plataforma.md) — la
+  plataforma expone el `git log` del repositorio de control como bitácora (sin duplicarlo aparte),
+  y el Proyecto gana un campo operativo de última ejecución por fase; la pantalla de Proyecto pasa
+  de wizard a tabs, con los datos generales fijos arriba y cada tab mostrando su resumen, su botón
+  de play y su configuración juntos.
+- [ADR-0038](decisiones/0038-stack-microservicios-y-autenticacion-declarados-en-fase-2.md) — el
+  Proyecto gana campos opcionales en Fase 2 (nube de despliegue —solo GCP habilitado—, monorepo o
+  multirepo, tecnología de backend, framework y plantilla de frontend, número de microservicios,
+  tipo de autenticación) para que skill 04, en modo fundacional, no tenga que adivinar el stack
+  cuando la persona ya lo sabe.
+- [ADR-0039](decisiones/0039-catalogo-de-stack-y-propuesta-del-arquitecto.md) — la tecnología del
+  Proyecto pasa a un catálogo con herramientas dependientes (Java → Spring Boot, Hibernate, JPA...),
+  y al terminar la Fase 1 de un Proyecto nuevo un análisis de arquitecto propone el stack con su
+  justificación (citando las HUs) y lo precarga en la pestaña Diseño.
+- [ADR-0040](decisiones/0040-deteccion-de-cambios-en-la-fuente-y-regeneracion-selectiva.md) — cada
+  HU guarda la huella de su fuente en Jira; la plataforma revisa sin LLM qué HUs son nuevas o
+  cambiaron y permite regenerar solo esas (o una puntual), dejando el historial en la bitácora.
+- [ADR-0041](decisiones/0041-configuracion-de-despliegue-gcp-para-release-sh.md) — la pestaña
+  Implementación captura lo necesario para armar el release.sh de GCP (proyecto, región, servicios,
+  Artifact Registry, disparador, autenticación —Workload Identity Federation recomendada— y solo
+  *nombres* de secretos), con una guía de lo que hay que preparar en GCP.
 
 ## Problema
 
