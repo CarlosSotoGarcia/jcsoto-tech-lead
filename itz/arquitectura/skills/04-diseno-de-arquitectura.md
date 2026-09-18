@@ -78,7 +78,15 @@ Cuerpo:
 4. Identifica qué repositorio(s) de los configurados necesita tocar esta HU.
 5. Escribe `plan.md` y deja la fase en `planificada`.
 
+## Estado de implementación
+
+Implementada la variante **fundacional** (Proyecto `nuevo`) — ADR-0044. El modo extensión sigue
+pendiente y depende del diagnóstico (skill 03).
+
 ## ADRs relacionados
+
+- [ADR-0044](../decisiones/0044-skill-04-arquitectura-fundacional-documento-y-aprobacion.md) — formato del
+  documento, aprobación y ejecución en la Fase 2.
 
 - [ADR-0002](../decisiones/0002-alcance-de-infraestructura-diseno-no-despliegue.md) — el mecanismo de
   indexación de código del que depende esta skill (diseño, no infraestructura desplegada).
@@ -116,8 +124,10 @@ justificarlo.
   un mini-RFC?
 - Si esta skill también debería registrar sus propias decisiones como ADRs del Proyecto (paralelo a
   cómo se documenta la arquitectura de este mismo sistema, ADR-0001) o si `plan.md` basta.
-- Formato exacto del artefacto de arquitectura fundacional (modo fundacional, ADR-0014): ¿un `plan.md`
-  especial a nivel de repositorio, o algo distinto?
+- ~~Formato exacto del artefacto de arquitectura fundacional (modo fundacional, ADR-0014)~~ — resuelto
+  en [ADR-0044](../decisiones/0044-skill-04-arquitectura-fundacional-documento-y-aprobacion.md): un
+  Markdown por repositorio en `arquitectura/<repositorio>.md`, con aprobación humana antes de
+  descomponer. Implementado solo el modo fundacional.
 - ~~Cómo se decide el stack/framework en modo fundacional cuando el tipo de Proyecto (ADR-0009, solo
   "web" por ahora) no basta para elegirlo por sí solo~~ — resuelto en
   [ADR-0038](../decisiones/0038-stack-microservicios-y-autenticacion-declarados-en-fase-2.md): la

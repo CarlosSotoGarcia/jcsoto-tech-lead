@@ -158,6 +158,10 @@
   de desarrollo (usuario + token de GitHub) se captura por Proyecto en la pestaña Desarrollo, con
   botón para probar conexión y permisos; los repositorios se clonan en `loom/loom_repos/` y se trabaja
   en ramas dentro de worktrees; primer uso: publicar el release.sh por Pull Request.
+- [ADR-0044](decisiones/0044-skill-04-arquitectura-fundacional-documento-y-aprobacion.md) — skill 04 en
+  modo fundacional: un documento de arquitectura por repositorio (capas, módulos, modelo de datos,
+  frontend, despliegue, decisiones y preguntas abiertas, citando las HUs) que la persona aprueba antes
+  de descomponer; la Fase 2 corre casos de prueba y arquitectura.
 
 ## Problema
 
