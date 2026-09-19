@@ -109,6 +109,10 @@ herramientas de backend y frontend, autenticación, estructura de repositorios, 
 su justificación, que la pantalla de Diseño precarga (ADR-0039). No genera archivos SDD; es estado
 del Proyecto, y su falla no invalida el descubrimiento.
 
+## Orden de las HUs
+
+El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md)): lee todas las HUs y guarda la posición de cada una en la fuente (Jira Rank) como prioridad de negocio (`orden_fuente`).
+
 ## ADRs relacionados
 
 - [ADR-0039](../decisiones/0039-catalogo-de-stack-y-propuesta-del-arquitecto.md) — propuesta de

@@ -59,6 +59,10 @@ herramientas acotadas sobre un worktree, desarrollo con TDD (compuerta que exige
 paquetes de backend/frontend), PR con la cuenta de desarrollo y sincronización del estado de los PRs.
 Sin ejecución local del código en esta versión.
 
+## Orden de las HUs
+
+El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md)): el siguiente paquete se elige por ese orden, y se puede avanzar con una HU concreta (`grupo` sin `pt`) respetando dependencias.
+
 ## ADRs relacionados
 
 - [ADR-0046](../decisiones/0046-skill-06-generacion-de-codigo-agente-con-tdd.md) — implementación y TDD.

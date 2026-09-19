@@ -172,6 +172,9 @@
 - [ADR-0047](decisiones/0047-proveedor-de-ia-por-proyecto-claude-o-gemini.md) — la IA es un atributo del
   Proyecto (Claude o Gemini) para las skills de análisis y el agente de código; keys por Proyecto o del
   servidor.
+- [ADR-0048](decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md) — orden de implementación de
+  las HUs (prioridad de la fuente ajustada por dependencias) y avance por HU en Desarrollo: la skill 06
+  elige por ese orden o con la HU que se indique.
 
 ## Problema
 

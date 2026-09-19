@@ -85,6 +85,10 @@ Implementada para Proyectos en modo `nuevo` a partir de la arquitectura fundacio
 paquetes — ADR-0045. El modo extensión, las rondas de fixes y la creación en Jira/GitHub siguen
 pendientes.
 
+## Orden de las HUs
+
+El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md)): fija el orden de implementación de cada HU (`orden`): prioridad de negocio ajustada por dependencias reales.
+
 ## ADRs relacionados
 
 - [ADR-0045](../decisiones/0045-skill-05-descomposicion-desde-arquitectura-fundacional.md) — adaptación
