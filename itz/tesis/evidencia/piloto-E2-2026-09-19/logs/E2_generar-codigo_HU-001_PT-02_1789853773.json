@@ -1,0 +1,165 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Paquete HU-001/PT-02 — Frontend: Pantalla de inicio de sesión y gestión de autenticación"
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 4,
+  "mensaje": "frontend en https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini (rama hu/ITZINV-12/PT-02, base main)."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "Preparando la rama de trabajo..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Rama hu/ITZINV-12/PT-02 lista (51 archivos existentes)",
+  "tags": [
+   {
+    "texto": "Rama",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "El agente está escribiendo el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/core/services/auth.service.ts (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/core/services/auth.service.spec.ts (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/core/guards/auth.guard.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/core/interceptors/jwt.interceptor.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/features/auth/pages/login-page/login-page.component.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/features/auth/pages/login-page/login-page.component.html (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/features/auth/components/login-form/login-form.component.ts (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/features/auth/components/login-form/login-form.component.html (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/features/auth/components/login-form/login-form.component.html (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/features/auth/components/login-form/login-form.component.spec.ts (4 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/README.md (3 KB)"
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Código generado: Se implementó la pantalla de inicio de sesión reactiva utilizando Angular Standalone Components, PrimeNG y Tailwind CSS. Se gestionó el estado con BehaviorSubje",
+  "tags": [
+   {
+    "texto": "10 archivos",
+    "severidad": "success"
+   },
+   {
+    "texto": "2 de prueba",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "Commit y push de la rama..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Commit 60d4aeff en hu/ITZINV-12/PT-02",
+  "tags": [
+   {
+    "texto": "Push",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 4,
+  "total": 4,
+  "clave": "HU-001/PT-02",
+  "mensaje": "Abriendo el Pull Request..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "PR abierto: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/5",
+  "tags": [
+   {
+    "texto": "En revisión",
+    "severidad": "info"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 4,
+  "mensaje": "HU-001/PT-02 en revisión: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/5"
+ }
+]

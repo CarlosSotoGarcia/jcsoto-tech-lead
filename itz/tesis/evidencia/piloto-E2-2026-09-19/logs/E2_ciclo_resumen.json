@@ -1,0 +1,286 @@
+[
+ {
+  "paquete": "BASE/PT-01",
+  "pasos": [
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 19.5,
+    "costo_usd": 0.0135,
+    "http": 200,
+    "ok": true,
+    "mensaje": "1 aprobado(s), 0 con observaciones."
+   }
+  ],
+  "tras_revision": {
+   "estado": "aprobado",
+   "observaciones": []
+  },
+  "estado_final_antes_de_fusionar": "aprobado",
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/1",
+  "rondas_revision": 1,
+  "fusion": 200
+ },
+ {
+  "paquete": "BASE/PT-02",
+  "pasos": [
+   {
+    "endpoint": "generar-codigo",
+    "seg": 98.3,
+    "costo_usd": 0.4799,
+    "http": 200,
+    "ok": true,
+    "mensaje": "BASE/PT-02 en revisión: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/2"
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 26.9,
+    "costo_usd": 0.0239,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   },
+   {
+    "endpoint": "corregir-codigo",
+    "seg": 21.5,
+    "costo_usd": 0.0487,
+    "http": 200,
+    "ok": true,
+    "mensaje": "BASE/PT-02: correcciones subidas al PR. Vuelve a revisarlo."
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 17.8,
+    "costo_usd": 0.0168,
+    "http": 200,
+    "ok": true,
+    "mensaje": "1 aprobado(s), 0 con observaciones."
+   }
+  ],
+  "tras_revision": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "bloqueante",
+     "fuente": "criterio_aceptacion"
+    }
+   ]
+  },
+  "tras_correccion": {
+   "estado": "aprobado",
+   "observaciones": []
+  },
+  "estado_final_antes_de_fusionar": "aprobado",
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/2",
+  "rondas_revision": 2,
+  "fusion": 200
+ },
+ {
+  "paquete": "BASE/PT-03",
+  "pasos": [
+   {
+    "endpoint": "generar-codigo",
+    "seg": 107.9,
+    "costo_usd": 0.5715,
+    "http": 200,
+    "ok": true,
+    "mensaje": "BASE/PT-03 en revisión: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/3"
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 24.3,
+    "costo_usd": 0.0204,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   },
+   {
+    "endpoint": "corregir-codigo",
+    "seg": 85.6,
+    "costo_usd": 0.6711,
+    "http": 200,
+    "ok": true,
+    "mensaje": "BASE/PT-03: correcciones subidas al PR. Vuelve a revisarlo."
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 29.0,
+    "costo_usd": 0.0261,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   }
+  ],
+  "tras_revision": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "bloqueante",
+     "fuente": "criterio_aceptacion"
+    },
+    {
+     "sev": "mayor",
+     "fuente": "pruebas"
+    }
+   ]
+  },
+  "tras_correccion": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "mayor",
+     "fuente": "buenas_practicas"
+    },
+    {
+     "sev": "menor",
+     "fuente": "buenas_practicas"
+    }
+   ]
+  },
+  "estado_final_antes_de_fusionar": "con_observaciones",
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/3",
+  "rondas_revision": 2,
+  "fusion": 200
+ },
+ {
+  "paquete": "HU-001/PT-01",
+  "pasos": [
+   {
+    "endpoint": "generar-codigo",
+    "seg": 153.0,
+    "costo_usd": 0.6302,
+    "http": 200,
+    "ok": true,
+    "mensaje": "HU-001/PT-01 en revisión: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/4"
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 40.9,
+    "costo_usd": 0.0383,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   },
+   {
+    "endpoint": "corregir-codigo",
+    "seg": 68.9,
+    "costo_usd": 0.3481,
+    "http": 200,
+    "ok": true,
+    "mensaje": "HU-001/PT-01: correcciones subidas al PR. Vuelve a revisarlo."
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 82.8,
+    "costo_usd": 0.0935,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   }
+  ],
+  "tras_revision": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "bloqueante",
+     "fuente": "arquitectura"
+    },
+    {
+     "sev": "mayor",
+     "fuente": "arquitectura"
+    },
+    {
+     "sev": "menor",
+     "fuente": "arquitectura"
+    },
+    {
+     "sev": "bloqueante",
+     "fuente": "criterio_aceptacion"
+    }
+   ]
+  },
+  "tras_correccion": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "bloqueante",
+     "fuente": "arquitectura"
+    },
+    {
+     "sev": "mayor",
+     "fuente": "pruebas"
+    },
+    {
+     "sev": "menor",
+     "fuente": "buenas_practicas"
+    },
+    {
+     "sev": "bloqueante",
+     "fuente": "criterio_aceptacion"
+    }
+   ]
+  },
+  "estado_final_antes_de_fusionar": "con_observaciones",
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/4",
+  "rondas_revision": 2,
+  "fusion": 200
+ },
+ {
+  "paquete": "HU-001/PT-02",
+  "pasos": [
+   {
+    "endpoint": "generar-codigo",
+    "seg": 129.9,
+    "costo_usd": 1.024,
+    "http": 200,
+    "ok": true,
+    "mensaje": "HU-001/PT-02 en revisión: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/5"
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 30.3,
+    "costo_usd": 0.0268,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   },
+   {
+    "endpoint": "corregir-codigo",
+    "seg": 38.3,
+    "costo_usd": 0.1847,
+    "http": 200,
+    "ok": true,
+    "mensaje": "HU-001/PT-02: correcciones subidas al PR. Vuelve a revisarlo."
+   },
+   {
+    "endpoint": "revisar-codigo",
+    "seg": 31.0,
+    "costo_usd": 0.0311,
+    "http": 200,
+    "ok": true,
+    "mensaje": "0 aprobado(s), 1 con observaciones."
+   }
+  ],
+  "tras_revision": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "bloqueante",
+     "fuente": "criterio_aceptacion"
+    }
+   ]
+  },
+  "tras_correccion": {
+   "estado": "con_observaciones",
+   "observaciones": [
+    {
+     "sev": "bloqueante",
+     "fuente": "criterio_aceptacion"
+    }
+   ]
+  },
+  "estado_final_antes_de_fusionar": "con_observaciones",
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/5",
+  "rondas_revision": 2,
+  "fusion": 200
+ }
+]

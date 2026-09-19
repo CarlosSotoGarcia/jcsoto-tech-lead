@@ -1,0 +1,55 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "BASE/PT-02"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-02",
+  "mensaje": "BASE/PT-02: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-02",
+  "mensaje": "BASE/PT-02: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-02",
+  "mensaje": "BASE/PT-02: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "BASE/PT-02 — El Pull Request implementa adecuadamente la estructura base del backend con Spring Boot, las migraciones de Flyway para el esquema inicial, la documen",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "1 observaciones",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "1 bloqueantes",
+    "severidad": "danger"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

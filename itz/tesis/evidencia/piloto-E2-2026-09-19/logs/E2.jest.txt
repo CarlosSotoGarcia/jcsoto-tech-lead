@@ -1,0 +1,61 @@
+      
+          // setup-jest.ts
+          import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+      
+          setupZoneTestEnv();
+
+    > 1 | import 'jest-preset-angular/setup-jest';
+        | ^
+      2 |
+
+      at Object.<anonymous> (node_modules/jest-preset-angular/setup-jest.js:1:111)
+      at Object.<anonymous> (setup-jest.ts:1:1)
+
+ts-jest[config] (WARN) [94mmessage[0m[90m TS151001: [0mIf you have issues related to imports, you should consider setting `esModuleInterop` to `true` in your TypeScript configuration file (usually `tsconfig.json`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
+PASS src/app/app.component.spec.ts (42.709 s)
+  ● Console
+
+    console.warn
+      
+          Importing "setup-jest.js" directly is deprecated. The file "setup-jest.js" will be removed in the future.
+          Please use "setupZoneTestEnv" function instead. Example:
+      
+          // setup-jest.ts
+          import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+      
+          setupZoneTestEnv();
+
+    > 1 | import 'jest-preset-angular/setup-jest';
+        | ^
+      2 |
+
+      at Object.<anonymous> (node_modules/jest-preset-angular/setup-jest.js:1:111)
+      at Object.<anonymous> (setup-jest.ts:1:1)
+
+PASS src/app/core/services/auth.service.spec.ts (45.892 s)
+  ● Console
+
+    console.warn
+      
+          Importing "setup-jest.js" directly is deprecated. The file "setup-jest.js" will be removed in the future.
+          Please use "setupZoneTestEnv" function instead. Example:
+      
+          // setup-jest.ts
+          import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+      
+          setupZoneTestEnv();
+
+    > 1 | import 'jest-preset-angular/setup-jest';
+        | ^
+      2 |
+
+      at Object.<anonymous> (node_modules/jest-preset-angular/setup-jest.js:1:111)
+      at Object.<anonymous> (setup-jest.ts:1:1)
+
+
+Test Suites: 5 passed, 5 total
+Tests:       19 passed, 19 total
+Snapshots:   0 total
+Time:        106.769 s
+Ran all test suites.
+exit 0

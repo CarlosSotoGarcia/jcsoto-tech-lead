@@ -1,0 +1,910 @@
+{
+ "hus": [
+  {
+   "id": "HU-001",
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "clasificacion": "hu",
+   "fuente_tipo": "jira",
+   "fuente_ref": "ITZINV-12",
+   "fase": "descompuesta",
+   "estado": "pendiente",
+   "fecha_descubrimiento": "2026-09-19",
+   "tiene_supuestos": true,
+   "prototipo_ref": null,
+   "depende_de": [],
+   "orden_fuente": 1,
+   "orden": 1,
+   "titulo": "Iniciar sesión con correo electrónico y contraseña",
+   "descripcion": "Como usuario del sistema quiero autenticarme mediante mi correo electrónico y contraseña para acceder de manera segura a la plataforma y visualizar únicamente la información correspondiente a mi perfil.",
+   "criterios_explicitos": [
+    "Dado que un usuario registrado se encuentra en la pantalla de inicio de sesión, Cuando ingresa su correo electrónico y contraseña válidos y hace clic en \"Iniciar sesión\", Entonces el sistema autentica exitosamente al usuario y lo redirige a la plataforma, garantizando acceso únicamente a la información asociada a su cuenta y rol."
+   ],
+   "criterios_inferidos": [
+    "Dado que el usuario deja vacíos los campos de correo o contraseña, Cuando intenta iniciar sesión, Entonces el sistema impide el envío del formulario y muestra mensajes de validación indicando que los campos son obligatorios.",
+    "Dado que el usuario ingresa un texto que no cumple con el formato estándar de correo electrónico, Cuando intenta iniciar sesión, Entonces el sistema muestra una validación de formato de correo inválido.",
+    "Dado que el usuario ingresa credenciales incorrectas (correo no registrado o contraseña errónea), Cuando intenta iniciar sesión, Entonces el sistema muestra un mensaje de error genérico (\"Correo o contraseña incorrectos\") para evitar la divulgación de usuarios existentes.",
+    "Dado que el usuario escribe su contraseña, Cuando interactúa con el campo de texto, Entonces los caracteres se muestran enmascarados/ocultos por defecto.",
+    "Dado que una cuenta de usuario se encuentra en estado inactivo o suspendido, Cuando el usuario intenta iniciar sesión con credenciales válidas, Entonces el sistema deniega el acceso y muestra un mensaje indicando que la cuenta no está activa."
+   ],
+   "supuestos": [
+    "Se asume que la autenticación manejará sesiones seguras mediante tokens (ej. JWT o cookies HTTP-Only con flag de seguridad).",
+    "Se asume que la creación y registro previo de usuarios, así como la recuperación de contraseña (\"Olvidé mi contraseña\"), corresponden a historias de usuario independientes fuera de este alcance."
+   ],
+   "notas": "Se recomienda aclarar con el Product Owner / Equipo de Seguridad los siguientes puntos antes del desarrollo: 1) ¿Se requiere bloqueo automático de cuenta tras N intentos fallidos consecutivos? 2) ¿Cuál es el tiempo de expiración de sesión por inactividad? 3) ¿Se incluirá opción de visualización/ocultamiento de contraseña (ícono de ojo)?",
+   "fuente_hash": "4f733edb8b87209cbb300a423439f2dfdb166799da6bae2b94511850b73484d6",
+   "fuente_actualizada_en": "2026-09-17T21:51:32.414-0600",
+   "spec_md": "---\nid: HU-001\nclasificacion: hu\nfuente_tipo: jira\nfuente_ref: ITZINV-12\nfase: especificada\nestado: pendiente\nfecha_descubrimiento: 2026-09-19\ntiene_supuestos: true\nprototipo_ref: null\ndepende_de: []\n---\n\n# Iniciar sesión con correo electrónico y contraseña\n\nComo usuario del sistema quiero autenticarme mediante mi correo electrónico y contraseña para acceder de manera segura a la plataforma y visualizar únicamente la información correspondiente a mi perfil.\n\n## Criterios de aceptación explícitos\n\n- Dado que un usuario registrado se encuentra en la pantalla de inicio de sesión, Cuando ingresa su correo electrónico y contraseña válidos y hace clic en \"Iniciar sesión\", Entonces el sistema autentica exitosamente al usuario y lo redirige a la plataforma, garantizando acceso únicamente a la información asociada a su cuenta y rol.\n\n## Criterios de aceptación inferidos\n\n- Dado que el usuario deja vacíos los campos de correo o contraseña, Cuando intenta iniciar sesión, Entonces el sistema impide el envío del formulario y muestra mensajes de validación indicando que los campos son obligatorios.\n- Dado que el usuario ingresa un texto que no cumple con el formato estándar de correo electrónico, Cuando intenta iniciar sesión, Entonces el sistema muestra una validación de formato de correo inválido.\n- Dado que el usuario ingresa credenciales incorrectas (correo no registrado o contraseña errónea), Cuando intenta iniciar sesión, Entonces el sistema muestra un mensaje de error genérico (\"Correo o contraseña incorrectos\") para evitar la divulgación de usuarios existentes.\n- Dado que el usuario escribe su contraseña, Cuando interactúa con el campo de texto, Entonces los caracteres se muestran enmascarados/ocultos por defecto.\n- Dado que una cuenta de usuario se encuentra en estado inactivo o suspendido, Cuando el usuario intenta iniciar sesión con credenciales válidas, Entonces el sistema deniega el acceso y muestra un mensaje indicando que la cuenta no está activa.\n\n## Supuestos y vacíos identificados\n\n- Se asume que la autenticación manejará sesiones seguras mediante tokens (ej. JWT o cookies HTTP-Only con flag de seguridad).\n- Se asume que la creación y registro previo de usuarios, así como la recuperación de contraseña (\"Olvidé mi contraseña\"), corresponden a historias de usuario independientes fuera de este alcance.\n\n## Notas\n\nSe recomienda aclarar con el Product Owner / Equipo de Seguridad los siguientes puntos antes del desarrollo: 1) ¿Se requiere bloqueo automático de cuenta tras N intentos fallidos consecutivos? 2) ¿Cuál es el tiempo de expiración de sesión por inactividad? 3) ¿Se incluirá opción de visualización/ocultamiento de contraseña (ícono de ojo)?\n",
+   "casos_prueba": [
+    {
+     "id": "TC-001",
+     "criterio_ref": "Dado que un usuario registrado se encuentra en la pantalla de inicio de sesión, Cuando ingresa su correo electrónico y contraseña válidos y hace clic en \"Iniciar sesión\", Entonces el sistema autentica exitosamente al usuario y lo redirige a la plataforma, garantizando acceso únicamente a la información asociada a su cuenta y rol.",
+     "escenario": "Given que el usuario registrado se encuentra en la pantalla de inicio de sesión\nWhen ingresa un correo electrónico válido y su contraseña correspondiente\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema autentica exitosamente al usuario y lo redirige al panel principal de la plataforma acorde a su rol",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "El usuario es autenticado correctamente, redirigido a la plataforma y se visualiza únicamente la información y funcionalidades asociadas a su rol.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-002",
+     "criterio_ref": "Dado que el usuario deja vacíos los campos de correo o contraseña, Cuando intenta iniciar sesión, Entonces el sistema impide el envío del formulario y muestra mensajes de validación indicando que los campos son obligatorios.",
+     "escenario": "Given que el usuario se encuentra en la pantalla de inicio de sesión\nWhen deja vacíos los campos de correo electrónico y contraseña\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema impide el envío del formulario\nAnd muestra mensajes de error en la interfaz indicando que los campos son obligatorios",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "El formulario de inicio de sesión no se envía y la UI muestra mensajes de campo obligatorio debajo de los campos vacíos.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-003",
+     "criterio_ref": "Dado que el usuario ingresa un texto que no cumple con el formato estándar de correo electrónico, Cuando intenta iniciar sesión, Entonces el sistema muestra una validación de formato de correo inválido.",
+     "escenario": "Given que el usuario se encuentra en la pantalla de inicio de sesión\nWhen ingresa un texto con formato incorrecto de correo electrónico (ej. \"usuario_sin_arroba\")\nAnd ingresa una contraseña\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema muestra un mensaje de validación indicando que el formato del correo electrónico no es válido",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "Aparece un mensaje de error en la UI indicando que el correo electrónico no cumple con el formato estándar.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-004",
+     "criterio_ref": "Dado que el usuario ingresa credenciales incorrectas (correo no registrado o contraseña errónea), Cuando intenta iniciar sesión, Entonces el sistema muestra un mensaje de error genérico (\"Correo o contraseña incorrectos\") para evitar la divulgación de usuarios existentes.",
+     "escenario": "Given que el usuario se encuentra en la pantalla de inicio de sesión\nWhen ingresa un correo no registrado o una contraseña errónea\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema muestra el mensaje de error genérico \"Correo o contraseña incorrectos\" sin especificar cuál de los dos datos falló",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "Se despliega en la interfaz el mensaje genérico \"Correo o contraseña incorrectos\" impidiendo el acceso a la plataforma.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-005",
+     "criterio_ref": "Dado que el usuario escribe su contraseña, Cuando interactúa con el campo de texto, Entonces los caracteres se muestran enmascarados/ocultos por defecto.",
+     "escenario": "Given que el usuario se encuentra en la pantalla de inicio de sesión\nWhen escribe caracteres en el campo de texto de contraseña\nThen los caracteres dentro del campo se muestran enmascarados/ocultos por defecto (input type=\"password\")",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "Los caracteres ingresados en la caja de texto de contraseña son ilegibles visualmente (enmascarados con puntos/asteriscos).",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-006",
+     "criterio_ref": "Dado que una cuenta de usuario se encuentra en estado inactivo o suspendido, Cuando el usuario intenta iniciar sesión con credenciales válidas, Entonces el sistema deniega el acceso y muestra un mensaje indicando que la cuenta no está activa.",
+     "escenario": "Given que el usuario posee una cuenta registrada en estado inactivo o suspendido y se encuentra en la pantalla de inicio de sesión\nWhen ingresa sus credenciales válidas (correo y contraseña)\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema deniega el acceso y muestra un mensaje indicando que la cuenta no se encuentra activa",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_inactivo",
+     "resultado_esperado": "El acceso es denegado y se visualiza en pantalla un mensaje notificando que la cuenta no está activa.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    }
+   ],
+   "test_cases_md": "---\nhu_id: HU-001\nfase: tcs_generados\ntotal_tcs: 6\nfecha_generacion: 2026-09-19\n---\n\n### TC-001 — deriva de: Dado que un usuario registrado se encuentra en la pantalla de inicio de sesión, Cuando ingresa su correo electrónico y contraseña válidos y hace clic en \"Iniciar sesión\", Entonces el sistema autentica exitosamente al usuario y lo redirige a la plataforma, garantizando acceso únicamente a la información asociada a su cuenta y rol.\n\nGiven que el usuario registrado se encuentra en la pantalla de inicio de sesión\nWhen ingresa un correo electrónico válido y su contraseña correspondiente\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema autentica exitosamente al usuario y lo redirige al panel principal de la plataforma acorde a su rol\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El usuario es autenticado correctamente, redirigido a la plataforma y se visualiza únicamente la información y funcionalidades asociadas a su rol.\n\n\n### TC-002 — deriva de: Dado que el usuario deja vacíos los campos de correo o contraseña, Cuando intenta iniciar sesión, Entonces el sistema impide el envío del formulario y muestra mensajes de validación indicando que los campos son obligatorios.\n\nGiven que el usuario se encuentra en la pantalla de inicio de sesión\nWhen deja vacíos los campos de correo electrónico y contraseña\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema impide el envío del formulario\nAnd muestra mensajes de error en la interfaz indicando que los campos son obligatorios\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** El formulario de inicio de sesión no se envía y la UI muestra mensajes de campo obligatorio debajo de los campos vacíos.\n\n\n### TC-003 — deriva de: Dado que el usuario ingresa un texto que no cumple con el formato estándar de correo electrónico, Cuando intenta iniciar sesión, Entonces el sistema muestra una validación de formato de correo inválido.\n\nGiven que el usuario se encuentra en la pantalla de inicio de sesión\nWhen ingresa un texto con formato incorrecto de correo electrónico (ej. \"usuario_sin_arroba\")\nAnd ingresa una contraseña\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema muestra un mensaje de validación indicando que el formato del correo electrónico no es válido\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Aparece un mensaje de error en la UI indicando que el correo electrónico no cumple con el formato estándar.\n\n\n### TC-004 — deriva de: Dado que el usuario ingresa credenciales incorrectas (correo no registrado o contraseña errónea), Cuando intenta iniciar sesión, Entonces el sistema muestra un mensaje de error genérico (\"Correo o contraseña incorrectos\") para evitar la divulgación de usuarios existentes.\n\nGiven que el usuario se encuentra en la pantalla de inicio de sesión\nWhen ingresa un correo no registrado o una contraseña errónea\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema muestra el mensaje de error genérico \"Correo o contraseña incorrectos\" sin especificar cuál de los dos datos falló\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Se despliega en la interfaz el mensaje genérico \"Correo o contraseña incorrectos\" impidiendo el acceso a la plataforma.\n\n\n### TC-005 — deriva de: Dado que el usuario escribe su contraseña, Cuando interactúa con el campo de texto, Entonces los caracteres se muestran enmascarados/ocultos por defecto.\n\nGiven que el usuario se encuentra en la pantalla de inicio de sesión\nWhen escribe caracteres en el campo de texto de contraseña\nThen los caracteres dentro del campo se muestran enmascarados/ocultos por defecto (input type=\"password\")\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Los caracteres ingresados en la caja de texto de contraseña son ilegibles visualmente (enmascarados con puntos/asteriscos).\n\n\n### TC-006 — deriva de: Dado que una cuenta de usuario se encuentra en estado inactivo o suspendido, Cuando el usuario intenta iniciar sesión con credenciales válidas, Entonces el sistema deniega el acceso y muestra un mensaje indicando que la cuenta no está activa.\n\nGiven que el usuario posee una cuenta registrada en estado inactivo o suspendido y se encuentra en la pantalla de inicio de sesión\nWhen ingresa sus credenciales válidas (correo y contraseña)\nAnd hace clic en el botón \"Iniciar sesión\"\nThen el sistema deniega el acceso y muestra un mensaje indicando que la cuenta no se encuentra activa\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_inactivo\n- **Resultado esperado:** El acceso es denegado y se visualiza en pantalla un mensaje notificando que la cuenta no está activa.\n"
+  },
+  {
+   "id": "HU-002",
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "clasificacion": "hu",
+   "fuente_tipo": "jira",
+   "fuente_ref": "ITZINV-13",
+   "fase": "descompuesta",
+   "estado": "pendiente",
+   "fecha_descubrimiento": "2026-09-19",
+   "tiene_supuestos": true,
+   "prototipo_ref": null,
+   "depende_de": [
+    "HU-001"
+   ],
+   "orden_fuente": 2,
+   "orden": 2,
+   "titulo": "Recuperación de contraseña por correo electrónico",
+   "descripcion": "Como usuario registrado que no recuerda su contraseña, quiero solicitar el restablecimiento de mi clave de acceso a través de un enlace enviado a mi correo electrónico, para recuperar el acceso a la plataforma de forma autónoma sin depender del administrador.",
+   "criterios_explicitos": [
+    "Dado que el usuario se encuentra en la pantalla de inicio de sesión, cuando selecciona la opción de recuperar contraseña e ingresa su correo electrónico registrado, entonces el sistema debe enviar un correo electrónico con las instrucciones/enlace para restablecer la contraseña sin requerir asistencia manual de un administrador."
+   ],
+   "criterios_inferidos": [
+    "Dado que el usuario solicita la recuperación e ingresa un correo electrónico (sea existente o no en el sistema), cuando presiona enviar, entonces el sistema muestra un mensaje genérico (ej. 'Si el correo está registrado, recibirás las instrucciones') para evitar la enumeración de usuarios/correos.",
+    "Dado que el usuario recibe el correo de recuperación, cuando hace clic en el enlace dentro del tiempo límite de validez (ej. 15 minutos), entonces es redirigido a un formulario seguro para ingresar la nueva contraseña.",
+    "Dado que el enlace de recuperación ya fue utilizado o ha expirado, cuando el usuario intenta ingresar a través de él, entonces el sistema le muestra un mensaje informando que el enlace no es válido y le ofrece la opción de solicitar uno nuevo.",
+    "Dado que el usuario ingresa su nueva contraseña en el formulario de restablecimiento, cuando la contraseña cumple con las políticas de complejidad (longitud, caracteres) y coincide con la confirmación, entonces el sistema actualiza la credencial, invalida el token utilizado y permite el inicio de sesión con la nueva clave."
+   ],
+   "supuestos": [
+    "Se asume que la plataforma dispone de un servicio de envío de correos transaccionales (SMTP/Servidor de correo) operativo e integrado.",
+    "Se asume que el token de recuperación generado es de un solo uso y expiración temporal corta.",
+    "Se asume que las políticas de complejidad de contraseñas son las mismas definidas a nivel global en el sistema."
+   ],
+   "notas": "Falta definir con precisión el tiempo exacto de vigencia del token/enlace de recuperación (ej. 15, 30 o 60 minutos). También se recomienda definir si se aplicará un límite de tasa de peticiones (rate limiting) por IP o correo para prevenir spam/abuso del servicio de correo transactional, e indicar si se debe enviar una notificación por correo confirmando que la contraseña ha sido cambiada con éxito.",
+   "fuente_hash": "7bcecacd046f325b73d24650f39443f8ecbb362f4fec2bf4d114f40465c6c9af",
+   "fuente_actualizada_en": "2026-09-17T21:51:29.703-0600",
+   "spec_md": "---\nid: HU-002\nclasificacion: hu\nfuente_tipo: jira\nfuente_ref: ITZINV-13\nfase: especificada\nestado: pendiente\nfecha_descubrimiento: 2026-09-19\ntiene_supuestos: true\nprototipo_ref: null\ndepende_de: []\n---\n\n# Recuperación de contraseña por correo electrónico\n\nComo usuario registrado que no recuerda su contraseña, quiero solicitar el restablecimiento de mi clave de acceso a través de un enlace enviado a mi correo electrónico, para recuperar el acceso a la plataforma de forma autónoma sin depender del administrador.\n\n## Criterios de aceptación explícitos\n\n- Dado que el usuario se encuentra en la pantalla de inicio de sesión, cuando selecciona la opción de recuperar contraseña e ingresa su correo electrónico registrado, entonces el sistema debe enviar un correo electrónico con las instrucciones/enlace para restablecer la contraseña sin requerir asistencia manual de un administrador.\n\n## Criterios de aceptación inferidos\n\n- Dado que el usuario solicita la recuperación e ingresa un correo electrónico (sea existente o no en el sistema), cuando presiona enviar, entonces el sistema muestra un mensaje genérico (ej. 'Si el correo está registrado, recibirás las instrucciones') para evitar la enumeración de usuarios/correos.\n- Dado que el usuario recibe el correo de recuperación, cuando hace clic en el enlace dentro del tiempo límite de validez (ej. 15 minutos), entonces es redirigido a un formulario seguro para ingresar la nueva contraseña.\n- Dado que el enlace de recuperación ya fue utilizado o ha expirado, cuando el usuario intenta ingresar a través de él, entonces el sistema le muestra un mensaje informando que el enlace no es válido y le ofrece la opción de solicitar uno nuevo.\n- Dado que el usuario ingresa su nueva contraseña en el formulario de restablecimiento, cuando la contraseña cumple con las políticas de complejidad (longitud, caracteres) y coincide con la confirmación, entonces el sistema actualiza la credencial, invalida el token utilizado y permite el inicio de sesión con la nueva clave.\n\n## Supuestos y vacíos identificados\n\n- Se asume que la plataforma dispone de un servicio de envío de correos transaccionales (SMTP/Servidor de correo) operativo e integrado.\n- Se asume que el token de recuperación generado es de un solo uso y expiración temporal corta.\n- Se asume que las políticas de complejidad de contraseñas son las mismas definidas a nivel global en el sistema.\n\n## Notas\n\nFalta definir con precisión el tiempo exacto de vigencia del token/enlace de recuperación (ej. 15, 30 o 60 minutos). También se recomienda definir si se aplicará un límite de tasa de peticiones (rate limiting) por IP o correo para prevenir spam/abuso del servicio de correo transactional, e indicar si se debe enviar una notificación por correo confirmando que la contraseña ha sido cambiada con éxito.\n",
+   "casos_prueba": [
+    {
+     "id": "TC-001",
+     "criterio_ref": "Dado que el usuario se encuentra en la pantalla de inicio de sesión, cuando selecciona la opción de recuperar contraseña e ingresa su correo electrónico registrado, entonces el sistema debe enviar un correo electrónico con las instrucciones/enlace para restablecer la contraseña sin requerir asistencia manual de un administrador.",
+     "escenario": "Given que un usuario no autenticado está en la pantalla de inicio de sesión y hace clic en '¿Olvidaste tu contraseña?'\nWhen ingresa su correo electrónico registrado 'usuario_valido@ejemplo.com' en el campo correspondiente y presiona el botón 'Enviar'\nThen el sistema envía de forma automática un correo electrónico con el enlace único de restablecimiento y confirma la acción en la interfaz de usuario sin requerir aprobación o asistencia de un administrador.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "Se envía el correo con el enlace de recuperación al correo registrado y se notifica al usuario en pantalla.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-002",
+     "criterio_ref": "Dado que el usuario solicita la recuperación e ingresa un correo electrónico (sea existente o no en el sistema), cuando presiona enviar, entonces el sistema muestra un mensaje genérico (ej. 'Si el correo está registrado, recibirás las instrucciones') para evitar la enumeración de usuarios/correos.",
+     "escenario": "Given que un usuario no autenticado navega al formulario de recuperación de contraseña\nWhen ingresa un correo electrónico que no existe en el sistema ('no_registrado@ejemplo.com') y presiona el botón 'Enviar'\nThen el sistema muestra exactamente el mismo mensaje genérico 'Si el correo está registrado, recibirás las instrucciones' que muestra para correos válidos, evitando revelar la inexistencia de la cuenta.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "La interfaz muestra el mensaje genérico de confirmación sin revelar el estado del correo en la base de datos ni generar ningún correo.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-003",
+     "criterio_ref": "Dado que el usuario recibe el correo de recuperación, cuando hace clic en el enlace dentro del tiempo límite de validez (ej. 15 minutos), entonces es redirigido a un formulario seguro para ingresar la nueva contraseña.",
+     "escenario": "Given que el usuario cuenta con un correo de recuperación cuyo token de acceso tiene menos de 15 minutos de haber sido generado\nWhen hace clic en el enlace de restablecimiento contenido en el correo\nThen el navegador lo redirige exitosamente a la página segura de restablecimiento de contraseña, donde se muestran los campos 'Nueva contraseña' y 'Confirmar nueva contraseña'.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "Se carga la pantalla de restablecimiento de contraseña de forma segura con los campos correspondientes habilitados.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-004",
+     "criterio_ref": "Dado que el enlace de recuperación ya fue utilizado o ha expirado, cuando el usuario intenta ingresar a través de él, entonces el sistema le muestra un mensaje informando que el enlace no es válido y le ofrece la opción de solicitar uno nuevo.",
+     "escenario": "Given que un usuario posee un enlace de recuperación emitido hace más de 15 minutos (expirado)\nWhen ingresa a la aplicación mediante dicho enlace\nThen el sistema impide la visualización del formulario de restablecimiento, muestra el mensaje 'El enlace no es válido o ha expirado' y despliega el botón 'Solicitar un nuevo enlace'.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "El sistema bloquea el acceso al formulario, muestra la notificación de enlace vencido e incluye un botón o enlace funcional para iniciar un nuevo proceso.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-005",
+     "criterio_ref": "Dado que el enlace de recuperación ya fue utilizado o ha expirado, cuando el usuario intenta ingresar a través de él, entonces el sistema le muestra un mensaje informando que el enlace no es válido y le ofrece la opción de solicitar uno nuevo.",
+     "escenario": "Given que un usuario ya utilizó exitosamente su enlace de recuperación para actualizar su contraseña previamente\nWhen intenta abrir nuevamente el mismo enlace en el navegador\nThen el sistema detecta que el token ya fue consumido, muestra el mensaje 'El enlace no es válido o ya fue utilizado' y le ofrece la opción de solicitar uno nuevo.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "invitado",
+     "resultado_esperado": "El token previamente utilizado es rechazado, se muestra el mensaje de error correspondiente y se da la opción de reiniciar la solicitud.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-006",
+     "criterio_ref": "Dado que el usuario ingresa su nueva contraseña en el formulario de restablecimiento, cuando la contraseña cumple con las políticas de complejidad (longitud, caracteres) y coincide con la confirmación, entonces el sistema actualiza la credencial, invalida el token utilizado y permite el inicio de sesión con la nueva clave.",
+     "escenario": "Given que el usuario se encuentra en el formulario seguro de restablecimiento con un token válido\nWhen ingresa una contraseña que cumple las políticas de complejidad (ej. 'Password123!') en el campo 'Nueva contraseña', la repite idénticamente en 'Confirmar contraseña' y presiona 'Guardar'\nThen el sistema actualiza la clave en la base de datos, invalida el token de recuperación, redirige al inicio de sesión y permite ingresar exitosamente utilizando la nueva contraseña.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "La credencial es actualizada, el token queda inservible y el usuario puede autenticarse de inmediato con la nueva clave.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-007",
+     "criterio_ref": "Dado que el usuario ingresa su nueva contraseña en el formulario de restablecimiento, cuando la contraseña cumple con las políticas de complejidad (longitud, caracteres) y coincide con la confirmación, entonces el sistema actualiza la credencial, invalida el token utilizado y permite el inicio de sesión con la nueva clave.",
+     "escenario": "Given que el usuario está en la pantalla de restablecimiento de contraseña\nWhen ingresa una nueva contraseña que no cumple la política de complejidad (ej. '12345') o ingresa contraseñas no coincidentes entre ambos campos y presiona 'Guardar'\nThen el sistema no procesa el cambio, muestra un mensaje explícito de error en los campos de la interfaz y no actualiza la credencial del usuario.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "Se visualizan alertas de error de validación en la interfaz y la contraseña actual de la cuenta permanece inalterada.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    }
+   ],
+   "test_cases_md": "---\nhu_id: HU-002\nfase: tcs_generados\ntotal_tcs: 7\nfecha_generacion: 2026-09-19\n---\n\n### TC-001 — deriva de: Dado que el usuario se encuentra en la pantalla de inicio de sesión, cuando selecciona la opción de recuperar contraseña e ingresa su correo electrónico registrado, entonces el sistema debe enviar un correo electrónico con las instrucciones/enlace para restablecer la contraseña sin requerir asistencia manual de un administrador.\n\nGiven que un usuario no autenticado está en la pantalla de inicio de sesión y hace clic en '¿Olvidaste tu contraseña?'\nWhen ingresa su correo electrónico registrado 'usuario_valido@ejemplo.com' en el campo correspondiente y presiona el botón 'Enviar'\nThen el sistema envía de forma automática un correo electrónico con el enlace único de restablecimiento y confirma la acción en la interfaz de usuario sin requerir aprobación o asistencia de un administrador.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Se envía el correo con el enlace de recuperación al correo registrado y se notifica al usuario en pantalla.\n\n\n### TC-002 — deriva de: Dado que el usuario solicita la recuperación e ingresa un correo electrónico (sea existente o no en el sistema), cuando presiona enviar, entonces el sistema muestra un mensaje genérico (ej. 'Si el correo está registrado, recibirás las instrucciones') para evitar la enumeración de usuarios/correos.\n\nGiven que un usuario no autenticado navega al formulario de recuperación de contraseña\nWhen ingresa un correo electrónico que no existe en el sistema ('no_registrado@ejemplo.com') y presiona el botón 'Enviar'\nThen el sistema muestra exactamente el mismo mensaje genérico 'Si el correo está registrado, recibirás las instrucciones' que muestra para correos válidos, evitando revelar la inexistencia de la cuenta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** La interfaz muestra el mensaje genérico de confirmación sin revelar el estado del correo en la base de datos ni generar ningún correo.\n\n\n### TC-003 — deriva de: Dado que el usuario recibe el correo de recuperación, cuando hace clic en el enlace dentro del tiempo límite de validez (ej. 15 minutos), entonces es redirigido a un formulario seguro para ingresar la nueva contraseña.\n\nGiven que el usuario cuenta con un correo de recuperación cuyo token de acceso tiene menos de 15 minutos de haber sido generado\nWhen hace clic en el enlace de restablecimiento contenido en el correo\nThen el navegador lo redirige exitosamente a la página segura de restablecimiento de contraseña, donde se muestran los campos 'Nueva contraseña' y 'Confirmar nueva contraseña'.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se carga la pantalla de restablecimiento de contraseña de forma segura con los campos correspondientes habilitados.\n\n\n### TC-004 — deriva de: Dado que el enlace de recuperación ya fue utilizado o ha expirado, cuando el usuario intenta ingresar a través de él, entonces el sistema le muestra un mensaje informando que el enlace no es válido y le ofrece la opción de solicitar uno nuevo.\n\nGiven que un usuario posee un enlace de recuperación emitido hace más de 15 minutos (expirado)\nWhen ingresa a la aplicación mediante dicho enlace\nThen el sistema impide la visualización del formulario de restablecimiento, muestra el mensaje 'El enlace no es válido o ha expirado' y despliega el botón 'Solicitar un nuevo enlace'.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** El sistema bloquea el acceso al formulario, muestra la notificación de enlace vencido e incluye un botón o enlace funcional para iniciar un nuevo proceso.\n\n\n### TC-005 — deriva de: Dado que el enlace de recuperación ya fue utilizado o ha expirado, cuando el usuario intenta ingresar a través de él, entonces el sistema le muestra un mensaje informando que el enlace no es válido y le ofrece la opción de solicitar uno nuevo.\n\nGiven que un usuario ya utilizó exitosamente su enlace de recuperación para actualizar su contraseña previamente\nWhen intenta abrir nuevamente el mismo enlace en el navegador\nThen el sistema detecta que el token ya fue consumido, muestra el mensaje 'El enlace no es válido o ya fue utilizado' y le ofrece la opción de solicitar uno nuevo.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** El token previamente utilizado es rechazado, se muestra el mensaje de error correspondiente y se da la opción de reiniciar la solicitud.\n\n\n### TC-006 — deriva de: Dado que el usuario ingresa su nueva contraseña en el formulario de restablecimiento, cuando la contraseña cumple con las políticas de complejidad (longitud, caracteres) y coincide con la confirmación, entonces el sistema actualiza la credencial, invalida el token utilizado y permite el inicio de sesión con la nueva clave.\n\nGiven que el usuario se encuentra en el formulario seguro de restablecimiento con un token válido\nWhen ingresa una contraseña que cumple las políticas de complejidad (ej. 'Password123!') en el campo 'Nueva contraseña', la repite idénticamente en 'Confirmar contraseña' y presiona 'Guardar'\nThen el sistema actualiza la clave en la base de datos, invalida el token de recuperación, redirige al inicio de sesión y permite ingresar exitosamente utilizando la nueva contraseña.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La credencial es actualizada, el token queda inservible y el usuario puede autenticarse de inmediato con la nueva clave.\n\n\n### TC-007 — deriva de: Dado que el usuario ingresa su nueva contraseña en el formulario de restablecimiento, cuando la contraseña cumple con las políticas de complejidad (longitud, caracteres) y coincide con la confirmación, entonces el sistema actualiza la credencial, invalida el token utilizado y permite el inicio de sesión con la nueva clave.\n\nGiven que el usuario está en la pantalla de restablecimiento de contraseña\nWhen ingresa una nueva contraseña que no cumple la política de complejidad (ej. '12345') o ingresa contraseñas no coincidentes entre ambos campos y presiona 'Guardar'\nThen el sistema no procesa el cambio, muestra un mensaje explícito de error en los campos de la interfaz y no actualiza la credencial del usuario.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se visualizan alertas de error de validación en la interfaz y la contraseña actual de la cuenta permanece inalterada.\n"
+  },
+  {
+   "id": "HU-003",
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "clasificacion": "hu",
+   "fuente_tipo": "jira",
+   "fuente_ref": "ITZINV-14",
+   "fase": "descompuesta",
+   "estado": "pendiente",
+   "fecha_descubrimiento": "2026-09-19",
+   "tiene_supuestos": true,
+   "prototipo_ref": null,
+   "depende_de": [
+    "HU-001"
+   ],
+   "orden_fuente": 3,
+   "orden": 3,
+   "titulo": "Cerrar sesión voluntariamente y expiración por inactividad",
+   "descripcion": "Como usuario autenticado, quiero cerrar mi sesión explícitamente o que esta expire automáticamente tras un periodo de inactividad, para proteger mi cuenta y evitar accesos no autorizados en dispositivos compartidos o públicos.",
+   "criterios_explicitos": [
+    "Dado que el usuario se encuentra con una sesión activa en la plataforma, cuando selecciona la opción de cerrar sesión, entonces su sesión finaliza inmediatamente y se evita el acceso no autorizado a su cuenta.",
+    "Dado que el usuario tiene una sesión activa y no realiza ninguna acción en la plataforma durante un periodo de inactividad, cuando se alcanza el límite de tiempo configurado, entonces el sistema cierra automáticamente la sesión para proteger la cuenta en equipos compartidos."
+   ],
+   "criterios_inferidos": [
+    "Dado que la sesión finalizó (por acción del usuario o inactividad), cuando el usuario intenta navegar hacia atrás usando el botón del navegador o acceder directamente a URLs protegidas, entonces el sistema deniega el acceso y lo redirige a la pantalla de inicio de sesión.",
+    "Dado que la sesión expiró por inactividad, cuando el sistema realiza el cierre automático, entonces redirige al usuario a la pantalla de login y muestra una notificación/mensaje claro indicando que la sesión se cerró por inactividad.",
+    "Dado que el usuario realiza interacciones en la plataforma (movimiento de cursor, tecleo, clics o peticiones HTTP/API) antes de que expire el tiempo límite, cuando detecta actividad, entonces el temporizador de inactividad se reinicia a cero.",
+    "Dado que la sesión se cierra (voluntaria o por expiración), cuando se procesa la solicitud de cierre, entonces el servidor invalida completamente los tokens de acceso/cookies de sesión (HttpOnly) impidiendo su reutilización en peticiones futuras (respuesta HTTP 401 Unauthorized).",
+    "Dado que el usuario tiene la aplicación abierta en múltiples pestañas del mismo navegador, cuando cierra sesión o esta expira en una de las pestañas, entonces la sesión se invalida sincrónicamente en todas las demás pestañas abiertas."
+   ],
+   "supuestos": [
+    "Umbral de tiempo de inactividad: Se asume un tiempo límite por defecto (ej. 15 o 30 minutos), pero requiere confirmación explícita con el PO/Negocio para alinearlo con las políticas de seguridad del sistema.",
+    "Advertencia previa de expiración (Timeout Warning): Se asume que no hay aviso previo antes del cierre automático. Hace falta confirmar con UX/Negocio si se desea incluir un modal interactivo N minutos/segundos antes de expirar (ej. 'Tu sesión expira en 1 minuto, ¿deseas mantenerla activa?').",
+    "Comportamiento con tareas en segundo plano o descargas: Se asume que la inactividad considera solo eventos de usuario explícitos (UI) y no llamadas periódicas pasivas (polling), a menos que Negocio defina lo contrario."
+   ],
+   "notas": "Se recomienda sincronizar esta HU con el equipo de seguridad y backend para asegurar que la expiración no ocurra únicamente a nivel de cliente (UI/Frontend), sino que haya una invalidación efectiva de tokens/sesión en el servidor (ej. revocación de Refresh Tokens o TTL corto en Access Tokens).",
+   "fuente_hash": "1d018206ff7e778fdd7576f766a4762f6f171173f6d7ea2a5d4161df93c2f6e8",
+   "fuente_actualizada_en": "2026-09-17T21:51:43.182-0600",
+   "spec_md": "---\nid: HU-003\nclasificacion: hu\nfuente_tipo: jira\nfuente_ref: ITZINV-14\nfase: especificada\nestado: pendiente\nfecha_descubrimiento: 2026-09-19\ntiene_supuestos: true\nprototipo_ref: null\ndepende_de: []\n---\n\n# Cerrar sesión voluntariamente y expiración por inactividad\n\nComo usuario autenticado, quiero cerrar mi sesión explícitamente o que esta expire automáticamente tras un periodo de inactividad, para proteger mi cuenta y evitar accesos no autorizados en dispositivos compartidos o públicos.\n\n## Criterios de aceptación explícitos\n\n- Dado que el usuario se encuentra con una sesión activa en la plataforma, cuando selecciona la opción de cerrar sesión, entonces su sesión finaliza inmediatamente y se evita el acceso no autorizado a su cuenta.\n- Dado que el usuario tiene una sesión activa y no realiza ninguna acción en la plataforma durante un periodo de inactividad, cuando se alcanza el límite de tiempo configurado, entonces el sistema cierra automáticamente la sesión para proteger la cuenta en equipos compartidos.\n\n## Criterios de aceptación inferidos\n\n- Dado que la sesión finalizó (por acción del usuario o inactividad), cuando el usuario intenta navegar hacia atrás usando el botón del navegador o acceder directamente a URLs protegidas, entonces el sistema deniega el acceso y lo redirige a la pantalla de inicio de sesión.\n- Dado que la sesión expiró por inactividad, cuando el sistema realiza el cierre automático, entonces redirige al usuario a la pantalla de login y muestra una notificación/mensaje claro indicando que la sesión se cerró por inactividad.\n- Dado que el usuario realiza interacciones en la plataforma (movimiento de cursor, tecleo, clics o peticiones HTTP/API) antes de que expire el tiempo límite, cuando detecta actividad, entonces el temporizador de inactividad se reinicia a cero.\n- Dado que la sesión se cierra (voluntaria o por expiración), cuando se procesa la solicitud de cierre, entonces el servidor invalida completamente los tokens de acceso/cookies de sesión (HttpOnly) impidiendo su reutilización en peticiones futuras (respuesta HTTP 401 Unauthorized).\n- Dado que el usuario tiene la aplicación abierta en múltiples pestañas del mismo navegador, cuando cierra sesión o esta expira en una de las pestañas, entonces la sesión se invalida sincrónicamente en todas las demás pestañas abiertas.\n\n## Supuestos y vacíos identificados\n\n- Umbral de tiempo de inactividad: Se asume un tiempo límite por defecto (ej. 15 o 30 minutos), pero requiere confirmación explícita con el PO/Negocio para alinearlo con las políticas de seguridad del sistema.\n- Advertencia previa de expiración (Timeout Warning): Se asume que no hay aviso previo antes del cierre automático. Hace falta confirmar con UX/Negocio si se desea incluir un modal interactivo N minutos/segundos antes de expirar (ej. 'Tu sesión expira en 1 minuto, ¿deseas mantenerla activa?').\n- Comportamiento con tareas en segundo plano o descargas: Se asume que la inactividad considera solo eventos de usuario explícitos (UI) y no llamadas periódicas pasivas (polling), a menos que Negocio defina lo contrario.\n\n## Notas\n\nSe recomienda sincronizar esta HU con el equipo de seguridad y backend para asegurar que la expiración no ocurra únicamente a nivel de cliente (UI/Frontend), sino que haya una invalidación efectiva de tokens/sesión en el servidor (ej. revocación de Refresh Tokens o TTL corto en Access Tokens).\n",
+   "casos_prueba": [
+    {
+     "id": "TC-001",
+     "criterio_ref": "Dado que el usuario se encuentra con una sesión activa en la plataforma, cuando selecciona la opción de cerrar sesión, entonces su sesión finaliza inmediatamente y se evita el acceso no autorizado a su cuenta.",
+     "escenario": "GIVEN el usuario \"usuario_final\" ha iniciado sesión y se encuentra en el panel principal\nWHEN hace clic en el avatar de usuario y selecciona la opción \"Cerrar sesión\"\nTHEN el sistema cierra la sesión inmediatamente y redirige a la pantalla de inicio de sesión.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "El usuario es redirigido a la pantalla de login y su sesión queda terminada sin acceso a rutas privadas.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-002",
+     "criterio_ref": "Dado que el usuario tiene una sesión activa y no realiza ninguna acción en la plataforma durante un periodo de inactividad, cuando se alcanza el límite de tiempo configurado, entonces el sistema cierra automáticamente la sesión para proteger la cuenta en equipos compartidos.",
+     "escenario": "GIVEN el usuario \"usuario_final\" ha iniciado sesión en la plataforma\nWHEN transcurre el tiempo límite de inactividad configurado sin que el usuario realice ninguna acción\nTHEN el sistema cierra la sesión automáticamente y finaliza la sesión activa.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "La sesión del usuario se destruye automáticamente tras alcanzar el tiempo límite de inactividad.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-003",
+     "criterio_ref": "Dado que la sesión expiró por inactividad, cuando el sistema realiza el cierre automático, entonces redirige al usuario a la pantalla de login y muestra una notificación/mensaje claro indicando que la sesión se cerró por inactividad.",
+     "escenario": "GIVEN la sesión del usuario finalizó automáticamente por inactividad\nWHEN el sistema efectúa la redirección a la pantalla de inicio de sesión\nTHEN la pantalla de login muestra un mensaje o banner de notificación indicando \"Su sesión ha expirado por inactividad\".",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "Se visualiza un mensaje explícito en la pantalla de login informando la causa del cierre de sesión por inactividad.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-004",
+     "criterio_ref": "Dado que la sesión finalizó (por acción del usuario o inactividad), cuando el usuario intenta navegar hacia atrás usando el botón del navegador o acceder directamente a URLs protegidas, entonces el sistema deniega el acceso y lo redirige a la pantalla de inicio de sesión.",
+     "escenario": "GIVEN el usuario ha finalizado su sesión previa en la plataforma\nWHEN intenta hacer clic en el botón atrás del navegador o ingresa directamente una URL protegida (ej: \"/dashboard\")\nTHEN el sistema deniega el acceso a la ruta protegida y redirige automáticamente al formulario de login.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "Acceso denegado a la ruta protegida y redirección inmediata al login sin mostrar contenido privado en caché o estado anterior.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-005",
+     "criterio_ref": "Dado que el usuario realiza interacciones en la plataforma (movimiento de cursor, tecleo, clics o peticiones HTTP/API) antes de que expire el tiempo límite, cuando detecta actividad, entonces el temporizador de inactividad se reinicia a cero.",
+     "escenario": "GIVEN el usuario tiene una sesión activa y ha transcurrido parte del tiempo de inactividad\nWHEN el usuario realiza una interacción en la plataforma (movimiento de cursor, presionar teclas, clic o petición API) antes de alcanzar el tiempo límite\nTHEN el temporizador de inactividad se reinicia a cero y la sesión permanece activa sin cerrarse.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "La sesión no expira y el contador de inactividad vuelve al estado inicial de 0.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-006",
+     "criterio_ref": "Dado que la sesión se cierra (voluntaria o por expiración), cuando se procesa la solicitud de cierre, entonces el servidor invalida completamente los tokens de acceso/cookies de sesión (HttpOnly) impidiendo su reutilización en peticiones futuras (respuesta HTTP 401 Unauthorized).",
+     "escenario": "GIVEN la sesión del usuario ha sido cerrada (voluntariamente o por expiración)\nWHEN se intenta realizar una nueva petición HTTP/API reutilizando el token o cookie de sesión previamente emitido\nTHEN el servidor responde con un código HTTP 401 Unauthorized e invalida la petición.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "Respuesta HTTP 401 Unauthorized confirmando la invalidación total del token/cookie en el backend.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    },
+    {
+     "id": "TC-007",
+     "criterio_ref": "Dado que el usuario tiene la aplicación abierta en múltiples pestañas del mismo navegador, cuando cierra sesión o esta expira en una de las pestañas, entonces la sesión se invalida sincrónicamente en todas las demás pestañas abiertas.",
+     "escenario": "GIVEN el usuario tiene la aplicación abierta con sesión activa en dos pestañas del mismo navegador\nWHEN cierra la sesión o esta expira en la primera pestaña\nTHEN la segunda pestaña detecta la invalidación de la sesión en tiempo real y redirige sincrónicamente a la pantalla de inicio de sesión.",
+     "tipo_verificacion": "ui_playwright",
+     "rol_requerido": "usuario_final",
+     "resultado_esperado": "Redirección automática a la pantalla de inicio de sesión en todas las pestañas abiertas del mismo navegador.",
+     "cobertura": null,
+     "cobertura_detalle": null
+    }
+   ],
+   "test_cases_md": "---\nhu_id: HU-003\nfase: tcs_generados\ntotal_tcs: 7\nfecha_generacion: 2026-09-19\n---\n\n### TC-001 — deriva de: Dado que el usuario se encuentra con una sesión activa en la plataforma, cuando selecciona la opción de cerrar sesión, entonces su sesión finaliza inmediatamente y se evita el acceso no autorizado a su cuenta.\n\nGIVEN el usuario \"usuario_final\" ha iniciado sesión y se encuentra en el panel principal\nWHEN hace clic en el avatar de usuario y selecciona la opción \"Cerrar sesión\"\nTHEN el sistema cierra la sesión inmediatamente y redirige a la pantalla de inicio de sesión.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El usuario es redirigido a la pantalla de login y su sesión queda terminada sin acceso a rutas privadas.\n\n\n### TC-002 — deriva de: Dado que el usuario tiene una sesión activa y no realiza ninguna acción en la plataforma durante un periodo de inactividad, cuando se alcanza el límite de tiempo configurado, entonces el sistema cierra automáticamente la sesión para proteger la cuenta en equipos compartidos.\n\nGIVEN el usuario \"usuario_final\" ha iniciado sesión en la plataforma\nWHEN transcurre el tiempo límite de inactividad configurado sin que el usuario realice ninguna acción\nTHEN el sistema cierra la sesión automáticamente y finaliza la sesión activa.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La sesión del usuario se destruye automáticamente tras alcanzar el tiempo límite de inactividad.\n\n\n### TC-003 — deriva de: Dado que la sesión expiró por inactividad, cuando el sistema realiza el cierre automático, entonces redirige al usuario a la pantalla de login y muestra una notificación/mensaje claro indicando que la sesión se cerró por inactividad.\n\nGIVEN la sesión del usuario finalizó automáticamente por inactividad\nWHEN el sistema efectúa la redirección a la pantalla de inicio de sesión\nTHEN la pantalla de login muestra un mensaje o banner de notificación indicando \"Su sesión ha expirado por inactividad\".\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se visualiza un mensaje explícito en la pantalla de login informando la causa del cierre de sesión por inactividad.\n\n\n### TC-004 — deriva de: Dado que la sesión finalizó (por acción del usuario o inactividad), cuando el usuario intenta navegar hacia atrás usando el botón del navegador o acceder directamente a URLs protegidas, entonces el sistema deniega el acceso y lo redirige a la pantalla de inicio de sesión.\n\nGIVEN el usuario ha finalizado su sesión previa en la plataforma\nWHEN intenta hacer clic en el botón atrás del navegador o ingresa directamente una URL protegida (ej: \"/dashboard\")\nTHEN el sistema deniega el acceso a la ruta protegida y redirige automáticamente al formulario de login.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Acceso denegado a la ruta protegida y redirección inmediata al login sin mostrar contenido privado en caché o estado anterior.\n\n\n### TC-005 — deriva de: Dado que el usuario realiza interacciones en la plataforma (movimiento de cursor, tecleo, clics o peticiones HTTP/API) antes de que expire el tiempo límite, cuando detecta actividad, entonces el temporizador de inactividad se reinicia a cero.\n\nGIVEN el usuario tiene una sesión activa y ha transcurrido parte del tiempo de inactividad\nWHEN el usuario realiza una interacción en la plataforma (movimiento de cursor, presionar teclas, clic o petición API) antes de alcanzar el tiempo límite\nTHEN el temporizador de inactividad se reinicia a cero y la sesión permanece activa sin cerrarse.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La sesión no expira y el contador de inactividad vuelve al estado inicial de 0.\n\n\n### TC-006 — deriva de: Dado que la sesión se cierra (voluntaria o por expiración), cuando se procesa la solicitud de cierre, entonces el servidor invalida completamente los tokens de acceso/cookies de sesión (HttpOnly) impidiendo su reutilización en peticiones futuras (respuesta HTTP 401 Unauthorized).\n\nGIVEN la sesión del usuario ha sido cerrada (voluntariamente o por expiración)\nWHEN se intenta realizar una nueva petición HTTP/API reutilizando el token o cookie de sesión previamente emitido\nTHEN el servidor responde con un código HTTP 401 Unauthorized e invalida la petición.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Respuesta HTTP 401 Unauthorized confirmando la invalidación total del token/cookie en el backend.\n\n\n### TC-007 — deriva de: Dado que el usuario tiene la aplicación abierta en múltiples pestañas del mismo navegador, cuando cierra sesión o esta expira en una de las pestañas, entonces la sesión se invalida sincrónicamente en todas las demás pestañas abiertas.\n\nGIVEN el usuario tiene la aplicación abierta con sesión activa en dos pestañas del mismo navegador\nWHEN cierra la sesión o esta expira en la primera pestaña\nTHEN la segunda pestaña detecta la invalidación de la sesión en tiempo real y redirige sincrónicamente a la pantalla de inicio de sesión.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Redirección automática a la pantalla de inicio de sesión en todas las pestañas abiertas del mismo navegador.\n"
+  }
+ ],
+ "paquetes": [
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-01",
+   "grupo": "BASE",
+   "titulo": "Entorno de desarrollo local dockerizado y orquestación base",
+   "descripcion": "Configuración del entorno de desarrollo multicontenedor con Docker Compose en la raíz para backend (Spring Boot), frontend (Angular) y base de datos relacional. Incluye Dockerfiles con volumen para recarga en caliente, .env.example y README.md principal con guía de inicio rápido, puertos, variables de entorno y comandos para ejecutar pruebas y detener servicios.",
+   "capa": "infra",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "docker-compose.yml",
+    "backend/Dockerfile.dev",
+    "frontend/Dockerfile.dev",
+    ".env.example",
+    "README.md"
+   ],
+   "tcs_asociados": [],
+   "depende_de": [],
+   "estado": "fusionado",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/1",
+   "rondas_revision": 1,
+   "observaciones": [],
+   "revisado_en": "2026-09-19T21:21:59.520114+00:00",
+   "id_externo": null,
+   "rama": "base/PT-01",
+   "md": "---\nid: PT-01\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: infra\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/1\nrondas_revision: 1\ndepende_de: []\nid_externo: null\nrama: base/PT-01\nfecha: 2026-09-19\n---\n\n# PT-01 — Entorno de desarrollo local dockerizado y orquestación base\n\n_BASE: Esqueleto del aplicativo_\n\nConfiguración del entorno de desarrollo multicontenedor con Docker Compose en la raíz para backend (Spring Boot), frontend (Angular) y base de datos relacional. Incluye Dockerfiles con volumen para recarga en caliente, .env.example y README.md principal con guía de inicio rápido, puertos, variables de entorno y comandos para ejecutar pruebas y detener servicios.\n\n## Entregables\n\n- docker-compose.yml\n- backend/Dockerfile.dev\n- frontend/Dockerfile.dev\n- .env.example\n- README.md\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-02",
+   "grupo": "BASE",
+   "titulo": "Estructura base del backend, persistencia Flyway, seguridad base y Swagger UI",
+   "descripcion": "Estructura del proyecto Spring Boot con arquitectura modular (auth, users, notifications), configuración de persistencia JPA, script inicial Flyway V1__init_schema.sql (tablas de usuario, rol, token_restablecimiento y sesion_revocada), filtro base de Spring Security, gestión global de excepciones con @RestControllerAdvice y Swagger/OpenAPI habilitado en /swagger-ui.html. Incluye backend/README.md y enlace desde el README principal.",
+   "capa": "backend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "backend/pom.xml",
+    "backend/src/main/java/com/itz/inventarios/Application.java",
+    "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "backend/src/main/java/com/itz/inventarios/config/OpenApiConfig.java",
+    "backend/src/main/resources/db/migration/V1__init_schema.sql",
+    "backend/README.md",
+    "README.md"
+   ],
+   "tcs_asociados": [],
+   "depende_de": [
+    "PT-01"
+   ],
+   "estado": "fusionado",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/2",
+   "rondas_revision": 2,
+   "observaciones": [],
+   "revisado_en": "2026-09-19T21:25:12.836890+00:00",
+   "id_externo": null,
+   "rama": "base/PT-02",
+   "md": "---\nid: PT-02\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/2\nrondas_revision: 2\ndepende_de: [PT-01]\nid_externo: null\nrama: base/PT-02\nfecha: 2026-09-19\n---\n\n# PT-02 — Estructura base del backend, persistencia Flyway, seguridad base y Swagger UI\n\n_BASE: Esqueleto del aplicativo_\n\nEstructura del proyecto Spring Boot con arquitectura modular (auth, users, notifications), configuración de persistencia JPA, script inicial Flyway V1__init_schema.sql (tablas de usuario, rol, token_restablecimiento y sesion_revocada), filtro base de Spring Security, gestión global de excepciones con @RestControllerAdvice y Swagger/OpenAPI habilitado en /swagger-ui.html. Incluye backend/README.md y enlace desde el README principal.\n\n## Entregables\n\n- backend/pom.xml\n- backend/src/main/java/com/itz/inventarios/Application.java\n- backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java\n- backend/src/main/java/com/itz/inventarios/config/OpenApiConfig.java\n- backend/src/main/resources/db/migration/V1__init_schema.sql\n- backend/README.md\n- README.md\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-03",
+   "grupo": "BASE",
+   "titulo": "Shell base del frontend, PrimeNG, Tailwind CSS y estado de autenticación",
+   "descripcion": "Configuración inicial del proyecto Angular con Tailwind CSS y PrimeNG. Creación de la estructura modular/standalone (core, features, shared), shell de layout principal, enrutamiento básico, cliente HTTP configurado y esqueleto del interceptor JWT y servicio de autenticación. Incluye frontend/README.md y actualización del README principal.",
+   "capa": "frontend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "frontend/package.json",
+    "frontend/angular.json",
+    "frontend/tailwind.config.js",
+    "frontend/src/app/core/guards/auth.guard.ts",
+    "frontend/src/app/core/interceptors/jwt.interceptor.ts",
+    "frontend/src/app/core/services/auth.service.ts",
+    "frontend/README.md",
+    "README.md"
+   ],
+   "tcs_asociados": [],
+   "depende_de": [
+    "PT-01"
+   ],
+   "estado": "fusionado",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/3",
+   "rondas_revision": 2,
+   "observaciones": [
+    {
+     "fuente": "buenas_practicas",
+     "severidad": "mayor",
+     "archivo": "frontend/src/app/core/services/auth.service.ts",
+     "linea": 42,
+     "descripcion": "El getter isAuthenticated$ instancia un nuevo Observable y se suscribe manualmente a tokenSubject mediante subscribe() sin retornar una función de cancelación (teardown). Esto provoca una fuga de memoria (memory leak) cada vez que un consumidor se suscribe al getter, ya que la suscripción al BehaviorSubject no se destruye al desuscribirse del getter.",
+     "sugerencia": "Transformar el Subject de forma reactiva utilizando el operador map de RxJS: `return this.tokenSubject.pipe(map(token => !!token));` (asegurando importar `map` desde 'rxjs')."
+    },
+    {
+     "fuente": "buenas_practicas",
+     "severidad": "menor",
+     "archivo": "frontend/src/app/core/services/auth.service.ts",
+     "linea": 72,
+     "descripcion": "En el método logout(), la invocación a forceLogout() para limpiar el estado local del cliente se realiza dentro de un operador tap(). Si la llamada HTTP a /api/v1/auth/logout retorna un error (por ejemplo, error 401 si el token ya venció en el servidor o falla de conectividad), el callback dentro de tap() no se ejecuta y la sesión local permanece activa.",
+     "sugerencia": "Utilizar el operador finalize(() => this.forceLogout()) o capturar el error con catchError para garantizar que la sesión local y el sessionStorage se limpien sin importar si la petición HTTP tuvo éxito o falló."
+    }
+   ],
+   "revisado_en": "2026-09-19T21:29:46.136676+00:00",
+   "id_externo": null,
+   "rama": "base/PT-03",
+   "md": "---\nid: PT-03\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/3\nrondas_revision: 2\ndepende_de: [PT-01]\nid_externo: null\nrama: base/PT-03\nfecha: 2026-09-19\n---\n\n# PT-03 — Shell base del frontend, PrimeNG, Tailwind CSS y estado de autenticación\n\n_BASE: Esqueleto del aplicativo_\n\nConfiguración inicial del proyecto Angular con Tailwind CSS y PrimeNG. Creación de la estructura modular/standalone (core, features, shared), shell de layout principal, enrutamiento básico, cliente HTTP configurado y esqueleto del interceptor JWT y servicio de autenticación. Incluye frontend/README.md y actualización del README principal.\n\n## Entregables\n\n- frontend/package.json\n- frontend/angular.json\n- frontend/tailwind.config.js\n- frontend/src/app/core/guards/auth.guard.ts\n- frontend/src/app/core/interceptors/jwt.interceptor.ts\n- frontend/src/app/core/services/auth.service.ts\n- frontend/README.md\n- README.md\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (buenas_practicas) `frontend/src/app/core/services/auth.service.ts:42`: El getter isAuthenticated$ instancia un nuevo Observable y se suscribe manualmente a tokenSubject mediante subscribe() sin retornar una función de cancelación (teardown). Esto provoca una fuga de memoria (memory leak) cada vez que un consumidor se suscribe al getter, ya que la suscripción al BehaviorSubject no se destruye al desuscribirse del getter.\n- **menor** (buenas_practicas) `frontend/src/app/core/services/auth.service.ts:72`: En el método logout(), la invocación a forceLogout() para limpiar el estado local del cliente se realiza dentro de un operador tap(). Si la llamada HTTP a /api/v1/auth/logout retorna un error (por ejemplo, error 401 si el token ya venció en el servidor o falla de conectividad), el callback dentro de tap() no se ejecuta y la sesión local permanece activa.\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-04",
+   "grupo": "BASE",
+   "titulo": "Dockerfiles de producción y Pipeline de Integración Continua (CI)",
+   "descripcion": "Creación de Dockerfiles multi-stage optimizados para producción (Backend JAR en JVM y Frontend Angular servido con Nginx) y pipeline de integración continua (CI) para la ejecución automatizada de linter, compilación y pruebas unitarias de backend y frontend en cada Pull Request.",
+   "capa": "infra",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "backend/Dockerfile",
+    "frontend/Dockerfile",
+    "frontend/nginx.conf",
+    ".github/workflows/ci.yml"
+   ],
+   "tcs_asociados": [],
+   "depende_de": [
+    "PT-02",
+    "PT-03"
+   ],
+   "estado": "pendiente",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": null,
+   "rondas_revision": 0,
+   "observaciones": [],
+   "revisado_en": null,
+   "id_externo": null,
+   "rama": "base/PT-04",
+   "md": "---\nid: PT-04\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: infra\nestado: pendiente\nronda: 1\ntcs_asociados: []\npr: null\nrondas_revision: 0\ndepende_de: [PT-02, PT-03]\nid_externo: null\nrama: base/PT-04\nfecha: 2026-09-19\n---\n\n# PT-04 — Dockerfiles de producción y Pipeline de Integración Continua (CI)\n\n_BASE: Esqueleto del aplicativo_\n\nCreación de Dockerfiles multi-stage optimizados para producción (Backend JAR en JVM y Frontend Angular servido con Nginx) y pipeline de integración continua (CI) para la ejecución automatizada de linter, compilación y pruebas unitarias de backend y frontend en cada Pull Request.\n\n## Entregables\n\n- backend/Dockerfile\n- frontend/Dockerfile\n- frontend/nginx.conf\n- .github/workflows/ci.yml\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-01",
+   "grupo": "HU-001",
+   "titulo": "Backend: Endpoints de inicio de sesión y perfil de usuario con JWT",
+   "descripcion": "Implementación de los endpoints REST de autenticación y consulta de perfil de usuario (`POST /api/v1/auth/login` y `GET /api/v1/users/me`). Incluye la definición de entidades JPA (Usuario, Rol), repositorios, lógica de validación de estado de cuenta (activa/inactiva) y verificación de contraseñas con BCrypt, generación y firmado de tokens JWT, DTOs con validación Jakarta Bean Validation y documentación mediante anotaciones OpenAPI (springdoc). Se actualiza el README.md del backend con las instrucciones de configuración y ejecución de pruebas.",
+   "capa": "backend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "backend/src/main/java/com/itz/inventarios/users/entity/UserEntity.java",
+    "backend/src/main/java/com/itz/inventarios/users/entity/RoleEntity.java",
+    "backend/src/main/java/com/itz/inventarios/users/repository/UserRepository.java",
+    "backend/src/main/java/com/itz/inventarios/auth/dto/LoginRequestDto.java",
+    "backend/src/main/java/com/itz/inventarios/auth/dto/LoginResponseDto.java",
+    "backend/src/main/java/com/itz/inventarios/users/dto/UserProfileDto.java",
+    "backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java",
+    "backend/src/main/java/com/itz/inventarios/users/service/UserService.java",
+    "backend/src/main/java/com/itz/inventarios/auth/controller/AuthController.java",
+    "backend/src/main/java/com/itz/inventarios/users/controller/UserController.java",
+    "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "backend/src/resources/db/migration/V1__init_schema.sql",
+    "backend/src/test/java/com/itz/inventarios/auth/AuthControllerTest.java",
+    "backend/src/test/java/com/itz/inventarios/auth/AuthServiceTest.java",
+    "backend/README.md"
+   ],
+   "tcs_asociados": [
+    "TC-001",
+    "TC-004",
+    "TC-006"
+   ],
+   "depende_de": [
+    "BASE/PT-02"
+   ],
+   "estado": "fusionado",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/4",
+   "rondas_revision": 2,
+   "observaciones": [
+    {
+     "fuente": "arquitectura",
+     "severidad": "bloqueante",
+     "archivo": "backend/src/resources/db/migration/V1__init_schema.sql",
+     "linea": 1,
+     "descripcion": "El script de migración de Flyway en `backend/src/resources/db/migration/V1__init_schema.sql` solo contiene un comentario y no define el esquema DDL (`CREATE TABLE usuario`, `CREATE TABLE rol`, etc.). Además, la ubicación en `src/resources` es incorrecta para la estructura estándar de Maven (debe ser `src/main/resources/db/migration`). Al estar vacío, Flyway no creará las tablas necesarias en la base de datos PostgreSQL, provocando fallos en tiempo de ejecución al consultar las entidades JPA.",
+     "sugerencia": "Mover la migración a `backend/src/main/resources/db/migration/V1__init_schema.sql` y agregar el script DDL completo que cree las tablas `rol` y `usuario` con sus llaves primarias, llaves foráneas, restricciones de unicidad e inserciones de roles iniciales."
+    },
+    {
+     "fuente": "pruebas",
+     "severidad": "mayor",
+     "archivo": "backend/src/test/java/com/itz/inventarios/users/UserServiceTest.java",
+     "linea": null,
+     "descripcion": "No se incluyeron pruebas unitarias para la capa de servicio de usuarios (`UserService`) ni para `UserController`. Aunque existen pruebas para la autenticación (`AuthServiceTest` y `AuthControllerTest`), la lógica de consulta del perfil de usuario autenticado (`GET /api/v1/users/me`) no está cubierta por pruebas unitarias.",
+     "sugerencia": "Crear la clase `UserServiceTest` para verificar el correcto funcionamiento de `getCurrentUserProfile()`, validando tanto el caso exitoso cuando el usuario existe en el SecurityContext como los casos de fallo (usuario no encontrado o sin autenticación)."
+    },
+    {
+     "fuente": "buenas_practicas",
+     "severidad": "menor",
+     "archivo": "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+     "linea": 71,
+     "descripcion": "En el filtro `jwtAuthenticationFilter`, se intenta instanciar `new SimpleGrantedAuthority(role)` sin verificar si la variable `role` obtenida del claim del token JWT es nula. Si un token no contiene el claim 'role', se lanzará una `IllegalArgumentException` que termina siendo capturada en el bloque catch genérico.",
+     "sugerencia": "Validar que `role != null` antes de crear el `SimpleGrantedAuthority` o proporcionar un rol por defecto para mayor robustez en la validación del token."
+    },
+    {
+     "fuente": "criterio_aceptacion",
+     "severidad": "bloqueante",
+     "archivo": null,
+     "linea": null,
+     "descripcion": "La HU tiene supuestos sin confirmar; una persona debe validarlos antes de fusionar: Se asume que la autenticación manejará sesiones seguras mediante tokens (ej. JWT o cookies HTTP-Only con flag de seguridad).; Se asume que la creación y registro previo de usuarios, así como la recuperación de contraseña (\"Olvidé mi contraseña\"), corresponden a historias de usuario independientes fuera de este alcance.",
+     "sugerencia": null
+    }
+   ],
+   "revisado_en": "2026-09-19T21:35:58.726980+00:00",
+   "id_externo": null,
+   "rama": "hu/ITZINV-12/PT-01",
+   "md": "---\nid: PT-01\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-004, TC-006]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/4\nrondas_revision: 2\ndepende_de: [BASE/PT-02]\nid_externo: null\nrama: hu/ITZINV-12/PT-01\nfecha: 2026-09-19\n---\n\n# PT-01 — Backend: Endpoints de inicio de sesión y perfil de usuario con JWT\n\n_HU-001: Iniciar sesión con correo electrónico y contraseña_\n\nImplementación de los endpoints REST de autenticación y consulta de perfil de usuario (`POST /api/v1/auth/login` y `GET /api/v1/users/me`). Incluye la definición de entidades JPA (Usuario, Rol), repositorios, lógica de validación de estado de cuenta (activa/inactiva) y verificación de contraseñas con BCrypt, generación y firmado de tokens JWT, DTOs con validación Jakarta Bean Validation y documentación mediante anotaciones OpenAPI (springdoc). Se actualiza el README.md del backend con las instrucciones de configuración y ejecución de pruebas.\n\n## Entregables\n\n- backend/src/main/java/com/itz/inventarios/users/entity/UserEntity.java\n- backend/src/main/java/com/itz/inventarios/users/entity/RoleEntity.java\n- backend/src/main/java/com/itz/inventarios/users/repository/UserRepository.java\n- backend/src/main/java/com/itz/inventarios/auth/dto/LoginRequestDto.java\n- backend/src/main/java/com/itz/inventarios/auth/dto/LoginResponseDto.java\n- backend/src/main/java/com/itz/inventarios/users/dto/UserProfileDto.java\n- backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java\n- backend/src/main/java/com/itz/inventarios/users/service/UserService.java\n- backend/src/main/java/com/itz/inventarios/auth/controller/AuthController.java\n- backend/src/main/java/com/itz/inventarios/users/controller/UserController.java\n- backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java\n- backend/src/resources/db/migration/V1__init_schema.sql\n- backend/src/test/java/com/itz/inventarios/auth/AuthControllerTest.java\n- backend/src/test/java/com/itz/inventarios/auth/AuthServiceTest.java\n- backend/README.md\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-004 pasa\n- TC-006 pasa\n\n## Observaciones de la revisión\n\n- **bloqueante** (arquitectura) `backend/src/resources/db/migration/V1__init_schema.sql:1`: El script de migración de Flyway en `backend/src/resources/db/migration/V1__init_schema.sql` solo contiene un comentario y no define el esquema DDL (`CREATE TABLE usuario`, `CREATE TABLE rol`, etc.). Además, la ubicación en `src/resources` es incorrecta para la estructura estándar de Maven (debe ser `src/main/resources/db/migration`). Al estar vacío, Flyway no creará las tablas necesarias en la base de datos PostgreSQL, provocando fallos en tiempo de ejecución al consultar las entidades JPA.\n- **mayor** (pruebas) `backend/src/test/java/com/itz/inventarios/users/UserServiceTest.java`: No se incluyeron pruebas unitarias para la capa de servicio de usuarios (`UserService`) ni para `UserController`. Aunque existen pruebas para la autenticación (`AuthServiceTest` y `AuthControllerTest`), la lógica de consulta del perfil de usuario autenticado (`GET /api/v1/users/me`) no está cubierta por pruebas unitarias.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java:71`: En el filtro `jwtAuthenticationFilter`, se intenta instanciar `new SimpleGrantedAuthority(role)` sin verificar si la variable `role` obtenida del claim del token JWT es nula. Si un token no contiene el claim 'role', se lanzará una `IllegalArgumentException` que termina siendo capturada en el bloque catch genérico.\n- **bloqueante** (criterio_aceptacion): La HU tiene supuestos sin confirmar; una persona debe validarlos antes de fusionar: Se asume que la autenticación manejará sesiones seguras mediante tokens (ej. JWT o cookies HTTP-Only con flag de seguridad).; Se asume que la creación y registro previo de usuarios, así como la recuperación de contraseña (\"Olvidé mi contraseña\"), corresponden a historias de usuario independientes fuera de este alcance.\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-02",
+   "grupo": "HU-001",
+   "titulo": "Frontend: Pantalla de inicio de sesión y gestión de autenticación",
+   "descripcion": "Desarrollo de la pantalla y formulario de inicio de sesión utilizando Angular, PrimeNG y Tailwind CSS, integrando el consumo del endpoint `POST /api/v1/auth/login`. Incluye las validaciones en cliente (campos obligatorios, formato email, campo de contraseña enmascarado con type=\"password\"), la gestión del estado reactivo con RxJS BehaviorSubject en AuthService, almacenamiento del token JWT en sessionStorage, interceptor JWT HTTP y guard de navegación AuthGuard. Incluye despliegue de mensajes de error genéricos para credenciales inválidas y cuentas inactivas, así como las pruebas unitarias en Jest.",
+   "capa": "frontend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "frontend/src/app/core/services/auth.service.ts",
+    "frontend/src/app/core/guards/auth.guard.ts",
+    "frontend/src/app/core/interceptors/jwt.interceptor.ts",
+    "frontend/src/app/features/auth/pages/login-page/login-page.component.ts",
+    "frontend/src/app/features/auth/pages/login-page/login-page.component.html",
+    "frontend/src/app/features/auth/components/login-form/login-form.component.ts",
+    "frontend/src/app/features/auth/components/login-form/login-form.component.html",
+    "frontend/src/app/features/auth/components/login-form/login-form.component.spec.ts",
+    "frontend/src/app/core/services/auth.service.spec.ts",
+    "frontend/README.md"
+   ],
+   "tcs_asociados": [
+    "TC-001",
+    "TC-002",
+    "TC-003",
+    "TC-004",
+    "TC-005",
+    "TC-006"
+   ],
+   "depende_de": [
+    "BASE/PT-03",
+    "PT-01"
+   ],
+   "estado": "fusionado",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/5",
+   "rondas_revision": 2,
+   "observaciones": [
+    {
+     "fuente": "criterio_aceptacion",
+     "severidad": "bloqueante",
+     "archivo": null,
+     "linea": null,
+     "descripcion": "La HU tiene supuestos sin confirmar; una persona debe validarlos antes de fusionar: Se asume que la autenticación manejará sesiones seguras mediante tokens (ej. JWT o cookies HTTP-Only con flag de seguridad).; Se asume que la creación y registro previo de usuarios, así como la recuperación de contraseña (\"Olvidé mi contraseña\"), corresponden a historias de usuario independientes fuera de este alcance.",
+     "sugerencia": null
+    }
+   ],
+   "revisado_en": "2026-09-19T21:40:15.091148+00:00",
+   "id_externo": null,
+   "rama": "hu/ITZINV-12/PT-02",
+   "md": "---\nid: PT-02\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/5\nrondas_revision: 2\ndepende_de: [BASE/PT-03, PT-01]\nid_externo: null\nrama: hu/ITZINV-12/PT-02\nfecha: 2026-09-19\n---\n\n# PT-02 — Frontend: Pantalla de inicio de sesión y gestión de autenticación\n\n_HU-001: Iniciar sesión con correo electrónico y contraseña_\n\nDesarrollo de la pantalla y formulario de inicio de sesión utilizando Angular, PrimeNG y Tailwind CSS, integrando el consumo del endpoint `POST /api/v1/auth/login`. Incluye las validaciones en cliente (campos obligatorios, formato email, campo de contraseña enmascarado con type=\"password\"), la gestión del estado reactivo con RxJS BehaviorSubject en AuthService, almacenamiento del token JWT en sessionStorage, interceptor JWT HTTP y guard de navegación AuthGuard. Incluye despliegue de mensajes de error genéricos para credenciales inválidas y cuentas inactivas, así como las pruebas unitarias en Jest.\n\n## Entregables\n\n- frontend/src/app/core/services/auth.service.ts\n- frontend/src/app/core/guards/auth.guard.ts\n- frontend/src/app/core/interceptors/jwt.interceptor.ts\n- frontend/src/app/features/auth/pages/login-page/login-page.component.ts\n- frontend/src/app/features/auth/pages/login-page/login-page.component.html\n- frontend/src/app/features/auth/components/login-form/login-form.component.ts\n- frontend/src/app/features/auth/components/login-form/login-form.component.html\n- frontend/src/app/features/auth/components/login-form/login-form.component.spec.ts\n- frontend/src/app/core/services/auth.service.spec.ts\n- frontend/README.md\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n\n## Observaciones de la revisión\n\n- **bloqueante** (criterio_aceptacion): La HU tiene supuestos sin confirmar; una persona debe validarlos antes de fusionar: Se asume que la autenticación manejará sesiones seguras mediante tokens (ej. JWT o cookies HTTP-Only con flag de seguridad).; Se asume que la creación y registro previo de usuarios, así como la recuperación de contraseña (\"Olvidé mi contraseña\"), corresponden a historias de usuario independientes fuera de este alcance.\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-01",
+   "grupo": "HU-002",
+   "titulo": "Backend: API REST y servicio de recuperación y restablecimiento de contraseña",
+   "descripcion": "Implementación de la persistencia, servicios y endpoints REST para la solicitud de recuperación y restablecimiento de contraseña. Incluye la entidad TokenRestablecimiento, migración Flyway, lógica de generación de tokens temporales de un solo uso, servicio de envío de correos transaccionales, respuesta genérica anti-enumeración de usuarios y endpoints POST /api/v1/auth/forgot-password y POST /api/v1/auth/reset-password documentados con Swagger/OpenAPI.",
+   "capa": "backend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "backend/src/main/resources/db/migration/V2__create_token_restablecimiento_table.sql",
+    "backend/src/main/java/com/itz/inventarios/auth/entity/TokenRestablecimiento.java",
+    "backend/src/main/java/com/itz/inventarios/auth/repository/TokenRestablecimientoRepository.java",
+    "backend/src/main/java/com/itz/inventarios/auth/dto/ForgotPasswordRequestDto.java",
+    "backend/src/main/java/com/itz/inventarios/auth/dto/ResetPasswordRequestDto.java",
+    "backend/src/main/java/com/itz/inventarios/notifications/service/EmailService.java",
+    "backend/src/main/java/com/itz/inventarios/auth/service/PasswordResetService.java",
+    "backend/src/main/java/com/itz/inventarios/auth/controller/PasswordResetController.java",
+    "backend/src/test/java/com/itz/inventarios/auth/service/PasswordResetServiceTest.java",
+    "backend/src/test/java/com/itz/inventarios/auth/controller/PasswordResetControllerTest.java",
+    "backend/README.md"
+   ],
+   "tcs_asociados": [
+    "TC-001",
+    "TC-002",
+    "TC-003",
+    "TC-004",
+    "TC-005",
+    "TC-006",
+    "TC-007"
+   ],
+   "depende_de": [
+    "BASE/PT-02"
+   ],
+   "estado": "pendiente",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": null,
+   "rondas_revision": 0,
+   "observaciones": [],
+   "revisado_en": null,
+   "id_externo": null,
+   "rama": "hu/ITZINV-13/PT-01",
+   "md": "---\nid: PT-01\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: backend\nestado: pendiente\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-007]\npr: null\nrondas_revision: 0\ndepende_de: [BASE/PT-02]\nid_externo: null\nrama: hu/ITZINV-13/PT-01\nfecha: 2026-09-19\n---\n\n# PT-01 — Backend: API REST y servicio de recuperación y restablecimiento de contraseña\n\n_HU-002: Recuperación de contraseña por correo electrónico_\n\nImplementación de la persistencia, servicios y endpoints REST para la solicitud de recuperación y restablecimiento de contraseña. Incluye la entidad TokenRestablecimiento, migración Flyway, lógica de generación de tokens temporales de un solo uso, servicio de envío de correos transaccionales, respuesta genérica anti-enumeración de usuarios y endpoints POST /api/v1/auth/forgot-password y POST /api/v1/auth/reset-password documentados con Swagger/OpenAPI.\n\n## Entregables\n\n- backend/src/main/resources/db/migration/V2__create_token_restablecimiento_table.sql\n- backend/src/main/java/com/itz/inventarios/auth/entity/TokenRestablecimiento.java\n- backend/src/main/java/com/itz/inventarios/auth/repository/TokenRestablecimientoRepository.java\n- backend/src/main/java/com/itz/inventarios/auth/dto/ForgotPasswordRequestDto.java\n- backend/src/main/java/com/itz/inventarios/auth/dto/ResetPasswordRequestDto.java\n- backend/src/main/java/com/itz/inventarios/notifications/service/EmailService.java\n- backend/src/main/java/com/itz/inventarios/auth/service/PasswordResetService.java\n- backend/src/main/java/com/itz/inventarios/auth/controller/PasswordResetController.java\n- backend/src/test/java/com/itz/inventarios/auth/service/PasswordResetServiceTest.java\n- backend/src/test/java/com/itz/inventarios/auth/controller/PasswordResetControllerTest.java\n- backend/README.md\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-007 pasa\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-02",
+   "grupo": "HU-002",
+   "titulo": "Frontend: Vistas y servicio para solicitud y restablecimiento de contraseña",
+   "descripcion": "Implementación de la interfaz de usuario en Angular para el flujo de recuperación de contraseña. Incluye la integración en AuthService para consumir los endpoints REST, el componente forgot-password-page para solicitar el enlace con mensaje de confirmación genérico, y reset-password-page para la validación del token de URL, formulario seguro con políticas de contraseña y manejo de tokens expirados/inválidos con opción de reintento.",
+   "capa": "frontend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "frontend/src/app/core/services/auth.service.ts",
+    "frontend/src/app/features/auth/pages/forgot-password-page/forgot-password-page.component.ts",
+    "frontend/src/app/features/auth/pages/forgot-password-page/forgot-password-page.component.html",
+    "frontend/src/app/features/auth/pages/reset-password-page/reset-password-page.component.ts",
+    "frontend/src/app/features/auth/pages/reset-password-page/reset-password-page.component.html",
+    "frontend/src/app/core/services/auth.service.spec.ts",
+    "frontend/src/app/features/auth/pages/forgot-password-page/forgot-password-page.component.spec.ts",
+    "frontend/src/app/features/auth/pages/reset-password-page/reset-password-page.component.spec.ts",
+    "frontend/README.md"
+   ],
+   "tcs_asociados": [
+    "TC-001",
+    "TC-002",
+    "TC-003",
+    "TC-004",
+    "TC-005",
+    "TC-006",
+    "TC-007"
+   ],
+   "depende_de": [
+    "BASE/PT-03",
+    "PT-01"
+   ],
+   "estado": "pendiente",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": null,
+   "rondas_revision": 0,
+   "observaciones": [],
+   "revisado_en": null,
+   "id_externo": null,
+   "rama": "hu/ITZINV-13/PT-02",
+   "md": "---\nid: PT-02\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: frontend\nestado: pendiente\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-007]\npr: null\nrondas_revision: 0\ndepende_de: [BASE/PT-03, PT-01]\nid_externo: null\nrama: hu/ITZINV-13/PT-02\nfecha: 2026-09-19\n---\n\n# PT-02 — Frontend: Vistas y servicio para solicitud y restablecimiento de contraseña\n\n_HU-002: Recuperación de contraseña por correo electrónico_\n\nImplementación de la interfaz de usuario en Angular para el flujo de recuperación de contraseña. Incluye la integración en AuthService para consumir los endpoints REST, el componente forgot-password-page para solicitar el enlace con mensaje de confirmación genérico, y reset-password-page para la validación del token de URL, formulario seguro con políticas de contraseña y manejo de tokens expirados/inválidos con opción de reintento.\n\n## Entregables\n\n- frontend/src/app/core/services/auth.service.ts\n- frontend/src/app/features/auth/pages/forgot-password-page/forgot-password-page.component.ts\n- frontend/src/app/features/auth/pages/forgot-password-page/forgot-password-page.component.html\n- frontend/src/app/features/auth/pages/reset-password-page/reset-password-page.component.ts\n- frontend/src/app/features/auth/pages/reset-password-page/reset-password-page.component.html\n- frontend/src/app/core/services/auth.service.spec.ts\n- frontend/src/app/features/auth/pages/forgot-password-page/forgot-password-page.component.spec.ts\n- frontend/src/app/features/auth/pages/reset-password-page/reset-password-page.component.spec.ts\n- frontend/README.md\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-007 pasa\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-01",
+   "grupo": "HU-003",
+   "titulo": "Backend - Endpoint de logout y revocación de tokens JWT",
+   "descripcion": "Implementación del mecanismo de invalidación de tokens JWT mediante la entidad SesionRevocada y el endpoint POST /api/v1/auth/logout. Incluye el registro del identificador del token (JTI) en la lista de revocación al cerrar sesión y la integración con el filtro de Spring Security para retornar HTTP 401 Unauthorized en peticiones subsiguientes utilizando un token revocado. Documentación con anotaciones OpenAPI/Swagger (@Operation, @ApiResponse, @Tag).",
+   "capa": "backend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "backend/src/main/java/com/itz/inventarios/auth/entity/SesionRevocada.java",
+    "backend/src/main/java/com/itz/inventarios/auth/repository/SesionRevocadaRepository.java",
+    "backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java",
+    "backend/src/main/java/com/itz/inventarios/auth/controller/AuthController.java",
+    "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "backend/src/test/java/com/itz/inventarios/auth/AuthControllerTest.java",
+    "backend/src/test/java/com/itz/inventarios/auth/AuthServiceTest.java",
+    "backend/README.md"
+   ],
+   "tcs_asociados": [
+    "TC-001",
+    "TC-006"
+   ],
+   "depende_de": [
+    "BASE/PT-02"
+   ],
+   "estado": "pendiente",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": null,
+   "rondas_revision": 0,
+   "observaciones": [],
+   "revisado_en": null,
+   "id_externo": null,
+   "rama": "hu/ITZINV-14/PT-01",
+   "md": "---\nid: PT-01\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: backend\nestado: pendiente\nronda: 1\ntcs_asociados: [TC-001, TC-006]\npr: null\nrondas_revision: 0\ndepende_de: [BASE/PT-02]\nid_externo: null\nrama: hu/ITZINV-14/PT-01\nfecha: 2026-09-19\n---\n\n# PT-01 — Backend - Endpoint de logout y revocación de tokens JWT\n\n_HU-003: Cerrar sesión voluntariamente y expiración por inactividad_\n\nImplementación del mecanismo de invalidación de tokens JWT mediante la entidad SesionRevocada y el endpoint POST /api/v1/auth/logout. Incluye el registro del identificador del token (JTI) en la lista de revocación al cerrar sesión y la integración con el filtro de Spring Security para retornar HTTP 401 Unauthorized en peticiones subsiguientes utilizando un token revocado. Documentación con anotaciones OpenAPI/Swagger (@Operation, @ApiResponse, @Tag).\n\n## Entregables\n\n- backend/src/main/java/com/itz/inventarios/auth/entity/SesionRevocada.java\n- backend/src/main/java/com/itz/inventarios/auth/repository/SesionRevocadaRepository.java\n- backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java\n- backend/src/main/java/com/itz/inventarios/auth/controller/AuthController.java\n- backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java\n- backend/src/test/java/com/itz/inventarios/auth/AuthControllerTest.java\n- backend/src/test/java/com/itz/inventarios/auth/AuthServiceTest.java\n- backend/README.md\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-006 pasa\n"
+  },
+  {
+   "proyecto_id": "bfc805e3495e4326afce54d676ce7bd2",
+   "id": "PT-02",
+   "grupo": "HU-003",
+   "titulo": "Frontend - Temporizador de inactividad, logout, sincronización multipestaña y guardias de seguridad",
+   "descripcion": "Implementación del servicio de detección de inactividad por temporizador (15 minutos por defecto) con reinicio ante eventos de usuario (mousemove, keydown, click), servicio de autenticación con llamada al endpoint de logout, sincronización entre pestañas mediante StorageEvent/BroadcastChannel, restricción de acceso en AuthGuard (evitando navegación hacia atrás) y manejo de notificación por inactividad en LoginPage.",
+   "capa": "frontend",
+   "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini",
+   "entregables": [
+    "frontend/src/app/core/services/inactivity.service.ts",
+    "frontend/src/app/core/services/auth.service.ts",
+    "frontend/src/app/core/guards/auth.guard.ts",
+    "frontend/src/app/features/auth/pages/login-page/login-page.component.ts",
+    "frontend/src/app/core/services/inactivity.service.spec.ts",
+    "frontend/src/app/core/services/auth.service.spec.ts",
+    "frontend/src/app/core/guards/auth.guard.spec.ts",
+    "frontend/src/app/features/auth/pages/login-page/login-page.component.spec.ts",
+    "frontend/README.md"
+   ],
+   "tcs_asociados": [
+    "TC-001",
+    "TC-002",
+    "TC-003",
+    "TC-004",
+    "TC-005",
+    "TC-006",
+    "TC-007"
+   ],
+   "depende_de": [
+    "BASE/PT-03",
+    "PT-01"
+   ],
+   "estado": "pendiente",
+   "ronda": 1,
+   "tipo": "original",
+   "paquete_origen": null,
+   "evidencia_origen": null,
+   "pr": null,
+   "rondas_revision": 0,
+   "observaciones": [],
+   "revisado_en": null,
+   "id_externo": null,
+   "rama": "hu/ITZINV-14/PT-02",
+   "md": "---\nid: PT-02\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini\ncapa: frontend\nestado: pendiente\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-007]\npr: null\nrondas_revision: 0\ndepende_de: [BASE/PT-03, PT-01]\nid_externo: null\nrama: hu/ITZINV-14/PT-02\nfecha: 2026-09-19\n---\n\n# PT-02 — Frontend - Temporizador de inactividad, logout, sincronización multipestaña y guardias de seguridad\n\n_HU-003: Cerrar sesión voluntariamente y expiración por inactividad_\n\nImplementación del servicio de detección de inactividad por temporizador (15 minutos por defecto) con reinicio ante eventos de usuario (mousemove, keydown, click), servicio de autenticación con llamada al endpoint de logout, sincronización entre pestañas mediante StorageEvent/BroadcastChannel, restricción de acceso en AuthGuard (evitando navegación hacia atrás) y manejo de notificación por inactividad en LoginPage.\n\n## Entregables\n\n- frontend/src/app/core/services/inactivity.service.ts\n- frontend/src/app/core/services/auth.service.ts\n- frontend/src/app/core/guards/auth.guard.ts\n- frontend/src/app/features/auth/pages/login-page/login-page.component.ts\n- frontend/src/app/core/services/inactivity.service.spec.ts\n- frontend/src/app/core/services/auth.service.spec.ts\n- frontend/src/app/core/guards/auth.guard.spec.ts\n- frontend/src/app/features/auth/pages/login-page/login-page.component.spec.ts\n- frontend/README.md\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-007 pasa\n"
+  }
+ ],
+ "metricas": {
+  "llamadas": [
+   {
+    "skill": "arquitectura",
+    "proveedor": "gemini",
+    "modelo": "gemini-3.6-flash",
+    "llamadas": 1,
+    "fallas": 0,
+    "tokens_in": 2007,
+    "tokens_out": 5851,
+    "duracion_ms": 30099,
+    "costo_usd": 0.0234
+   },
+   {
+    "skill": "corregir-codigo",
+    "proveedor": "gemini",
+    "modelo": "gemini-pro-latest",
+    "llamadas": 35,
+    "fallas": 0,
+    "tokens_in": 353395,
+    "tokens_out": 17957,
+    "duracion_ms": 188556,
+    "costo_usd": 1.2526
+   },
+   {
+    "skill": "descomponer",
+    "proveedor": "gemini",
+    "modelo": "gemini-3.6-flash",
+    "llamadas": 4,
+    "fallas": 0,
+    "tokens_in": 15501,
+    "tokens_out": 11372,
+    "duracion_ms": 57638,
+    "costo_usd": 0.0543
+   },
+   {
+    "skill": "descubrir",
+    "proveedor": "gemini",
+    "modelo": "gemini-3.6-flash",
+    "llamadas": 3,
+    "fallas": 0,
+    "tokens_in": 1519,
+    "tokens_out": 5128,
+    "duracion_ms": 32322,
+    "costo_usd": 0.0204
+   },
+   {
+    "skill": "generar-codigo",
+    "proveedor": "gemini",
+    "modelo": "gemini-pro-latest",
+    "llamadas": 55,
+    "fallas": 1,
+    "tokens_in": 670448,
+    "tokens_out": 82563,
+    "duracion_ms": 650128,
+    "costo_usd": 3.0822
+   },
+   {
+    "skill": "generar-tcs",
+    "proveedor": "gemini",
+    "modelo": "gemini-3.6-flash",
+    "llamadas": 3,
+    "fallas": 0,
+    "tokens_in": 2060,
+    "tokens_out": 9176,
+    "duracion_ms": 45426,
+    "costo_usd": 0.036
+   },
+   {
+    "skill": "revisar-codigo",
+    "proveedor": "gemini",
+    "modelo": "gemini-3.6-flash",
+    "llamadas": 10,
+    "fallas": 1,
+    "tokens_in": 135186,
+    "tokens_out": 44839,
+    "duracion_ms": 241990,
+    "costo_usd": 0.2904
+   }
+  ],
+  "ejecuciones": [
+   {
+    "skill": "arquitectura",
+    "ejecuciones": 1,
+    "errores": 0,
+    "duracion_ms": 30184
+   },
+   {
+    "skill": "corregir-codigo",
+    "ejecuciones": 4,
+    "errores": 0,
+    "duracion_ms": 198046
+   },
+   {
+    "skill": "descomponer",
+    "ejecuciones": 1,
+    "errores": 0,
+    "duracion_ms": 58140
+   },
+   {
+    "skill": "descubrir",
+    "ejecuciones": 1,
+    "errores": 0,
+    "duracion_ms": 33973
+   },
+   {
+    "skill": "generar-codigo",
+    "ejecuciones": 5,
+    "errores": 0,
+    "duracion_ms": 670516
+   },
+   {
+    "skill": "generar-tcs",
+    "ejecuciones": 1,
+    "errores": 0,
+    "duracion_ms": 45695
+   },
+   {
+    "skill": "revisar-codigo",
+    "ejecuciones": 9,
+    "errores": 0,
+    "duracion_ms": 265695
+   }
+  ],
+  "reintentos": 1,
+  "rechazos_de_compuertas": 0,
+  "total_tokens": 1357002,
+  "total_llamadas": 111
+ }
+}

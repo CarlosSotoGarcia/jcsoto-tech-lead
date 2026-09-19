@@ -1,0 +1,55 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "HU-001/PT-02"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-02",
+  "mensaje": "HU-001/PT-02: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-02",
+  "mensaje": "HU-001/PT-02: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-02",
+  "mensaje": "HU-001/PT-02: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001/PT-02 — El Pull Request PT-02 cumple satisfactoriamente con todos los criterios de aceptación (TC-001 a TC-006) y las especificaciones de arquitectura. La imp",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "1 observaciones",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "1 bloqueantes",
+    "severidad": "danger"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

@@ -78,6 +78,10 @@ de GitHub destino y su rama base, y credenciales de Jira (correo + API token, po
 
 ---
 
+### 2.4 Estado del piloto (2026-09-19)
+
+Piloto acotado (tope 20 USD) sobre P1 con 3 HUs: **E2 (Gemini) ejecutado**, fases 1 a 3 y 5 de 10 paquetes, 4.76 USD estimados; **E1 (Claude API) bloqueado** por saldo insuficiente en la API de Anthropic; E3/E4 pendientes (IAT sin configurar). Resultados en el capítulo 5 de `Loom - Tesis.docx` y evidencia en `evidencia/piloto-E2-2026-09-19/`. Hallazgos: 100 % de trazabilidad criterio-caso pero todos los casos son de interfaz; el frontend generado pasa sus 19 pruebas y el backend no compila (dependencia sin versión) sin que la revisión lo detecte; posible subconteo de tokens de entrada en las skills de análisis.
+
 ## 3. Métricas y datos: qué existe y qué falta
 
 ### 3.1 Ya se registra hoy

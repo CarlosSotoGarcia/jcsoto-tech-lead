@@ -1,0 +1,179 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Paquete BASE/PT-03 — Shell base del frontend, PrimeNG, Tailwind CSS y estado de autenticación"
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 4,
+  "mensaje": "frontend en https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini (rama base/PT-03, base main)."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "Preparando la rama de trabajo..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Rama base/PT-03 lista (17 archivos existentes)",
+  "tags": [
+   {
+    "texto": "Rama",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "El agente está escribiendo el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/package.json (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/angular.json (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/tailwind.config.js (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/services/auth.service.spec.ts (3 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/services/auth.service.ts (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/interceptors/jwt.interceptor.spec.ts (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/interceptors/jwt.interceptor.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/interceptors/jwt.interceptor.spec.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/guards/auth.guard.spec.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/src/app/core/guards/auth.guard.ts (1 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/README.md (2 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió README.md (3 KB)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "  escribió frontend/setup-jest.ts (1 KB)"
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Código generado: Se inicializó el esquema del frontend en Angular configurado con PrimeNG y Tailwind CSS. Se crearon los archivos núcleo para el control de sesión: servicio de a",
+  "tags": [
+   {
+    "texto": "12 archivos",
+    "severidad": "success"
+   },
+   {
+    "texto": "3 de prueba",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "Commit y push de la rama..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Commit 029c1fe2 en base/PT-03",
+  "tags": [
+   {
+    "texto": "Push",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 4,
+  "total": 4,
+  "clave": "BASE/PT-03",
+  "mensaje": "Abriendo el Pull Request..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "PR abierto: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/3",
+  "tags": [
+   {
+    "texto": "En revisión",
+    "severidad": "info"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 4,
+  "mensaje": "BASE/PT-03 en revisión: https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/3"
+ }
+]

@@ -1,0 +1,7 @@
+  [inicio] Conectando con Jira...
+  [item_listo] HU-001 — Iniciar sesión con correo electrónico y contraseña
+  [item_listo] HU-002 — Recuperación de contraseña por correo electrónico
+  [item_listo] HU-003 — Cerrar sesión voluntariamente y expiración por inactividad
+  [completado] 3 elemento(s) analizado(s).
+E2 descubrir claves=ITZINV-12&claves=ITZINV-13&claves=ITZINV-14 -> http 200, 36.0s, eventos 9, error: []
+E2 costo acumulado: 0.0204 USD; llamadas: 3

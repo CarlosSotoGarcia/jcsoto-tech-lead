@@ -1,0 +1,55 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "HU-001/PT-01"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-01",
+  "mensaje": "HU-001/PT-01: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-01",
+  "mensaje": "HU-001/PT-01: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-01",
+  "mensaje": "HU-001/PT-01: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001/PT-01 — El PR implementa adecuadamente los endpoints de autenticación JWT y perfil de usuario, siguiendo la arquitectura de capas y documentando la API con Op",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "4 observaciones",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "2 bloqueantes",
+    "severidad": "danger"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

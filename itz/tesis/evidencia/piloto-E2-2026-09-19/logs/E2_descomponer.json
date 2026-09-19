@@ -1,0 +1,104 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Leyendo la arquitectura aprobada y las HUs..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 4,
+  "mensaje": "Esqueleto + 3 HU(s) por descomponer. Las actividades no se descomponen."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 4,
+  "clave": "BASE",
+  "mensaje": "Planeando el esqueleto y el orden de las HUs..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "BASE — esqueleto: 4 paquete(s)",
+  "tags": [
+   {
+    "texto": "4 paquetes",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 4,
+  "clave": "HU-001",
+  "mensaje": "Descomponiendo HU-001 (2/4)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001 — 2 paquete(s): backend, frontend",
+  "tags": [
+   {
+    "texto": "2 paquetes",
+    "severidad": "success"
+   },
+   {
+    "texto": "#1",
+    "severidad": "secondary"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 4,
+  "clave": "HU-002",
+  "mensaje": "Descomponiendo HU-002 (3/4)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-002 — 2 paquete(s): backend, frontend",
+  "tags": [
+   {
+    "texto": "2 paquetes",
+    "severidad": "success"
+   },
+   {
+    "texto": "#2",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "depende de 1",
+    "severidad": "info"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 4,
+  "total": 4,
+  "clave": "HU-003",
+  "mensaje": "Descomponiendo HU-003 (4/4)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-003 — 2 paquete(s): backend, frontend",
+  "tags": [
+   {
+    "texto": "2 paquetes",
+    "severidad": "success"
+   },
+   {
+    "texto": "#3",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "depende de 1",
+    "severidad": "info"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 4,
+  "mensaje": "10 paquetes de trabajo en 4 grupo(s) (esqueleto + HUs)."
+ }
+]

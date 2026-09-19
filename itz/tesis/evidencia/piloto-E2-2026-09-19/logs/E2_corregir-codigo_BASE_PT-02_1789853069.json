@@ -1,0 +1,74 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Corrigiendo BASE/PT-02 — 1 observaciones"
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 3,
+  "mensaje": "Rama base/PT-02 · https://github.com/CarlosSotoGarcia/loom-piloto-e2-gemini/pull/2"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "BASE/PT-02",
+  "mensaje": "Preparando la rama del PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Rama base/PT-02 lista (17 archivos)",
+  "tags": [
+   {
+    "texto": "Rama",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 3,
+  "clave": "BASE/PT-02",
+  "mensaje": "El agente está aplicando las correcciones..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 3,
+  "clave": "BASE/PT-02",
+  "mensaje": "  escribió backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java (2 KB)"
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Correcciones: Corrección de la configuración de Spring Security cambiando el uso de un método obsoleto/inexistente por requestMatchers.",
+  "tags": [
+   {
+    "texto": "1 archivos",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 3,
+  "clave": "BASE/PT-02",
+  "mensaje": "Commit y push a la rama del PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Commit fa478f32 en base/PT-02",
+  "tags": [
+   {
+    "texto": "Push",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 3,
+  "mensaje": "BASE/PT-02: correcciones subidas al PR. Vuelve a revisarlo."
+ }
+]

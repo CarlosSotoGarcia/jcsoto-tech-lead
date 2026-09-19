@@ -1,0 +1,55 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "HU-001/PT-01"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-01",
+  "mensaje": "HU-001/PT-01: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-01",
+  "mensaje": "HU-001/PT-01: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-01",
+  "mensaje": "HU-001/PT-01: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001/PT-01 — Se ha revisado el Pull Request del PT-01. La lógica de negocio, validación de credenciales con BCrypt, manejo de estado activo/inactivo de la cuenta e",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "4 observaciones",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "2 bloqueantes",
+    "severidad": "danger"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]
