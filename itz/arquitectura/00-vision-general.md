@@ -183,6 +183,8 @@
   paquete desde la lista de paquetes, con la cuenta de desarrollo; libera a los dependientes.
 - [ADR-0052](decisiones/0052-backend-documentado-con-swagger-openapi.md) — el backend se genera documentado con Swagger/OpenAPI:
   la arquitectura define la API y el contrato de endpoints, y el agente y la revisión lo exigen.
+- [ADR-0053](decisiones/0053-proveedor-claude-cuenta-normal-para-desarrollo.md) — proveedor «Claude (cuenta normal)»: usa el
+  CLI de Claude Code de la máquina (sesión, sin API de pago) para desarrollo local; agente confinado al repositorio.
 
 ## Problema
 

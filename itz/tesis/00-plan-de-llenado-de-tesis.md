@@ -61,7 +61,9 @@ de GitHub destino y su rama base, y credenciales de Jira (correo + API token, po
    más una muestra de paquetes repetidos (p. ej. 5 paquetes × 3 veces) para medir varianza.
 4. **Evaluación ciega:** quien califique relevancia de observaciones y suficiencia de TCs no debe saber qué proveedor los generó (asignar etiquetas A/B).
 5. **Registrar fallos** además de éxitos: JSON mal formado, truncamientos, reintentos, terminaciones sin pruebas, archivos obligatorios ausentes.
-6. **Congelar versión:** anotar el commit de Loom y los modelos exactos usados (`claude-sonnet-5`; Gemini `gemini-3.6-flash` para análisis y
+6. **Usar la API en los experimentos:** el proveedor «Claude (cuenta normal)» (ADR-0053) es solo para desarrollo; no da tokens, tiempo ni costo
+   comparables. Los escenarios E1–E4 se corren con Claude (API) y Gemini.
+7. **Congelar versión:** anotar el commit de Loom y los modelos exactos usados (`claude-sonnet-5`; Gemini `gemini-3.6-flash` para análisis y
    `gemini-pro-latest` para código; cambian con el tiempo).
 
 ### 2.3 Experimentos
