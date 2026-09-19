@@ -169,6 +169,9 @@
 - [ADR-0046](decisiones/0046-skill-06-generacion-de-codigo-agente-con-tdd.md) — skill 06: un agente con
   herramientas acotadas escribe el código de un paquete en su rama, con TDD (pruebas unitarias primero,
   compuerta que las exige), abre el PR con la cuenta de desarrollo y sincroniza el estado de los PRs.
+- [ADR-0047](decisiones/0047-proveedor-de-ia-por-proyecto-claude-o-gemini.md) — la IA es un atributo del
+  Proyecto (Claude o Gemini) para las skills de análisis y el agente de código; keys por Proyecto o del
+  servidor.
 
 ## Problema
 
