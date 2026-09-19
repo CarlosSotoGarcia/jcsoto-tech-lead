@@ -200,6 +200,8 @@
   fallos y cada corrida queda como regresión repetible sin IA.
 - [ADR-0060](decisiones/0060-diagnostico-de-avance-con-agente-de-navegador.md) — skill 03: diagnóstico de avance; el agente de navegador prueba los
   TCs contra el ambiente existente, marca cada uno cubierto/pendiente/sin evaluar y la skill 05 solo descompone lo pendiente.
+- [ADR-0061](decisiones/0061-generacion-de-fixes-desde-smoke-testing.md) — skill 09: los TCs fallidos del smoke testing se diagnostican y se convierten en
+  paquetes de fix (nueva ronda, máximo 3) que siguen el ciclo normal de código y revisión; después se vuelve a probar la HU.
 
 ## Problema
 

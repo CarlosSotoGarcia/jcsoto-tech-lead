@@ -142,7 +142,7 @@ de GitHub destino y su rama base, y credenciales de Jira (correo + API token, po
 | CU-10 | Generar y publicar el release a GCP | Administrador | Skill 10, ADR-0041, 0042 | Implementado |
 | CU-11 | Cambiar de proveedor de IA por proyecto | Administrador | ADR-0047 | Implementado |
 | CU-12 | Diagnosticar avance previo (brownfield) | Administrador | Skill 03, ADR-0007 | **No implementado** |
-| CU-13 | Smoke testing con Playwright y fixes | Administrador | Skills 08 y 09 | **No implementado** |
+| CU-13 | Smoke testing con Playwright y fixes | Administrador | Skills 08 y 09 | Implementado (ADR-0059, ADR-0061); falta correrlo en proyectos reales |
 
 ### 4.3 Escenarios de validación (los `E1`–`E4` de § 2.1)
 
@@ -252,7 +252,7 @@ Símbolos y abreviaturas (la guía pide relación con ≥ 10 elementos): HU, TC,
 | 5 | Generación de código y PRs | Implementado (skill 06) | Medir |
 | 6 | Revisión de código y ciclo de observaciones | Implementado (skill 07); rondas automáticas no | Medir; decidir si hay rondas automáticas |
 | 7 | Ejecución de TCs con Playwright | Implementado (skill 08, ADR-0059); falta el diagnóstico (skill 03) que reutiliza el motor | Correr en los proyectos reales y medir |
-| 8 | Fallo → fix | **No implementado** (skill 09) | Ídem |
+| 8 | Fallo → fix | Implementado (skill 09, ADR-0061) | Correr el ciclo completo en los proyectos reales y medir rondas hasta que el TC pasa |
 | 9 | Indexación multi-repo (solo diseño) | Documentado a nivel de diseño (ADR-0002, 0018) | Redactar |
 | 10 | Validar en 2–3 proyectos, greenfield y con avance previo, variando fuente | Jira en 2 proyectos; ambos greenfield probablemente | Ver decisiones 1 y 2 |
 | 11 | Medir por HU | Parcial (falta instrumentación) | § 3.2 |

@@ -64,7 +64,14 @@ a la lista, todos con el mismo `ronda`.
 5. Despacha cada paquete de trabajo de fix a `skills/06-...md` como cualquier otro paquete de trabajo
    pendiente — mismo mecanismo de generación de código y PR, sin trato especial.
 
+## Estado de implementación
+
+Implementada — [ADR-0061](../decisiones/0061-generacion-de-fixes-desde-smoke-testing.md): diagnóstico con IA de los TCs fallidos, un fix por causa raíz (cada TC en exactamente un fix),
+atribución de mejor esfuerzo, límite de 3 rondas y nueva corrida de smoke testing al fusionar la ronda.
+
 ## ADRs relacionados
+
+- [ADR-0061](../decisiones/0061-generacion-de-fixes-desde-smoke-testing.md) — implementación.
 
 - [ADR-0004](../decisiones/0004-flujo-orientado-a-hus-generacion-de-codigo-y-autorrevision.md) — el
   ciclo de fix como fase del flujo.
