@@ -52,7 +52,16 @@ Esta skill escribe en **dos lugares distintos** — vale la pena tenerlo present
    no puede aprobar en automático.
 6. Actualiza `paquetes/PT-0N.md` en el repositorio de control con la URL del PR y el nuevo estado.
 
+## Estado de implementación
+
+Implementada — [ADR-0046](../decisiones/0046-skill-06-generacion-de-codigo-agente-con-tdd.md): agente con
+herramientas acotadas sobre un worktree, desarrollo con TDD (compuerta que exige pruebas unitarias en
+paquetes de backend/frontend), PR con la cuenta de desarrollo y sincronización del estado de los PRs.
+Sin ejecución local del código en esta versión.
+
 ## ADRs relacionados
+
+- [ADR-0046](../decisiones/0046-skill-06-generacion-de-codigo-agente-con-tdd.md) — implementación y TDD.
 
 - [ADR-0004](../decisiones/0004-flujo-orientado-a-hus-generacion-de-codigo-y-autorrevision.md) —
   generación de código y apertura de PR como fase del flujo.
@@ -85,9 +94,8 @@ estado y la URL del PR.
 
 ## Pendientes propios de esta skill
 
-- Qué hace el sistema si el código generado ni siquiera compila/corre localmente antes de abrir PR —
-  ¿se abre igual para que la revisión (S5) lo detecte, o hay una validación local previa que evita
-  abrir PRs claramente rotos?
+- ~~Qué hace el sistema si el código generado no compila~~ — v1: se abre igual y la CI/la revisión lo
+  detectan (ADR-0046); validar localmente antes del PR queda como mejora.
 - ~~Cómo se coordinan paquetes de trabajo relacionados que tocan repos distintos~~ — resuelto en
   [ADR-0029](../decisiones/0029-orden-secuencial-de-paquetes-de-trabajo-dependientes.md): en secuencia
   estricta, nunca en paralelo — el dependiente no arranca hasta que la dependencia está fusionada.

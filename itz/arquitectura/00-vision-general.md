@@ -166,6 +166,9 @@
   arquitectura aprobada: planea el esqueleto (grupo BASE) y el orden de las HUs, y parte cada HU en
   paquetes de una sola capa y un solo repositorio que cubren todos sus TCs; `tasks.md` y `PT-0N.md` en
   el repositorio de control y la lista en la pestaña Desarrollo.
+- [ADR-0046](decisiones/0046-skill-06-generacion-de-codigo-agente-con-tdd.md) — skill 06: un agente con
+  herramientas acotadas escribe el código de un paquete en su rama, con TDD (pruebas unitarias primero,
+  compuerta que las exige), abre el PR con la cuenta de desarrollo y sincroniza el estado de los PRs.
 
 ## Problema
 
