@@ -175,6 +175,10 @@
 - [ADR-0048](decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md) — orden de implementación de
   las HUs (prioridad de la fuente ajustada por dependencias) y avance por HU en Desarrollo: la skill 06
   elige por ese orden o con la HU que se indique.
+- [ADR-0049](decisiones/0049-skill-07-revision-de-codigo-y-correcciones.md) — skill 07: revisión del PR contra
+  spec, arquitectura y buenas prácticas, observaciones publicadas en GitHub y correcciones sobre la misma rama.
+- [ADR-0050](decisiones/0050-entorno-de-desarrollo-dockerizado-y-readme-en-el-esqueleto.md) — el primer paquete
+  del esqueleto deja el entorno de desarrollo dockerizado y su README, y se exige al agente.
 
 ## Problema
 

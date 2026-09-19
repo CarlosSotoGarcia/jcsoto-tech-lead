@@ -62,7 +62,15 @@ automático si arrastra un supuesto sin resolver.**
    `usuarios_autorizados_a_aprobar` antes de fusionarse — este paso ya no lo hace esta skill, es un
    gate del orquestador (ver [diagrama 01](../diagramas/01-flujo-pipeline-hu-a-desarrollo.md)).
 
+## Estado de implementación
+
+Implementada — [ADR-0049](../decisiones/0049-skill-07-revision-de-codigo-y-correcciones.md): revisa el diff del PR
+contra spec, arquitectura y buenas prácticas, publica las observaciones en GitHub, marca el paquete `aprobado` o
+`con_observaciones` y permite corregirlo sobre la misma rama. Sin CI ni confirmación de supuestos todavía.
+
 ## ADRs relacionados
+
+- [ADR-0049](../decisiones/0049-skill-07-revision-de-codigo-y-correcciones.md) — implementación.
 
 - [ADR-0004](../decisiones/0004-flujo-orientado-a-hus-generacion-de-codigo-y-autorrevision.md) — el
   ciclo de revisión como fase del flujo.

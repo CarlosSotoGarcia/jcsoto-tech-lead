@@ -89,6 +89,11 @@ pendientes.
 
 El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md)): fija el orden de implementación de cada HU (`orden`): prioridad de negocio ajustada por dependencias reales.
 
+## Esqueleto con entorno de desarrollo
+
+El primer paquete del esqueleto deja el entorno de desarrollo dockerizado y el README
+([ADR-0050](../decisiones/0050-entorno-de-desarrollo-dockerizado-y-readme-en-el-esqueleto.md)).
+
 ## ADRs relacionados
 
 - [ADR-0045](../decisiones/0045-skill-05-descomposicion-desde-arquitectura-fundacional.md) — adaptación
