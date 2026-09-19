@@ -104,8 +104,12 @@ de GitHub destino y su rama base, y credenciales de Jira (correo + API token, po
 | Resultado de CI del PR y de `docker compose up` | Experimento E | manual o lectura de la API de GitHub |
 | Versión de Loom (commit) por corrida | Reproducibilidad | campo en `metricas` |
 
-> Acción técnica previa: instrumentar `_llm.py` y `agente_codigo.py` para escribir un registro por llamada (`skill`, `proveedor`, `modelo`,
-> `duración`, `tokens_in`, `tokens_out`, `reintentos`, `resultado`) y un endpoint/exportación a CSV. Es un ADR nuevo.
+> **Hecho (ADR-0057):** el sistema ya registra proveedor, modelo, tokens, duración, reintentos, rechazos de compuertas y costo en la colección
+> `metricas` (resumen en la tarjeta «Uso de IA» y CSV con «Exportar CSV»). Falta cargar `LOOM_PRECIOS_MODELOS` con los precios vigentes, registrar la
+> calificación humana y la versión de Loom por corrida.
+>
+> ~~Acción técnica previa: instrumentar `_llm.py` y `agente_codigo.py` para escribir un registro por llamada (`skill`, `proveedor`, `modelo`,
+> `duración`, `tokens_in`, `tokens_out`, `reintentos`, `resultado`) y un endpoint/exportación a CSV. Es un ADR nuevo.~~
 
 ### 3.3 Rúbricas de evaluación humana (por definir y anexar)
 

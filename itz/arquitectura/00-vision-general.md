@@ -191,6 +191,8 @@
   (con el gcloud de la máquina y confirmación) y detección de cambios de infraestructura que dejan el despliegue desactualizado.
 - [ADR-0056](decisiones/0056-un-readme-por-servicio.md) — un README por servicio (backend, frontend, microservicios) además
   del de la raíz; el esqueleto lo crea, el agente lo mantiene y la revisión lo verifica.
+- [ADR-0057](decisiones/0057-instrumentacion-de-metricas-de-uso-de-ia.md) — métricas de uso de IA por llamada, skill, reintento y
+  compuerta (proveedor, modelo, tokens, tiempo, costo), con resumen en pantalla y exportación CSV para la tesis.
 
 ## Problema
 
