@@ -187,6 +187,10 @@
   CLI de Claude Code de la máquina (sesión, sin API de pago) para desarrollo local; agente confinado al repositorio.
 - [ADR-0054](decisiones/0054-release-py-en-lugar-de-release-sh.md) — el release se genera como `release.py` (Python, multiplataforma)
   en lugar de `release.sh`; el nombre del secreto se valida.
+- [ADR-0055](decisiones/0055-ejecutar-el-release-desde-la-plataforma.md) — botón para ejecutar el release desde la plataforma
+  (con el gcloud de la máquina y confirmación) y detección de cambios de infraestructura que dejan el despliegue desactualizado.
+- [ADR-0056](decisiones/0056-un-readme-por-servicio.md) — un README por servicio (backend, frontend, microservicios) además
+  del de la raíz; el esqueleto lo crea, el agente lo mantiene y la revisión lo verifica.
 
 ## Problema
 

@@ -38,6 +38,11 @@ Ningún archivo contiene credenciales: el workflow se autentica antes de ejecuta
 3. Rellena las plantillas, escribe todo en `despliegue/` y hace un solo commit.
 4. Devuelve los archivos y las advertencias, y registra la última ejecución de la Fase 4.
 
+## Ejecución desde la plataforma
+
+El release se puede ejecutar desde la pestaña Implementación y los cambios de infraestructura dejan el despliegue «desactualizado»
+([ADR-0055](../decisiones/0055-ejecutar-el-release-desde-la-plataforma.md)).
+
 ## Artefacto: release.py
 
 El script se genera en Python (`release.py`) y no en Bash — [ADR-0054](../decisiones/0054-release-py-en-lugar-de-release-sh.md).

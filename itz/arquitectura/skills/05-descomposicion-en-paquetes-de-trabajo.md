@@ -94,6 +94,10 @@ El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hu
 El primer paquete del esqueleto deja el entorno de desarrollo dockerizado y el README
 ([ADR-0050](../decisiones/0050-entorno-de-desarrollo-dockerizado-y-readme-en-el-esqueleto.md)).
 
+## README por servicio
+
+El esqueleto crea el README de cada servicio ([ADR-0056](../decisiones/0056-un-readme-por-servicio.md)).
+
 ## ADRs relacionados
 
 - [ADR-0045](../decisiones/0045-skill-05-descomposicion-desde-arquitectura-fundacional.md) — adaptación
