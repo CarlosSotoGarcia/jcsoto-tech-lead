@@ -113,6 +113,11 @@ del Proyecto, y su falla no invalida el descubrimiento.
 
 El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md)): lee todas las HUs y guarda la posición de cada una en la fuente (Jira Rank) como prioridad de negocio (`orden_fuente`).
 
+## Fuente Markdown
+
+Se implementó junto a Jira: los archivos `.md` se suben desde la plataforma a una carpeta del servidor, uno por HU o actividad, y se analizan en orden natural de
+nombre ([ADR-0058](../decisiones/0058-fuente-de-hus-markdown-con-archivos-subidos.md)). La fuente GitHub sigue pendiente.
+
 ## ADRs relacionados
 
 - [ADR-0039](../decisiones/0039-catalogo-de-stack-y-propuesta-del-arquitecto.md) — propuesta de

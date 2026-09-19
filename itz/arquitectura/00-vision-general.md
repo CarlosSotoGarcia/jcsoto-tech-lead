@@ -193,6 +193,8 @@
   del de la raíz; el esqueleto lo crea, el agente lo mantiene y la revisión lo verifica.
 - [ADR-0057](decisiones/0057-instrumentacion-de-metricas-de-uso-de-ia.md) — métricas de uso de IA por llamada, skill, reintento y
   compuerta (proveedor, modelo, tokens, tiempo, costo), con resumen en pantalla y exportación CSV para la tesis.
+- [ADR-0058](decisiones/0058-fuente-de-hus-markdown-con-archivos-subidos.md) — fuente de HUs Markdown: se suben varios `.md` desde
+  la plataforma a una carpeta del servidor (un archivo por HU o actividad, orden natural de nombre) y de ahí arranca el análisis.
 
 ## Problema
 

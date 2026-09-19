@@ -245,7 +245,7 @@ Símbolos y abreviaturas (la guía pide relación con ≥ 10 elementos): HU, TC,
 
 | Obj. | Tema | Estado hoy | Acción |
 |---|---|---|---|
-| 1 | Modelo de Proyecto y fuente pluggable | Implementado (Jira); Markdown y GitHub no | Decidir si se implementa Markdown/GitHub o se acota el alcance |
+| 1 | Modelo de Proyecto y fuente pluggable | Implementado (Jira y Markdown, ADR-0058); GitHub no | Decidir si se implementa GitHub o se acota el alcance |
 | 2 | Análisis de HU y generación de TCs | Implementado (skills 01–02) | Medir (experimento A) |
 | 3 | Diagnóstico de avance existente | **No implementado** (skill 03) | Implementar o mover a trabajo futuro |
 | 4 | Arquitectura y descomposición | Implementado (skills 04–05) | Medir |
