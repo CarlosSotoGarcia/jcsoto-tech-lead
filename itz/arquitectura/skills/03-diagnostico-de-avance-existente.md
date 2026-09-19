@@ -53,7 +53,14 @@ tcs_fallan: [TC-001, TC-003, TC-005]
 4. Escribe `evidencia/diagnostico-01.md` y actualiza el estado de cobertura en `test-cases.md`.
 5. Deja la fase en `diagnosticada` para que el orquestador continúe con diseño de arquitectura.
 
+## Estado de implementación
+
+Implementada — [ADR-0060](../decisiones/0060-diagnostico-de-avance-con-agente-de-navegador.md): el agente de navegador de la skill 08 prueba los TCs contra el ambiente existente, marca
+cada uno `cubierto`, `pendiente` o `sin_evaluar`, y la skill 05 solo descompone lo que falta.
+
 ## ADRs relacionados
+
+- [ADR-0060](../decisiones/0060-diagnostico-de-avance-con-agente-de-navegador.md) — implementación.
 
 - [ADR-0006](../decisiones/0006-smoke-tests-con-playwright-y-bitacora-de-hus.md) — Playwright como
   motor de ejecución de TCs.

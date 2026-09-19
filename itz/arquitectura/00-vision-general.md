@@ -198,6 +198,8 @@
 - [ADR-0059](decisiones/0059-smoke-testing-por-hu-con-script-generado-desde-el-codigo.md) — skill 08: smoke testing por HU; la IA lee el
   código, escribe un script de Playwright (validado y ejecutado aparte con cuentas de prueba por rol), un agente de navegador verifica los
   fallos y cada corrida queda como regresión repetible sin IA.
+- [ADR-0060](decisiones/0060-diagnostico-de-avance-con-agente-de-navegador.md) — skill 03: diagnóstico de avance; el agente de navegador prueba los
+  TCs contra el ambiente existente, marca cada uno cubierto/pendiente/sin evaluar y la skill 05 solo descompone lo pendiente.
 
 ## Problema
 

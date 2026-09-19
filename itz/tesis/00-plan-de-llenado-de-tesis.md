@@ -247,7 +247,7 @@ Símbolos y abreviaturas (la guía pide relación con ≥ 10 elementos): HU, TC,
 |---|---|---|---|
 | 1 | Modelo de Proyecto y fuente pluggable | Implementado (Jira y Markdown, ADR-0058); GitHub no | Decidir si se implementa GitHub o se acota el alcance |
 | 2 | Análisis de HU y generación de TCs | Implementado (skills 01–02) | Medir (experimento A) |
-| 3 | Diagnóstico de avance existente | **No implementado** (skill 03) | Implementar o mover a trabajo futuro |
+| 3 | Diagnóstico de avance existente | Implementado (skill 03, ADR-0060) | Correr en ITZ Inventarios / IAT y medir aciertos contra revisión manual |
 | 4 | Arquitectura y descomposición | Implementado (skills 04–05) | Medir |
 | 5 | Generación de código y PRs | Implementado (skill 06) | Medir |
 | 6 | Revisión de código y ciclo de observaciones | Implementado (skill 07); rondas automáticas no | Medir; decidir si hay rondas automáticas |
