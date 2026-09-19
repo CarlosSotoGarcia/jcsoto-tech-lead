@@ -36,7 +36,7 @@ There are no build, lint, or test commands to run here.
     for the conventions. This is where architecture work should land going forward, not
     `documentación/` (which is the frozen, already-approved proposal).
   - `referencias/` — other students' theses, kept as reference models.
-  - `tesis/` — the institution's official thesis-structure guide, plus `00-plan-de-llenado-de-tesis.md` (working
+  - `tesis/` — the institution's official thesis-structure guide, `Loom - Tesis.docx` (the working copy of that guide: Word track changes on, one content control with placeholder guidance per section — write the thesis there, never edit the original guide), plus `00-plan-de-llenado-de-tesis.md` (working
     plan: what to write per chapter, evidence needed, Claude-vs-Gemini validation design, open decisions).
 
 ## Working with this repository
