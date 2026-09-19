@@ -185,6 +185,8 @@
   la arquitectura define la API y el contrato de endpoints, y el agente y la revisión lo exigen.
 - [ADR-0053](decisiones/0053-proveedor-claude-cuenta-normal-para-desarrollo.md) — proveedor «Claude (cuenta normal)»: usa el
   CLI de Claude Code de la máquina (sesión, sin API de pago) para desarrollo local; agente confinado al repositorio.
+- [ADR-0054](decisiones/0054-release-py-en-lugar-de-release-sh.md) — el release se genera como `release.py` (Python, multiplataforma)
+  en lugar de `release.sh`; el nombre del secreto se valida.
 
 ## Problema
 
