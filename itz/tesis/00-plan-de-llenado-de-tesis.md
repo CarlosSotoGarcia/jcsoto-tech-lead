@@ -251,7 +251,7 @@ Símbolos y abreviaturas (la guía pide relación con ≥ 10 elementos): HU, TC,
 | 4 | Arquitectura y descomposición | Implementado (skills 04–05) | Medir |
 | 5 | Generación de código y PRs | Implementado (skill 06) | Medir |
 | 6 | Revisión de código y ciclo de observaciones | Implementado (skill 07); rondas automáticas no | Medir; decidir si hay rondas automáticas |
-| 7 | Ejecución de TCs con Playwright | **No implementado** (skill 08) | Implementar o mover a trabajo futuro |
+| 7 | Ejecución de TCs con Playwright | Implementado (skill 08, ADR-0059); falta el diagnóstico (skill 03) que reutiliza el motor | Correr en los proyectos reales y medir |
 | 8 | Fallo → fix | **No implementado** (skill 09) | Ídem |
 | 9 | Indexación multi-repo (solo diseño) | Documentado a nivel de diseño (ADR-0002, 0018) | Redactar |
 | 10 | Validar en 2–3 proyectos, greenfield y con avance previo, variando fuente | Jira en 2 proyectos; ambos greenfield probablemente | Ver decisiones 1 y 2 |

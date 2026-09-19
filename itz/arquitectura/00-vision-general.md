@@ -195,6 +195,9 @@
   compuerta (proveedor, modelo, tokens, tiempo, costo), con resumen en pantalla y exportación CSV para la tesis.
 - [ADR-0058](decisiones/0058-fuente-de-hus-markdown-con-archivos-subidos.md) — fuente de HUs Markdown: se suben varios `.md` desde
   la plataforma a una carpeta del servidor (un archivo por HU o actividad, orden natural de nombre) y de ahí arranca el análisis.
+- [ADR-0059](decisiones/0059-smoke-testing-por-hu-con-script-generado-desde-el-codigo.md) — skill 08: smoke testing por HU; la IA lee el
+  código, escribe un script de Playwright (validado y ejecutado aparte con cuentas de prueba por rol), un agente de navegador verifica los
+  fallos y cada corrida queda como regresión repetible sin IA.
 
 ## Problema
 

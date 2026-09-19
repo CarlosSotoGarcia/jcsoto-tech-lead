@@ -50,7 +50,15 @@ Idéntico al mecanismo de `skills/03-...md` (generar script Playwright por TC, e
 prueba del rol correspondiente, registrar resultado y evidencia), aplicado sobre **todos los TCs de la
 HU** una vez que el orquestador confirma que la ronda en curso está completa (ADR-0023).
 
+## Estado de implementación
+
+Implementada — [ADR-0059](../decisiones/0059-smoke-testing-por-hu-con-script-generado-desde-el-codigo.md): la IA lee el código del frontend y escribe un script de
+Playwright por HU; se valida y ejecuta en un proceso aparte con cuentas de prueba por rol; un agente de navegador verifica los fallos; las corridas quedan como regresión repetible sin IA.
+Sin generación de fixes (skill 09) ni verificación del despliegue (ADR-0025) todavía.
+
 ## ADRs relacionados
+
+- [ADR-0059](../decisiones/0059-smoke-testing-por-hu-con-script-generado-desde-el-codigo.md) — implementación.
 
 - [ADR-0004](../decisiones/0004-flujo-orientado-a-hus-generacion-de-codigo-y-autorrevision.md) — smoke
   testing como fase posterior al merge.
