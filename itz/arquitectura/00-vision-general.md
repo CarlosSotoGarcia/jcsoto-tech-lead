@@ -179,6 +179,10 @@
   spec, arquitectura y buenas prácticas, observaciones publicadas en GitHub y correcciones sobre la misma rama.
 - [ADR-0050](decisiones/0050-entorno-de-desarrollo-dockerizado-y-readme-en-el-esqueleto.md) — el primer paquete
   del esqueleto deja el entorno de desarrollo dockerizado y su README, y se exige al agente.
+- [ADR-0051](decisiones/0051-aceptar-y-fusionar-el-pr-desde-la-plataforma.md) — la persona acepta (fusiona) el PR de un
+  paquete desde la lista de paquetes, con la cuenta de desarrollo; libera a los dependientes.
+- [ADR-0052](decisiones/0052-backend-documentado-con-swagger-openapi.md) — el backend se genera documentado con Swagger/OpenAPI:
+  la arquitectura define la API y el contrato de endpoints, y el agente y la revisión lo exigen.
 
 ## Problema
 

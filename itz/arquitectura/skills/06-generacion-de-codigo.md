@@ -63,6 +63,10 @@ Sin ejecución local del código en esta versión.
 
 El orden de las HUs ([ADR-0048](../decisiones/0048-orden-de-implementacion-de-hus-y-avance-por-hu.md)): el siguiente paquete se elige por ese orden, y se puede avanzar con una HU concreta (`grupo` sin `pt`) respetando dependencias.
 
+## Fusión del PR
+
+La persona acepta el PR desde la plataforma ([ADR-0051](../decisiones/0051-aceptar-y-fusionar-el-pr-desde-la-plataforma.md)).
+
 ## ADRs relacionados
 
 - [ADR-0046](../decisiones/0046-skill-06-generacion-de-codigo-agente-con-tdd.md) — implementación y TDD.

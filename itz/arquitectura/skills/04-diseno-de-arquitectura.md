@@ -83,6 +83,11 @@ Cuerpo:
 Implementada la variante **fundacional** (Proyecto `nuevo`) — ADR-0044. El modo extensión sigue
 pendiente y depende del diagnóstico (skill 03).
 
+## API y Swagger
+
+La arquitectura de un repositorio con backend incluye la sección «API y Swagger/OpenAPI»
+([ADR-0052](../decisiones/0052-backend-documentado-con-swagger-openapi.md)).
+
 ## ADRs relacionados
 
 - [ADR-0044](../decisiones/0044-skill-04-arquitectura-fundacional-documento-y-aprobacion.md) — formato del
