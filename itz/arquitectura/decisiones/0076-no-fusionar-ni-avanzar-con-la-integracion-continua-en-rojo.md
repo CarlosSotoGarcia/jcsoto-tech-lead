@@ -13,7 +13,7 @@ Loom fusionaba un PR sin mirar sus checks de GitHub Actions. En el piloto E1c lo
 1. **La fusión exige los checks en verde.** Antes de fusionar, Loom lee los check runs y los estados del commit más reciente de la rama del PR (`estado_checks_pr`: `verde`, `pendiente`, `fallido` o `sin_checks`). Con checks fallidos o sin terminar, la fusión se rechaza y el mensaje nombra los checks. Aplica al botón de aceptar y al avance por HU.
 2. **El avance por HU espera y se detiene.** Antes de fusionar cada paquete, «Avanzar con esta HU» espera a que el CI termine (revisa cada 20 s, tope de 25 min). En verde, fusiona y sigue con el siguiente paquete; en rojo, se detiene, deja el PR abierto y nombra los checks que fallaron. No se pasa al siguiente paquete mientras el anterior no esté fusionado, lo cual ya exigían las dependencias entre paquetes.
 3. **Repositorio sin checks.** Si tras 90 s el repositorio no reporta ninguno, se acepta y se avisa en el registro; sin CI no hay evidencia que exigir.
-4. **Complemento recomendado en GitHub:** proteger la rama base con «Require status checks to pass» hace que ni siquiera un clic fuera de Loom pueda fusionar en rojo. Loom no lo configura por su cuenta, porque exige permisos de administrador del repositorio.
+4. **Complemento recomendado en GitHub:** proteger la rama base con «Require status checks to pass» hace que ni siquiera un clic fuera de Loom pueda fusionar en rojo. Loom no lo configura por su cuenta: exige permisos de administrador y, en un repositorio privado, GitHub Pro (con el plan gratuito la API responde 403, como en el piloto). Queda preparado como `loom/scripts/proteger-rama.sh`, que se activa a mano con `scripts/proteger-rama.sh <dueño/repo> main`.
 
 ## Consecuencias
 
