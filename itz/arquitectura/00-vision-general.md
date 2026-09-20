@@ -214,6 +214,10 @@
   a casos, código y smoke testing (versión funcional de los casos por paquete y corrida); la regresión se niega con casos cambiados.
 - [ADR-0067](decisiones/0067-paquetes-de-cambio-cuando-cambian-los-casos-de-prueba.md) — paquetes de cambio: llevan el código y sus pruebas a los casos que cambiaron
   (mismo ciclo que un fix) y la arquitectura avisa cuando cambia la especificación de una HU.
+- [ADR-0068](decisiones/0068-registro-de-rondas-de-revision-y-correccion-como-evidencia.md) — cada ronda de revisión y de corrección se guarda (observaciones, respuestas,
+  commit, valoración humana) y se exporta a CSV como evidencia de la tesis.
+- [ADR-0069](decisiones/0069-segunda-opinion-de-la-ia-sobre-las-observaciones-de-la-revision.md) — segunda opinión de la IA (idealmente independiente de quien revisó) sobre
+  cada observación, contra el diff de esa revisión; historial de revisión rediseñado.
 
 ## Problema
 

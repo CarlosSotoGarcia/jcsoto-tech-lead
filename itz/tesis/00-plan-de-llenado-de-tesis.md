@@ -91,6 +91,7 @@ Piloto acotado (tope 20 USD) sobre P1 con 3 HUs: **E2 (Gemini) ejecutado**, fase
 | HUs con criterios explícitos/inferidos, supuestos, posición en la fuente (`orden_fuente`) y orden final (`orden`) | Mongo `hus`; `HU-00N/spec.md` |
 | TCs por HU con `criterio_ref` (deriva de qué criterio) | Mongo `hus.casos_prueba`; `test-cases.md` |
 | Paquetes: capa, repo, entregables, TCs asociados, dependencias, estado, PR, `rondas_revision`, observaciones (fuente, severidad, archivo, línea) | Mongo `paquetes`; `paquetes/PT-0N.md` |
+| Rondas de revisión y de corrección de cada PR: observaciones (severidad, fuente, ubicación), respuesta de la corrección, commit, valoración humana | Mongo `revisiones`; CSV en «Exportar revisiones» (ADR-0068) |
 | Historial cronológico de cada artefacto | `git log` del repositorio de control (`loom_target/<id>/`) |
 | PRs con descripción, diff, comentarios de revisión y commits | GitHub del proyecto |
 | Pruebas escritas por paquete (archivos de prueba) | Descripción del PR y árbol de la rama |
