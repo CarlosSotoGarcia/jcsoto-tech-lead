@@ -1,0 +1,51 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "BASE/PT-04"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-04",
+  "mensaje": "BASE/PT-04: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-04",
+  "mensaje": "BASE/PT-04: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-04",
+  "mensaje": "BASE/PT-04: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "BASE/PT-04 — El shell cubre lo pedido: rutas lazy, layout, interceptor de URL base, Jest y script OpenAPI, con pruebas razonables y README actualizado. Hay defecto",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "5 observaciones",
+    "severidad": "secondary"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

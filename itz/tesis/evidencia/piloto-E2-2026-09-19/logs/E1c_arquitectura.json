@@ -1,0 +1,41 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Leyendo las HUs y el stack elegido..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "1 repositorio(s) por diseñar (3 HU(s) leídas)."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "loom-piloto-e1c-claude-cli",
+  "mensaje": "Diseñando la arquitectura de loom-piloto-e1c-claude-cli (1/1)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "loom-piloto-e1c-claude-cli — arquitectura definida",
+  "tags": [
+   {
+    "texto": "4 entidades",
+    "severidad": "info"
+   },
+   {
+    "texto": "8 decisiones",
+    "severidad": "secondary"
+   },
+   {
+    "texto": "8 preguntas",
+    "severidad": "warn"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "1 arquitectura(s) definida(s) — pendiente de tu aprobación."
+ }
+]

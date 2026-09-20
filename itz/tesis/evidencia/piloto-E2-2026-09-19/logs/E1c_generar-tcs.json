@@ -1,0 +1,67 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Leyendo HUs especificadas..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 3,
+  "mensaje": "3 HU(s) pendientes de generar TCs."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-001",
+  "mensaje": "Generando TCs de HU-001 (1/3)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001 — 21 TC(s) generado(s)",
+  "tags": [
+   {
+    "texto": "21 TCs",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 3,
+  "clave": "HU-002",
+  "mensaje": "Generando TCs de HU-002 (2/3)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-002 — 18 TC(s) generado(s)",
+  "tags": [
+   {
+    "texto": "18 TCs",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 3,
+  "clave": "HU-003",
+  "mensaje": "Generando TCs de HU-003 (3/3)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-003 — 19 TC(s) generado(s)",
+  "tags": [
+   {
+    "texto": "19 TCs",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 3,
+  "mensaje": "3 HU(s) con TCs generados."
+ }
+]

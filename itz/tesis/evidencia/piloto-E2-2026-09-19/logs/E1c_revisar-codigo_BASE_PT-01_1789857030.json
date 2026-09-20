@@ -1,0 +1,51 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "BASE/PT-01"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-01",
+  "mensaje": "BASE/PT-01: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-01",
+  "mensaje": "BASE/PT-01: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-01",
+  "mensaje": "BASE/PT-01: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "BASE/PT-01 — El entorno dockerizado cubre la mayor parte de los entregables (compose con postgres, mailhog, backend y frontend, Dockerfiles dev, .env.example y REA",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "7 observaciones",
+    "severidad": "secondary"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

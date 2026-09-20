@@ -1,0 +1,61 @@
+          Please use "setupZoneTestEnv" function instead. Example:
+      
+          // setup-jest.ts
+          import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+      
+          setupZoneTestEnv();
+
+    > 1 | import 'jest-preset-angular/setup-jest';
+        | ^
+      2 |
+
+      at Object.<anonymous> (node_modules/jest-preset-angular/setup-jest.js:1:111)
+      at Object.<anonymous> (setup-jest.ts:1:1)
+
+PASS src/app/features/login/login.component.spec.ts (41.129 s)
+  ● Console
+
+    console.warn
+      
+          Importing "setup-jest.js" directly is deprecated. The file "setup-jest.js" will be removed in the future.
+          Please use "setupZoneTestEnv" function instead. Example:
+      
+          // setup-jest.ts
+          import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+      
+          setupZoneTestEnv();
+
+    > 1 | import 'jest-preset-angular/setup-jest';
+        | ^
+      2 |
+
+      at Object.<anonymous> (node_modules/jest-preset-angular/setup-jest.js:1:111)
+      at Object.<anonymous> (setup-jest.ts:1:1)
+
+PASS src/app/core/auth/auth.service.spec.ts (38.285 s)
+  ● Console
+
+    console.warn
+      
+          Importing "setup-jest.js" directly is deprecated. The file "setup-jest.js" will be removed in the future.
+          Please use "setupZoneTestEnv" function instead. Example:
+      
+          // setup-jest.ts
+          import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+      
+          setupZoneTestEnv();
+
+    > 1 | import 'jest-preset-angular/setup-jest';
+        | ^
+      2 |
+
+      at Object.<anonymous> (node_modules/jest-preset-angular/setup-jest.js:1:111)
+      at Object.<anonymous> (setup-jest.ts:1:1)
+
+
+Test Suites: 12 passed, 12 total
+Tests:       77 passed, 77 total
+Snapshots:   0 total
+Time:        130.239 s
+Ran all test suites.
+exit 0

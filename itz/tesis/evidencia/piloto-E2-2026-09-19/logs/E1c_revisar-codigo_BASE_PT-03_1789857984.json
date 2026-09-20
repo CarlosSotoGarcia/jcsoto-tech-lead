@@ -1,0 +1,51 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "BASE/PT-03"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-03",
+  "mensaje": "BASE/PT-03: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-03",
+  "mensaje": "BASE/PT-03: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-03",
+  "mensaje": "BASE/PT-03: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "BASE/PT-03 — La implementación de seguridad base es sólida y bien probada: cadena stateless, CORS estricto, BCrypt configurable, JwtService con validación defensiv",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "5 observaciones",
+    "severidad": "secondary"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

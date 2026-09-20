@@ -202,6 +202,8 @@
   TCs contra el ambiente existente, marca cada uno cubierto/pendiente/sin evaluar y la skill 05 solo descompone lo pendiente.
 - [ADR-0061](decisiones/0061-generacion-de-fixes-desde-smoke-testing.md) — skill 09: los TCs fallidos del smoke testing se diagnostican y se convierten en
   paquetes de fix (nueva ronda, máximo 3) que siguen el ciclo normal de código y revisión; después se vuelve a probar la HU.
+- [ADR-0062](decisiones/0062-descomposicion-no-acepta-resultados-vacios.md) — skill 05: una HU sin paquetes no se da por buena; se reintenta hasta 3 veces y
+  luego falla con un error claro (defecto hallado en el piloto de la tesis).
 
 ## Problema
 

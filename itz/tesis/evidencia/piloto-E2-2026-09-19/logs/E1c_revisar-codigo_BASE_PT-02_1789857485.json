@@ -1,0 +1,51 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "BASE/PT-02"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-02",
+  "mensaje": "BASE/PT-02: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-02",
+  "mensaje": "BASE/PT-02: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "BASE/PT-02",
+  "mensaje": "BASE/PT-02: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "BASE/PT-02 — El esqueleto cumple casi todo lo pedido: pom, módulos, migraciones V1..V4, ProblemDetail, OpenApiConfig, Swagger y README. Hay un defecto de seguridad",
+  "tags": [
+   {
+    "texto": "Con observaciones",
+    "severidad": "warn"
+   },
+   {
+    "texto": "6 observaciones",
+    "severidad": "secondary"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "0 aprobado(s), 1 con observaciones."
+ }
+]

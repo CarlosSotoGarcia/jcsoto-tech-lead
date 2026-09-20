@@ -1,0 +1,74 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Corrigiendo HU-001/PT-02 — 2 observaciones"
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 3,
+  "mensaje": "Rama hu/ITZINV-12/PT-02 · https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/6"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-001/PT-02",
+  "mensaje": "Preparando la rama del PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Rama hu/ITZINV-12/PT-02 lista (136 archivos)",
+  "tags": [
+   {
+    "texto": "Rama",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 3,
+  "clave": "HU-001/PT-02",
+  "mensaje": "El agente está aplicando las correcciones..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 3,
+  "clave": "HU-001/PT-02",
+  "mensaje": "  escribió frontend/src/app/core/api/api.models.ts"
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Correcciones: **notas_para_revision**\n\n1. **Observación 1 (menor, tipos a mano): corregida en parte.** No pude ejecutar `npm run api:generate`. Necesita el backend levantado ",
+  "tags": [
+   {
+    "texto": "1 archivos",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 3,
+  "clave": "HU-001/PT-02",
+  "mensaje": "Commit y push a la rama del PR..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "Commit 6a60d566 en hu/ITZINV-12/PT-02",
+  "tags": [
+   {
+    "texto": "Push",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 3,
+  "mensaje": "HU-001/PT-02: correcciones subidas al PR. Vuelve a revisarlo."
+ }
+]

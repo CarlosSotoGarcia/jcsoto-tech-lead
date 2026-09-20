@@ -1,0 +1,79 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Conectando con Jira..."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 3,
+  "mensaje": "3 elemento(s) por actualizar (de 33 en el sprint activo)."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "ITZINV-12",
+  "mensaje": "Analizando ITZINV-12 (1/3)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001 — Iniciar sesión con correo y contraseña",
+  "tags": [
+   {
+    "texto": "HU",
+    "severidad": "info"
+   },
+   {
+    "texto": "Con supuestos",
+    "severidad": "warn"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 2,
+  "total": 3,
+  "clave": "ITZINV-13",
+  "mensaje": "Analizando ITZINV-13 (2/3)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-002 — Recuperar contraseña olvidada por correo electrónico",
+  "tags": [
+   {
+    "texto": "HU",
+    "severidad": "info"
+   },
+   {
+    "texto": "Con supuestos",
+    "severidad": "warn"
+   }
+  ]
+ },
+ {
+  "tipo": "procesando",
+  "indice": 3,
+  "total": 3,
+  "clave": "ITZINV-14",
+  "mensaje": "Analizando ITZINV-14 (3/3)..."
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-003 — Cerrar sesión manualmente y por expiración por inactividad",
+  "tags": [
+   {
+    "texto": "HU",
+    "severidad": "info"
+   },
+   {
+    "texto": "Con supuestos",
+    "severidad": "warn"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 3,
+  "mensaje": "3 elemento(s) analizado(s)."
+ }
+]
