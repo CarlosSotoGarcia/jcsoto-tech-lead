@@ -223,6 +223,7 @@
 - [ADR-0071](decisiones/0071-el-release-crea-cloud-sql-secretos-y-variables-y-registra-los-fallos-de-arranque.md) — el release crea Cloud SQL, secretos y variables, resuelve
   las URL antes de desplegar y deja registrados los fallos de arranque del código generado.
 - [ADR-0072](decisiones/0072-release-automatico-al-aceptar-un-pr.md) — opción por proyecto: aceptar un PR desde Loom lanza el release en segundo plano (una corrida a la vez).
+- [ADR-0073](decisiones/0073-resultados-de-smoke-e-incidencias-visibles-en-las-hus.md) — el informe de smoke con iconos y porcentajes; «Ver HUs» y el detalle muestran resultados de smoke e incidencias (fixes).
 
 ## Problema
 
