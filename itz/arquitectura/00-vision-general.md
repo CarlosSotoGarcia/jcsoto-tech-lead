@@ -208,6 +208,10 @@
   aplicativo desplegable (Dockerfile de producción y CI) y las HUs dependen de él; el release avisa si falta el Dockerfile.
 - [ADR-0064](decisiones/0064-responder-y-resolver-las-observaciones-al-corregir-un-pr.md) — skill 07: al corregir un PR se responde cada observación con lo que
   se cambió (según el diff) y se resuelven las conversaciones de las corregidas.
+- [ADR-0065](decisiones/0065-agregar-hus-por-etapas-con-historial-de-versiones.md) — HUs por etapas: estado por HU visible, aviso de arquitectura desactualizada,
+  esqueleto con avance protegido al re-descomponer e historial de versiones de spec y casos de prueba en Mongo.
+- [ADR-0066](decisiones/0066-propagar-los-cambios-de-hu-a-casos-de-prueba-codigo-y-smoke.md) — un cambio de especificación o de casos de prueba se propaga como aviso
+  a casos, código y smoke testing (versión funcional de los casos por paquete y corrida); la regresión se niega con casos cambiados.
 
 ## Problema
 
