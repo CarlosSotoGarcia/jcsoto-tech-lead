@@ -212,6 +212,8 @@
   esqueleto con avance protegido al re-descomponer e historial de versiones de spec y casos de prueba en Mongo.
 - [ADR-0066](decisiones/0066-propagar-los-cambios-de-hu-a-casos-de-prueba-codigo-y-smoke.md) — un cambio de especificación o de casos de prueba se propaga como aviso
   a casos, código y smoke testing (versión funcional de los casos por paquete y corrida); la regresión se niega con casos cambiados.
+- [ADR-0067](decisiones/0067-paquetes-de-cambio-cuando-cambian-los-casos-de-prueba.md) — paquetes de cambio: llevan el código y sus pruebas a los casos que cambiaron
+  (mismo ciclo que un fix) y la arquitectura avisa cuando cambia la especificación de una HU.
 
 ## Problema
 
