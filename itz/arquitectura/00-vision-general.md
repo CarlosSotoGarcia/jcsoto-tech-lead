@@ -226,6 +226,7 @@
 - [ADR-0073](decisiones/0073-resultados-de-smoke-e-incidencias-visibles-en-las-hus.md) — el informe de smoke con iconos y porcentajes; «Ver HUs» y el detalle muestran resultados de smoke e incidencias (fixes).
 - [ADR-0074](decisiones/0074-avanzar-con-una-hu-de-punta-a-punta.md) — «Avanzar con esta HU»: confirmación con rondas de corrección y avance por paquete (generar, revisar, corregir, fusionar) hasta completar la HU; al final se lanza el release.
 - [ADR-0075](decisiones/0075-rediseno-de-la-interfaz-como-consola-de-desarrollo.md) — la interfaz pasa a una consola de desarrollo oscura con la paleta Novex, tokens compartidos con PrimeNG y estados con icono.
+- [ADR-0076](decisiones/0076-no-fusionar-ni-avanzar-con-la-integracion-continua-en-rojo.md) — no se fusiona ni se avanza al siguiente paquete con los checks de GitHub en rojo o sin terminar.
 
 ## Problema
 
