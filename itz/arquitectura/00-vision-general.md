@@ -220,6 +220,8 @@
   cada observación, contra el diff de esa revisión; historial de revisión rediseñado.
 - [ADR-0070](decisiones/0070-compuerta-de-compilacion-antes-de-abrir-o-corregir-un-pr.md) — compuerta de compilación en un contenedor antes de subir código o su corrección; si
   falla se devuelve el error al agente y, si no se logra, el PR lleva la advertencia y la revisión la marca como bloqueante.
+- [ADR-0071](decisiones/0071-el-release-crea-cloud-sql-secretos-y-variables-y-registra-los-fallos-de-arranque.md) — el release crea Cloud SQL, secretos y variables, resuelve
+  las URL antes de desplegar y deja registrados los fallos de arranque del código generado.
 
 ## Problema
 
