@@ -222,6 +222,7 @@
   falla se devuelve el error al agente y, si no se logra, el PR lleva la advertencia y la revisión la marca como bloqueante.
 - [ADR-0071](decisiones/0071-el-release-crea-cloud-sql-secretos-y-variables-y-registra-los-fallos-de-arranque.md) — el release crea Cloud SQL, secretos y variables, resuelve
   las URL antes de desplegar y deja registrados los fallos de arranque del código generado.
+- [ADR-0072](decisiones/0072-release-automatico-al-aceptar-un-pr.md) — opción por proyecto: aceptar un PR desde Loom lanza el release en segundo plano (una corrida a la vez).
 
 ## Problema
 
