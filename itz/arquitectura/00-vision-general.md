@@ -204,6 +204,8 @@
   paquetes de fix (nueva ronda, máximo 3) que siguen el ciclo normal de código y revisión; después se vuelve a probar la HU.
 - [ADR-0062](decisiones/0062-descomposicion-no-acepta-resultados-vacios.md) — skill 05: una HU sin paquetes no se da por buena; se reintenta hasta 3 veces y
   luego falla con un error claro (defecto hallado en el piloto de la tesis).
+- [ADR-0063](decisiones/0063-el-esqueleto-deja-el-aplicativo-desplegable-antes-de-las-hus.md) — la arquitectura declara el despliegue, el esqueleto deja el
+  aplicativo desplegable (Dockerfile de producción y CI) y las HUs dependen de él; el release avisa si falta el Dockerfile.
 
 ## Problema
 
