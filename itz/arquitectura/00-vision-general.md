@@ -206,6 +206,8 @@
   luego falla con un error claro (defecto hallado en el piloto de la tesis).
 - [ADR-0063](decisiones/0063-el-esqueleto-deja-el-aplicativo-desplegable-antes-de-las-hus.md) — la arquitectura declara el despliegue, el esqueleto deja el
   aplicativo desplegable (Dockerfile de producción y CI) y las HUs dependen de él; el release avisa si falta el Dockerfile.
+- [ADR-0064](decisiones/0064-responder-y-resolver-las-observaciones-al-corregir-un-pr.md) — skill 07: al corregir un PR se responde cada observación con lo que
+  se cambió (según el diff) y se resuelven las conversaciones de las corregidas.
 
 ## Problema
 
