@@ -6,7 +6,7 @@
 > resultados en 3 secciones, 243 páginas). Este archivo no es la tesis: es el mapa de qué escribir, con qué evidencia y
 > qué falta.
 >
-> Estado: **borrador 1 — 2026-09-19**. Se actualiza conforme se resuelven las decisiones abiertas (sección 10).
+> Estado: **borrador 2 — 2026-09-21** (segunda etapa del piloto E1c; ver § 2.5). Se actualiza conforme se resuelven las decisiones abiertas (sección 10).
 
 ---
 
@@ -82,6 +82,29 @@ de GitHub destino y su rama base, y credenciales de Jira (correo + API token, po
 
 Piloto acotado (tope 20 USD) sobre P1 con 3 HUs: **E2 (Gemini) ejecutado**, fases 1 a 3 y 5 de 10 paquetes, 4.76 USD estimados; **E1 (Claude API) bloqueado** por saldo insuficiente en la API de Anthropic; **E1c (Claude por CLI) ejecutado** como alternativa exploratoria (6 de 13 paquetes, costo nocional 10.02 USD, no comparable con la API); E3/E4 pendientes (IAT sin configurar). Resultados en el capítulo 5 de `Loom - Tesis.docx` y evidencia en `evidencia/piloto-E2-2026-09-19/`. Hallazgos: 100 % de trazabilidad criterio-caso pero todos los casos son de interfaz; el frontend generado pasa sus 19 pruebas y el backend no compila (dependencia sin versión) sin que la revisión lo detecte; posible subconteo de tokens de entrada en las skills de análisis.
 
+### 2.5 Segunda etapa del piloto E1c (2026-09-20 y 2026-09-21)
+
+Decisión del 2026-09-20: **primero se hace funcionar de punta a punta el proyecto experimento** (E1c, ITZ Inventarios con Claude por CLI), registrando cada error y cada
+intervención manual para que Loom los evite solo; **después se repite el ejercicio desde cero** para documentar el proceso completo y limpio. Lo que sigue es lo que
+ya ocurrió en esta etapa (todo con fuente en el repositorio o en la conversación de trabajo; los números son de la corrida indicada, no un promedio).
+
+| Qué | Resultado | Fuente |
+|---|---|---|
+| Generación de código por Loom | HU-001, HU-002 y HU-003 completas (paquetes generados, revisados, corregidos y fusionados); HU-004 y HU-005 sin generar | Mongo `paquetes`; PR del piloto |
+| Ciclo de HU-001 (2 paquetes, 1 ronda de corrección) | 14.82 USD nocional (Claude por CLI, no comparable con la API); cada paquete terminó con observaciones abiertas, una de ellas bloqueante | Métricas de la corrida |
+| Despliegue en GCP (Cloud Run + Cloud SQL) | Ambiente funcionando (backend y frontend); el `release.py` que genera Loom crea la base, los secretos y las variables (ADR-0071) | Cloud Run; `health` en `UP` |
+| Smoke testing de HU-001 | 19 casos: 13 pasan, 0 fallan, 6 bloqueados (límite de intentos del login por el orden de los casos y falta de datos de prueba); 332 s | `HU-001/evidencia/smoke-01.md` |
+| Defectos del código generado que solo aparecieron al desplegar o en el CI | 10 (A1 a A10): migración, CORS, entrypoint del frontend, Dockerfile, pruebas, lock, autenticación de GCP, checksum de Flyway | `01-registro-de-hallazgos-piloto-e1c.md` |
+| Intervenciones manuales sobre el código del piloto | 6 PR directos (#14, #15, #16, #23, #24, #28), `flyway repair` en Cloud SQL, usuarios de prueba insertados en Cloud SQL, decisión de negocio (90 min de inactividad) registrada por la API | Mismo registro (§ D) |
+| Mejoras a la plataforma nacidas de estos hallazgos | ADR-0071 a ADR-0084: release con Cloud SQL, release automático, avance de HU de punta a punta, no fusionar con el CI en rojo, corregir con el log del CI, lint y pruebas antes de subir, despliegue con GitHub Actions + Workload Identity, procesos concurrentes, historial y cancelación | `arquitectura/decisiones/` |
+
+**Lectura para el capítulo 5 (sin adelantar conclusiones):** el código generado pasó la revisión de Loom y la compilación, pero falló al ejecutarse o en el CI de forma repetida
+(A1 a A5); la revisión de código no detecta lo que solo se ve al arrancar. Esto sostiene el argumento de las compuertas de ejecución (compilación, lint, pruebas y arranque real) y
+debe reportarse como resultado, incluida la parte que todavía no está resuelta (la compuerta de arranque, ADR-0071, no está implementada).
+
+**Advertencia de validez:** esta etapa mezcla trabajo de la plataforma con corridas del piloto. Los números de arriba sirven para orientar y para el registro de hallazgos, **no** como
+resultados del experimento; los resultados válidos saldrán de la repetición desde cero con la plataforma congelada (§ 9, paso 3).
+
 ## 3. Métricas y datos: qué existe y qué falta
 
 ### 3.1 Ya se registra hoy
@@ -95,6 +118,14 @@ Piloto acotado (tope 20 USD) sobre P1 con 3 HUs: **E2 (Gemini) ejecutado**, fase
 | Historial cronológico de cada artefacto | `git log` del repositorio de control (`loom_target/<id>/`) |
 | PRs con descripción, diff, comentarios de revisión y commits | GitHub del proyecto |
 | Pruebas escritas por paquete (archivos de prueba) | Descripción del PR y árbol de la rama |
+| Corridas de smoke testing por HU: resultado de cada caso, motivo, capturas, script y % de aprobados (informe con iconos y porcentajes, ADR-0073) | Mongo `smoke`; `HU-00N/evidencia/smoke-NN.md` |
+| **Procesos ejecutados** (skill, HU, cuándo empezó y terminó, estado, registro de eventos; ADR-0084) | Mongo `procesos`; pestaña «Procesos» de cada HU |
+| Versiones de la especificación y de los casos de prueba de cada HU (ADR-0065) | Mongo `hu_versiones` |
+| Decisiones de una persona sobre los supuestos de una HU y cuándo se tomaron (ADR-0077) | Mongo `hus` (`decisiones`) |
+| Resultado del compilado, lint y pruebas previos al push (`compilacion` del paquete, ADR-0070 y 0079) | Mongo `paquetes` |
+| Estado del CI de cada PR y extracto del log cuando falla (ADR-0076 y 0078) | Lectura de la API de GitHub al avanzar; no se guarda aparte |
+| Resultado de cada release (local o en GitHub Actions) | Campo `release_resultado` del proyecto; ejecuciones en GitHub Actions |
+| Hallazgos e intervenciones manuales de la segunda etapa | `01-registro-de-hallazgos-piloto-e1c.md` |
 
 ### 3.2 **Falta registrar** (bloquea el capítulo 5 si no se hace antes de correr los escenarios)
 
@@ -115,6 +146,10 @@ Piloto acotado (tope 20 USD) sobre P1 con 3 HUs: **E2 (Gemini) ejecutado**, fase
 >
 > ~~Acción técnica previa: instrumentar `_llm.py` y `agente_codigo.py` para escribir un registro por llamada (`skill`, `proveedor`, `modelo`,
 > `duración`, `tokens_in`, `tokens_out`, `reintentos`, `resultado`) y un endpoint/exportación a CSV. Es un ADR nuevo.~~
+
+> **Estado al 2026-09-21:** el «Resultado de CI del PR» ya se **lee** para decidir si se fusiona (ADR-0076), pero **no se guarda** por paquete: falta persistirlo para el experimento E.
+> También falta guardar el costo por HU completa (hoy hay costo por corrida y por skill), la versión de Loom por corrida y la calificación humana. El número de intervenciones manuales
+> se lleva a mano en el registro de hallazgos; conviene definir un criterio único de qué cuenta como intervención antes de repetir el ejercicio.
 
 ### 3.3 Rúbricas de evaluación humana (por definir y anexar)
 
@@ -184,12 +219,12 @@ márgenes 2.5 sup/inf/der y 3.0 izq, interlineado 1.5, numeración abajo a la de
 | **3.1 Trabajos relacionados** | Máx. media cuartilla por trabajo (ver § 6) | — | Por investigar | Búsqueda bibliográfica |
 | 3.2 Análisis comparativo | Tabla comparativa de herramientas/trabajos vs. Loom | § 6 | Por hacer | Criterios y datos verificados |
 | **4.1 Metodología de solución** | Enfoque, población/muestra (proyectos y HUs), instrumentos (métricas y rúbricas), validez y confiabilidad | § 2–3 | Por escribir | Instrumentación, rúbricas |
-| **4.2 Metodología implementada** | Fases de Loom (Requerimientos, Diseño, Desarrollo, Implementación), arquitectura, skills, modelo de datos, SDD, TDD, revisión, proveedor de IA | ADRs 0001–0050, `skills/`, código | Material listo, falta redactar | Diagramas y figuras (§ 7) |
+| **4.2 Metodología implementada** | Fases de Loom (Requerimientos, Diseño, Desarrollo, Implementación), arquitectura, skills, modelo de datos, SDD, TDD, revisión, proveedor de IA; y las compuertas de ejecución (compilación, lint y pruebas, CI en verde), el avance de HU de punta a punta, el release por GitHub Actions y los procesos concurrentes | ADRs 0001–0084, `skills/`, código | Material listo, falta redactar | Diagramas y figuras (§ 7); actualizar con los ADR 0071–0084 |
 | **5.1 Pruebas** | Cómo se probó: corridas, repeticiones, evaluación ciega | § 2 | Por ejecutar | Correr E1–E4 |
-| **5.2 Resultados** | Tablas y gráficas por escenario y por skill; comparación Claude vs. Gemini; casos ilustrativos | § 3–4 | Por ejecutar | Datos |
+| **5.2 Resultados** | Tablas y gráficas por escenario y por skill; comparación Claude vs. Gemini; casos ilustrativos; **defectos que la revisión no detecta y que aparecen al ejecutar** (registro de hallazgos), autonomía (intervenciones manuales) | § 2.5, § 3–4; registro de hallazgos | Parcial (E1c, segunda etapa) | Repetir desde cero con la plataforma congelada; datos de E1/E3/E4 |
 | 6.1 Conclusiones | Respuesta a preguntas e hipótesis | — | Pendiente | Resultados |
 | 6.2 Recomendaciones | Para quien adopte el enfoque | — | Pendiente | — |
-| 6.3 Trabajos futuros | Diagnóstico brownfield, smoke testing y fixes, más proveedores/fuentes, confirmación de supuestos, CI como evidencia, subtareas en Jira, gestor de secretos | Pendientes de los ADRs | Base lista | — |
+| 6.3 Trabajos futuros | Diagnóstico brownfield, más proveedores/fuentes, **adaptadores de proveedor de código (GitLab) y de despliegue**, compuerta de arranque contra una base real, pruebas de integración con Testcontainers en la compuerta, protección de rama en GitHub, Terraform como IaC, persistencia y reanudación de procesos, subtareas en Jira y creación de incidencias en Jira, gestor de secretos | Pendientes de los ADRs 0071–0084 | Base lista | — |
 | Referencias | Estilo por definir (ver decisiones) | — | Pendiente | Elegir formato |
 | Anexos A–… | A: ADRs; B: fichas de skills; C: prompts de cada skill; D: ejemplo completo de una HU (spec, TCs, paquetes, PR, revisión); E: rúbricas; F: capturas de la plataforma; G: datos crudos de los escenarios; H: manual de instalación (README) | Repo | Parcial | Curar y numerar |
 
@@ -250,17 +285,21 @@ Símbolos y abreviaturas (la guía pide relación con ≥ 10 elementos): HU, TC,
 
 | Obj. | Tema | Estado hoy | Acción |
 |---|---|---|---|
-| 1 | Modelo de Proyecto y fuente pluggable | Implementado (Jira y Markdown, ADR-0058); GitHub no | Decidir si se implementa GitHub o se acota el alcance |
+| 1 | Modelo de Proyecto y fuente pluggable | Fuentes de HUs implementadas (Jira y Markdown, ADR-0058); GitHub como fuente no. **El proveedor de código es solo GitHub** (PR, checks, fusión, despliegue): con GitLab hace falta un adaptador (ADR-0081) | Decidir si se implementa GitHub como fuente o se acota; declarar el alcance por proveedor |
 | 2 | Análisis de HU y generación de TCs | Implementado (skills 01–02) | Medir (experimento A) |
 | 3 | Diagnóstico de avance existente | Implementado (skill 03, ADR-0060) | Correr en ITZ Inventarios / IAT y medir aciertos contra revisión manual |
 | 4 | Arquitectura y descomposición | Implementado (skills 04–05) | Medir |
-| 5 | Generación de código y PRs | Implementado (skill 06) | Medir |
-| 6 | Revisión de código y ciclo de observaciones | Implementado (skill 07); rondas automáticas no | Medir; decidir si hay rondas automáticas |
-| 7 | Ejecución de TCs con Playwright | Implementado (skill 08, ADR-0059); falta el diagnóstico (skill 03) que reutiliza el motor | Correr en los proyectos reales y medir |
-| 8 | Fallo → fix | Implementado (skill 09, ADR-0061) | Correr el ciclo completo en los proyectos reales y medir rondas hasta que el TC pasa |
+| 5 | Generación de código y PRs | Implementado (skill 06) con compuerta de compilación, lint y pruebas antes de subir (ADR-0070 y 0079) | Medir; el código generado falló al ejecutarse (registro de hallazgos) |
+| 6 | Revisión de código y ciclo de observaciones | Implementado (skill 07); **rondas automáticas implementadas** dentro de «Avanzar con esta HU» (ADR-0074): corregir hasta N rondas, esperar el CI y fusionar solo con los checks en verde (ADR-0076) | Medir rondas y observaciones que quedan abiertas |
+| 7 | Ejecución de TCs con Playwright | Implementado (skill 08, ADR-0059) y **ejecutado sobre HU-001** (13 de 19 pasan, 6 bloqueados); el diagnóstico (skill 03) no se ha corrido | Correr en HU-002 y HU-003; resolver los bloqueados |
+| 8 | Fallo → fix | Implementado (skill 09, ADR-0061); **no se ha ejercitado**: el smoke de HU-001 no dejó fallas de la aplicación, solo casos bloqueados | Correr el ciclo completo con fallas reales y medir rondas hasta que el TC pasa |
 | 9 | Indexación multi-repo (solo diseño) | Documentado a nivel de diseño (ADR-0002, 0018) | Redactar |
 | 10 | Validar en 2–3 proyectos, greenfield y con avance previo, variando fuente | Jira en 2 proyectos; ambos greenfield probablemente | Ver decisiones 1 y 2 |
-| 11 | Medir por HU | Parcial (falta instrumentación) | § 3.2 |
+| 11 | Medir por HU | Parcial: hay métricas por corrida y skill, historial de procesos con inicio y fin (ADR-0084) y resultados de smoke; falta costo por HU completa y resultado de CI por paquete | § 3.2 |
+
+**Aportes no previstos en los objetivos originales** (a describir en el capítulo 4.2 y a reportar como alcance ampliado): despliegue a GCP con base de datos y secretos, release automático por
+GitHub Actions con identidad federada, compuertas de ejecución previas al push, corrección con el log del CI, decisiones de negocio sobre los supuestos, procesos concurrentes con reglas de
+exclusión, historial y cancelación de procesos. Ninguno estaba en los 11 objetivos: si no se documentan como limitación de tiempo, pueden leerse como desviación.
 
 Si se decide **acotar** (recomendado por tiempo), se documenta con un ADR nuevo que reemplace/ajuste el alcance de `00-vision-general.md` (los ADRs no se
 editan) y la tesis reporta esos puntos como limitaciones y trabajo futuro en lugar de resultados.
@@ -271,7 +310,8 @@ editan) y la tesis reporta esos puntos como limitaciones y trabajo futuro en lug
 
 1. **Cerrar decisiones abiertas** (sección 10).
 2. **Instrumentar métricas** (§ 3.2) — antes de correr los escenarios, para no repetirlos.
-3. **Congelar y capturar** los backlogs de P1 y P2; preparar un repositorio destino por escenario.
+3. **Congelar y capturar** los backlogs de P1 y P2; preparar un repositorio destino por escenario. **Repetir el ejercicio desde cero** con la plataforma congelada cuando el proyecto
+   experimento funcione de punta a punta (decisión del 2026-09-20): esa repetición es la que aporta los resultados válidos; la segunda etapa actual es de depuración.
 4. **Correr E1–E4** (fases 1–3) y, en paralelo, redactar lo que no depende de datos:
    caps. 1 y 2, 4.2 (metodología implementada) y anexos A–C.
 5. **Búsqueda bibliográfica** y cap. 3 (estado del arte y tabla comparativa).
@@ -294,6 +334,10 @@ pase de las 150 cuartillas.
 6. **Título definitivo y director**, y si la tesis se presenta como Loom o Telar.
 7. **Fecha objetivo** de entrega, para dimensionar cuántas repeticiones y cuántos paquetes se pueden evaluar.
 8. **Costos:** presupuesto de API para las corridas y repeticiones (E1–E4 con 63 paquetes cada una es una cantidad relevante de tokens).
+9. **Alcance por proveedor de código:** ¿se declara que el piloto valida solo GitHub (recomendado) o se construye el adaptador de GitLab? (ADR-0081).
+10. **Qué cuenta como intervención manual** en la medición de autonomía (un PR de arreglo, una decisión de negocio, un reinicio, un `repair`): definirlo antes de repetir el ejercicio.
+11. **Protección de la rama base en GitHub:** exige GitHub Pro (o repositorio público); hasta entonces solo Loom impide fusionar en rojo, no un clic directo en GitHub.
+12. **Costos de nube** del ambiente de pruebas (Cloud SQL por hora, Cloud Run): ¿se apaga entre sesiones y se reporta el costo aparte del de IA?
 
 ## 11. Riesgos
 
@@ -305,4 +349,8 @@ pase de las 150 cuartillas.
 | Código sin ejecutar | Resultados de "calidad" sobrestimados | Experimento E con CI/ejecución manual |
 | Sesgo del evaluador | Comparación poco creíble | Evaluación ciega y rúbrica escrita |
 | Los proyectos son propios/de prueba | Validez externa limitada | Declararlo en limitaciones; añadir un proyecto de otro dominio |
-| Alcance mayor al tiempo disponible | Tesis incompleta | Acotar objetivos con un ADR (§ 8) |
+| Alcance mayor al tiempo disponible | Tesis incompleta | Acotar objetivos con un ADR (§ 8); la segunda etapa ya amplió la plataforma más allá de los 11 objetivos |
+| Las intervenciones manuales del tesista contaminan la medición de autonomía | Se sobrestima lo que Loom resuelve solo | Registrar cada intervención (hallazgos § D) y repetir el ejercicio desde cero sin ellas |
+| Defectos que la revisión no ve y que aparecen al ejecutar (migraciones, arranque, CI) | «Código revisado» no significa «código que funciona» | Compuertas de ejecución (ADR-0070, 0079) y, pendiente, la de arranque (ADR-0071); reportarlo como resultado |
+| Dependencia de servicios externos y de cuenta (GitHub, GCP, la sesión del CLI de Claude) | Corridas que fallan por el entorno y no por la plataforma | Registrar la causa de cada fallo (entorno vs. plataforma vs. código generado) |
+| Evolución rápida de la plataforma durante el piloto | La plataforma no es la misma entre corridas | Congelar la versión (commit) antes de repetir; registrar la versión por corrida (§ 3.2) |
