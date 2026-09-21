@@ -11,6 +11,7 @@ Cada archivo `.md` de la carpeta puede traer varias secciones, cada una encabeza
     TABLA: Título de la tabla        (sin título: `TABLA:`; se numera Tabla <capítulo>.<n> con campo SEQ)
     | Encabezado 1 | Encabezado 2 |
     | dato | dato |
+    FIGURA: ruta.png | Título        (imagen PNG relativa a itz/tesis, con leyenda Figura <capítulo>.<n>)
     TABLA-ADR:                       (tabla de registros de decisión, generada de itz/arquitectura/decisiones/)
 
 Solo se tocan los controles cuyo tag aparece en los borradores; lo demás del documento queda igual. La guía original nunca se edita.
@@ -25,6 +26,9 @@ from xml.sax.saxutils import escape
 RAIZ = Path(__file__).resolve().parents[1]
 DECISIONES = RAIZ.parent / "arquitectura" / "decisiones"
 _contadores: dict[str, int] = {}
+_figuras: dict[str, int] = {}
+_medios: list[tuple[str, bytes]] = []  # (nombre en word/media, contenido)
+BASE_FIGURAS = RAIZ
 
 
 def capitulo_de(tag: str) -> str:
@@ -95,6 +99,45 @@ def leyenda(capitulo: str, titulo: str) -> str:
     )
 
 
+def figura(capitulo: str, ruta: str, titulo: str) -> str:
+    """Imagen PNG en línea (máx. 15 x 17 cm) con leyenda «Figura C.N. título» debajo."""
+    import struct
+
+    datos = (BASE_FIGURAS / ruta).read_bytes()
+    ancho_px, alto_px = struct.unpack(">II", datos[16:24])
+    ancho_cm, alto_cm = 15.0, 15.0 * alto_px / ancho_px
+    if alto_cm > 17.0:
+        ancho_cm, alto_cm = ancho_cm * 17.0 / alto_cm, 17.0
+    ancho, alto = int(ancho_cm * 360000), int(alto_cm * 360000)
+    n_medio = len(_medios) + 1
+    _medios.append((f"loom_fig{n_medio}.png", datos))
+    rid = f"rIdLoomFig{n_medio}"
+    _figuras[capitulo] = _figuras.get(capitulo, 0) + 1
+    n = _figuras[capitulo]
+    imagen = (
+        '<w:p><w:pPr><w:keepNext/><w:spacing w:before="120" w:after="60"/><w:ind w:firstLine="0"/><w:jc w:val="center"/></w:pPr><w:r><w:drawing>'
+        f'<wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="{ancho}" cy="{alto}"/>'
+        f'<wp:docPr id="{9000 + n_medio}" name="Figura {capitulo}.{n}" descr="{escape(titulo, {chr(34): "&quot;"})}"/>'
+        '<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+        '<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
+        f'<pic:nvPicPr><pic:cNvPr id="{9000 + n_medio}" name="loom_fig{n_medio}.png"/><pic:cNvPicPr/></pic:nvPicPr>'
+        f'<pic:blipFill><a:blip r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
+        f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{ancho}" cy="{alto}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>'
+        '</pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>'
+    )
+    pie = (
+        '<w:p><w:pPr><w:pStyle w:val="Caption"/><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b w:val="0"/></w:rPr></w:pPr>'
+        f'<w:r><w:t>Figura {capitulo}.</w:t></w:r>'
+        '<w:r><w:fldChar w:fldCharType="begin"/></w:r>'
+        '<w:r><w:instrText xml:space="preserve"> SEQ Figura \\s 1</w:instrText></w:r>'
+        '<w:r><w:fldChar w:fldCharType="separate"/></w:r>'
+        f'<w:r><w:rPr><w:noProof/></w:rPr><w:t>{n}</w:t></w:r>'
+        '<w:r><w:fldChar w:fldCharType="end"/></w:r>'
+        f'{corridas(". " + titulo)}</w:p>'
+    )
+    return imagen + pie
+
+
 def tabla(filas: list[list[str]], pesos: list[int] | None = None) -> str:
     columnas = len(filas[0])
     pesos = pesos or [1] * columnas
@@ -142,6 +185,10 @@ def bloques_a_xml(tag: str, texto: str) -> str:
             i += 1
         elif linea.startswith("### "):
             salida.append(subtitulo(linea[4:].strip()))
+            i += 1
+        elif linea.startswith("FIGURA:"):
+            ruta, _, titulo = linea[len("FIGURA:"):].partition("|")
+            salida.append(figura(capitulo, ruta.strip(), titulo.strip()))
             i += 1
         elif linea.startswith("TABLA-ADR:"):
             salida.append(leyenda(capitulo, "Registros de decisión de arquitectura"))
@@ -238,6 +285,20 @@ def main(docx: str, carpeta: str) -> None:
         hechas.append((tag, palabras))
     from lxml import etree
 
+    if _medios:
+        if 'xmlns:wp=' not in xml[:3000] or 'xmlns:r=' not in xml[:3000]:
+            raise SystemExit("document.xml no declara los espacios de nombres wp/r necesarios para las figuras")
+        rels = otros["word/_rels/document.xml.rels"].decode("utf-8")
+        for nombre, datos in _medios:
+            n = nombre[len("loom_fig"):-4]
+            rels = rels.replace("</Relationships>", f'<Relationship Id="rIdLoomFig{n}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/{nombre}"/></Relationships>')
+            otros[f"word/media/{nombre}"] = datos
+            orden.append(f"word/media/{nombre}")
+        otros["word/_rels/document.xml.rels"] = rels.encode("utf-8")
+        tipos = otros["[Content_Types].xml"].decode("utf-8")
+        if 'Extension="png"' not in tipos:
+            tipos = tipos.replace("<Override", '<Default Extension="png" ContentType="image/png"/><Override', 1)
+        otros["[Content_Types].xml"] = tipos.encode("utf-8")
     etree.fromstring(xml.encode("utf-8"))  # falla si el XML quedó mal formado
     with zipfile.ZipFile(ruta, "w", zipfile.ZIP_DEFLATED) as z:
         for n in orden:

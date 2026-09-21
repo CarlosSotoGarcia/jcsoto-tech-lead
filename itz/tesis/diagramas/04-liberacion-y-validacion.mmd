@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    participant L as Loom (backend)
+    participant GH as GitHub Actions
+    participant WIF as Workload Identity Federation
+    participant GCP as Google Cloud
+    participant PW as Playwright
+    L->>GH: workflow_dispatch (release.py)
+    GH->>WIF: token OIDC firmado
+    WIF-->>GH: credenciales temporales
+    GH->>GCP: construir imagen y desplegar en Cloud Run
+    GCP-->>GH: URL del ambiente de desarrollo
+    GH-->>L: resultado del workflow
+    L->>PW: ejecutar casos de prueba de la HU
+    PW->>GCP: navegar el ambiente desplegado
+    GCP-->>PW: respuesta de la aplicación
+    PW-->>L: pasa / falla por caso + evidencia
+    alt algún caso falla
+        L->>L: skill 09 crea paquetes de fix (nueva ronda)
+    else todos pasan
+        L->>L: HU completa
+    end

@@ -1,0 +1,30 @@
+flowchart LR
+    P(["Persona\n(líder técnico)"])
+    J[("Fuente de HUs\nJira")]
+    subgraph LOOM["Loom"]
+        direction TB
+        FE["Frontend\nAngular + PrimeNG"]
+        BE["Backend FastAPI\norquestador y skills"]
+        DB[("MongoDB\nProyectos, HUs, paquetes,\nprocesos, métricas")]
+        CT[/"Repositorio de control\nartefactos por HU (Markdown)"/]
+        DK["Docker\ncompilación, lint\ny pruebas unitarias"]
+    end
+    LLM["Modelo de lenguaje\nClaude API · Claude CLI · Gemini"]
+    subgraph GH["GitHub (repositorio del Proyecto)"]
+        PR["Ramas y Pull Requests"]
+        CI["GitHub Actions\nCI y release"]
+    end
+    GCP["Google Cloud\nCloud Run · Artifact Registry"]
+
+    P <--> FE
+    FE <-->|"API REST + SSE"| BE
+    BE <--> DB
+    BE <--> CT
+    BE --> DK
+    BE <-->|"prompts y salidas\nestructuradas"| LLM
+    J -->|"lee HUs"| BE
+    BE -->|"push y PR"| PR
+    PR --> CI
+    BE -->|"lanza workflow_dispatch"| CI
+    CI -->|"Workload Identity\nFederation"| GCP
+    BE -->|"smoke (Playwright)"| GCP

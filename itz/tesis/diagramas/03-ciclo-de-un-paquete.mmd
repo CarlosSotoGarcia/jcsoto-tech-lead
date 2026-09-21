@@ -1,0 +1,14 @@
+flowchart TB
+    A(["Paquete pendiente"]) --> B["Agente escribe pruebas y código (TDD)"]
+    B --> D{"Compuertas en Docker:<br/>¿incluye pruebas, compila,<br/>pasa lint y pruebas?"}
+    D -->|"no, hay reintentos"| B
+    D -->|"sí"| F["Push y Pull Request"]
+    F --> G["Revisión con contexto:<br/>HU, casos y arquitectura"]
+    G --> H{"¿Observaciones<br/>bloqueantes?"}
+    H -->|"sí, quedan rondas"| I["Corrección"]
+    I --> G
+    H -->|"no"| K{"¿CI verde?"}
+    K -->|"no: corrección con el log"| I
+    K -->|"sí"| M(["Fusión del PR"])
+    D -->|"sin reintentos"| X(["Intervención humana"])
+    H -->|"sin rondas"| X

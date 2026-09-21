@@ -1,0 +1,20 @@
+flowchart TB
+    H(["HU en el backlog (Jira)"])
+    subgraph A[" "]
+        direction LR
+        F1["<b>Fase 1 · Requerimientos</b><br/>01 Especificación de la HU<br/>02 Casos de prueba<br/>03 Diagnóstico de avance"]
+        F2["<b>Fase 2 · Diseño</b><br/>04 Arquitectura y plan<br/>05 Paquetes de trabajo"]
+        F1 --> F2
+    end
+    subgraph B[" "]
+        direction LR
+        F3["<b>Fase 3 · Desarrollo</b><br/>06 Código con TDD<br/>07 Revisión con contexto<br/>corrección · CI · fusión"]
+        F4["<b>Fase 4 · Implementación</b><br/>10 Release a GCP<br/>08 Smoke testing"]
+        F3 -->|"ronda fusionada"| F4
+    end
+    V{"¿Pasan todos<br/>los casos?"}
+    FIN(["HU completa"])
+    H --> A --> B
+    B --> V
+    V -->|"sí"| FIN
+    V -->|"no: skill 09 (fixes)"| B

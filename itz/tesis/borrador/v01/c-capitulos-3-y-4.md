@@ -70,11 +70,15 @@ Loom es un sistema de *skills* de IA con un orquestador que las despacha y una p
 
 El flujo recorre cuatro fases. Requerimientos lee las HUs de la fuente configurada y las especifica. Diseño genera los casos de prueba y la arquitectura, y la persona aprueba la arquitectura. Desarrollo descompone las HUs en paquetes de trabajo, genera el código, lo revisa, lo corrige y lo fusiona. Implementación despliega la aplicación en la nube y valida las HUs con pruebas de humo. Cada fase puede ejecutarse por separado, por lo que un Proyecto puede entrar al flujo en el punto que corresponda a su estado.
 
-[FIGURA 4.1 por insertar: arquitectura de alto nivel y flujo de la HU al despliegue (fuente: diagramas/00-arquitectura-alto-nivel.md y diagramas/01-flujo-pipeline-hu-a-desarrollo.md).]
+La figura 4.1 resume el recorrido de una HU por las cuatro fases.
+
+FIGURA: diagramas/02-flujo-por-fases.png | Flujo de una HU por las cuatro fases de Loom
 
 ### 4.2.2 Arquitectura de la plataforma
 
-La plataforma se implementó como monorepo con un servidor en Python (con validación de datos mediante Pydantic), MongoDB como base de datos documental y una interfaz web en Angular con la biblioteca PrimeNG [ADR-0031]. Los procesos largos informan su progreso con eventos enviados por el servidor (SSE), que la interfaz muestra en un panel de actividad. El acceso de las personas requiere inicio de sesión.
+La plataforma se implementó como monorepo con un servidor en Python (con validación de datos mediante Pydantic), MongoDB como base de datos documental y una interfaz web en Angular con la biblioteca PrimeNG [ADR-0031]. Los procesos largos informan su progreso con eventos enviados por el servidor (SSE), que la interfaz muestra en un panel de actividad. El acceso de las personas requiere inicio de sesión. La figura 4.2 muestra los componentes y sus conexiones con los servicios externos.
+
+FIGURA: diagramas/01-arquitectura-de-la-plataforma.png | Arquitectura de la plataforma y servicios externos
 
 Tres proveedores de IA quedan disponibles por Proyecto: la API de Claude, la API de Gemini y el CLI de Claude Code con cuenta personal, este último solo para desarrollo. Las *skills* no dependen del proveedor; una capa común resuelve la llamada, valida la salida contra un esquema y reintenta ante respuestas truncadas o mal formadas.
 
@@ -111,7 +115,11 @@ La compuerta responde a un hallazgo de las primeras corridas: el agente no ejecu
 
 ### 4.2.6 Revisión, corrección y fusión
 
-La revisión recibe el Pull Request y el contexto completo (especificación, casos de prueba, arquitectura aprobada y el resumen de la implementación). Cada observación lleva una fuente (criterio de aceptación, arquitectura, buenas prácticas, pruebas o seguridad), una severidad (bloqueante, mayor o menor) y, cuando aplica, archivo y línea, y se publica como comentario en el Pull Request. Si una HU tiene supuestos sin confirmar, el sistema agrega una observación bloqueante hasta que una persona registre su decisión.
+La revisión recibe el Pull Request y el contexto completo (especificación, casos de prueba, arquitectura aprobada y el resumen de la implementación). Cada observación lleva una fuente (criterio de aceptación, arquitectura, buenas prácticas, pruebas o seguridad), una severidad (bloqueante, mayor o menor) y, cuando aplica, archivo y línea, y se publica como comentario en el Pull Request. La figura 4.3 resume el ciclo completo de un paquete, desde la generación hasta la fusión.
+
+FIGURA: diagramas/03-ciclo-de-un-paquete.png | Ciclo de un paquete de trabajo: generación, compuertas, revisión, corrección y fusión
+
+Si una HU tiene supuestos sin confirmar, el sistema agrega una observación bloqueante hasta que una persona registre su decisión.
 
 La corrección aplica las observaciones sobre la misma rama, responde cada comentario y marca las conversaciones resueltas. Cada ronda de revisión y de corrección se guarda con su resultado, y las observaciones pueden valorarse por una persona (relevante, mal sustentada, ruido, falsa) o pasar por una segunda opinión de otro proveedor de IA, para disponer de evidencia de su relevancia.
 
@@ -129,7 +137,9 @@ El despliegue automático usa GitHub Actions con federación de identidad: el pr
 
 ### 4.2.9 Validación funcional
 
-Las pruebas de humo recorren todos los casos de prueba de una HU cuando toda su ronda de paquetes está fusionada. Un modelo lee el código de la aplicación y los casos y escribe un guion de Playwright con las acciones y las verificaciones de cada caso; el guion se ejecuta contra el ambiente desplegado con la cuenta de prueba del rol que el caso requiere. Cuando un caso falla, un agente de navegador lo reproduce para distinguir un guion mal escrito de un fallo real de la aplicación. El resultado de cada caso es aprobado, fallido o bloqueado, y el informe con capturas queda como evidencia. Los casos fallidos pueden convertirse en paquetes de corrección que reingresan al ciclo de código y revisión.
+Las pruebas de humo recorren todos los casos de prueba de una HU cuando toda su ronda de paquetes está fusionada. Un modelo lee el código de la aplicación y los casos y escribe un guion de Playwright con las acciones y las verificaciones de cada caso; el guion se ejecuta contra el ambiente desplegado con la cuenta de prueba del rol que el caso requiere. Cuando un caso falla, un agente de navegador lo reproduce para distinguir un guion mal escrito de un fallo real de la aplicación. El resultado de cada caso es aprobado, fallido o bloqueado, y el informe con capturas queda como evidencia. Los casos fallidos pueden convertirse en paquetes de corrección que reingresan al ciclo de código y revisión. La figura 4.4 muestra la secuencia del despliegue y de la validación.
+
+FIGURA: diagramas/04-liberacion-y-validacion.png | Secuencia de liberación en la nube y validación funcional
 
 ### 4.2.10 Cambios en los requisitos
 
