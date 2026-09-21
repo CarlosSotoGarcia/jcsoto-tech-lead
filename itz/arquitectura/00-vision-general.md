@@ -229,6 +229,11 @@
 - [ADR-0076](decisiones/0076-no-fusionar-ni-avanzar-con-la-integracion-continua-en-rojo.md) — no se fusiona ni se avanza al siguiente paquete con los checks de GitHub en rojo o sin terminar.
 - [ADR-0077](decisiones/0077-decisiones-sobre-los-supuestos-de-una-hu.md) — la persona confirma los supuestos de una HU en «Decisiones pendientes»; la revisión deja de bloquear y el agente recibe la decisión como requisito.
 - [ADR-0078](decisiones/0078-corregir-con-el-log-de-la-integracion-continua.md) — si el CI falla al avanzar, se devuelve el log del check al agente como una ronda de corrección (hasta 2 por paquete).
+- [ADR-0079](decisiones/0079-lint-y-pruebas-antes-de-subir-el-codigo.md) — la compuerta de compilación corre también lint y pruebas unitarias antes de subir el código.
+- [ADR-0080](decisiones/0080-actividad-en-curso-visible-desde-cualquier-sesion.md) — el panel de actividad muestra lo que corre en el servidor aunque lo haya lanzado otra sesión.
+- [ADR-0081](decisiones/0081-despliegue-automatico-con-github-actions-y-workload-identity-federation.md) — el despliegue se dispara con GitHub Actions + Workload Identity Federation que `release.py` configura solo; alcance por proveedor (GitLab a futuro).
+- [ADR-0082](decisiones/0082-release-lanzado-desde-loom-en-github-actions.md) — Loom lanza el workflow de release en GitHub Actions cuando una HU queda completa; los PR de despliegue se aceptan desde Loom.
+- [ADR-0083](decisiones/0083-procesos-concurrentes-con-reglas-de-exclusion.md) — propuesta: varios procesos a la vez con reglas de exclusión y el release exclusivo.
 
 ## Problema
 

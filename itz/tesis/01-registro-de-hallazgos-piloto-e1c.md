@@ -16,7 +16,8 @@ Convenciones: «Loom» = lo hizo la plataforma por sí sola; «Manual» = lo hiz
 | A6 | Pruebas Jest de `logout` esperaban `sessionStorage` vacío (HU-003/PT-02) | CI | Loom (corrección con el log del CI) | — resuelto por [ADR-0078](../arquitectura/decisiones/0078-corregir-con-el-log-de-la-integracion-continua.md) |
 | A7 | HU-003/PT-03: lint `prefer-const` y una prueba de `inactivity.service.spec.ts` en rojo | CI | En curso (Loom) | El agente corrige a ciegas: no ejecuta lint ni Jest. Ejecutarlos en un contenedor antes del push |
 | A8 | `package-lock.json` ausente: `npm ci` fallaba en Firebase Hosting | Release | Manual (cambio a Cloud Run) | El paquete de Dockerfiles de producción debe generar y validar el lock |
-| A9 | Deploy de CI falla en «Autenticación en GCP (Workload Identity Federation)» | CI | Abierto | Coherencia entre el tipo de autenticación configurado y el workflow generado |
+| A9 | Deploy de CI falla en «Autenticación en GCP (Workload Identity Federation)»: nadie creaba la federación y el job duplicaba el despliegue con otros nombres | CI | Manual, PR #28 (se quitó el job) | Resuelto en el diseño por [ADR-0081](../arquitectura/decisiones/0081-despliegue-automatico-con-github-actions-y-workload-identity-federation.md); falta que el paquete de CI no genere un job de despliegue |
+| A10 | Editar una migración ya aplicada (V2, PR #14 y #23) provocó `Migration checksum mismatch` y la revisión nueva del backend no arrancó | Despliegue | Manual: `flyway repair` contra Cloud SQL | Una migración aplicada no se edita: el agente debe agregar una versión nueva; la compuerta de arranque contra una base con historial lo detectaría |
 
 ## B. Proceso: lo que Loom hacía mal o no hacía
 
@@ -26,7 +27,8 @@ Convenciones: «Loom» = lo hizo la plataforma por sí sola; «Manual» = lo hiz
 | B2 | Un supuesto sin confirmar bloquea la revisión y ninguna corrección lo resuelve; no había dónde decidirlo | Resuelto: ADR-0077 (pantalla «Decisiones pendientes»). HU-001 y HU-002 se fusionaron con esa observación abierta |
 | B3 | El release no proveía base de datos, secretos ni variables | Resuelto: ADR-0071 |
 | B4 | Sin forma de completar una HU sin repetir cuatro acciones por paquete | Resuelto: ADR-0074 |
-| B5 | El release no se lanzaba al terminar una HU | Resuelto en código (ADR-0072); pendiente verificar de punta a punta |
+| B5 | El release no se lanzaba al terminar una HU | Verificado: al fusionar PT-03 se lanzó solo (ADR-0072); ahora el disparo pasa a GitHub Actions (ADR-0081) |
+| B8 | Conectar GitHub a Cloud Build exige autorización interactiva; el trigger de Cloud Build no se puede crear por API | Resuelto: GitHub Actions + WIF (ADR-0081) |
 | B6 | El agente marca como corregido lo que no pudo ejecutar; la verificación real llega hasta el CI | Abierto (ver A7) |
 | B7 | El smoke testing dejó 6 de 19 casos bloqueados: límite de intentos del login por el orden de los casos y falta de datos de prueba | Abierto: ordenar casos que provocan bloqueos y sembrar usuarios |
 
@@ -36,7 +38,7 @@ Convenciones: «Loom» = lo hizo la plataforma por sí sola; «Manual» = lo hiz
 
 ## D. Intervenciones manuales (para medir la autonomía)
 
-PR #14, #15, #16, #23 y #24 en el repositorio del piloto (fusionados con `gh`); usuarios de prueba insertados en Cloud SQL; decisión de 90 minutos registrada por la API. Todo lo demás sobre el código del piloto lo hizo Loom, disparado por su API.
+PR #14, #15, #16, #23, #24 y #28 en el repositorio del piloto, `flyway repair` en Cloud SQL, creación y borrado de una cuenta de servicio de prueba (fusionados con `gh`); usuarios de prueba insertados en Cloud SQL; decisión de 90 minutos registrada por la API. Todo lo demás sobre el código del piloto lo hizo Loom, disparado por su API.
 
 ## E. Pendiente de esta etapa
 
