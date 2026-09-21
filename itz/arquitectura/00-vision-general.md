@@ -228,6 +228,7 @@
 - [ADR-0075](decisiones/0075-rediseno-de-la-interfaz-como-consola-de-desarrollo.md) — la interfaz pasa a una consola de desarrollo oscura con la paleta Novex, tokens compartidos con PrimeNG y estados con icono.
 - [ADR-0076](decisiones/0076-no-fusionar-ni-avanzar-con-la-integracion-continua-en-rojo.md) — no se fusiona ni se avanza al siguiente paquete con los checks de GitHub en rojo o sin terminar.
 - [ADR-0077](decisiones/0077-decisiones-sobre-los-supuestos-de-una-hu.md) — la persona confirma los supuestos de una HU en «Decisiones pendientes»; la revisión deja de bloquear y el agente recibe la decisión como requisito.
+- [ADR-0078](decisiones/0078-corregir-con-el-log-de-la-integracion-continua.md) — si el CI falla al avanzar, se devuelve el log del check al agente como una ronda de corrección (hasta 2 por paquete).
 
 ## Problema
 
