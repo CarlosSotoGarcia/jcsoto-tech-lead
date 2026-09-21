@@ -6,7 +6,7 @@
 > resultados en 3 secciones, 243 páginas). Este archivo no es la tesis: es el mapa de qué escribir, con qué evidencia y
 > qué falta.
 >
-> Estado: **borrador 2 — 2026-09-21** (segunda etapa del piloto E1c; ver § 2.5). Se actualiza conforme se resuelven las decisiones abiertas (sección 10).
+> Estado: **borrador 3 — 2026-09-21** (segunda etapa del piloto E1c, § 2.5; cómo se llena cada sección y flujo de redacción, § 12 y § 13). Se actualiza conforme se resuelven las decisiones abiertas (sección 10).
 
 ---
 
@@ -330,7 +330,7 @@ pase de las 150 cuartillas.
 2. **Proyectos:** ¿P2 (IAT) es greenfield o ya tiene código? ¿Hay un tercer proyecto con avance previo y fuente distinta (Markdown/GitHub) para cubrir el objetivo 10?
 3. **Experimento C** (revisión solo con diff vs. con contexto): ¿se incluye? Es lo que sostiene H1; implica una variante de la skill 07 que solo reciba el diff.
 4. **Quién evalúa** relevancia de observaciones y suficiencia de TCs (tú, tu director u otra persona) y cuántas muestras es viable calificar.
-5. **Estilo de citas y referencias** que exige el programa (APA, IEEE…) — revisar las dos tesis de referencia y confirmar con el director.
+5. **Estilo de citas y referencias:** el flujo de redacción asume **IEEE** (numérico, por orden de aparición; lo fija la skill `redaccion-academica`). Confirmarlo con el director y con las dos tesis de referencia.
 6. **Título definitivo y director**, y si la tesis se presenta como Loom o Telar.
 7. **Fecha objetivo** de entrega, para dimensionar cuántas repeticiones y cuántos paquetes se pueden evaluar.
 8. **Costos:** presupuesto de API para las corridas y repeticiones (E1–E4 con 63 paquetes cada una es una cantidad relevante de tokens).
@@ -338,6 +338,8 @@ pase de las 150 cuartillas.
 10. **Qué cuenta como intervención manual** en la medición de autonomía (un PR de arreglo, una decisión de negocio, un reinicio, un `repair`): definirlo antes de repetir el ejercicio.
 11. **Protección de la rama base en GitHub:** exige GitHub Pro (o repositorio público); hasta entonces solo Loom impide fusionar en rojo, no un clic directo en GitHub.
 12. **Costos de nube** del ambiente de pruebas (Cloud SQL por hora, Cloud Run): ¿se apaga entre sesiones y se reporta el costo aparte del de IA?
+13. **Declaración del uso de IA en la redacción:** el borrador de la tesis se apoya en asistentes de IA. ¿El programa exige declararlo y en qué forma (nota metodológica, agradecimientos, anexo)? Confirmarlo con el director **antes** de redactar, porque cambia cómo se documenta el proceso.
+14. **Voz y persona gramatical** (impersonal, primera persona del plural o del singular): tomar una muestra de 2 a 3 párrafos de la tesis de referencia y fijarla. Es la base para la pasada de humanización (§ 13).
 
 ## 11. Riesgos
 
@@ -354,3 +356,69 @@ pase de las 150 cuartillas.
 | Defectos que la revisión no ve y que aparecen al ejecutar (migraciones, arranque, CI) | «Código revisado» no significa «código que funciona» | Compuertas de ejecución (ADR-0070, 0079) y, pendiente, la de arranque (ADR-0071); reportarlo como resultado |
 | Dependencia de servicios externos y de cuenta (GitHub, GCP, la sesión del CLI de Claude) | Corridas que fallan por el entorno y no por la plataforma | Registrar la causa de cada fallo (entorno vs. plataforma vs. código generado) |
 | Evolución rápida de la plataforma durante el piloto | La plataforma no es la misma entre corridas | Congelar la versión (commit) antes de repetir; registrar la versión por corrida (§ 3.2) |
+
+---
+
+## 12. Cómo se llena cada sección que no es de resultados
+
+Revisión del `Loom - Tesis.docx` (copia de trabajo, 2026-09-21): de sus 33 controles de contenido, **solo 5.1 y 5.2 tienen texto redactado**; el índice se genera solo y los anexos son marcadores («Pendiente de integrar»); los otros 29 siguen con la guía original de la plantilla.
+El capítulo 5 ya redactado corresponde a la **primera** etapa del piloto (E2 y E1c) y se reescribirá con los resultados de la repetición desde cero (por eso se deja fuera de este
+apartado). Presupuesto total: **80–150 cuartillas**; con el reparto de abajo se llega a unas **105** sin anexos.
+
+**Regla común a todas las secciones:** cada afirmación sobre Loom cita un artefacto del repositorio (ADR, especificación de skill, código, evidencia); cada afirmación sobre el mundo exterior
+cita una fuente `[N]` verificada o queda marcada `[CITA PENDIENTE]`; cada cifra sale de la tabla de trazabilidad (§ 13, paso 5). Nada se rellena con autores, años o cifras plausibles.
+
+| Sección | Cuartillas | Qué lleva | Fuente en el repositorio | Cómo se redacta | Depende de resultados | Qué no se puede afirmar |
+|---|---|---|---|---|---|---|
+| Resumen y *Abstract* | 1 y 0.5 | Objetivo, método, resultados clave, conclusiones; sin abreviaturas ni citas | Se escribe con 5 y 6 terminados | Último paso; el *Abstract* se traduce y se revisa por separado | **Sí** | Cualquier resultado que no esté en el capítulo 5 |
+| Introducción | 3 | Área, razones y resumen de capítulos | `00-vision-general.md`, propuesta aprobada | Después de los capítulos 1 a 4; empieza por el objeto de estudio, sin historia de la computación | Parcial | Promesas que la plataforma no cumple (§ 8) |
+| 1.1 Descripción del problema | 2 | Problema delimitado, en forma de pregunta, con literatura | § 1 de este plan; registro de hallazgos (el código revisado que no arranca) | Del problema general al caso concreto: HU a código verificado; un párrafo con evidencia propia | No | Estadísticas de la industria sin fuente |
+| 1.2 Preguntas de investigación | 1 | Contexto explícito, generalización, proveedor | § 1–2 | Una pregunta por párrafo, numeradas | No | Preguntas que los experimentos no pueden contestar |
+| 1.3 Objetivos | 1.5 | General y específicos | `00-vision-general.md` y § 8 | Se ajustan a lo implementado; el recorte se documenta con un ADR nuevo, no editando los anteriores | No | Objetivos «logrados» sin medición |
+| 1.4 Justificación | 2 | Beneficiarios, utilidad, costo de no hacerlo | Propuesta aprobada | Argumento con datos externos citados | No | Cifras de productividad o costo sin fuente (hoy no hay ninguna verificada) |
+| 1.5 Alcances y limitaciones | 2 | Dentro y fuera de alcance | Visión general, § 8, ADR-0081 | Lista corta y honesta: proveedor de código solo GitHub, un usuario, ejecución local, seguridad de pruebas, proyectos propios | No | Generalidad que el piloto no probó |
+| 1.6–1.7 Hipótesis y variables | 2 | H1–H3, variables independientes y dependientes | § 1 | Solo hipótesis medibles con los datos que se van a tener (§ 3) | Sí (cierre) | Hipótesis sin instrumento |
+| **2 Marco teórico** | 18–22 | LLM y agentes con herramientas, ingeniería dirigida por especificaciones, historias de usuario y criterios, pruebas (TDD, E2E), revisión de código, CI/CD y contenedores, ADR | Ninguna: es literatura | Cada concepto: definición formal `[N]`, y una oración que lo vincula con Loom. Se arma primero la lista de referencias verificadas y después el texto | No | Definiciones de memoria: se citan o se marcan |
+| **3.1 Trabajos relacionados** | 8–10 | Media cuartilla por trabajo | Búsqueda documentada (§ 6) | Ficha por trabajo con problema, método, resultado y limitación; solo se afirma lo que dice la fuente primaria | No | Capacidades de herramientas comerciales tomadas de mercadeo |
+| 3.2 Análisis comparativo | 3–4 | Tabla de criterios contra Loom | § 6 | Criterios fijados antes de llenar la tabla; cada celda con su fuente y su fecha de consulta | No | Ventajas de Loom no medidas |
+| **4.1 Metodología de solución** | 8 | Diseño de la investigación, muestra, instrumentos, validez y confiabilidad, ética de datos | § 2–3, decisiones 1–14 | Describir el diseño **real**: etapa de depuración y repetición con la plataforma congelada; datos de terceros generalizados (`CLAUDE.md`) | No | Aleatorización o repeticiones que no se harán |
+| **4.2 Metodología implementada** | 18–22 | Arquitectura, fases y skills, modelo de datos, compuertas, revisión, despliegue, concurrencia y procesos | ADR 0001–0084, `skills/00–10`, `diagramas/`, `pantallas-plataforma-telar.md`, código | Una subsección por skill con su especificación; las decisiones se citan por número de ADR (lista completa en el anexo A); figuras de los diagramas Mermaid | Parcial (versión congelada) | Funciones que no se han ejercitado (diagnóstico, fixes, compuerta de arranque) |
+| 6.1 Conclusiones | 3 | Respuesta a preguntas e hipótesis | Capítulo 5 | Una conclusión por pregunta, con la cifra que la sostiene | **Sí** | Nada fuera de lo medido |
+| 6.2 Recomendaciones | 1.5 | Para quien adopte el enfoque | Registro de hallazgos | Derivadas de los defectos y de lo que la plataforma ya corrige | Parcial | Recomendaciones sin evidencia propia |
+| 6.3 Trabajos futuros | 1.5 | Lo pendiente y lo acotado | Pendientes de los ADR 0071–0084, § 8 | Lista priorizada con motivo | No | — |
+| Referencias | — | Lista IEEE por orden de aparición | Se arma mientras se redacta | Un archivo de trabajo con cada referencia y su estado (verificada / pendiente) | No | Referencias con datos inventados |
+
+**Anexos** (fuera del conteo): A) índice de ADR (se genera de `decisiones/`, sin redactar a mano); B) fichas de skills (de `skills/`); C) prompts de cada skill (se extraen del código, no se transcriben);
+D) **ejemplo completo de una HU** (HU-001: especificación, casos de prueba, paquetes, PR, rondas de revisión, informe de smoke; ya existe la evidencia); E) rúbricas; F) capturas
+(tomarlas al final, con la interfaz ya rediseñada); G) datos crudos; H) manual de instalación.
+
+**Orden recomendado para las secciones sin datos:** 4.2 (hay material completo), 1.5 y 1.3 (se ajustan con § 8), 4.1, 1.1–1.2 y 1.6–1.7, 2 y 3 (necesitan la bibliografía), anexos A–D; y al final introducción, resumen, conclusiones.
+
+## 13. Flujo de redacción y estilo
+
+Las skills disponibles y para qué sirve cada una en esta tesis:
+
+| Skill | Sirve para | Límite |
+|---|---|---|
+| `redaccion-academica` (del repositorio) | Estilo técnico-académico en español: variar la longitud de las oraciones, quitar muletillas, anclar cada generalidad en un término exacto y dejar la cita lista en IEEE (`[N]`) | No inventa citas ni datos; deja `[CITA PENDIENTE]` |
+| `humanizer` | Quitar los rasgos de texto generado por IA (contraste «no es X sino Y», cierres de una línea, tríadas forzadas, guiones por todas partes, inflación de importancia, negritas decorativas) sin cambiar lo que dice | Sus listas de palabras están en inglés: los patrones estructurales valen en español, las palabras hay que traducirlas (lista abajo). Con una muestra de escritura, la muestra manda sobre sus reglas |
+| `writing-guidelines` (Vercel) | Guía de estilo para documentación de producto en inglés, consultada por internet | **No aplica a la tesis** (idioma y género distintos); solo serviría para el `README` del repositorio |
+
+**Pasos por sección (en este orden):**
+
+1. **Ficha de sección:** objetivo, extensión (§ 12), fuentes del repositorio, cifras permitidas con su origen y lo que no se puede afirmar. Es lo que evita redactar de memoria.
+2. **Borrador desde las fuentes:** viñetas a prosa, en la copia de trabajo `Loom - Tesis.docx` (control de cambios activo, nunca en la guía original). Cada dato lleva su fuente entre corchetes hasta el paso 5.
+3. **Pasada `redaccion-academica`:** ritmo del párrafo, muletillas, anclaje técnico, citas `[N]`. Devuelve dos listas: citas pendientes y generalidades sin evidencia (se resuelven con el autor, no se rellenan).
+4. **Pasada `humanizer`:** con la muestra de voz de la tesis de referencia (decisión 14); texto técnico, así que **neutro y sin opiniones agregadas**; en modo archivo solo cambia prosa (no toca datos, rutas, código ni nombres de ADR).
+5. **Verificación de cifras y citas:** cada número se contrasta con su fuente en una tabla de trazabilidad (`trazabilidad-de-cifras.md`, por crear: cifra, valor, archivo o colección, fecha de la corrida). Cada `[N]` se resuelve o se deja como pendiente visible.
+6. **Formato:** estilos de título y rótulo de la guía (Arial 12, márgenes, interlineado, rótulos de figuras y tablas con número de capítulo) para que los índices se generen solos.
+7. **Revisión del director** por capítulo, no al final.
+
+**Rasgos de IA a vigilar en español** (adaptación de la lista del `humanizer`): «es importante destacar/señalar», «cabe mencionar», «en el panorama actual», «en un mundo cada vez más…», «juega un papel fundamental/clave/crucial»,
+«no solo… sino también» y «no es X, es Y», «un abanico de», «sin lugar a dudas», «robusto», «holístico», «sinergia», «revolucionar», cierres de párrafo que repiten la idea («En definitiva…», «En resumen…»),
+tríadas de adjetivos o sustantivos por costumbre, guion largo como conector universal (en este repositorio abunda; en la tesis se usa con medida), negritas y encabezados decorativos, y párrafos que anuncian lo que van a decir.
+
+**Dos cuidados propios de esta tesis**
+
+- **Coherencia entre lo que se afirma y lo que se implementó:** los ADR y el plan usan «implementado» con cautela; en la tesis, una función solo se describe como resultado si se ejercitó (§ 8). Lo demás va como diseño o trabajo futuro.
+- **Trazabilidad del proceso de redacción:** como la tesis trata de asistentes de IA, conviene guardar qué partes se redactaron con apoyo de IA y qué revisó el autor (decisión 13).
