@@ -1,0 +1,16 @@
+import sys; sys.path.insert(0,'.')
+from loom_ui import *
+l=Loom()
+try:
+    l.login(); l.ir("/proyectos/"+PID)
+    l.pg.locator("button").filter(has_text="Revisar en Diseño").first.click(); time.sleep(3)
+    l.captura("09-arquitectura-generada-pendiente-de-aprobar")
+    l.pg.get_by_role("button", name="Ver documento").click(); time.sleep(3)
+    l.captura("10-documento-de-arquitectura")
+    l.pg.screenshot(path=str(CAPS/"10b-documento-de-arquitectura-completo.png"), full_page=True)
+    l.pg.keyboard.press("Escape"); time.sleep(1)
+    l.pg.get_by_role("button", name="Aprobar arquitectura").click(); time.sleep(4)
+    l.captura("11-arquitectura-aprobada")
+    l.ir("/proyectos/"+PID); l.captura("12-ruta-tras-aprobar-arquitectura")
+    print([b for b in l.pg.get_by_role("button").all_inner_texts() if b][7:10])
+finally: l.cerrar()

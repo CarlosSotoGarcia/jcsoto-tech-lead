@@ -1,0 +1,48 @@
+23 generar ok=True
+23 BASE-PT-02 tras revisión: aprobado obs=2
+23 BASE-PT-02 tras revisión: aprobado obs=2
+23 BASE-PT-02 tras revisión: aprobado obs=2
+23 BASE-PT-02 fusión: fusionado
+24 generar ok=True
+24 BASE-PT-03 tras revisión: con_observaciones obs=4
+24 BASE-PT-03 fusión: fusionado
+25 generar ok=True
+25 BASE-PT-04 tras revisión: con_observaciones obs=6
+25 BASE-PT-04 fusión: fusionado
+26 generar ok=True
+26 BASE-PT-05 tras revisión: con_observaciones obs=9
+26 BASE-PT-05 fusión: con_observaciones
+26 BASE-PT-05 tras revisión: con_observaciones obs=9
+26 BASE-PT-05 checks CI: ['pass']
+26 BASE-PT-05 fusión: fusionado
+27 generar ok=True
+27 HU-001-PT-01 tras revisión: con_observaciones obs=8
+27 HU-001-PT-01 checks CI: ['pass', 'skipping']
+27 HU-001-PT-01 fusión: fusionado
+28 generar ok=True
+28 HU-001-PT-02 tras revisión: con_observaciones obs=5
+28 HU-001-PT-02 checks CI: ['pass', 'skipping']
+28 HU-001-PT-02 fusión: fusionado
+29 generar ok=True
+29 HU-002-PT-01 tras revisión: con_observaciones obs=6
+29 HU-002-PT-01 checks CI: ['pass', 'skipping']
+29 HU-002-PT-01 fusión: fusionado
+30 generar ok=True
+30 HU-002-PT-02 tras revisión: con_observaciones obs=6
+30 HU-002-PT-02 checks CI: ['pass', 'skipping']
+30 HU-002-PT-02 fusión: fusionado
+31 generar ok=True
+31 HU-002-PT-03 tras revisión: con_observaciones obs=5
+31 HU-002-PT-03 checks CI: ['pass', 'skipping']
+31 HU-002-PT-03 fusión: fusionado
+32 generar ok=True
+32 HU-003-PT-01 tras revisión: aprobado obs=2
+32 HU-003-PT-01 checks CI: ['pass', 'skipping']
+32 HU-003-PT-01 fusión: fusionado
+33 generar ok=True
+33 sin paquete en revision tras generar: []
+33 generar falló por límite de sesión de Claude (reinicia 3:30); reintento
+33 generar ok=True
+33 HU-003-PT-02 tras revisión: con_observaciones obs=7
+33 HU-003-PT-02 checks CI: ['fail', 'pass', 'skipping']
+release 1: falló el arranque del backend (Flyway checksum mismatch con la BD de la corrida anterior); BD inventarios recreada por decisión del usuario

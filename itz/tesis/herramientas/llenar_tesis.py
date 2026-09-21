@@ -105,6 +105,20 @@ def figura(capitulo: str, ruta: str, titulo: str) -> str:
 
     datos = (BASE_FIGURAS / ruta).read_bytes()
     ancho_px, alto_px = struct.unpack(">II", datos[16:24])
+    if len(datos) > 200_000:  # capturas de pantalla: se reducen a 1200 px de ancho y 128 colores para no inflar el .docx
+        try:
+            import io
+            from PIL import Image
+
+            im = Image.open(io.BytesIO(datos)).convert("RGB")
+            if im.width > 1200:
+                im = im.resize((1200, round(im.height * 1200 / im.width)), Image.LANCZOS)
+            buf = io.BytesIO()
+            im.quantize(colors=128, method=Image.MEDIANCUT).save(buf, "PNG", optimize=True)
+            datos = buf.getvalue()
+            ancho_px, alto_px = im.width, im.height
+        except ImportError:
+            pass
     ancho_cm, alto_cm = 15.0, 15.0 * alto_px / ancho_px
     if alto_cm > 17.0:
         ancho_cm, alto_cm = ancho_cm * 17.0 / alto_cm, 17.0
@@ -186,6 +200,9 @@ def bloques_a_xml(tag: str, texto: str) -> str:
         elif linea.startswith("### "):
             salida.append(subtitulo(linea[4:].strip()))
             i += 1
+        elif linea.startswith("CAPITULO:"):
+            capitulo = linea[len("CAPITULO:"):].strip()
+            i += 1
         elif linea.startswith("FIGURA:"):
             ruta, _, titulo = linea[len("FIGURA:"):].partition("|")
             salida.append(figura(capitulo, ruta.strip(), titulo.strip()))
@@ -214,6 +231,16 @@ def bloques_a_xml(tag: str, texto: str) -> str:
     return "".join(salida)
 
 
+def _guardar(encontradas: dict[str, str], tag: str, buffer: list[str]) -> None:
+    """`@@ tag+` agrega el texto al final de la sección `tag` (para repartir una sección larga en varios archivos)."""
+    texto = "\n".join(buffer)
+    if tag.endswith("+"):
+        base = tag[:-1]
+        encontradas[base] = encontradas.get(base, "") + "\n\n" + texto
+    else:
+        encontradas[tag] = texto
+
+
 def secciones(carpeta: Path) -> dict[str, str]:
     encontradas: dict[str, str] = {}
     for md in sorted(carpeta.glob("*.md")):
@@ -222,12 +249,12 @@ def secciones(carpeta: Path) -> dict[str, str]:
             m = re.match(r"^@@\s+(\S+)\s*$", linea)
             if m:
                 if actual:
-                    encontradas[actual] = "\n".join(buffer)
+                    _guardar(encontradas, actual, buffer)
                 actual, buffer = m.group(1), []
             elif actual is not None:
                 buffer.append(linea)
         if actual:
-            encontradas[actual] = "\n".join(buffer)
+            _guardar(encontradas, actual, buffer)
     return encontradas
 
 

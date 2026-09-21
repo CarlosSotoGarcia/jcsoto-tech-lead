@@ -1,0 +1,15 @@
+import sys; sys.path.insert(0,'.')
+from ciclo_ui import *
+l=Loom()
+try:
+    l.login(); l.ir("/proyectos/"+PID)
+    l.pg.get_by_role("tab", name=re.compile("Implementación")).click(); time.sleep(2)
+    l.pg.get_by_role("button", name="Generar release.py").scroll_into_view_if_needed()
+    btn = l.pg.get_by_role("button", name=re.compile("Publicar en el repositorio"))
+    print("publicar habilitado:", btn.is_enabled())
+    btn.scroll_into_view_if_needed(); btn.click(); time.sleep(6)
+    l.captura("38-fase4-publicar-pr-de-despliegue")
+    esperar_actividad(l, maximo=600, cada=20, prefijo="38b-fase4-publicar-progreso")
+    l.ir("/proyectos/"+PID); l.pg.get_by_role("tab", name=re.compile("Implementación")).click(); time.sleep(2)
+    l.pg.get_by_role("button", name="Ejecutar release").scroll_into_view_if_needed(); l.captura("38c-fase4-pr-publicado")
+finally: l.cerrar()

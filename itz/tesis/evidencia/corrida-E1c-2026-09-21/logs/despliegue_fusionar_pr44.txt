@@ -1,0 +1,1 @@
+POST /proyectos/{id}/despliegue/fusionar?url_pr=.../pull/44 (endpoint de Loom; la interfaz no tiene botón para fusionar el PR de despliegue)
