@@ -234,6 +234,7 @@
 - [ADR-0081](decisiones/0081-despliegue-automatico-con-github-actions-y-workload-identity-federation.md) — el despliegue se dispara con GitHub Actions + Workload Identity Federation que `release.py` configura solo; alcance por proveedor (GitLab a futuro).
 - [ADR-0082](decisiones/0082-release-lanzado-desde-loom-en-github-actions.md) — Loom lanza el workflow de release en GitHub Actions cuando una HU queda completa; los PR de despliegue se aceptan desde Loom.
 - [ADR-0083](decisiones/0083-procesos-concurrentes-con-reglas-de-exclusion.md) — propuesta: varios procesos a la vez con reglas de exclusión y el release exclusivo.
+- [ADR-0084](decisiones/0084-historial-de-procesos-y-cancelacion.md) — los procesos se guardan en Mongo (cuándo empezó, cuándo terminó, cómo) y se pueden cancelar, deteniendo también sus procesos externos.
 
 ## Problema
 
