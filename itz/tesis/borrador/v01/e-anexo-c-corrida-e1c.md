@@ -73,19 +73,19 @@ FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/22-BASE-PT-01-fusionado.png | 
 La tabla siguiente resume el ciclo de los doce paquetes. La generación de código tardó entre 1.0 y 14.7 minutos por paquete; cada revisión, entre 0.4 y 0.8 minutos.
 
 TABLA: Resultado de la revisión de cada paquete de trabajo
-| Paquete | Rondas de revisión | Observaciones | Mayores | Menores | PR |
-| BASE/PT-01 | 1 | 6 | 3 | 3 | #32 |
-| BASE/PT-02 | 1 | 2 | 0 | 2 | #33 |
-| BASE/PT-03 | 1 | 4 | 1 | 3 | #34 |
-| BASE/PT-04 | 1 | 6 | 3 | 3 | #35 |
-| BASE/PT-05 | 1 | 9 | 4 | 5 | #36 |
-| HU-001/PT-01 | 1 | 8 | 3 | 5 | #37 |
-| HU-001/PT-02 | 1 | 5 | 1 | 4 | #38 |
-| HU-002/PT-01 | 1 | 6 | 3 | 3 | #39 |
-| HU-002/PT-02 | 1 | 6 | 1 | 5 | #40 |
-| HU-002/PT-03 | 1 | 5 | 2 | 3 | #41 |
-| HU-003/PT-01 | 1 | 2 | 0 | 2 | #42 |
-| HU-003/PT-02 | 1 | 0 (tras la corrección) | 0 | 0 | #43 |
+| Paquete | Observaciones | Bloqueantes | Mayores | Menores | PR |
+| BASE/PT-01 | 6 | 0 | 3 | 3 | #32 |
+| BASE/PT-02 | 2 | 0 | 0 | 2 | #33 |
+| BASE/PT-03 | 4 | 0 | 1 | 3 | #34 |
+| BASE/PT-04 | 6 | 0 | 3 | 3 | #35 |
+| BASE/PT-05 | 9 | 0 | 4 | 5 | #36 |
+| HU-001/PT-01 | 8 | 0 | 3 | 5 | #37 |
+| HU-001/PT-02 | 5 | 0 | 1 | 4 | #38 |
+| HU-002/PT-01 | 6 | 0 | 3 | 3 | #39 |
+| HU-002/PT-02 | 6 | 0 | 1 | 5 | #40 |
+| HU-002/PT-03 | 5 | 0 | 2 | 3 | #41 |
+| HU-003/PT-01 | 2 | 0 | 0 | 2 | #42 |
+| HU-003/PT-02 | 7 | 2 | 3 | 2 | #43 |
 
 Tres situaciones se apartaron del ciclo previsto y quedan registradas como hallazgos de la corrida.
 
@@ -93,7 +93,7 @@ Primero, al aceptar BASE/PT-05, que incorpora el flujo de integración continua,
 
 Segundo, la generación de HU-003/PT-02 falló en su primer intento porque el CLI de Claude alcanzó el límite de sesión de la suscripción («You've hit your session limit»); se reintentó al reiniciarse el límite.
 
-Tercero, el Pull Request de HU-003/PT-02 tuvo un *check* de integración continua en rojo por una regla de análisis estático del frontend (prefijo del selector de un componente de Angular) que la compuerta local no detectó. Loom no dejó fusionarlo. Se aplicó una ronda de corrección desde la interfaz (6 min 13 s), el CI quedó en verde y se fusionó.
+Tercero, en HU-003/PT-02 la compuerta de Docker falló en sus tres intentos, por lo que el Pull Request se abrió con la advertencia y la revisión dejó dos observaciones bloqueantes. El *check* de integración continua también quedó en rojo, por una regla de análisis estático del frontend (prefijo del selector de un componente de Angular), y Loom no dejó fusionarlo. Se aplicó una ronda de corrección desde la interfaz (6 min 13 s), la compuerta y el CI quedaron en verde y se fusionó.
 
 FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/34-HU-003-PT-02-con-observaciones-y-ci-rojo.png | HU-003/PT-02 con observaciones y la integración continua en rojo
 
@@ -151,8 +151,8 @@ TABLA: Resumen de la corrida E1c
 | Fase 2: casos de prueba | 44 casos (14, 14 y 16) | 1.8 min |
 | Fase 2: arquitectura | 5 entidades, 7 decisiones, 7 preguntas | 2.0 min |
 | Fase 3: descomposición | 12 paquetes (2 intentos) | 2.1 min (más 2.5 min del intento fallido) |
-| Fase 3: ciclo de 12 paquetes | 12 fusionados; 1 corrección por CI en rojo | 0.5 a 14.7 min por paquete |
+| Fase 3: ciclo de 12 paquetes | 12 fusionados; 1 corrección por compuerta y CI en rojo | 0.5 a 14.7 min por paquete |
 | Fase 4: release en Google Cloud | Backend y frontend desplegados (2.º intento) | 8.5 min |
 | Fase 4: pruebas de humo | 36 aprobados, 2 fallidos, 6 bloqueados | 13.7 min en total |
 
-El costo nocional informado por el CLI de Claude fue de 16.67 USD para 228 llamadas al modelo (no comparable con la facturación de una API, porque el CLI se usó con una suscripción). Cada valor de este anexo proviene de las bases de datos de Loom, de la API de GitHub o de las pantallas capturadas; los tiempos son de reloj y dependen de la máquina, de la red y de la carga del proveedor.
+El costo nocional informado por el CLI de Claude fue de 16.67 USD para 128 llamadas al modelo (no comparable con la facturación de una API, porque el CLI se usó con una suscripción). Cada valor de este anexo proviene de las bases de datos de Loom, de la API de GitHub o de las pantallas capturadas; los tiempos son de reloj y dependen de la máquina, de la red y de la carga del proveedor.
