@@ -4,16 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-This is **not a software project** — there is no source code, build system, package manifest, or test
-suite. It is Juan Carlos Soto García's personal repository of professional-profile documents and the
-materials for his Maestría en Sistemas Computacionales thesis/titulación process (Instituto Tecnológico
-de Zacatecas).
+This is primarily Juan Carlos Soto García's personal repository of professional-profile documents and
+the materials for his Maestría en Sistemas Computacionales thesis/titulación process (Instituto
+Tecnológico de Zacatecas). Most of it — `experiencia/`, `itz/documentación/`, `itz/arquitectura/`,
+`itz/tesis/` — is content, not code, and has no build/lint/test commands.
 
-There are no build, lint, or test commands to run here.
+The exception is [loom/](loom/) — **see [loom/CLAUDE.md](loom/CLAUDE.md)** — a real FastAPI + Angular
+codebase: the working implementation of the system ("Loom"/"Telar") that `itz/arquitectura/` designs and
+that `itz/tesis/` reports on. Its design decisions and skill specs live in `itz/arquitectura/`, not in
+`loom/` itself, so the two directories are tightly coupled despite the top-level split.
 
 ## Structure
 
 - [README.md](README.md) — one-line repo description/tagline.
+- [loom/](loom/) — the Loom platform's source code (FastAPI backend, Angular frontend). See
+  [loom/CLAUDE.md](loom/CLAUDE.md) for its commands and architecture.
 - [experiencia/](experiencia/) — professional-profile documents: a CV PDF plus several **overlapping**
   Markdown profiles (`PERFIL-TECNICO.md`, `PERFIL-TECNICO Monou.md`, `Perfil Profesional y Técnico.md`,
   `perfil-profesional-carlos.md`, `perfil-tecnico-carlos-soto.md`, `gemini-code-*.md`). These were
