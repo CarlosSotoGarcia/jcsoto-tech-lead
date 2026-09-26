@@ -1,0 +1,1125 @@
+[
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-01",
+  "grupo": "BASE",
+  "titulo": "Entorno de desarrollo dockerizado (compose, Dockerfiles dev, .env.example, README raíz)",
+  "descripcion": "Deja el entorno de desarrollo levantable con docker compose up: servicios backend (Spring Boot con código montado y recarga en caliente), frontend (Angular dev server con hot reload) y PostgreSQL, más un servidor SMTP de desarrollo (p. ej. MailHog) para el correo de recuperación. Incluye Dockerfiles de desarrollo (nombrados Dockerfile.dev en backend/ y frontend/, distintos del Dockerfile de producción), .env.example con las variables de la arquitectura (DB_*, JWT_*, IDLE_TIMEOUT_MINUTES, MAIL_*, FRONTEND_BASE_URL, CORS_ALLOWED_ORIGINS, API_BASE_URL) y README.md raíz con requisitos previos, cómo levantar, puertos y URLs (incluida Swagger), variables de entorno, cómo correr pruebas dentro de los contenedores, cómo detener/limpiar y enlaces a los README de backend y frontend.",
+  "capa": "infra",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "docker-compose.yml de desarrollo en la raíz (backend, frontend, postgres, mailhog)",
+   "backend/Dockerfile.dev y frontend/Dockerfile.dev con volumen y recarga en caliente",
+   "Healthcheck de postgres y depends_on",
+   "Archivo .env.example",
+   "README.md raíz con guía de despliegue en desarrollo y enlaces a los README de servicios",
+   ".gitignore y .dockerignore"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/32",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «infra»"
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "backend/Dockerfile.dev",
+    "linea": 10,
+    "descripcion": "La recarga en caliente del backend no está garantizada: `mvn spring-boot:run` con devtools solo reinicia cuando cambian las clases compiladas en target/classes, y nada recompila al editar el código fuente montado. Además el CMD activa el perfil `dev` (-Dspring-boot.run.profiles=dev) y compose también fija SPRING_PROFILES_ACTIVE=dev, pero la arquitectura solo define application.yml y application-prod.yml; no hay application-dev.yml (redundante y confuso). El PR reconoce que depende de que el pom incluya devtools, sin acordarlo en ningún paquete.",
+    "sugerencia": "Documentar/asegurar devtools en el pom del esqueleto, y para recompilar en caliente usar un proceso que compile al cambiar (p. ej. `mvn spring-boot:run` junto a `mvn compile` en bucle, o IDE/fswatch) o indicarlo en el README. Quitar el argumento de perfil duplicado y dejar solo SPRING_PROFILES_ACTIVE.",
+    "comentario_id": 4059734181
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "mayor",
+    "archivo": "docker-compose.yml",
+    "linea": 37,
+    "descripcion": "La dependencia del backend en `mailhog` y `PORT: 8080` es correcta, pero el backend no tiene healthcheck y el frontend solo usa `depends_on: [backend]` sin condición; además `docker-compose.yml` y el `.dockerignore` raíz excluyen `*.md`/compose, lo que no afecta al build porque los contextos son ./backend y ./frontend (el .dockerignore raíz es inútil). Los contextos de build tienen sus propios .dockerignore.",
+    "sugerencia": "Añadir healthcheck al backend (GET /actuator/health) y usar `condition: service_healthy` en frontend si se quiere orden real; eliminar o justificar el .dockerignore raíz.",
+    "comentario_id": 4059734187
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "mayor",
+    "archivo": "frontend/Dockerfile.dev",
+    "linea": 10,
+    "descripcion": "El CMD ejecuta `npm ci || npm install` en cada arranque del contenedor sobre un volumen anónimo/nombrado de node_modules montado bajo el bind mount ./frontend:/app. `npm ci` borra node_modules antes de instalar y se repite en cada `up`, lo que hace lento el arranque; además, si falla `npm ci` (lockfile ausente) cae a `npm install` silenciosamente. Además `CHOKIDAR_USEPOLLING` es redundante con `--poll 2000`.",
+    "sugerencia": "Copiar package*.json e instalar en el build de la imagen (COPY + RUN npm ci) y en el CMD solo ejecutar `ng serve`; usar la instalación en runtime solo si node_modules está vacío. Quitar CHOKIDAR_USEPOLLING.",
+    "comentario_id": 4059734192
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": ".env.example",
+    "linea": 13,
+    "descripcion": "Los valores de ejemplo de JWT_SECRET y DB_PASSWORD son válidos y funcionales (cumplen la longitud mínima), así que un usuario que copie el archivo sin cambiarlos levanta con secretos conocidos. Además Postgres (5432) queda publicado en el host en todas las interfaces.",
+    "sugerencia": "Dejar placeholders que fuercen a definirlos (compose ya exige DB_PASSWORD/JWT_SECRET) o generar valores, y publicar puertos en 127.0.0.1 (`127.0.0.1:${DB_PORT}:5432`).",
+    "comentario_id": 4059734193
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "docker-compose.yml",
+    "linea": 56,
+    "descripcion": "`API_BASE_URL` se pasa al contenedor del frontend como variable de entorno, pero `ng serve` no la lee en runtime; la arquitectura la inyecta en nginx/config.json solo en producción. En dev no tendrá efecto salvo que el esqueleto del frontend lo implemente.",
+    "sugerencia": "Documentar en el README cómo consume el frontend dev la URL del API (environments/proxy) o quitar la variable hasta que exista el consumidor.",
+    "comentario_id": 4059734198
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": "README.md",
+    "linea": 83,
+    "descripcion": "El criterio \"compila, corre y pasa sus pruebas\" no se puede verificar: `docker compose up` no funciona hasta que existan backend/pom.xml y frontend/package.json (lo admite el README). Los comandos de prueba del README (`mvn test`, `npm test`, `npm run lint`) asumen scripts que aún no existen. Tampoco están enlazados README de backend/frontend que aún no existen (enlaces rotos).",
+    "sugerencia": "Indicar en el README que los enlaces y comandos de prueba aplicarán cuando lleguen los paquetes de esqueleto, o crear README mínimos en backend/ y frontend/.",
+    "comentario_id": 4059734202
+   }
+  ],
+  "revisado_en": "2026-09-21T06:27:41.715352+00:00",
+  "id_externo": null,
+  "rama": "base/PT-01",
+  "md": "---\nid: PT-01\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: infra\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/32\nrondas_revision: 1\ndepende_de: []\nid_externo: null\nrama: base/PT-01\nfecha: 2026-09-21\n---\n\n# PT-01 — Entorno de desarrollo dockerizado (compose, Dockerfiles dev, .env.example, README raíz)\n\n_BASE: Esqueleto del aplicativo_\n\nDeja el entorno de desarrollo levantable con docker compose up: servicios backend (Spring Boot con código montado y recarga en caliente), frontend (Angular dev server con hot reload) y PostgreSQL, más un servidor SMTP de desarrollo (p. ej. MailHog) para el correo de recuperación. Incluye Dockerfiles de desarrollo (nombrados Dockerfile.dev en backend/ y frontend/, distintos del Dockerfile de producción), .env.example con las variables de la arquitectura (DB_*, JWT_*, IDLE_TIMEOUT_MINUTES, MAIL_*, FRONTEND_BASE_URL, CORS_ALLOWED_ORIGINS, API_BASE_URL) y README.md raíz con requisitos previos, cómo levantar, puertos y URLs (incluida Swagger), variables de entorno, cómo correr pruebas dentro de los contenedores, cómo detener/limpiar y enlaces a los README de backend y frontend.\n\n## Entregables\n\n- docker-compose.yml de desarrollo en la raíz (backend, frontend, postgres, mailhog)\n- backend/Dockerfile.dev y frontend/Dockerfile.dev con volumen y recarga en caliente\n- Healthcheck de postgres y depends_on\n- Archivo .env.example\n- README.md raíz con guía de despliegue en desarrollo y enlaces a los README de servicios\n- .gitignore y .dockerignore\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `backend/Dockerfile.dev:10`: La recarga en caliente del backend no está garantizada: `mvn spring-boot:run` con devtools solo reinicia cuando cambian las clases compiladas en target/classes, y nada recompila al editar el código fuente montado. Además el CMD activa el perfil `dev` (-Dspring-boot.run.profiles=dev) y compose también fija SPRING_PROFILES_ACTIVE=dev, pero la arquitectura solo define application.yml y application-prod.yml; no hay application-dev.yml (redundante y confuso). El PR reconoce que depende de que el pom incluya devtools, sin acordarlo en ningún paquete.\n- **mayor** (buenas_practicas) `docker-compose.yml:37`: La dependencia del backend en `mailhog` y `PORT: 8080` es correcta, pero el backend no tiene healthcheck y el frontend solo usa `depends_on: [backend]` sin condición; además `docker-compose.yml` y el `.dockerignore` raíz excluyen `*.md`/compose, lo que no afecta al build porque los contextos son ./backend y ./frontend (el .dockerignore raíz es inútil). Los contextos de build tienen sus propios .dockerignore.\n- **mayor** (buenas_practicas) `frontend/Dockerfile.dev:10`: El CMD ejecuta `npm ci || npm install` en cada arranque del contenedor sobre un volumen anónimo/nombrado de node_modules montado bajo el bind mount ./frontend:/app. `npm ci` borra node_modules antes de instalar y se repite en cada `up`, lo que hace lento el arranque; además, si falla `npm ci` (lockfile ausente) cae a `npm install` silenciosamente. Además `CHOKIDAR_USEPOLLING` es redundante con `--poll 2000`.\n- **menor** (seguridad) `.env.example:13`: Los valores de ejemplo de JWT_SECRET y DB_PASSWORD son válidos y funcionales (cumplen la longitud mínima), así que un usuario que copie el archivo sin cambiarlos levanta con secretos conocidos. Además Postgres (5432) queda publicado en el host en todas las interfaces.\n- **menor** (buenas_practicas) `docker-compose.yml:56`: `API_BASE_URL` se pasa al contenedor del frontend como variable de entorno, pero `ng serve` no la lee en runtime; la arquitectura la inyecta en nginx/config.json solo en producción. En dev no tendrá efecto salvo que el esqueleto del frontend lo implemente.\n- **menor** (criterio_aceptacion) `README.md:83`: El criterio \"compila, corre y pasa sus pruebas\" no se puede verificar: `docker compose up` no funciona hasta que existan backend/pom.xml y frontend/package.json (lo admite el README). Los comandos de prueba del README (`mvn test`, `npm test`, `npm run lint`) asumen scripts que aún no existen. Tampoco están enlazados README de backend/frontend que aún no existen (enlaces rotos).\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-02",
+  "grupo": "BASE",
+  "titulo": "Base del backend: Spring Boot, config, Flyway, Swagger y README",
+  "descripcion": "Proyecto Maven Spring Boot 3 / Java 21 con la estructura de paquetes por módulo (config, common, auth, user, passwordreset), application.yml y application-prod.yml con propiedades tipadas (JwtProperties, MailConfig), conexión a PostgreSQL, Flyway con V1__auth.sql (tablas users, roles, user_role, password_reset_token, revoked_token, auth_event y seed inicial de roles/usuario) y ddl-auto=validate. Manejo de errores base con ProblemDetail (@RestControllerAdvice), actuator health y springdoc-openapi con Swagger UI en /swagger-ui.html y /v3/api-docs, con esquema bearerAuth global. Sin lógica de negocio.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "pom.xml con Spring Web, Security, JPA, Validation, Flyway, PostgreSQL, springdoc, MapStruct, Lombok, Actuator, Mail",
+   "InventariosApplication y estructura de paquetes",
+   "application.yml y application-prod.yml con server.port=${PORT}",
+   "V1__auth.sql con esquema y seed",
+   "OpenApiConfig con bearerAuth y Swagger UI accesible",
+   "GlobalExceptionHandler ProblemDetail",
+   "Prueba de arranque del contexto y test de health con JUnit 5 (Testcontainers o similar)",
+   "backend/README.md con qué hace, cómo levantarlo, variables, pruebas, estructura y URL de Swagger"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/33",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 49
+  },
+  "observaciones": [
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "linea": 45,
+    "descripcion": "El authenticationEntryPoint es un HttpStatusEntryPoint, que devuelve 401 sin cuerpo. Los 401 y 403 lanzados por los filtros de seguridad no pasan por @RestControllerAdvice, así que no salen en ProblemDetail. Esto contradice la convención de errores RFC 7807 y la prueba solo comprueba el código de estado.",
+    "sugerencia": "Añadir un AuthenticationEntryPoint y un AccessDeniedHandler que escriban un ProblemDetail (application/problem+json) y usarlos en exceptionHandling. Ampliar SecurityConfigTest para comprobar el cuerpo.",
+    "comentario_id": 4059780221
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "backend/src/test/resources/application-test.yml",
+    "linea": 3,
+    "descripcion": "Las pruebas usan H2 en modo PostgreSQL, así que V1__auth.sql nunca se valida contra PostgreSQL real (IDENTITY, TIMESTAMP WITH TIME ZONE, CHECK con LOWER). La entrega pedía Testcontainers \"o similar\". H2 es válido para mantener las pruebas sin Docker, pero un fallo de la migración en Cloud SQL solo se vería al desplegar.",
+    "sugerencia": "Mantener H2 para las pruebas rápidas y añadir, al menos en CI, una prueba de migración con Testcontainers PostgreSQL (o un servicio postgres en GitHub Actions) que ejecute Flyway y el seed.",
+    "comentario_id": 4059780231
+   }
+  ],
+  "revisado_en": "2026-09-21T06:37:39.335232+00:00",
+  "id_externo": null,
+  "rama": "base/PT-02",
+  "md": "---\nid: PT-02\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/33\nrondas_revision: 1\ndepende_de: [PT-01]\nid_externo: null\nrama: base/PT-02\nfecha: 2026-09-21\n---\n\n# PT-02 — Base del backend: Spring Boot, config, Flyway, Swagger y README\n\n_BASE: Esqueleto del aplicativo_\n\nProyecto Maven Spring Boot 3 / Java 21 con la estructura de paquetes por módulo (config, common, auth, user, passwordreset), application.yml y application-prod.yml con propiedades tipadas (JwtProperties, MailConfig), conexión a PostgreSQL, Flyway con V1__auth.sql (tablas users, roles, user_role, password_reset_token, revoked_token, auth_event y seed inicial de roles/usuario) y ddl-auto=validate. Manejo de errores base con ProblemDetail (@RestControllerAdvice), actuator health y springdoc-openapi con Swagger UI en /swagger-ui.html y /v3/api-docs, con esquema bearerAuth global. Sin lógica de negocio.\n\n## Entregables\n\n- pom.xml con Spring Web, Security, JPA, Validation, Flyway, PostgreSQL, springdoc, MapStruct, Lombok, Actuator, Mail\n- InventariosApplication y estructura de paquetes\n- application.yml y application-prod.yml con server.port=${PORT}\n- V1__auth.sql con esquema y seed\n- OpenApiConfig con bearerAuth y Swagger UI accesible\n- GlobalExceptionHandler ProblemDetail\n- Prueba de arranque del contexto y test de health con JUnit 5 (Testcontainers o similar)\n- backend/README.md con qué hace, cómo levantarlo, variables, pruebas, estructura y URL de Swagger\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **menor** (arquitectura) `backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java:45`: El authenticationEntryPoint es un HttpStatusEntryPoint, que devuelve 401 sin cuerpo. Los 401 y 403 lanzados por los filtros de seguridad no pasan por @RestControllerAdvice, así que no salen en ProblemDetail. Esto contradice la convención de errores RFC 7807 y la prueba solo comprueba el código de estado.\n- **menor** (pruebas) `backend/src/test/resources/application-test.yml:3`: Las pruebas usan H2 en modo PostgreSQL, así que V1__auth.sql nunca se valida contra PostgreSQL real (IDENTITY, TIMESTAMP WITH TIME ZONE, CHECK con LOWER). La entrega pedía Testcontainers \"o similar\". H2 es válido para mantener las pruebas sin Docker, pero un fallo de la migración en Cloud SQL solo se vería al desplegar.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-03",
+  "grupo": "BASE",
+  "titulo": "Seguridad base del backend: Spring Security stateless y CORS",
+  "descripcion": "Configuración base de Spring Security stateless con SecurityConfig, BCrypt PasswordEncoder, CORS limitado a CORS_ALLOWED_ORIGINS, rutas públicas (Swagger en dev, health, /api/v1/auth/**) y resto autenticadas, manejo 401/403 en ProblemDetail y habilitación de @PreAuthorize. Sin emisión de JWT, filtro con reglas ni endpoints de negocio: eso lo hacen las HUs. Swagger restringido en prod.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "SecurityConfig con SecurityFilterChain stateless",
+   "Bean BCryptPasswordEncoder",
+   "Configuración CORS por propiedad",
+   "AuthenticationEntryPoint y AccessDeniedHandler con ProblemDetail",
+   "Test de slice que verifica 401 en ruta protegida y acceso a rutas públicas",
+   "Actualización de backend/README.md si cambian variables"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-02"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/34",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 43
+  },
+  "observaciones": [
+   {
+    "fuente": "pruebas",
+    "severidad": "mayor",
+    "archivo": "backend/src/test/java/com/itz/inventarios/config/SecurityConfigTest.java",
+    "linea": 46,
+    "descripcion": "rutasDeAuthNoExigenAutenticacion hace GET a /api/v1/auth/login, que no existe: solo comprueba que el estado sea distinto de 401 (será 404/405). La aserción es débil y pasaría con casi cualquier resultado que no sea 401, incluido un 403 o 500.",
+    "sugerencia": "Eliminarla o cambiarla por una aserción precisa (p. ej. 404 o 405 esperado, o usar el ProbeController de SecurityWebSliceTest, que ya cubre POST /api/v1/auth/probe con 200). Evitar duplicar cobertura.",
+    "comentario_id": 4059812423
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "backend/src/test/java/com/itz/inventarios/config/SecurityWebSliceTest.java",
+    "linea": null,
+    "descripcion": "No hay prueba de que en prod (app.security.swagger-public=false) Swagger/api-docs devuelvan 401, que es un requisito explícito del paquete (Swagger restringido en prod). Solo se prueba el caso dev.",
+    "sugerencia": "Añadir un slice con @TestPropertySource(properties=\"app.security.swagger-public=false\") que verifique 401 en /v3/api-docs y /swagger-ui.html.",
+    "comentario_id": null
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/config/ProblemResponseWriter.java",
+    "linea": 19,
+    "descripcion": "Se construye manualmente un Map con los campos del ProblemDetail en lugar de serializar el ProblemDetail; si GlobalExceptionHandler añade propiedades (type, properties) el formato puede divergir. Además el handler 'pd.getType()' se serializa como 'about:blank' sin más.",
+    "sugerencia": "Serializar el ProblemDetail directamente con el ObjectMapper de Spring (que ya tiene el mixin de ProblemDetail) y fijar instance con pd.setInstance(URI.create(request.getRequestURI())), manteniendo un único formato con GlobalExceptionHandler.",
+    "comentario_id": 4059812432
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "linea": null,
+    "descripcion": "El valor por defecto de app.security.swagger-public es true (@Value con :true y application.yml). Si el perfil prod no se activa por error, Swagger queda público (fallo abierto).",
+    "sugerencia": "Usar por defecto false en el @Value y activar true explícitamente en dev/application.yml, o documentar que solo prod lo sobrescribe.",
+    "comentario_id": null
+   }
+  ],
+  "revisado_en": "2026-09-21T06:44:24.728745+00:00",
+  "id_externo": null,
+  "rama": "base/PT-03",
+  "md": "---\nid: PT-03\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/34\nrondas_revision: 1\ndepende_de: [PT-02]\nid_externo: null\nrama: base/PT-03\nfecha: 2026-09-21\n---\n\n# PT-03 — Seguridad base del backend: Spring Security stateless y CORS\n\n_BASE: Esqueleto del aplicativo_\n\nConfiguración base de Spring Security stateless con SecurityConfig, BCrypt PasswordEncoder, CORS limitado a CORS_ALLOWED_ORIGINS, rutas públicas (Swagger en dev, health, /api/v1/auth/**) y resto autenticadas, manejo 401/403 en ProblemDetail y habilitación de @PreAuthorize. Sin emisión de JWT, filtro con reglas ni endpoints de negocio: eso lo hacen las HUs. Swagger restringido en prod.\n\n## Entregables\n\n- SecurityConfig con SecurityFilterChain stateless\n- Bean BCryptPasswordEncoder\n- Configuración CORS por propiedad\n- AuthenticationEntryPoint y AccessDeniedHandler con ProblemDetail\n- Test de slice que verifica 401 en ruta protegida y acceso a rutas públicas\n- Actualización de backend/README.md si cambian variables\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (pruebas) `backend/src/test/java/com/itz/inventarios/config/SecurityConfigTest.java:46`: rutasDeAuthNoExigenAutenticacion hace GET a /api/v1/auth/login, que no existe: solo comprueba que el estado sea distinto de 401 (será 404/405). La aserción es débil y pasaría con casi cualquier resultado que no sea 401, incluido un 403 o 500.\n- **menor** (pruebas) `backend/src/test/java/com/itz/inventarios/config/SecurityWebSliceTest.java`: No hay prueba de que en prod (app.security.swagger-public=false) Swagger/api-docs devuelvan 401, que es un requisito explícito del paquete (Swagger restringido en prod). Solo se prueba el caso dev.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/config/ProblemResponseWriter.java:19`: Se construye manualmente un Map con los campos del ProblemDetail en lugar de serializar el ProblemDetail; si GlobalExceptionHandler añade propiedades (type, properties) el formato puede divergir. Además el handler 'pd.getType()' se serializa como 'about:blank' sin más.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java`: El valor por defecto de app.security.swagger-public es true (@Value con :true y application.yml). Si el perfil prod no se activa por error, Swagger queda público (fallo abierto).\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-04",
+  "grupo": "BASE",
+  "titulo": "Shell del frontend Angular: layout, rutas, cliente HTTP y README",
+  "descripcion": "Proyecto Angular con standalone components, Tailwind y PrimeNG, Jest configurado, environments, app.routes.ts con lazy loading de features vacías (auth, home) como placeholders, app.config.ts con HttpClient y un interceptor base sin lógica de sesión, layout base (cabecera y contenedor) y servicio de configuración API_BASE_URL. Sin pantallas ni lógica de negocio.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "package.json, angular.json, tailwind.config.js, jest.config.ts",
+   "app.routes.ts y app.config.ts con lazy loading",
+   "Estructura core/, shared/, features/ y src/environments/",
+   "Layout base y cliente HTTP con API_BASE_URL",
+   "Prueba Jest de humo y lint configurado",
+   "frontend/README.md con qué hace, cómo levantarlo, variables, pruebas y estructura"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/35",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 140
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "frontend/src/styles.css",
+    "linea": 1,
+    "descripcion": "Tailwind se usa con `@tailwind base/components/utilities`, pero el build `@angular-devkit/build-angular:application` (Angular 18) solo procesa Tailwind si hay configuración PostCSS (`.postcssrc.json` o `postcss.config.js`) o si se usa el soporte automático detectando `tailwind.config.js`. Angular 18 detecta tailwind.config.js automáticamente, pero `postcss` y `autoprefixer` en devDependencies sin config explícita generan ambigüedad; el PR no ha sido compilado por el autor, por lo que el layout con clases Tailwind puede no aplicarse.",
+    "sugerencia": "Verificar con `ng build` que las utilidades Tailwind se generan; si no, añadir `.postcssrc.json` con `{\"plugins\":{\"tailwindcss\":{}}}`.",
+    "comentario_id": 4059848043
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "frontend/src/app/core/config/api-base-url.ts",
+    "linea": 30,
+    "descripcion": "La arquitectura pide que API_BASE_URL se inyecte en runtime (nginx.conf.template/config.json) y el código lee `window.__APP_CONFIG__`, pero nada en el PR carga ese objeto: `index.html` no incluye ningún `<script src=\"/config.js\">`. Con `environment.ts` de producción en '' el runtime config nunca se aplicaría en despliegue.",
+    "sugerencia": "Añadir en `index.html` un `<script src=\"/config.js\"></script>` (y un `public/config.js` por defecto vacío que nginx sobrescriba), o documentar que lo aporta el paquete del Dockerfile/nginx.",
+    "comentario_id": 4059848049
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "mayor",
+    "archivo": "frontend/angular.json",
+    "linea": 31,
+    "descripcion": "La configuración `production` (por defecto) usa `environment.ts` con apiBaseUrl '' y `development` reemplaza por `environment.development.ts`; es coherente, pero el target `test` no existe y `lint` con `@angular-eslint/builder` requiere `.eslintrc.json` con `parserOptions.project` no definido; `plugin:@angular-eslint/template/process-inline-templates` requiere el plugin `@angular-eslint/template` listado en overrides de *.ts, no está declarado en `plugins` de ese override. Puede fallar `ng lint`.",
+    "sugerencia": "Comprobar `npm run lint` en CI; alinear `.eslintrc.json` con el esquema generado por `ng add @angular-eslint/schematics`.",
+    "comentario_id": 4059848055
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/core/config/api-base-url.spec.ts",
+    "linea": 45,
+    "descripcion": "La prueba 'cae al valor del environment' solo verifica `typeof === 'string'`, no comprueba el comportamiento.",
+    "sugerencia": "Importar `environment` y afirmar `toBe(environment.apiBaseUrl)`.",
+    "comentario_id": 4059848058
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/core/config/api-config.service.ts",
+    "linea": 18,
+    "descripcion": "`isApiUrl` con base vacía devuelve true para cualquier URL que empiece por '/', incluidas rutas de assets locales; y con base no vacía `startsWith` puede coincidir con dominios prefijo (p. ej. http://localhost:8080.evil.com).",
+    "sugerencia": "Comparar contra `apiBaseUrl + '/'` o parsear con `new URL` y comparar origen.",
+    "comentario_id": 4059848059
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "frontend/package.json",
+    "linea": 1,
+    "descripcion": "No hay `package-lock.json` en el PR, pero la arquitectura de CI/Dockerfile usa `npm ci`, que falla sin lockfile.",
+    "sugerencia": "Generar y versionar `package-lock.json`.",
+    "comentario_id": 4059848064
+   }
+  ],
+  "revisado_en": "2026-09-21T06:51:34.117137+00:00",
+  "id_externo": null,
+  "rama": "base/PT-04",
+  "md": "---\nid: PT-04\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/35\nrondas_revision: 1\ndepende_de: [PT-01]\nid_externo: null\nrama: base/PT-04\nfecha: 2026-09-21\n---\n\n# PT-04 — Shell del frontend Angular: layout, rutas, cliente HTTP y README\n\n_BASE: Esqueleto del aplicativo_\n\nProyecto Angular con standalone components, Tailwind y PrimeNG, Jest configurado, environments, app.routes.ts con lazy loading de features vacías (auth, home) como placeholders, app.config.ts con HttpClient y un interceptor base sin lógica de sesión, layout base (cabecera y contenedor) y servicio de configuración API_BASE_URL. Sin pantallas ni lógica de negocio.\n\n## Entregables\n\n- package.json, angular.json, tailwind.config.js, jest.config.ts\n- app.routes.ts y app.config.ts con lazy loading\n- Estructura core/, shared/, features/ y src/environments/\n- Layout base y cliente HTTP con API_BASE_URL\n- Prueba Jest de humo y lint configurado\n- frontend/README.md con qué hace, cómo levantarlo, variables, pruebas y estructura\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `frontend/src/styles.css:1`: Tailwind se usa con `@tailwind base/components/utilities`, pero el build `@angular-devkit/build-angular:application` (Angular 18) solo procesa Tailwind si hay configuración PostCSS (`.postcssrc.json` o `postcss.config.js`) o si se usa el soporte automático detectando `tailwind.config.js`. Angular 18 detecta tailwind.config.js automáticamente, pero `postcss` y `autoprefixer` en devDependencies sin config explícita generan ambigüedad; el PR no ha sido compilado por el autor, por lo que el layout con clases Tailwind puede no aplicarse.\n- **mayor** (criterio_aceptacion) `frontend/src/app/core/config/api-base-url.ts:30`: La arquitectura pide que API_BASE_URL se inyecte en runtime (nginx.conf.template/config.json) y el código lee `window.__APP_CONFIG__`, pero nada en el PR carga ese objeto: `index.html` no incluye ningún `<script src=\"/config.js\">`. Con `environment.ts` de producción en '' el runtime config nunca se aplicaría en despliegue.\n- **mayor** (buenas_practicas) `frontend/angular.json:31`: La configuración `production` (por defecto) usa `environment.ts` con apiBaseUrl '' y `development` reemplaza por `environment.development.ts`; es coherente, pero el target `test` no existe y `lint` con `@angular-eslint/builder` requiere `.eslintrc.json` con `parserOptions.project` no definido; `plugin:@angular-eslint/template/process-inline-templates` requiere el plugin `@angular-eslint/template` listado en overrides de *.ts, no está declarado en `plugins` de ese override. Puede fallar `ng lint`.\n- **menor** (pruebas) `frontend/src/app/core/config/api-base-url.spec.ts:45`: La prueba 'cae al valor del environment' solo verifica `typeof === 'string'`, no comprueba el comportamiento.\n- **menor** (buenas_practicas) `frontend/src/app/core/config/api-config.service.ts:18`: `isApiUrl` con base vacía devuelve true para cualquier URL que empiece por '/', incluidas rutas de assets locales; y con base no vacía `startsWith` puede coincidir con dominios prefijo (p. ej. http://localhost:8080.evil.com).\n- **menor** (buenas_practicas) `frontend/package.json:1`: No hay `package-lock.json` en el PR, pero la arquitectura de CI/Dockerfile usa `npm ci`, que falla sin lockfile.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-05",
+  "grupo": "BASE",
+  "titulo": "Despliegue: Dockerfiles de producción y CI con GitHub Actions",
+  "descripcion": "Deja el aplicativo desplegable en Cloud Run: backend/Dockerfile multi-stage (maven:3.9-eclipse-temurin-21 y eclipse-temurin:21-jre, puerto 8080, healthcheck /actuator/health) y frontend/Dockerfile multi-stage (node:20-alpine y nginx:alpine, fallback a index.html, /healthz, API_BASE_URL inyectada en runtime vía nginx.conf.template). Workflows de GitHub Actions: en PR, mvn verify en backend y npm ci, lint y jest en frontend; en push a main, docker build, push a Artifact Registry y gcloud run deploy por servicio con Workload Identity Federation, reconstruyendo cada servicio solo si cambian sus rutas. Actualiza el README raíz con la sección de despliegue.",
+  "capa": "infra",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "backend/Dockerfile de producción",
+   "frontend/Dockerfile de producción y nginx.conf.template con /healthz",
+   "Workflow CI de PR (backend y frontend con filtros por ruta)",
+   "Workflow de deploy en push a main con Artifact Registry, Cloud Run y WIF",
+   "Documentación de variables y secretos de despliegue en el README raíz"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01",
+   "PT-02",
+   "PT-03",
+   "PT-04"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/36",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «infra»"
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "frontend/Dockerfile",
+    "linea": 8,
+    "descripcion": "La arquitectura y el paquete exigen `npm ci`, pero el Dockerfile (y ci.yml línea ~62) hacen fallback a `npm install` cuando no existe package-lock.json. Los archivos del repo no listan package-lock.json, así que el build y el CI de producción no son reproducibles y no cumplen 'npm ci' en el frontend.",
+    "sugerencia": "Commitear frontend/package-lock.json y usar `npm ci` sin fallback tanto en Dockerfile como en ci.yml (que falle si falta el lockfile).",
+    "comentario_id": 4059868513
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "backend/Dockerfile",
+    "linea": 33,
+    "descripcion": "El HEALTHCHECK depende de /actuator/health, pero en el diff no se ve que spring-boot-starter-actuator esté en el pom ni que SecurityConfig permita /actuator/health sin autenticación (hay un ActuatorHealthTest en el repo, pero no se puede confirmar aquí). Además `server.port=${PORT}` se asume en application-prod.yml sin verificarse en este PR. Si falta algo, el contenedor queda unhealthy.",
+    "sugerencia": "Verificar que actuator esté declarado, /actuator/health sea público en el perfil prod y application-prod.yml use `server.port: ${PORT:8080}`.",
+    "comentario_id": 4059868520
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "mayor",
+    "archivo": ".github/workflows/deploy.yml",
+    "linea": 74,
+    "descripcion": "`--set-env-vars` interpola `${{ vars.* }}` directamente dentro del script de shell (inyección de expresiones/comillas si algún valor contiene `$`, comillas o `@`, p. ej. DB_URL con `&` y `?`, lo que además rompe la línea de shell sin comillas internas). Además usa el delimitador `^@^` pero DB_URL o CORS podrían contener `@`.",
+    "sugerencia": "Pasar los valores vía `env:` del step y referenciarlos como variables de shell entre comillas, o usar `--env-vars-file` generado en YAML; elegir un delimitador que no aparezca en los valores.",
+    "comentario_id": 4059868525
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "mayor",
+    "archivo": ".github/workflows/deploy.yml",
+    "linea": 8,
+    "descripcion": "El despliegue en push a main no depende de que el CI pase (mvn verify/jest) y el backend se construye con `-DskipTests` en el Dockerfile. Se puede desplegar código roto a producción.",
+    "sugerencia": "Ejecutar las pruebas en el workflow de deploy (o usar `workflow_run` condicionado a CI exitoso / branch protection con checks requeridos) y documentarlo.",
+    "comentario_id": 4059868532
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": ".github/workflows/deploy.yml",
+    "linea": null,
+    "descripcion": "Las variables de entorno de la arquitectura incluyen SPRING_PROFILES_ACTIVE, etc., y todo se pasa por `vars` de GitHub, incluido DB_URL/DB_USER y --allow-unauthenticated para el backend; no hay restricción de swagger en prod verificable. Además el frontend pasa API_BASE_URL sin comillas de protección.",
+    "sugerencia": "Revisar que Swagger esté restringido en application-prod.yml y quotear los valores pasados a gcloud.",
+    "comentario_id": null
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": ".github/workflows/ci.yml",
+    "linea": null,
+    "descripcion": "El filtro por rutas hace que un PR que solo toca la raíz (p. ej. README, docker-compose) no ejecute ningún job; si los jobs son checks requeridos, el PR quedaría bloqueado esperando. Además `dorny/paths-filter` necesita `pull-requests: read`, que sí está, pero el job `changes` hace checkout innecesario en PR.",
+    "sugerencia": "Añadir un job final agregador que siempre corra (o no usar checks requeridos por job) y documentarlo.",
+    "comentario_id": null
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "frontend/nginx.conf.template",
+    "linea": 22,
+    "descripcion": "`/config.js` se genera con `${API_BASE_URL}` sin escapar: un valor con comillas o barras invertidas rompería el JS. Además la imagen nginx:alpine solo aplica envsubst a variables definidas en el entorno; `ENV API_BASE_URL=\"\"` cubre el caso vacío. Los `add_header` dentro de location anulan los del nivel superior (no hay), sin problema, pero `gzip_types` no incluye text/html por defecto (sí lo comprime).",
+    "sugerencia": "Validar API_BASE_URL (solo URL) o usar JSON escapado; aceptable para el esqueleto pero documentar la restricción.",
+    "comentario_id": 4059868537
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": null,
+    "linea": null,
+    "descripcion": "El paquete no agrega pruebas y las imágenes/workflows no se ejecutaron ('Compila, corre y pasa sus pruebas' no se puede confirmar). No hay verificación automática del build de Docker en PR.",
+    "sugerencia": "Añadir en ci.yml un paso `docker build` (sin push) para backend y frontend, para validar los Dockerfiles en cada PR.",
+    "comentario_id": null
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/Dockerfile",
+    "linea": 16,
+    "descripcion": "Se instala curl en la imagen final solo para el healthcheck, aumentando superficie de ataque; Cloud Run además ignora HEALTHCHECK de Docker.",
+    "sugerencia": "Configurar el startup/liveness probe de Cloud Run en `gcloud run deploy` (--startup-probe / probes de /actuator/health) y evitar instalar curl.",
+    "comentario_id": 4059868544
+   }
+  ],
+  "revisado_en": "2026-09-21T06:55:35.040308+00:00",
+  "id_externo": null,
+  "rama": "base/PT-05",
+  "md": "---\nid: PT-05\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: infra\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/36\nrondas_revision: 1\ndepende_de: [PT-01, PT-02, PT-03, PT-04]\nid_externo: null\nrama: base/PT-05\nfecha: 2026-09-21\n---\n\n# PT-05 — Despliegue: Dockerfiles de producción y CI con GitHub Actions\n\n_BASE: Esqueleto del aplicativo_\n\nDeja el aplicativo desplegable en Cloud Run: backend/Dockerfile multi-stage (maven:3.9-eclipse-temurin-21 y eclipse-temurin:21-jre, puerto 8080, healthcheck /actuator/health) y frontend/Dockerfile multi-stage (node:20-alpine y nginx:alpine, fallback a index.html, /healthz, API_BASE_URL inyectada en runtime vía nginx.conf.template). Workflows de GitHub Actions: en PR, mvn verify en backend y npm ci, lint y jest en frontend; en push a main, docker build, push a Artifact Registry y gcloud run deploy por servicio con Workload Identity Federation, reconstruyendo cada servicio solo si cambian sus rutas. Actualiza el README raíz con la sección de despliegue.\n\n## Entregables\n\n- backend/Dockerfile de producción\n- frontend/Dockerfile de producción y nginx.conf.template con /healthz\n- Workflow CI de PR (backend y frontend con filtros por ruta)\n- Workflow de deploy en push a main con Artifact Registry, Cloud Run y WIF\n- Documentación de variables y secretos de despliegue en el README raíz\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `frontend/Dockerfile:8`: La arquitectura y el paquete exigen `npm ci`, pero el Dockerfile (y ci.yml línea ~62) hacen fallback a `npm install` cuando no existe package-lock.json. Los archivos del repo no listan package-lock.json, así que el build y el CI de producción no son reproducibles y no cumplen 'npm ci' en el frontend.\n- **mayor** (criterio_aceptacion) `backend/Dockerfile:33`: El HEALTHCHECK depende de /actuator/health, pero en el diff no se ve que spring-boot-starter-actuator esté en el pom ni que SecurityConfig permita /actuator/health sin autenticación (hay un ActuatorHealthTest en el repo, pero no se puede confirmar aquí). Además `server.port=${PORT}` se asume en application-prod.yml sin verificarse en este PR. Si falta algo, el contenedor queda unhealthy.\n- **mayor** (buenas_practicas) `.github/workflows/deploy.yml:74`: `--set-env-vars` interpola `${{ vars.* }}` directamente dentro del script de shell (inyección de expresiones/comillas si algún valor contiene `$`, comillas o `@`, p. ej. DB_URL con `&` y `?`, lo que además rompe la línea de shell sin comillas internas). Además usa el delimitador `^@^` pero DB_URL o CORS podrían contener `@`.\n- **mayor** (arquitectura) `.github/workflows/deploy.yml:8`: El despliegue en push a main no depende de que el CI pase (mvn verify/jest) y el backend se construye con `-DskipTests` en el Dockerfile. Se puede desplegar código roto a producción.\n- **menor** (arquitectura) `.github/workflows/deploy.yml`: Las variables de entorno de la arquitectura incluyen SPRING_PROFILES_ACTIVE, etc., y todo se pasa por `vars` de GitHub, incluido DB_URL/DB_USER y --allow-unauthenticated para el backend; no hay restricción de swagger en prod verificable. Además el frontend pasa API_BASE_URL sin comillas de protección.\n- **menor** (buenas_practicas) `.github/workflows/ci.yml`: El filtro por rutas hace que un PR que solo toca la raíz (p. ej. README, docker-compose) no ejecute ningún job; si los jobs son checks requeridos, el PR quedaría bloqueado esperando. Además `dorny/paths-filter` necesita `pull-requests: read`, que sí está, pero el job `changes` hace checkout innecesario en PR.\n- **menor** (buenas_practicas) `frontend/nginx.conf.template:22`: `/config.js` se genera con `${API_BASE_URL}` sin escapar: un valor con comillas o barras invertidas rompería el JS. Además la imagen nginx:alpine solo aplica envsubst a variables definidas en el entorno; `ENV API_BASE_URL=\"\"` cubre el caso vacío. Los `add_header` dentro de location anulan los del nivel superior (no hay), sin problema, pero `gzip_types` no incluye text/html por defecto (sí lo comprime).\n- **menor** (pruebas): El paquete no agrega pruebas y las imágenes/workflows no se ejecutaron ('Compila, corre y pasa sus pruebas' no se puede confirmar). No hay verificación automática del build de Docker en PR.\n- **menor** (buenas_practicas) `backend/Dockerfile:16`: Se instala curl en la imagen final solo para el healthcheck, aumentando superficie de ataque; Cloud Run además ignora HEALTHCHECK de Docker.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-01",
+  "grupo": "HU-001",
+  "titulo": "Backend: modelo de datos, login JWT, /users/me y auditoría",
+  "descripcion": "Migración Flyway V1__auth con user, role, user_role, revoked_token, password_reset_token y auth_event, más seed de roles/usuarios. Login con correo normalizado (trim + minúsculas), BCrypt, mensaje genérico, JWT HS256 de 15 min con jti, JwtAuthenticationFilter, 401 en rutas protegidas, endpoint /users/me limitado a la cuenta propia, autorización por @PreAuthorize, rate limit anti fuerza bruta y registro de auth_event LOGIN_OK/LOGIN_FAIL. Errores en ProblemDetail y Swagger/OpenAPI.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "backend/src/main/resources/db/migration/V1__auth.sql (tablas user, role, user_role, revoked_token, password_reset_token, auth_event + seed inicial de roles y usuarios)",
+   "config/SecurityConfig (stateless, CORS al origen del frontend, BCrypt, @EnableMethodSecurity), config/JwtProperties, config/OpenApiConfig (bearerAuth global)",
+   "user/domain (User, Role), user/repository (UserRepository, RoleRepository), user/mapper (UserMapper MapStruct)",
+   "auth/domain (AuthEvent), auth/repository (AuthEventRepository, RevokedTokenRepository)",
+   "auth/service (AuthService, JwtService con jti y expiración 15 min, LoginAttemptService con rate limit/bloqueo temporal, AuthEventService), JwtAuthenticationFilter",
+   "auth/web (AuthController POST /api/v1/auth/login con LoginRequest/LoginResponse records validados con Bean Validation), user/web (UserController GET /api/v1/users/me con UserResponse)",
+   "common/error (@RestControllerAdvice con ProblemDetail: 400 validación, 401 mensaje genérico, 429 fuerza bruta)",
+   "Swagger/OpenAPI documentado (@Tag, @Operation, @ApiResponse, @Schema) para POST /api/v1/auth/login (público, @SecurityRequirements vacío) y GET /api/v1/users/me",
+   "Pruebas JUnit 5: AuthServiceTest, JwtServiceTest, LoginAttemptServiceTest, AuthControllerTest y UserControllerTest (slice), pruebas de filtro JWT (401 sin token/expirado, acceso solo a /me propio, 403/404 a recursos ajenos), prueba de que la contraseña no aparece en logs ni respuestas",
+   "backend/README.md actualizado (variables JWT_SECRET, JWT_ACCESS_TTL_MINUTES, CORS_ALLOWED_ORIGINS, DB_*, seed de usuarios, ejecución de pruebas, Swagger en /swagger-ui.html)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-006",
+   "TC-007",
+   "TC-009",
+   "TC-010",
+   "TC-011",
+   "TC-012",
+   "TC-014"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/37",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 61
+  },
+  "observaciones": [
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java",
+    "linea": 45,
+    "descripcion": "El bloqueo por fuerza bruta se clave solo por correo. Cualquier atacante puede provocar el bloqueo de 15 min de una cuenta legítima con 5 intentos fallidos (denegación de servicio dirigida). Además, el bloqueo se comprueba antes de validar credenciales, y no hay límite por IP.",
+    "sugerencia": "Combinar clave correo+IP o añadir un límite por IP adicional; documentar el riesgo si se acepta.",
+    "comentario_id": 4060075835
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/user/service/SeedUserPasswordInitializer.java",
+    "linea": 30,
+    "descripcion": "El SeedUserPasswordInitializer es un @Component sin @Profile: si SEED_PASSWORD se define en producción, todas las cuentas sembradas (incluido ADMIN) quedan con una contraseña conocida. Solo la documentación dice que no se defina en prod.",
+    "sugerencia": "Anotar con @Profile(\"!prod\") o @ConditionalOnProperty/perfil dev, para que sea imposible activarlo en producción.",
+    "comentario_id": 4060075842
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/auth/web/AuthController.java",
+    "linea": 50,
+    "descripcion": "Se usa http.getRemoteAddr() como IP de auditoría. Detrás de Cloud Run/proxy será siempre la IP del balanceador, por lo que auth_event.ip pierde valor (TC-014 pide origen).",
+    "sugerencia": "Configurar server.forward-headers-strategy=native/framework para que getRemoteAddr refleje X-Forwarded-For, o resolver la IP de cliente explícitamente.",
+    "comentario_id": 4060075850
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java",
+    "linea": 47,
+    "descripcion": "Con bloqueo activo se registra LOGIN_FAIL con userId null y sin distinguir que fue por bloqueo; la auditoría pierde el usuario y el motivo.",
+    "sugerencia": "Registrar el usuario si existe o un tipo/motivo específico de bloqueo.",
+    "comentario_id": 4060075856
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "linea": 60,
+    "descripcion": "JwtAuthenticationFilter se añade con new dentro de la cadena; es correcto para evitar doble registro, pero se registra antes de configurar csrf/cors y el filtro pasa a ejecutarse también en preflight OPTIONS sin necesidad.",
+    "sugerencia": "Sin acción urgente; opcionalmente saltar el filtro para OPTIONS (shouldNotFilter).",
+    "comentario_id": 4060075859
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/user/domain/User.java",
+    "linea": 57,
+    "descripcion": "Uso de @ManyToMany EAGER sobre roles en cada carga de usuario, incluido cada /me. Aceptable ahora, pero costoso al crecer.",
+    "sugerencia": "Considerar @EntityGraph en findByEmail/findById en lugar de EAGER global.",
+    "comentario_id": 4060075865
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "backend/src/test/java/com/itz/inventarios/auth/AuthFlowIntegrationTest.java",
+    "linea": 118,
+    "descripcion": "Los tests de integración dependen del estado en memoria compartido de LoginAttemptService entre tests (correos únicos mitigan). La prueba de logs solo verifica el mensaje formateado, no el contenido de argumentos ni excepciones.",
+    "sugerencia": "Mantener correos únicos y, en la prueba de logs, revisar también toString de argumentos y mensajes de throwable.",
+    "comentario_id": 4060075870
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/user/web/UserController.java",
+    "linea": 36,
+    "descripcion": "Se usa el nombre completo io.swagger...Schema inline en lugar de import; y falta documentar respuesta 403 y la ausencia de bearer en la operación.",
+    "sugerencia": "Importar Schema y añadir @ApiResponse 403 si aplica.",
+    "comentario_id": 4060075875
+   }
+  ],
+  "revisado_en": "2026-09-21T07:34:27.050915+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-12/PT-01",
+  "md": "---\nid: PT-01\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-006, TC-007, TC-009, TC-010, TC-011, TC-012, TC-014]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/37\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05]\nid_externo: null\nrama: hu/ITZINV-12/PT-01\nfecha: 2026-09-21\n---\n\n# PT-01 — Backend: modelo de datos, login JWT, /users/me y auditoría\n\n_HU-001: Iniciar sesión con correo y contraseña_\n\nMigración Flyway V1__auth con user, role, user_role, revoked_token, password_reset_token y auth_event, más seed de roles/usuarios. Login con correo normalizado (trim + minúsculas), BCrypt, mensaje genérico, JWT HS256 de 15 min con jti, JwtAuthenticationFilter, 401 en rutas protegidas, endpoint /users/me limitado a la cuenta propia, autorización por @PreAuthorize, rate limit anti fuerza bruta y registro de auth_event LOGIN_OK/LOGIN_FAIL. Errores en ProblemDetail y Swagger/OpenAPI.\n\n## Entregables\n\n- backend/src/main/resources/db/migration/V1__auth.sql (tablas user, role, user_role, revoked_token, password_reset_token, auth_event + seed inicial de roles y usuarios)\n- config/SecurityConfig (stateless, CORS al origen del frontend, BCrypt, @EnableMethodSecurity), config/JwtProperties, config/OpenApiConfig (bearerAuth global)\n- user/domain (User, Role), user/repository (UserRepository, RoleRepository), user/mapper (UserMapper MapStruct)\n- auth/domain (AuthEvent), auth/repository (AuthEventRepository, RevokedTokenRepository)\n- auth/service (AuthService, JwtService con jti y expiración 15 min, LoginAttemptService con rate limit/bloqueo temporal, AuthEventService), JwtAuthenticationFilter\n- auth/web (AuthController POST /api/v1/auth/login con LoginRequest/LoginResponse records validados con Bean Validation), user/web (UserController GET /api/v1/users/me con UserResponse)\n- common/error (@RestControllerAdvice con ProblemDetail: 400 validación, 401 mensaje genérico, 429 fuerza bruta)\n- Swagger/OpenAPI documentado (@Tag, @Operation, @ApiResponse, @Schema) para POST /api/v1/auth/login (público, @SecurityRequirements vacío) y GET /api/v1/users/me\n- Pruebas JUnit 5: AuthServiceTest, JwtServiceTest, LoginAttemptServiceTest, AuthControllerTest y UserControllerTest (slice), pruebas de filtro JWT (401 sin token/expirado, acceso solo a /me propio, 403/404 a recursos ajenos), prueba de que la contraseña no aparece en logs ni respuestas\n- backend/README.md actualizado (variables JWT_SECRET, JWT_ACCESS_TTL_MINUTES, CORS_ALLOWED_ORIGINS, DB_*, seed de usuarios, ejecución de pruebas, Swagger en /swagger-ui.html)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-006 pasa\n- TC-007 pasa\n- TC-009 pasa\n- TC-010 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-014 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (seguridad) `backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java:45`: El bloqueo por fuerza bruta se clave solo por correo. Cualquier atacante puede provocar el bloqueo de 15 min de una cuenta legítima con 5 intentos fallidos (denegación de servicio dirigida). Además, el bloqueo se comprueba antes de validar credenciales, y no hay límite por IP.\n- **mayor** (seguridad) `backend/src/main/java/com/itz/inventarios/user/service/SeedUserPasswordInitializer.java:30`: El SeedUserPasswordInitializer es un @Component sin @Profile: si SEED_PASSWORD se define en producción, todas las cuentas sembradas (incluido ADMIN) quedan con una contraseña conocida. Solo la documentación dice que no se defina en prod.\n- **mayor** (seguridad) `backend/src/main/java/com/itz/inventarios/auth/web/AuthController.java:50`: Se usa http.getRemoteAddr() como IP de auditoría. Detrás de Cloud Run/proxy será siempre la IP del balanceador, por lo que auth_event.ip pierde valor (TC-014 pide origen).\n- **menor** (criterio_aceptacion) `backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java:47`: Con bloqueo activo se registra LOGIN_FAIL con userId null y sin distinguir que fue por bloqueo; la auditoría pierde el usuario y el motivo.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java:60`: JwtAuthenticationFilter se añade con new dentro de la cadena; es correcto para evitar doble registro, pero se registra antes de configurar csrf/cors y el filtro pasa a ejecutarse también en preflight OPTIONS sin necesidad.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/user/domain/User.java:57`: Uso de @ManyToMany EAGER sobre roles en cada carga de usuario, incluido cada /me. Aceptable ahora, pero costoso al crecer.\n- **menor** (pruebas) `backend/src/test/java/com/itz/inventarios/auth/AuthFlowIntegrationTest.java:118`: Los tests de integración dependen del estado en memoria compartido de LoginAttemptService entre tests (correos únicos mitigan). La prueba de logs solo verifica el mensaje formateado, no el contenido de argumentos ni excepciones.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/user/web/UserController.java:36`: Se usa el nombre completo io.swagger...Schema inline en lugar de import; y falta documentar respuesta 403 y la ausencia de bearer en la operación.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-02",
+  "grupo": "HU-001",
+  "titulo": "Frontend: pantalla de login, sesión, interceptor y guard",
+  "descripcion": "Pantalla de login con formulario reactivo y validación de campos, contraseña enmascarada, manejo de errores genéricos y de servicio no disponible sin perder el correo, almacenamiento del token en sessionStorage, interceptor Bearer con redirección a login en 401, guard de rutas y pantalla home protegida que muestra los datos de /users/me.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "src/app/core/auth.service.ts (BehaviorSubject de sesión, login, carga de /users/me), core/token.storage.ts (sessionStorage), core/auth.interceptor.ts (Bearer + 401 limpia sesión y redirige a /login), core/auth.guard.ts",
+   "src/app/features/auth/login (componente standalone con formulario reactivo, PrimeNG + Tailwind, validación de correo obligatorio/formato y contraseña obligatoria, campo password enmascarado, mensaje genérico de credenciales inválidas, mensaje amigable ante 429 o servicio no disponible conservando el correo escrito)",
+   "src/app/features/home (pantalla protegida inicial con datos de /users/me, carga lazy)",
+   "src/app/app.routes.ts y app.config.ts (rutas /login y home protegida por guard, registro del interceptor), src/environments/",
+   "Pruebas Jest: auth.service.spec, auth.interceptor.spec, auth.guard.spec, login.component.spec, home.component.spec",
+   "frontend/README.md actualizado (API_BASE_URL, ejecución de lint y jest)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-007",
+   "TC-008",
+   "TC-009",
+   "TC-013"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/38",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 2,
+   "segundos": 81
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "frontend/src/app/core/auth.guard.ts",
+    "linea": 8,
+    "descripcion": "El guard solo comprueba que exista un token en sessionStorage (`isAuthenticated()` = token !== null). Un token caducado o inválido deja entrar a /home; solo se redirige cuando /users/me responde 401. TC-008 (sesión expirada) depende de que esa llamada se dispare y se maneje. Además `AuthService.loadProfile()` no se invoca desde el guard, y HomeComponent solo lo llama si `currentUser` es null, así que el flujo funciona solo por accidente.",
+    "sugerencia": "Validar la vigencia del token en el guard (por ejemplo guardando `expiresAt` de la respuesta de login y comparándolo) o hacer que el guard resuelva `loadProfile()` cuando no hay usuario en memoria y redirija a /login si falla.",
+    "comentario_id": 4060125289
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/core/auth.service.ts",
+    "linea": 49,
+    "descripcion": "`expiresAt` de LoginResponse se descarta: no se persiste ni se usa. Sin ello el cliente no conoce la vigencia limitada de la sesión.",
+    "sugerencia": "Guardar `expiresAt` junto al token (TokenStorage) y usarlo en `isAuthenticated()`.",
+    "comentario_id": 4060125302
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/core/auth.interceptor.ts",
+    "linea": 24,
+    "descripcion": "La exclusión del 401 del login usa `req.url.endsWith(LOGIN_PATH)`, lo que es frágil (p. ej. coincidiría con cualquier URL que termine igual).",
+    "sugerencia": "Comparar con `api.url(LOGIN_PATH)` para una igualdad exacta.",
+    "comentario_id": 4060125308
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/features/auth/login/login.component.spec.ts",
+    "linea": 40,
+    "descripcion": "No hay prueba de que un login exitoso no vuelva a enviar mientras `loading` o de que el botón se deshabilite; tampoco se prueba el caso 4xx distinto de 401 (p. ej. 400/403), que hoy se clasifica como credenciales inválidas.",
+    "sugerencia": "Añadir una prueba del estado `loading` y decidir/probar explícitamente el tratamiento de otros 4xx.",
+    "comentario_id": 4060125309
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/features/auth/login/login.component.ts",
+    "linea": 98,
+    "descripcion": "El componente usa propiedades mutables (`loading`, `error`) y suscripción manual sin `takeUntilDestroyed`; en Angular 18 son preferibles signals y limpiar la suscripción. Además el mensaje de 429 no se distingue de un 5xx en el TC-013 más allá del texto, lo cual es correcto, pero el `Validators.email` cast con `{ value } as AbstractControl` es un truco de tipos poco legible.",
+    "sugerencia": "Usar signals para `loading`/`error`, `takeUntilDestroyed` en la suscripción y una regex de correo propia o `Validators.email(new FormControl(value))` para evitar el cast.",
+    "comentario_id": 4060125314
+   }
+  ],
+  "revisado_en": "2026-09-21T07:43:16.348174+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-12/PT-02",
+  "md": "---\nid: PT-02\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-007, TC-008, TC-009, TC-013]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/38\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/ITZINV-12/PT-02\nfecha: 2026-09-21\n---\n\n# PT-02 — Frontend: pantalla de login, sesión, interceptor y guard\n\n_HU-001: Iniciar sesión con correo y contraseña_\n\nPantalla de login con formulario reactivo y validación de campos, contraseña enmascarada, manejo de errores genéricos y de servicio no disponible sin perder el correo, almacenamiento del token en sessionStorage, interceptor Bearer con redirección a login en 401, guard de rutas y pantalla home protegida que muestra los datos de /users/me.\n\n## Entregables\n\n- src/app/core/auth.service.ts (BehaviorSubject de sesión, login, carga de /users/me), core/token.storage.ts (sessionStorage), core/auth.interceptor.ts (Bearer + 401 limpia sesión y redirige a /login), core/auth.guard.ts\n- src/app/features/auth/login (componente standalone con formulario reactivo, PrimeNG + Tailwind, validación de correo obligatorio/formato y contraseña obligatoria, campo password enmascarado, mensaje genérico de credenciales inválidas, mensaje amigable ante 429 o servicio no disponible conservando el correo escrito)\n- src/app/features/home (pantalla protegida inicial con datos de /users/me, carga lazy)\n- src/app/app.routes.ts y app.config.ts (rutas /login y home protegida por guard, registro del interceptor), src/environments/\n- Pruebas Jest: auth.service.spec, auth.interceptor.spec, auth.guard.spec, login.component.spec, home.component.spec\n- frontend/README.md actualizado (API_BASE_URL, ejecución de lint y jest)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-007 pasa\n- TC-008 pasa\n- TC-009 pasa\n- TC-013 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `frontend/src/app/core/auth.guard.ts:8`: El guard solo comprueba que exista un token en sessionStorage (`isAuthenticated()` = token !== null). Un token caducado o inválido deja entrar a /home; solo se redirige cuando /users/me responde 401. TC-008 (sesión expirada) depende de que esa llamada se dispare y se maneje. Además `AuthService.loadProfile()` no se invoca desde el guard, y HomeComponent solo lo llama si `currentUser` es null, así que el flujo funciona solo por accidente.\n- **menor** (criterio_aceptacion) `frontend/src/app/core/auth.service.ts:49`: `expiresAt` de LoginResponse se descarta: no se persiste ni se usa. Sin ello el cliente no conoce la vigencia limitada de la sesión.\n- **menor** (buenas_practicas) `frontend/src/app/core/auth.interceptor.ts:24`: La exclusión del 401 del login usa `req.url.endsWith(LOGIN_PATH)`, lo que es frágil (p. ej. coincidiría con cualquier URL que termine igual).\n- **menor** (pruebas) `frontend/src/app/features/auth/login/login.component.spec.ts:40`: No hay prueba de que un login exitoso no vuelva a enviar mientras `loading` o de que el botón se deshabilite; tampoco se prueba el caso 4xx distinto de 401 (p. ej. 400/403), que hoy se clasifica como credenciales inválidas.\n- **menor** (buenas_practicas) `frontend/src/app/features/auth/login/login.component.ts:98`: El componente usa propiedades mutables (`loading`, `error`) y suscripción manual sin `takeUntilDestroyed`; en Angular 18 son preferibles signals y limpiar la suscripción. Además el mensaje de 429 no se distingue de un 5xx en el TC-013 más allá del texto, lo cual es correcto, pero el `Validators.email` cast con `{ value } as AbstractControl` es un truco de tipos poco legible.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-01",
+  "grupo": "HU-002",
+  "titulo": "Backend: solicitud de recuperación de contraseña (POST /auth/password/forgot)",
+  "descripcion": "Endpoint público que genera un token de un solo uso (hash SHA-256, caducidad 30 min), invalida el anterior vigente, envía el correo con enlace y responde siempre igual. Incluye rate limiting por correo/IP, auditoría RESET_REQUEST y manejo seguro de fallos de envío. Cuentas inexistentes o deshabilitadas producen la misma respuesta externa sin enviar correo.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "Migración src/main/resources/db/migration/V2__password_reset.sql: tabla password_reset_token (id, user_id, token_hash único, expires_at, used_at, created_at) y auth_event si no está en V1",
+   "passwordreset/domain/PasswordResetToken (entidad JPA) y passwordreset/repository/PasswordResetTokenRepository (buscar vigente por user, buscar por token_hash)",
+   "passwordreset/service/PasswordResetRequestService: normaliza correo a minúsculas, ignora cuentas inexistentes o enabled=false con respuesta idéntica, invalida tokens vigentes previos, genera token con SecureRandom (≥256 bits), guarda solo SHA-256, envía correo con enlace FRONTEND_BASE_URL/reset-password?token=…",
+   "passwordreset/service/PasswordResetMailer sobre JavaMailSender (config/MailConfig, MAIL_HOST/PORT/USER/PASSWORD/FROM); los fallos de envío se registran en log sin exponerse al cliente ni cambiar la respuesta",
+   "Rate limiting por correo e IP en /password/forgot (filtro o servicio en config/ o common/), responde 429 en ProblemDetail al superar el límite; umbrales en propiedades tipadas",
+   "Registro en auth_event de RESET_REQUEST (email_intentado, ip; sin tokens) mediante el servicio de auditoría del módulo auth",
+   "passwordreset/web/PasswordResetController con POST /api/v1/auth/password/forgot y DTOs record ForgotPasswordRequest (@NotBlank, @Email) / respuesta genérica; errores de validación en ProblemDetail",
+   "Documentación Swagger/OpenAPI: @Tag, @Operation, @ApiResponse (200, 400, 429), @Schema en DTOs y @SecurityRequirements vacío en POST /api/v1/auth/password/forgot",
+   "Ruta permitida sin autenticación en config/SecurityConfig",
+   "Pruebas JUnit 5: PasswordResetRequestServiceTest (correo existente, inexistente, deshabilitado, invalidación del token anterior, token guardado como hash, fallo de correo), PasswordResetControllerTest (slice: 200 genérico, 400 por correo vacío/inválido, 429), prueba del rate limiter y de auditoría",
+   "Actualizar backend/README.md: variables MAIL_*, FRONTEND_BASE_URL, umbrales de rate limit y cómo probar el envío en local"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-003",
+   "TC-004",
+   "TC-007",
+   "TC-010",
+   "TC-011",
+   "TC-012",
+   "TC-013",
+   "TC-014"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/39",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 50
+  },
+  "observaciones": [
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/passwordreset/web/PasswordResetController.java",
+    "linea": 46,
+    "descripcion": "La IP se obtiene con request.getRemoteAddr(). En Cloud Run (proxy inverso) sería la IP del proxy, salvo que se configure server.forward-headers-strategy. Todos los clientes compartirían el cubo de IP: con 10 solicitudes/15 min un solo abusador bloquea a todos (DoS) y la auditoría registra IP incorrecta (TC-010, TC-014).",
+    "sugerencia": "Configurar server.forward-headers-strategy=framework (o native) en application-prod.yml y documentarlo, o resolver la IP cliente de X-Forwarded-For de forma confiable.",
+    "comentario_id": 4060172547
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/passwordreset/service/PasswordResetRequestService.java",
+    "linea": 66,
+    "descripcion": "El límite por correo se comprueba después del de IP y solo si este pasa; además el 429 distingue el caso pero es esperado. Sin embargo, el limitador por correo consume cupo también para correos inexistentes, lo que está bien, pero el limitador es en memoria por instancia: en Cloud Run con varias instancias el límite efectivo se multiplica y se pierde al reiniciar. No hay limpieza de la clave de correo salvo el prune a 10 000 entradas, con memoria creciente controlada por claves controladas por el atacante.",
+    "sugerencia": "Documentar la limitación (ya se menciona en README) y valorar un almacén compartido (BD) o max-instances=1; acotar el tamaño del mapa con un prune periódico por tiempo.",
+    "comentario_id": 4060172553
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/passwordreset/service/PasswordResetRequestService.java",
+    "linea": 64,
+    "descripcion": "El envío de correo (SMTP, síncrono) ocurre dentro de la transacción @Transactional y la solicitud de una cuenta existente tarda notablemente más que la de una inexistente: permite enumeración de cuentas por tiempos, contra el objetivo de respuesta idéntica (TC-003). Además, si el envío falla el token queda guardado y el usuario no recibe enlace.",
+    "sugerencia": "Enviar el correo de forma asíncrona (@Async) tras el commit (@TransactionalEventListener AFTER_COMMIT) para igualar tiempos y no mantener la transacción abierta durante el SMTP.",
+    "comentario_id": 4060172562
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/passwordreset/web/ForgotPasswordRequest.java",
+    "linea": 13,
+    "descripcion": "La validación de correo es redundante: @Email y @Pattern juntos con el mismo mensaje, lo que produce dos errores por campo en respuestas 400. Además el record con constructor compacto que recorta el email hace lógica en el DTO.",
+    "sugerencia": "Conservar solo una de las dos restricciones (@Email con regex propia) o eliminar @Pattern; mover el trim al servicio, que ya normaliza.",
+    "comentario_id": 4060172572
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "linea": 42,
+    "descripcion": "La ruta /api/v1/auth/password/forgot ya está cubierta por /api/v1/auth/** en PUBLIC_PATHS; la línea añadida es redundante (y /api/v1/auth/** deja públicas rutas futuras como logout/refresh).",
+    "sugerencia": "Quitar la entrada redundante y, si es posible, listar explícitamente las rutas públicas de auth.",
+    "comentario_id": 4060172580
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "backend/src/test/java/com/itz/inventarios/passwordreset/service/PasswordResetRequestServiceTest.java",
+    "linea": null,
+    "descripcion": "La prueba PasswordResetRequestFlowIntegrationTest depende de H2 y de un perfil test asumido; las pruebas usan org.mockito.Mockito.times con nombre completo y no hay prueba unitaria de la auditoría en el rate limit rechazado (no se audita). Además el límite por IP en el test de integración usa IP única por llamada, por lo que no valida la extracción de IP real.",
+    "sugerencia": "Importar times estáticamente; confirmar que el perfil test y H2 existen; valorar auditar también solicitudes bloqueadas si la HU lo requiere.",
+    "comentario_id": null
+   }
+  ],
+  "revisado_en": "2026-09-21T07:51:16.497748+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-13/PT-01",
+  "md": "---\nid: PT-01\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-003, TC-004, TC-007, TC-010, TC-011, TC-012, TC-013, TC-014]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/39\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05]\nid_externo: null\nrama: hu/ITZINV-13/PT-01\nfecha: 2026-09-21\n---\n\n# PT-01 — Backend: solicitud de recuperación de contraseña (POST /auth/password/forgot)\n\n_HU-002: Recuperar contraseña olvidada por correo electrónico_\n\nEndpoint público que genera un token de un solo uso (hash SHA-256, caducidad 30 min), invalida el anterior vigente, envía el correo con enlace y responde siempre igual. Incluye rate limiting por correo/IP, auditoría RESET_REQUEST y manejo seguro de fallos de envío. Cuentas inexistentes o deshabilitadas producen la misma respuesta externa sin enviar correo.\n\n## Entregables\n\n- Migración src/main/resources/db/migration/V2__password_reset.sql: tabla password_reset_token (id, user_id, token_hash único, expires_at, used_at, created_at) y auth_event si no está en V1\n- passwordreset/domain/PasswordResetToken (entidad JPA) y passwordreset/repository/PasswordResetTokenRepository (buscar vigente por user, buscar por token_hash)\n- passwordreset/service/PasswordResetRequestService: normaliza correo a minúsculas, ignora cuentas inexistentes o enabled=false con respuesta idéntica, invalida tokens vigentes previos, genera token con SecureRandom (≥256 bits), guarda solo SHA-256, envía correo con enlace FRONTEND_BASE_URL/reset-password?token=…\n- passwordreset/service/PasswordResetMailer sobre JavaMailSender (config/MailConfig, MAIL_HOST/PORT/USER/PASSWORD/FROM); los fallos de envío se registran en log sin exponerse al cliente ni cambiar la respuesta\n- Rate limiting por correo e IP en /password/forgot (filtro o servicio en config/ o common/), responde 429 en ProblemDetail al superar el límite; umbrales en propiedades tipadas\n- Registro en auth_event de RESET_REQUEST (email_intentado, ip; sin tokens) mediante el servicio de auditoría del módulo auth\n- passwordreset/web/PasswordResetController con POST /api/v1/auth/password/forgot y DTOs record ForgotPasswordRequest (@NotBlank, @Email) / respuesta genérica; errores de validación en ProblemDetail\n- Documentación Swagger/OpenAPI: @Tag, @Operation, @ApiResponse (200, 400, 429), @Schema en DTOs y @SecurityRequirements vacío en POST /api/v1/auth/password/forgot\n- Ruta permitida sin autenticación en config/SecurityConfig\n- Pruebas JUnit 5: PasswordResetRequestServiceTest (correo existente, inexistente, deshabilitado, invalidación del token anterior, token guardado como hash, fallo de correo), PasswordResetControllerTest (slice: 200 genérico, 400 por correo vacío/inválido, 429), prueba del rate limiter y de auditoría\n- Actualizar backend/README.md: variables MAIL_*, FRONTEND_BASE_URL, umbrales de rate limit y cómo probar el envío en local\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-007 pasa\n- TC-010 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-013 pasa\n- TC-014 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (seguridad) `backend/src/main/java/com/itz/inventarios/passwordreset/web/PasswordResetController.java:46`: La IP se obtiene con request.getRemoteAddr(). En Cloud Run (proxy inverso) sería la IP del proxy, salvo que se configure server.forward-headers-strategy. Todos los clientes compartirían el cubo de IP: con 10 solicitudes/15 min un solo abusador bloquea a todos (DoS) y la auditoría registra IP incorrecta (TC-010, TC-014).\n- **mayor** (seguridad) `backend/src/main/java/com/itz/inventarios/passwordreset/service/PasswordResetRequestService.java:66`: El límite por correo se comprueba después del de IP y solo si este pasa; además el 429 distingue el caso pero es esperado. Sin embargo, el limitador por correo consume cupo también para correos inexistentes, lo que está bien, pero el limitador es en memoria por instancia: en Cloud Run con varias instancias el límite efectivo se multiplica y se pierde al reiniciar. No hay limpieza de la clave de correo salvo el prune a 10 000 entradas, con memoria creciente controlada por claves controladas por el atacante.\n- **mayor** (criterio_aceptacion) `backend/src/main/java/com/itz/inventarios/passwordreset/service/PasswordResetRequestService.java:64`: El envío de correo (SMTP, síncrono) ocurre dentro de la transacción @Transactional y la solicitud de una cuenta existente tarda notablemente más que la de una inexistente: permite enumeración de cuentas por tiempos, contra el objetivo de respuesta idéntica (TC-003). Además, si el envío falla el token queda guardado y el usuario no recibe enlace.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/passwordreset/web/ForgotPasswordRequest.java:13`: La validación de correo es redundante: @Email y @Pattern juntos con el mismo mensaje, lo que produce dos errores por campo en respuestas 400. Además el record con constructor compacto que recorta el email hace lógica en el DTO.\n- **menor** (arquitectura) `backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java:42`: La ruta /api/v1/auth/password/forgot ya está cubierta por /api/v1/auth/** en PUBLIC_PATHS; la línea añadida es redundante (y /api/v1/auth/** deja públicas rutas futuras como logout/refresh).\n- **menor** (pruebas) `backend/src/test/java/com/itz/inventarios/passwordreset/service/PasswordResetRequestServiceTest.java`: La prueba PasswordResetRequestFlowIntegrationTest depende de H2 y de un perfil test asumido; las pruebas usan org.mockito.Mockito.times con nombre completo y no hay prueba unitaria de la auditoría en el rate limit rechazado (no se audita). Además el límite por IP en el test de integración usa IP única por llamada, por lo que no valida la extracción de IP real.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-02",
+  "grupo": "HU-002",
+  "titulo": "Backend: restablecer contraseña con token (POST /auth/password/reset)",
+  "descripcion": "Endpoint público que valida el token (existente, no usado, no caducado), valida la política de contraseñas y confirmación, cambia el hash BCrypt y marca el token como usado en la misma transacción, invalida las sesiones previas, notifica por correo y audita RESET_DONE.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "Migración src/main/resources/db/migration/V3__password_changed_at.sql: columna users.password_changed_at (u otro mecanismo equivalente) para invalidar tokens JWT emitidos antes del cambio",
+   "passwordreset/service/PasswordResetService: busca por SHA-256 del token, rechaza inexistente/caducado/usado con error claro (ProblemDetail 400/410 indicando que debe solicitar uno nuevo), cambia contraseña y marca used_at en una única @Transactional",
+   "user/service/PasswordPolicyValidator centralizado, con parámetros en propiedades tipadas (valores por defecto pendientes de confirmar por negocio); si la contraseña no cumple o la confirmación no coincide, se rechaza sin consumir el token",
+   "Invalidación de sesiones previas: actualizar password_changed_at y ajustar auth JwtAuthenticationFilter para rechazar tokens con iat anterior",
+   "Correo de notificación de cambio de contraseña vía PasswordResetMailer (fallo de envío solo se registra en log)",
+   "Registro en auth_event de RESET_DONE (sin contraseñas ni tokens)",
+   "passwordreset/web/PasswordResetController: POST /api/v1/auth/password/reset con DTO record ResetPasswordRequest (token, newPassword, confirmPassword) validado con Bean Validation",
+   "Documentación Swagger/OpenAPI: @Operation, @ApiResponse (200, 400, 410/422), @Schema en DTOs y @SecurityRequirements vacío en POST /api/v1/auth/password/reset; ruta pública en SecurityConfig",
+   "Pruebas JUnit 5: PasswordResetServiceTest (éxito, token caducado, token ya usado, política incumplida y token sigue válido, confirmación distinta, sesiones previas invalidadas, notificación enviada, auditoría), PasswordResetControllerTest (slice) y prueba de integración del flujo forgot→reset→login con la nueva contraseña",
+   "Actualizar backend/README.md con el flujo de recuperación, la política de contraseñas configurable y la invalidación de sesiones"
+  ],
+  "tcs_asociados": [
+   "TC-002",
+   "TC-005",
+   "TC-006",
+   "TC-008",
+   "TC-009",
+   "TC-014"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/40",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 53
+  },
+  "observaciones": [
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/auth/service/JwtAuthenticationFilter.java",
+    "linea": 60,
+    "descripcion": "issuedBeforePasswordChange trunca password_changed_at al segundo y usa isBefore. Un JWT emitido en el mismo segundo del cambio, pero antes (o con iat igual al segundo), sigue siendo válido tras el reset. TC-009 exige invalidar las sesiones previas; hay una ventana de hasta 1 s. Además, el constructor de 2 argumentos deja un lookup que siempre devuelve vacío (fail-open) y SecurityConfig también devuelve vacío si el repositorio no está disponible.",
+    "sugerencia": "Compara con isBefore sobre el instante sin truncar y pon el iat con precisión adecuada, o usa un contador/versión de sesión (token_version) en un claim. Elimina el constructor que desactiva la comprobación y falla cerrado si no hay lookup en producción.",
+    "comentario_id": 4060228560
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java",
+    "linea": 63,
+    "descripcion": "El filtro hace una consulta a BD por cada petición autenticada y SecurityConfig usa ObjectProvider solo para acomodar slices de test; la capa auth/config queda acoplada a UserRepository. Además PUBLIC_PATHS ya incluye /api/v1/auth/** y la ruta reset añadida es redundante.",
+    "sugerencia": "Inyecta PasswordChangeLookup como bean en el módulo user (implementación con UserRepository) y quita la ruta redundante. Considera caché corta si la carga es relevante.",
+    "comentario_id": 4060228568
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/passwordreset/web/PasswordResetController.java",
+    "linea": 52,
+    "descripcion": "El endpoint público /reset no tiene limitación de frecuencia, y la IP se toma de http.getRemoteAddr(); detrás de Cloud Run será la del proxy, así que la auditoría RESET_DONE registrará la IP del balanceador. Un atacante puede además probar tokens sin límite (aunque son de 256 bits).",
+    "sugerencia": "Resuelve la IP cliente con X-Forwarded-For fiable (server.forward-headers-strategy) y aplica el rate limiter existente por IP también a /reset.",
+    "comentario_id": 4060228571
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "backend/src/test/java/com/itz/inventarios/passwordreset/service/PasswordResetServiceTest.java",
+    "linea": 66,
+    "descripcion": "El helper rejected() invoca service.reset dos veces (assertThatThrownBy y luego otra vez), lo que puede enmascarar efectos y duplicar llamadas a mocks. Además elMensajeEsElMismoParaInexistenteCaducadoYUsado configura el mock con 'hash-x' que no corresponde al hash real de 'x' (no prueba realmente el caso caducado, y el caso inexistente lo cubre por defecto de Mockito).",
+    "sugerencia": "Usa assertThatThrownBy(...).asInstanceOf(...) o captura la excepción una sola vez; incluye el caso caducado en la comparación de mensajes.",
+    "comentario_id": 4060228576
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "backend/src/test/java/com/itz/inventarios/passwordreset/PasswordResetFlowIntegrationTest.java",
+    "linea": 168,
+    "descripcion": "La prueba de sesiones invalidadas depende de Thread.sleep(1100), lo que la vuelve lenta y sensible al reloj; y tokenCaducadoOInexistenteDa410 fija expiresAt a createdAt-1s, lo que depende de que createdAt no sea nulo.",
+    "sugerencia": "Inyecta un Clock controlable (MutableClock ya existe) en el contexto de la prueba en lugar de dormir el hilo.",
+    "comentario_id": 4060228583
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/passwordreset/service/PasswordResetService.java",
+    "linea": 66,
+    "descripcion": "Se comprueba primero token y cuenta y luego la política, de modo que la contraseña incumplida se responde 422 solo con token válido: correcto. Pero la política valida newPassword.length() en caracteres mientras BCrypt limita a 72 bytes; una contraseña con caracteres multibyte dentro de 72 caracteres se trunca silenciosamente.",
+    "sugerencia": "Valida la longitud máxima en bytes UTF-8 (getBytes(UTF_8).length <= 72) en PasswordPolicyValidator.",
+    "comentario_id": 4060228586
+   }
+  ],
+  "revisado_en": "2026-09-21T08:00:07.756080+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-13/PT-02",
+  "md": "---\nid: PT-02\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-002, TC-005, TC-006, TC-008, TC-009, TC-014]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/40\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/ITZINV-13/PT-02\nfecha: 2026-09-21\n---\n\n# PT-02 — Backend: restablecer contraseña con token (POST /auth/password/reset)\n\n_HU-002: Recuperar contraseña olvidada por correo electrónico_\n\nEndpoint público que valida el token (existente, no usado, no caducado), valida la política de contraseñas y confirmación, cambia el hash BCrypt y marca el token como usado en la misma transacción, invalida las sesiones previas, notifica por correo y audita RESET_DONE.\n\n## Entregables\n\n- Migración src/main/resources/db/migration/V3__password_changed_at.sql: columna users.password_changed_at (u otro mecanismo equivalente) para invalidar tokens JWT emitidos antes del cambio\n- passwordreset/service/PasswordResetService: busca por SHA-256 del token, rechaza inexistente/caducado/usado con error claro (ProblemDetail 400/410 indicando que debe solicitar uno nuevo), cambia contraseña y marca used_at en una única @Transactional\n- user/service/PasswordPolicyValidator centralizado, con parámetros en propiedades tipadas (valores por defecto pendientes de confirmar por negocio); si la contraseña no cumple o la confirmación no coincide, se rechaza sin consumir el token\n- Invalidación de sesiones previas: actualizar password_changed_at y ajustar auth JwtAuthenticationFilter para rechazar tokens con iat anterior\n- Correo de notificación de cambio de contraseña vía PasswordResetMailer (fallo de envío solo se registra en log)\n- Registro en auth_event de RESET_DONE (sin contraseñas ni tokens)\n- passwordreset/web/PasswordResetController: POST /api/v1/auth/password/reset con DTO record ResetPasswordRequest (token, newPassword, confirmPassword) validado con Bean Validation\n- Documentación Swagger/OpenAPI: @Operation, @ApiResponse (200, 400, 410/422), @Schema en DTOs y @SecurityRequirements vacío en POST /api/v1/auth/password/reset; ruta pública en SecurityConfig\n- Pruebas JUnit 5: PasswordResetServiceTest (éxito, token caducado, token ya usado, política incumplida y token sigue válido, confirmación distinta, sesiones previas invalidadas, notificación enviada, auditoría), PasswordResetControllerTest (slice) y prueba de integración del flujo forgot→reset→login con la nueva contraseña\n- Actualizar backend/README.md con el flujo de recuperación, la política de contraseñas configurable y la invalidación de sesiones\n\n## Se da por terminado cuando\n\n- TC-002 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-008 pasa\n- TC-009 pasa\n- TC-014 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (seguridad) `backend/src/main/java/com/itz/inventarios/auth/service/JwtAuthenticationFilter.java:60`: issuedBeforePasswordChange trunca password_changed_at al segundo y usa isBefore. Un JWT emitido en el mismo segundo del cambio, pero antes (o con iat igual al segundo), sigue siendo válido tras el reset. TC-009 exige invalidar las sesiones previas; hay una ventana de hasta 1 s. Además, el constructor de 2 argumentos deja un lookup que siempre devuelve vacío (fail-open) y SecurityConfig también devuelve vacío si el repositorio no está disponible.\n- **menor** (arquitectura) `backend/src/main/java/com/itz/inventarios/config/SecurityConfig.java:63`: El filtro hace una consulta a BD por cada petición autenticada y SecurityConfig usa ObjectProvider solo para acomodar slices de test; la capa auth/config queda acoplada a UserRepository. Además PUBLIC_PATHS ya incluye /api/v1/auth/** y la ruta reset añadida es redundante.\n- **menor** (seguridad) `backend/src/main/java/com/itz/inventarios/passwordreset/web/PasswordResetController.java:52`: El endpoint público /reset no tiene limitación de frecuencia, y la IP se toma de http.getRemoteAddr(); detrás de Cloud Run será la del proxy, así que la auditoría RESET_DONE registrará la IP del balanceador. Un atacante puede además probar tokens sin límite (aunque son de 256 bits).\n- **menor** (pruebas) `backend/src/test/java/com/itz/inventarios/passwordreset/service/PasswordResetServiceTest.java:66`: El helper rejected() invoca service.reset dos veces (assertThatThrownBy y luego otra vez), lo que puede enmascarar efectos y duplicar llamadas a mocks. Además elMensajeEsElMismoParaInexistenteCaducadoYUsado configura el mock con 'hash-x' que no corresponde al hash real de 'x' (no prueba realmente el caso caducado, y el caso inexistente lo cubre por defecto de Mockito).\n- **menor** (pruebas) `backend/src/test/java/com/itz/inventarios/passwordreset/PasswordResetFlowIntegrationTest.java:168`: La prueba de sesiones invalidadas depende de Thread.sleep(1100), lo que la vuelve lenta y sensible al reloj; y tokenCaducadoOInexistenteDa410 fija expiresAt a createdAt-1s, lo que depende de que createdAt no sea nulo.\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/passwordreset/service/PasswordResetService.java:66`: Se comprueba primero token y cuenta y luego la política, de modo que la contraseña incumplida se responde 422 solo con token válido: correcto. Pero la política valida newPassword.length() en caracteres mientras BCrypt limita a 72 bytes; una contraseña con caracteres multibyte dentro de 72 caracteres se trunca silenciosamente.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-03",
+  "grupo": "HU-002",
+  "titulo": "Frontend: pantallas Recuperar contraseña y Restablecer contraseña",
+  "descripcion": "Pantallas standalone lazy-loaded de la feature auth para solicitar el enlace y definir la nueva contraseña con el token de la URL, consumiendo los endpoints forgot y reset. Sin login automático: tras el éxito se redirige al login.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "src/app/features/auth/forgot-password/forgot-password.component (formulario reactivo con correo requerido y con formato válido, PrimeNG + Tailwind; muestra siempre el mensaje genérico 'si el correo existe, recibirás instrucciones'; manejo del 429 con mensaje claro)",
+   "src/app/features/auth/reset-password/reset-password.component (lee token de la query, campos nueva contraseña y confirmación con validación de coincidencia, muestra errores del backend de política; ante token caducado/usado muestra mensaje y enlace para solicitar uno nuevo; al éxito redirige a /login con aviso)",
+   "Métodos forgotPassword() y resetPassword() en core/auth.service contra /api/v1/auth/password/forgot y /reset",
+   "Rutas públicas lazy en app.routes.ts (forgot-password, reset-password) y enlace '¿Olvidaste tu contraseña?' en la pantalla de login",
+   "Pruebas Jest: forgot-password.component.spec (correo inválido/vacío no envía, mensaje genérico, 429), reset-password.component.spec (confirmación distinta, política rechazada, token inválido, éxito y redirección) y auth.service.spec para los dos métodos nuevos",
+   "Actualizar frontend/README.md si cambian rutas o scripts de prueba"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-008"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-02"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/41",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 106
+  },
+  "observaciones": [
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "mayor",
+    "archivo": "frontend/src/app/features/auth/forgot-password/forgot-password.component.ts",
+    "linea": 41,
+    "descripcion": "`Validators.email({ value } as AbstractControl)` castea un objeto parcial a AbstractControl; funciona en runtime pero es frágil, y además el validador de Angular ya queda redundante con la regex. Adicionalmente `trimmedEmail` está duplicado con el del login (mismo helper en login.component.ts), violando DRY y arriesgando divergencia en las reglas de correo.",
+    "sugerencia": "Eliminar la llamada a Validators.email y usar solo la regex; extraer el validador de correo a shared/ (p. ej. shared/validators/email.validator.ts) y reutilizarlo en login y forgot-password.",
+    "comentario_id": 4060261542
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "frontend/src/app/features/auth/reset-password/reset-password.component.ts",
+    "linea": 160,
+    "descripcion": "handleError solo trata 410 como token inválido; 400 se trata como error de política. Si el backend responde 400 por token inválido/malformado (o 404), el usuario ve un mensaje genérico de política sin el enlace para solicitar uno nuevo, incumpliendo TC-005/TC-006. Además el mapeo 410 depende de un contrato asumido que no se verifica en el diff.",
+    "sugerencia": "Confirmar el contrato de PT-02 (códigos para token caducado/usado/inexistente) y mapear todos los casos de token inválido a tokenInvalid; añadir pruebas para esos códigos.",
+    "comentario_id": 4060261548
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/features/auth/login/login.component.spec.ts",
+    "linea": 1,
+    "descripcion": "Las pruebas existentes del login usan provideRouter([]) sin ActivatedRoute mockeado; LoginComponent ahora inyecta ActivatedRoute (funciona con provideRouter), pero el caso `?reset=ok` reemplaza el ActivatedRoute por un objeto parcial. Correcto, aunque el resetTestingModule dentro del test es frágil.",
+    "sugerencia": "Mover la configuración con ?reset=ok a un describe propio con su propio setup en vez de reiniciar el TestBed dentro del it.",
+    "comentario_id": 4060261555
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/features/auth/forgot-password/forgot-password.component.spec.ts",
+    "linea": 54,
+    "descripcion": "La prueba 'el mensaje es el mismo para cualquier correo válido' reinicia el TestBed y compara dos renders con el mismo mock, por lo que no verifica realmente nada sobre el backend y es redundante con la anterior.",
+    "sugerencia": "Eliminarla o sustituirla por una aserción de que el texto mostrado coincide con la constante GENERIC_MESSAGE.",
+    "comentario_id": 4060261561
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": "frontend/src/app/features/auth/reset-password/reset-password.component.ts",
+    "linea": 36,
+    "descripcion": "El token se lee solo una vez del snapshot y permanece en la URL tras el envío; no se limpia del historial. Riesgo bajo, pero conviene evitar que el token quede en el historial/Referer tras el uso.",
+    "sugerencia": "Usar navigate con replaceUrl al éxito (ya se sale a /login) y considerar Referrer-Policy no-referrer en nginx para /reset-password.",
+    "comentario_id": 4060261567
+   }
+  ],
+  "revisado_en": "2026-09-21T08:05:56.509834+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-13/PT-03",
+  "md": "---\nid: PT-03\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-008]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/41\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-02]\nid_externo: null\nrama: hu/ITZINV-13/PT-03\nfecha: 2026-09-21\n---\n\n# PT-03 — Frontend: pantallas Recuperar contraseña y Restablecer contraseña\n\n_HU-002: Recuperar contraseña olvidada por correo electrónico_\n\nPantallas standalone lazy-loaded de la feature auth para solicitar el enlace y definir la nueva contraseña con el token de la URL, consumiendo los endpoints forgot y reset. Sin login automático: tras el éxito se redirige al login.\n\n## Entregables\n\n- src/app/features/auth/forgot-password/forgot-password.component (formulario reactivo con correo requerido y con formato válido, PrimeNG + Tailwind; muestra siempre el mensaje genérico 'si el correo existe, recibirás instrucciones'; manejo del 429 con mensaje claro)\n- src/app/features/auth/reset-password/reset-password.component (lee token de la query, campos nueva contraseña y confirmación con validación de coincidencia, muestra errores del backend de política; ante token caducado/usado muestra mensaje y enlace para solicitar uno nuevo; al éxito redirige a /login con aviso)\n- Métodos forgotPassword() y resetPassword() en core/auth.service contra /api/v1/auth/password/forgot y /reset\n- Rutas públicas lazy en app.routes.ts (forgot-password, reset-password) y enlace '¿Olvidaste tu contraseña?' en la pantalla de login\n- Pruebas Jest: forgot-password.component.spec (correo inválido/vacío no envía, mensaje genérico, 429), reset-password.component.spec (confirmación distinta, política rechazada, token inválido, éxito y redirección) y auth.service.spec para los dos métodos nuevos\n- Actualizar frontend/README.md si cambian rutas o scripts de prueba\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-008 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (buenas_practicas) `frontend/src/app/features/auth/forgot-password/forgot-password.component.ts:41`: `Validators.email({ value } as AbstractControl)` castea un objeto parcial a AbstractControl; funciona en runtime pero es frágil, y además el validador de Angular ya queda redundante con la regex. Adicionalmente `trimmedEmail` está duplicado con el del login (mismo helper en login.component.ts), violando DRY y arriesgando divergencia en las reglas de correo.\n- **mayor** (criterio_aceptacion) `frontend/src/app/features/auth/reset-password/reset-password.component.ts:160`: handleError solo trata 410 como token inválido; 400 se trata como error de política. Si el backend responde 400 por token inválido/malformado (o 404), el usuario ve un mensaje genérico de política sin el enlace para solicitar uno nuevo, incumpliendo TC-005/TC-006. Además el mapeo 410 depende de un contrato asumido que no se verifica en el diff.\n- **menor** (pruebas) `frontend/src/app/features/auth/login/login.component.spec.ts:1`: Las pruebas existentes del login usan provideRouter([]) sin ActivatedRoute mockeado; LoginComponent ahora inyecta ActivatedRoute (funciona con provideRouter), pero el caso `?reset=ok` reemplaza el ActivatedRoute por un objeto parcial. Correcto, aunque el resetTestingModule dentro del test es frágil.\n- **menor** (pruebas) `frontend/src/app/features/auth/forgot-password/forgot-password.component.spec.ts:54`: La prueba 'el mensaje es el mismo para cualquier correo válido' reinicia el TestBed y compara dos renders con el mismo mock, por lo que no verifica realmente nada sobre el backend y es redundante con la anterior.\n- **menor** (criterio_aceptacion) `frontend/src/app/features/auth/reset-password/reset-password.component.ts:36`: El token se lee solo una vez del snapshot y permanece en la URL tras el envío; no se limpia del historial. Riesgo bajo, pero conviene evitar que el token quede en el historial/Referer tras el uso.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-01",
+  "grupo": "HU-003",
+  "titulo": "Backend: logout con revocación de jti, refresh deslizante y expiración validada en servidor",
+  "descripcion": "En el módulo auth: cierre de sesión que revoca el jti en servidor (idempotente), renovación deslizante del JWT mientras hay actividad, rechazo en el filtro JWT de tokens vencidos o revocados y auditoría de logout y expiración. Inactividad configurable por IDLE_TIMEOUT_MINUTES (supuesto: 15 min).",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "Migración Flyway backend/src/main/resources/db/migration/V2__revoked_token.sql (tabla revoked_token: jti PK, user_id, expires_at, revoked_at; ajuste de tipos de auth_event si V1 no contempla LOGOUT/expiración; V1 no se modifica)",
+   "auth/domain/RevokedToken y auth/repository/RevokedTokenRepository (existsByJti, deleteByExpiresAtBefore)",
+   "auth/service/TokenRevocationService (revocar jti idempotente, consultar) y tarea programada de limpieza de revocados caducados",
+   "auth/service/AuthService: logout y refresh (nuevo JWT con nuevo jti solo si el token es válido y está dentro de la ventana de inactividad; revoca el jti anterior)",
+   "POST /api/v1/auth/logout en auth/web/AuthController: 204 idempotente aunque el token ya esté revocado o vencido; registra auth_event LOGOUT",
+   "POST /api/v1/auth/refresh en auth/web/AuthController con DTO record de respuesta (token, expiración)",
+   "config/JwtProperties (accessTtlMinutes, idleTimeoutMinutes) y application.yml con JWT_ACCESS_TTL_MINUTES e IDLE_TIMEOUT_MINUTES",
+   "JwtAuthenticationFilter actualizado: 401 ProblemDetail si el token está expirado o su jti revocado; registra auth_event de sesión expirada",
+   "Swagger/OpenAPI de /api/v1/auth/logout y /api/v1/auth/refresh: @Operation, @ApiResponse (200/204, 401), @Schema en DTOs, bearerAuth",
+   "Pruebas JUnit 5: AuthServiceTest, TokenRevocationServiceTest, JwtAuthenticationFilterTest, slice test AuthControllerTest (logout, doble logout idempotente, reuso de token revocado 401, token vencido 401, refresh válido y refresh fuera de ventana, auditoría)",
+   "Actualizar backend/README.md con las variables JWT_ACCESS_TTL_MINUTES e IDLE_TIMEOUT_MINUTES y los endpoints logout/refresh"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-009",
+   "TC-010",
+   "TC-014",
+   "TC-015",
+   "TC-016"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/42",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 1,
+   "segundos": 57
+  },
+  "observaciones": [
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java",
+    "linea": 126,
+    "descripcion": "En refresh el jti anterior se revoca antes de emitir el token nuevo. Si jwtService.issue fallara, el usuario perdería la sesión sin recibir un token de reemplazo. Además, las peticiones en vuelo con el token anterior (la SPA suele lanzar varias en paralelo) recibirán 401 con «sesión cerrada» en cuanto el refresh termine, y el interceptor las tomará como cierre de sesión.",
+    "sugerencia": "Emitir el token nuevo antes de revocar el anterior. Si la SPA sufre carreras por peticiones paralelas, valorar un periodo de gracia corto para el jti reemplazado y coordinar el refresh en el frontend (una sola petición a la vez).",
+    "comentario_id": 4060336994
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": "backend/src/main/java/com/itz/inventarios/auth/service/JwtAuthenticationFilter.java",
+    "linea": 98,
+    "descripcion": "SESSION_EXPIRED (TC-016) solo se audita cuando llega una petición con el token ya vencido. Si el usuario abandona la sesión y no vuelve a llamar al servidor, no queda ningún evento de expiración. La distinción entre cierre manual y expiración en la bitácora depende de que el cliente reintente.",
+    "sugerencia": "Documentar esta limitación en el README y en el paquete del frontend: el IdleService debe llamar a refresh o a un endpoint autenticado al vencer el temporizador, para que el servidor registre la expiración. Alternativa: hacer que logout de un token vencido con claims recuperables audite SESSION_EXPIRED.",
+    "comentario_id": 4060337000
+   }
+  ],
+  "revisado_en": "2026-09-21T08:18:16.623978+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-14/PT-01",
+  "md": "---\nid: PT-01\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-009, TC-010, TC-014, TC-015, TC-016]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/42\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05]\nid_externo: null\nrama: hu/ITZINV-14/PT-01\nfecha: 2026-09-21\n---\n\n# PT-01 — Backend: logout con revocación de jti, refresh deslizante y expiración validada en servidor\n\n_HU-003: Cerrar sesión manualmente y expirar sesión por inactividad_\n\nEn el módulo auth: cierre de sesión que revoca el jti en servidor (idempotente), renovación deslizante del JWT mientras hay actividad, rechazo en el filtro JWT de tokens vencidos o revocados y auditoría de logout y expiración. Inactividad configurable por IDLE_TIMEOUT_MINUTES (supuesto: 15 min).\n\n## Entregables\n\n- Migración Flyway backend/src/main/resources/db/migration/V2__revoked_token.sql (tabla revoked_token: jti PK, user_id, expires_at, revoked_at; ajuste de tipos de auth_event si V1 no contempla LOGOUT/expiración; V1 no se modifica)\n- auth/domain/RevokedToken y auth/repository/RevokedTokenRepository (existsByJti, deleteByExpiresAtBefore)\n- auth/service/TokenRevocationService (revocar jti idempotente, consultar) y tarea programada de limpieza de revocados caducados\n- auth/service/AuthService: logout y refresh (nuevo JWT con nuevo jti solo si el token es válido y está dentro de la ventana de inactividad; revoca el jti anterior)\n- POST /api/v1/auth/logout en auth/web/AuthController: 204 idempotente aunque el token ya esté revocado o vencido; registra auth_event LOGOUT\n- POST /api/v1/auth/refresh en auth/web/AuthController con DTO record de respuesta (token, expiración)\n- config/JwtProperties (accessTtlMinutes, idleTimeoutMinutes) y application.yml con JWT_ACCESS_TTL_MINUTES e IDLE_TIMEOUT_MINUTES\n- JwtAuthenticationFilter actualizado: 401 ProblemDetail si el token está expirado o su jti revocado; registra auth_event de sesión expirada\n- Swagger/OpenAPI de /api/v1/auth/logout y /api/v1/auth/refresh: @Operation, @ApiResponse (200/204, 401), @Schema en DTOs, bearerAuth\n- Pruebas JUnit 5: AuthServiceTest, TokenRevocationServiceTest, JwtAuthenticationFilterTest, slice test AuthControllerTest (logout, doble logout idempotente, reuso de token revocado 401, token vencido 401, refresh válido y refresh fuera de ventana, auditoría)\n- Actualizar backend/README.md con las variables JWT_ACCESS_TTL_MINUTES e IDLE_TIMEOUT_MINUTES y los endpoints logout/refresh\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-009 pasa\n- TC-010 pasa\n- TC-014 pasa\n- TC-015 pasa\n- TC-016 pasa\n\n## Observaciones de la revisión\n\n- **menor** (buenas_practicas) `backend/src/main/java/com/itz/inventarios/auth/service/AuthService.java:126`: En refresh el jti anterior se revoca antes de emitir el token nuevo. Si jwtService.issue fallara, el usuario perdería la sesión sin recibir un token de reemplazo. Además, las peticiones en vuelo con el token anterior (la SPA suele lanzar varias en paralelo) recibirán 401 con «sesión cerrada» en cuanto el refresh termine, y el interceptor las tomará como cierre de sesión.\n- **menor** (criterio_aceptacion) `backend/src/main/java/com/itz/inventarios/auth/service/JwtAuthenticationFilter.java:98`: SESSION_EXPIRED (TC-016) solo se audita cuando llega una petición con el token ya vencido. Si el usuario abandona la sesión y no vuelve a llamar al servidor, no queda ningún evento de expiración. La distinción entre cierre manual y expiración en la bitácora depende de que el cliente reintente.\n"
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "id": "PT-02",
+  "grupo": "HU-003",
+  "titulo": "Frontend: cierre de sesión manual, expiración por inactividad y sincronización entre pestañas",
+  "descripcion": "En el frontend Angular: botón Cerrar sesión en el layout, IdleService que detecta actividad, refresca el token y cierra sesión al vencer la inactividad, con diálogo de aviso opcional, limpieza de datos de sesión, redirección al login con mensaje y propagación del cierre a todas las pestañas.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+  "entregables": [
+   "core/auth.service: logout() que llama a POST /api/v1/auth/logout (tolera errores/401), limpia sesión y redirige a /login; refresh() contra POST /api/v1/auth/refresh",
+   "core/token.storage: limpieza completa de sessionStorage/localStorage de la sesión y estado del BehaviorSubject",
+   "core/idle.service: detecta clics, teclado, navegación y peticiones iniciadas por el usuario para reiniciar el temporizador; dispara refresh mientras hay actividad y logout con motivo 'inactividad' al vencer",
+   "Sincronización multi-pestaña (BroadcastChannel o evento storage) para reflejar logout manual o por expiración en todas las pestañas",
+   "Botón Cerrar sesión en el layout, disponible en toda pantalla autenticada (features/home y layout compartido en shared/)",
+   "Diálogo PrimeNG de aviso de sesión por expirar con opción de extender (core/session), opcional según supuesto",
+   "auth.interceptor: ante 401 limpia sesión y redirige al login; auth.guard y navegación con replaceUrl para que 'atrás' no muestre contenido protegido",
+   "features/auth/login: mensaje claro 'La sesión venció por inactividad' cuando se llega por expiración",
+   "Pruebas Jest: auth.service.spec, idle.service.spec (reinicio por actividad, refresh, expiración con fake timers), auth.interceptor.spec, auth.guard.spec, token.storage.spec, componente de botón/diálogo y login con mensaje de expiración, sincronización entre pestañas",
+   "Actualizar frontend/README.md si cambian configuración o pruebas (p. ej. tiempo de inactividad en environments)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-007",
+   "TC-008",
+   "TC-009",
+   "TC-011",
+   "TC-012",
+   "TC-013",
+   "TC-014",
+   "TC-015"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/43",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": true,
+   "intentos": 2,
+   "segundos": 89
+  },
+  "observaciones": [],
+  "revisado_en": "2026-09-21T09:48:35.208339+00:00",
+  "id_externo": null,
+  "rama": "hu/ITZINV-14/PT-02",
+  "md": "---\nid: PT-02\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-007, TC-008, TC-009, TC-011, TC-012, TC-013, TC-014, TC-015]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/43\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/ITZINV-14/PT-02\nfecha: 2026-09-21\n---\n\n# PT-02 — Frontend: cierre de sesión manual, expiración por inactividad y sincronización entre pestañas\n\n_HU-003: Cerrar sesión manualmente y expirar sesión por inactividad_\n\nEn el frontend Angular: botón Cerrar sesión en el layout, IdleService que detecta actividad, refresca el token y cierra sesión al vencer la inactividad, con diálogo de aviso opcional, limpieza de datos de sesión, redirección al login con mensaje y propagación del cierre a todas las pestañas.\n\n## Entregables\n\n- core/auth.service: logout() que llama a POST /api/v1/auth/logout (tolera errores/401), limpia sesión y redirige a /login; refresh() contra POST /api/v1/auth/refresh\n- core/token.storage: limpieza completa de sessionStorage/localStorage de la sesión y estado del BehaviorSubject\n- core/idle.service: detecta clics, teclado, navegación y peticiones iniciadas por el usuario para reiniciar el temporizador; dispara refresh mientras hay actividad y logout con motivo 'inactividad' al vencer\n- Sincronización multi-pestaña (BroadcastChannel o evento storage) para reflejar logout manual o por expiración en todas las pestañas\n- Botón Cerrar sesión en el layout, disponible en toda pantalla autenticada (features/home y layout compartido en shared/)\n- Diálogo PrimeNG de aviso de sesión por expirar con opción de extender (core/session), opcional según supuesto\n- auth.interceptor: ante 401 limpia sesión y redirige al login; auth.guard y navegación con replaceUrl para que 'atrás' no muestre contenido protegido\n- features/auth/login: mensaje claro 'La sesión venció por inactividad' cuando se llega por expiración\n- Pruebas Jest: auth.service.spec, idle.service.spec (reinicio por actividad, refresh, expiración con fake timers), auth.interceptor.spec, auth.guard.spec, token.storage.spec, componente de botón/diálogo y login con mensaje de expiración, sincronización entre pestañas\n- Actualizar frontend/README.md si cambian configuración o pruebas (p. ej. tiempo de inactividad en environments)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-007 pasa\n- TC-008 pasa\n- TC-009 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-013 pasa\n- TC-014 pasa\n- TC-015 pasa\n"
+ }
+]

@@ -1,0 +1,1625 @@
+[
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "hu_id": "HU-001",
+  "corrida": 1,
+  "tcs_version": 1,
+  "ronda": 1,
+  "modo": "completo",
+  "fecha": "2026-09-21T14:45:25.938611+00:00",
+  "ambiente": "https://inventarios-web-118746543308.us-central1.run.app",
+  "proveedor": "claude_cli",
+  "suite": "\"\"\"Smoke testing de HU-001 — Iniciar sesión con correo y contraseña\nGenerado por Loom (skill 08, ADR-0059) a partir del código del aplicativo y los casos de prueba de la HU.\nEjecución manual: TEST_BASE_URL, TEST_USER y TEST_PASSWORD como variables de entorno y `python este_archivo.py`.\"\"\"\n\nimport re\n\nfrom playwright.sync_api import Page, expect\n\n\ndef tc_001(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home$'))\n    expect(page.get_by_text('Bienvenido,')).to_be_visible()\n    expect(page.get_by_role('button', name=re.compile('Cerrar sesión', re.I))).to_be_visible()\n    expect(page.get_by_test_id('login-error')).to_have_count(0)\n\n\ndef tc_002(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home$'))\n    expect(page.get_by_text('Bienvenido,')).to_be_visible()\n    # Solo aparece el correo de la cuenta autenticada\n    expect(page.locator('dd').first).to_have_text(re.compile(re.escape(usuario), re.I))\n    expect(page.locator('dd')).to_have_count(2)\n    expect(page.get_by_test_id('home-error')).to_have_count(0)\n\n\ndef tc_003(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill(contrasena + '_incorrecta')\n    page.get_by_role('button', name='Iniciar sesión').click()\n    error = page.get_by_test_id('login-error')\n    expect(error).to_be_visible()\n    expect(error).to_have_text(re.compile(r'Correo o contraseña incorrectos'))\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.locator('#email')).to_be_visible()\n\n\ndef tc_004(page, base_url, usuario, contrasena):\n    \"\"\"TC-004: Given un correo que no existe en el sistema. When ingresa ese correo con cualquier contras\"\"\"\n    page.goto(base_url + '/')\n    page.get_by_text('Iniciar sesión').first.wait_for(state='visible')\n    page.get_by_label('Correo').first.fill('noexiste.qa.9731@example.com')\n    page.get_by_role('textbox', name='Contraseña').first.fill('ClaveIncorrecta#123')\n    page.get_by_role('button', name='Iniciar sesión').first.click()\n    page.get_by_text('incorrect').first.wait_for(state='visible')\n    expect(page.get_by_text('Correo o contraseña incorrectos.').first).to_be_visible()\n\n\ndef tc_005(page, base_url, usuario, contrasena):\n    peticiones = []\n    page.on('request', lambda r: peticiones.append(r.url) if r.url.endswith('/api/v1/auth/login') else None)\n    boton = page.get_by_role('button', name='Iniciar sesión')\n\n    # (a) correo vacío\n    page.goto(base_url + '/login')\n    page.locator('#password').fill('Alguna123!')\n    boton.click()\n    expect(page.get_by_text('El correo es obligatorio.')).to_be_visible()\n\n    # (b) contraseña vacía\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    boton.click()\n    expect(page.get_by_text('La contraseña es obligatoria.')).to_be_visible()\n\n    # (c) correo con formato inválido\n    page.goto(base_url + '/login')\n    page.locator('#email').fill('usuario@')\n    page.locator('#password').fill('Alguna123!')\n    boton.click()\n    expect(page.get_by_text('El correo no tiene un formato válido.')).to_be_visible()\n\n    expect(page).to_have_url(re.compile(r'/login'))\n    assert len(peticiones) == 0\n\n\ndef tc_006(page, base_url, usuario, contrasena):\n    otro_id = '00000000-0000-0000-0000-00000000b0b0'\n    with page.expect_request(re.compile(r'/api/v1/auth/login$')) as info:\n        page.goto(base_url + '/login')\n        page.locator('#email').fill(usuario)\n        page.locator('#password').fill(contrasena)\n        page.get_by_role('button', name='Iniciar sesión').click()\n    api_base = info.value.url[:-len('/api/v1/auth/login')]\n    expect(page).to_have_url(re.compile(r'/home$'))\n    token = page.evaluate(\"sessionStorage.getItem('auth.token')\")\n\n    resp = page.request.get(\n        api_base + '/api/v1/users/' + otro_id,\n        headers={'Authorization': 'Bearer ' + token},\n    )\n    assert resp.status in (403, 404)\n\n    page.goto(base_url + '/users/' + otro_id)\n    expect(page.get_by_text('Bienvenido,')).to_be_visible()\n    expect(page.get_by_text(otro_id)).to_have_count(0)\n\n\ndef tc_007(page, base_url, usuario, contrasena):\n    \"\"\"TC-007: Given un visitante sin sesión. When navega directamente a una URL protegida y consulta un \"\"\"\n    page.goto(base_url + '/')\n    page.goto(base_url + '/dashboard')\n    page.goto(base_url + '/api/users')\n    expect(page.get_by_text('Iniciar sesión').first).to_be_visible()\n    page.goto(base_url + '/api/users')\n\n\ndef tc_008(page, base_url, usuario, contrasena):\n    with page.expect_request(re.compile(r'/api/v1/auth/login$')) as info:\n        page.goto(base_url + '/login')\n        page.locator('#email').fill(usuario)\n        page.locator('#password').fill(contrasena)\n        page.get_by_role('button', name='Iniciar sesión').click()\n    api_base = info.value.url[:-len('/api/v1/auth/login')]\n    expect(page).to_have_url(re.compile(r'/home$'))\n\n    # Invalida el token de sesión\n    page.evaluate(\"sessionStorage.setItem('auth.token', 'token.expirado.invalido')\")\n    resp = page.request.get(\n        api_base + '/api/v1/users/me',\n        headers={'Authorization': 'Bearer token.expirado.invalido'},\n    )\n    assert resp.status == 401\n\n    page.reload()\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_text('Bienvenido,')).to_have_count(0)\n\n\ndef tc_009(page, base_url, usuario, contrasena):\n    \"\"\"TC-009: Given la página de login cargada. When escribe una contraseña en el campo y envía el formu\"\"\"\n    page.goto(base_url + '/')\n    page.get_by_text('Contraseña').first.wait_for(state='visible')\n    page.get_by_label('Contraseña').first.fill('TextoPrueba123')\n    page.get_by_role('button', name='Iniciar sesión').first.click()\n    expect(page.get_by_text('Contraseña').first).to_be_visible()\n    page.locator('input[type=password]').first.click()\n\n\ndef tc_010(page, base_url, usuario, contrasena):\n    with page.expect_request(re.compile(r'/api/v1/auth/login$')) as info:\n        page.goto(base_url + '/login')\n        page.locator('#email').fill(usuario)\n        page.locator('#password').fill(contrasena)\n        page.get_by_role('button', name='Iniciar sesión').click()\n    api_base = info.value.url[:-len('/api/v1/auth/login')]\n    expect(page).to_have_url(re.compile(r'/home$'))\n    token = page.evaluate(\"sessionStorage.getItem('auth.token')\")\n    assert token\n\n    page.get_by_role('button', name=re.compile('Cerrar sesión', re.I)).click()\n    expect(page).to_have_url(re.compile(r'/login'))\n\n    page.go_back()\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_text('Bienvenido,')).to_have_count(0)\n\n    resp = page.request.get(\n        api_base + '/api/v1/users/me',\n        headers={'Authorization': 'Bearer ' + token},\n    )\n    assert resp.status == 401\n\n\ndef tc_011(page, base_url, usuario, contrasena):\n    boton = page.get_by_role('button', name='Iniciar sesión')\n    for i in range(7):\n        page.goto(base_url + '/login')\n        page.locator('#email').fill(usuario)\n        page.locator('#password').fill('Incorrecta_' + str(i))\n        boton.click()\n        expect(page.get_by_test_id('login-error')).to_be_visible()\n\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill(contrasena)\n    boton.click()\n    expect(page.get_by_test_id('login-error')).to_have_text(re.compile(r'Demasiados intentos'))\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_text('Bienvenido,')).to_have_count(0)\n\n\ndef tc_012(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.locator('#email').fill('  ' + usuario.upper() + '  ')\n    page.locator('#password').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home$'))\n    expect(page.get_by_text('Bienvenido,')).to_be_visible()\n    expect(page.locator('dd').first).to_have_text(re.compile(re.escape(usuario), re.I))\n\n\ndef tc_013(page, base_url, usuario, contrasena):\n    page.route(re.compile(r'/api/v1/auth/login$'), lambda route: route.fulfill(status=503, body='{}', content_type='application/json'))\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    error = page.get_by_test_id('login-error')\n    expect(error).to_be_visible()\n    expect(error).to_contain_text('El servicio no está disponible en este momento')\n    expect(page.locator('#email')).to_have_value(usuario)\n    expect(page).to_have_url(re.compile(r'/login'))\n\n\ndef tc_014(page, base_url, usuario, contrasena):\n    # Intento fallido y luego exitoso; la consulta del registro de auditoría no tiene pantalla en el código provisto,\n    # por lo que se verifica el flujo de acceso del admin y que la contraseña no se expone en la UI.\n    page.goto(base_url + '/login')\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill('Incorrecta_audit_1')\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page.get_by_test_id('login-error')).to_be_visible()\n\n    page.locator('#email').fill(usuario)\n    page.locator('#password').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home$'))\n    expect(page.get_by_text('Bienvenido,')).to_be_visible()\n    expect(page.get_by_text(contrasena, exact=True)).to_have_count(0)\n\n\nif __name__ == \"__main__\":\n    import os\n\n    from playwright.sync_api import sync_playwright\n\n    BASE = os.environ.get(\"TEST_BASE_URL\", 'https://inventarios-web-118746543308.us-central1.run.app').rstrip(\"/\")\n    with sync_playwright() as p:\n        browser = p.chromium.launch()\n        for nombre, funcion in sorted((n, f) for n, f in globals().items() if n.startswith(\"tc_\") and callable(f)):\n            page = browser.new_page(viewport={\"width\": 1280, \"height\": 800})\n            try:\n                funcion(page, BASE, os.environ.get(\"TEST_USER\", \"\"), os.environ.get(\"TEST_PASSWORD\", \"\"))\n                print(nombre, \"pasa\")\n            except Exception as error:\n                print(nombre, \"FALLA\", str(error).splitlines()[0][:160])\n            page.close()\n        browser.close()\n",
+  "resultados": [
+   {
+    "tc_id": "TC-001",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-002",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-003",
+    "rol": "invitado",
+    "resultado": "bloqueado",
+    "motivo": "El caso exige un correo registrado con una contraseña incorrecta, pero no hay cuenta de prueba. Un correo inventado no permite comprobar que el mensaje no revela qué dato falló. La página de login sí carga, con campos Correo y Contraseña. · Script: AssertionError: Locator expected to be visible Actual value: None Error: element(s) not found Call log:",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está casi vacía (main sin contenido); espero a ver si aparece el login.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/login",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/login"
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-004",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "Con un correo inexistente el sistema rechazó el acceso, se quedó en /login y mostró la alerta «Correo o contraseña incorrectos.». Es un mensaje genérico que no revela si el correo existe. No había cuenta de prueba, así que no pude ejecutar el caso de contraseña incorrecta con un correo real para compararlo directamente. Lo doy por idéntico porque el texto es genérico, pero esa comparación queda sin confirmar.",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "Página vacía, esperar a que cargue el formulario",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Iniciar sesión»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Escribir correo inexistente en el campo Correo.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Correo",
+       "texto": "noexiste.qa.9731@example.com",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió «noexiste.qa.9731@example.com»"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Escribir una contraseña cualquiera en el campo Contraseña.",
+       "accion": "escribir",
+       "estrategia": "rol",
+       "rol": "textbox",
+       "objetivo": "Contraseña",
+       "texto": "ClaveIncorrecta#123",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió «ClaveIncorrecta#123»"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Enviar el formulario con el correo inexistente.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Iniciar sesión",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "El botón está deshabilitado (procesando); espero a que aparezca un mensaje de error.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "incorrect",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «incorrect»"
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "Confirmar el mensaje mostrado para correo no registrado.",
+       "accion": "verificar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Correo o contraseña incorrectos.",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "verificado: «Correo o contraseña incorrectos.» está visible"
+     }
+    ],
+    "origen": "agente (el script estaba mal)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-005",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-006",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-007",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "Sin sesión, /dashboard y /api/users redirigieron a /login («Iniciar sesión» visible) y no se mostró contenido protegido. El código HTTP 401 no se puede ver desde el navegador. Solo se observó la redirección al login, así que el 401 queda sin confirmar.",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "Navegar directamente a una URL protegida sin sesión.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/dashboard",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/dashboard"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Redirigió al login; ahora consultar endpoint protegido sin credenciales, p.ej. /api/me.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/api/users",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/api/users"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Confirmar que se muestra el login sin contenido protegido.",
+       "accion": "verificar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "verificado: «Iniciar sesión» está visible"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Reconfirmar qué devuelve /api/users sin sesión.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/api/users",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/api/users"
+     }
+    ],
+    "origen": "agente (el script estaba mal)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-008",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-009",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "El campo «Contraseña» coincide con el selector input[type=password] (el clic sobre él funcionó), por lo que está enmascarado. La página está en https://inventarios-web-118746543308.us-central1.run.app/login, es decir, HTTPS, y la URL no tiene query params ni contiene «TextoPrueba123» tras enviar el formulario. No se inspeccionó el tráfico de red directamente, y el hash con sal y los logs quedan para revisión de backend fuera de UI.",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está casi vacía; espero a ver si carga el login.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Contraseña",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Contraseña»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Escribir una contraseña en el campo para comprobar el enmascaramiento.",
+       "accion": "escribir",
+       "estrategia": "rol",
+       "rol": "textbox",
+       "objetivo": "Contraseña",
+       "texto": "",
+       "secreto": "contrasena",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "no hay «contrasena» configurado para el rol de este caso"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Sin cuenta; escribo un texto ficticio (no credencial) para verificar enmascaramiento.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Contraseña",
+       "texto": "TextoPrueba123",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió «TextoPrueba123»"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Enviar el formulario con la contraseña escrita, como indica el escenario.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Iniciar sesión",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "Confirmar que la URL usa HTTPS y que la contraseña no aparece en la URL.",
+       "accion": "verificar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "https://inventarios-web-118746543308.us-central1.run.app/login",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "Locator.wait_for: Timeout 5000ms exceeded."
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "Confirmar que el campo es type=password mediante selector css.",
+       "accion": "esperar_texto",
+       "estrategia": "css",
+       "rol": "",
+       "objetivo": "input[type=password]",
+       "texto": "input[type=password]",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "Locator.wait_for: Timeout 8000ms exceeded."
+     },
+     {
+      "n": 8,
+      "accion": {
+       "razonamiento": "Confirmar enmascaramiento: verificar tipo del campo con selector css.",
+       "accion": "verificar_texto",
+       "estrategia": "css",
+       "rol": "",
+       "objetivo": "input[type=password]",
+       "texto": "Contraseña",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "verificado: «Contraseña» está visible"
+     },
+     {
+      "n": 9,
+      "accion": {
+       "razonamiento": "Comprobar si existe un input type=password mediante selector css.",
+       "accion": "clic",
+       "estrategia": "css",
+       "rol": "",
+       "objetivo": "input[type=password]",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     }
+    ],
+    "origen": "agente (el script estaba mal)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-010",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-011",
+    "rol": "invitado",
+    "resultado": "bloqueado",
+    "motivo": "El caso requiere un correo registrado (y su contraseña correcta) para probar el bloqueo tras intentos fallidos, pero el rol invitado no tiene cuenta de prueba disponible. No se puede ejecutar sin credenciales válidas. Solo se observó el formulario de login con Correo, Contraseña y enlace de recuperación. · Script: AssertionError: Locator expected to be visible Actual value: None Error: element(s) not found Call log:",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está vacía; espero a que cargue un formulario de login.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Iniciar sesión»"
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-012",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-013",
+    "rol": "invitado",
+    "resultado": "bloqueado",
+    "motivo": "La página de login carga, pero el caso exige escribir correo y contraseña y no hay usuario configurado para el rol invitado. Tampoco se dispone de forma de interceptar la petición de autenticación con un 503. Por eso no se pudo comprobar el mensaje de error, la conservación del correo ni que no se inicie sesión. · Script: AssertionError: Locator expected to be visible Actual value: None Error: element(s) not found Call log:",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está vacía; intento ir a la ruta de login.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/login",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/login"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Escribo el correo con el secreto de usuario para iniciar el flujo.",
+       "accion": "escribir",
+       "estrategia": "rol",
+       "rol": "textbox",
+       "objetivo": "Correo",
+       "texto": "",
+       "secreto": "usuario",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "no hay «usuario» configurado para el rol de este caso"
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-014",
+    "rol": "admin",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   }
+  ],
+  "pasan": 11,
+  "fallan": 0,
+  "bloqueados": 3,
+  "regresiones": [],
+  "duracion_ms": 316947
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "hu_id": "HU-002",
+  "corrida": 1,
+  "tcs_version": 1,
+  "ronda": 1,
+  "modo": "completo",
+  "fecha": "2026-09-21T14:52:01.958043+00:00",
+  "ambiente": "https://inventarios-web-118746543308.us-central1.run.app",
+  "proveedor": "claude_cli",
+  "suite": "\"\"\"Smoke testing de HU-002 — Recuperar contraseña olvidada por correo electrónico\nGenerado por Loom (skill 08, ADR-0059) a partir del código del aplicativo y los casos de prueba de la HU.\nEjecución manual: TEST_BASE_URL, TEST_USER y TEST_PASSWORD como variables de entorno y `python este_archivo.py`.\"\"\"\n\nimport re\n\nfrom playwright.sync_api import Page, expect\n\n\ndef tc_001(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_role('link', name='¿Olvidaste tu contraseña?').click()\n    expect(page).to_have_url(re.compile(r'/forgot-password'))\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_role('button', name='Enviar enlace').click()\n    expect(page.get_by_test_id('forgot-success')).to_be_visible()\n    expect(page.get_by_test_id('forgot-success')).to_contain_text('Si el correo existe, recibirás instrucciones')\n\n\ndef tc_002(page, base_url, usuario, contrasena):\n    # El buzón no es accesible desde la prueba: se verifica el flujo de UI con el token disponible.\n    page.goto(base_url + '/reset-password?token=token-de-prueba')\n    page.locator('#newPassword').fill('NuevaClave#2026x')\n    page.locator('#confirmPassword').fill('NuevaClave#2026x')\n    page.get_by_role('button', name='Restablecer contraseña').click()\n    expect(page.get_by_test_id('reset-token-invalid').or_(page.get_by_test_id('login-reset-notice')).or_(page.get_by_test_id('reset-error'))).to_be_visible()\n\n\ndef tc_003(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/forgot-password')\n    page.get_by_label('Correo').fill('no.registrado.qa@example.com')\n    page.get_by_role('button', name='Enviar enlace').click()\n    expect(page.get_by_test_id('forgot-success')).to_be_visible()\n    msg1 = page.get_by_test_id('forgot-success').inner_text().strip()\n    page.goto(base_url + '/forgot-password')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_role('button', name='Enviar enlace').click()\n    expect(page.get_by_test_id('forgot-success')).to_be_visible()\n    msg2 = page.get_by_test_id('forgot-success').inner_text().strip()\n    assert msg1 == msg2\n    expect(page).to_have_url(re.compile(r'/forgot-password'))\n    expect(page.get_by_test_id('forgot-error')).to_have_count(0)\n\n\ndef tc_004(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/forgot-password')\n    campo = page.get_by_label('Correo')\n    boton = page.get_by_role('button', name='Enviar enlace')\n    campo.fill('')\n    boton.click()\n    expect(page.get_by_text('El correo es obligatorio.')).to_be_visible()\n    expect(page.get_by_test_id('forgot-success')).to_have_count(0)\n    for valor in ['usuario', 'usuario@', 'a@b']:\n        campo.fill(valor)\n        boton.click()\n        expect(page.get_by_text('El correo no tiene un formato válido.')).to_be_visible()\n        expect(page.get_by_test_id('forgot-success')).to_have_count(0)\n\n\ndef tc_005(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/reset-password?token=token-expirado-simulado')\n    page.locator('#newPassword').fill('NuevaClave#2026x')\n    page.locator('#confirmPassword').fill('NuevaClave#2026x')\n    page.get_by_role('button', name='Restablecer contraseña').click()\n    expect(page.get_by_test_id('reset-token-invalid')).to_be_visible()\n    expect(page.get_by_test_id('reset-token-invalid')).to_contain_text('solicita uno nuevo')\n    expect(page.get_by_role('link', name='Solicitar un nuevo enlace')).to_be_visible()\n\n\ndef tc_006(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/reset-password?token=token-ya-utilizado')\n    page.locator('#newPassword').fill('OtraClave#2026x')\n    page.locator('#confirmPassword').fill('OtraClave#2026x')\n    page.get_by_role('button', name='Restablecer contraseña').click()\n    expect(page.get_by_test_id('reset-token-invalid')).to_be_visible()\n    expect(page.get_by_test_id('reset-token-invalid')).to_contain_text('ya fue utilizado')\n    expect(page).to_have_url(re.compile(r'/reset-password'))\n\n\ndef tc_007(page, base_url, usuario, contrasena):\n    # Enlace A (invalidado por la emisión de B), simulado con un token no vigente.\n    page.goto(base_url + '/reset-password?token=enlace-A-invalidado')\n    page.locator('#newPassword').fill('NuevaClave#2026x')\n    page.locator('#confirmPassword').fill('NuevaClave#2026x')\n    page.get_by_role('button', name='Restablecer contraseña').click()\n    expect(page.get_by_test_id('reset-token-invalid')).to_be_visible()\n    expect(page.get_by_role('link', name='Solicitar un nuevo enlace')).to_be_visible()\n\n\ndef tc_008(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/reset-password?token=token-de-prueba')\n    page.locator('#newPassword').fill('ValidaClave#2026x')\n    page.locator('#confirmPassword').fill('OtraDistinta#2026')\n    page.get_by_role('button', name='Restablecer contraseña').click()\n    expect(page.get_by_text('La contraseña y su confirmación no coinciden.')).to_be_visible()\n    expect(page).to_have_url(re.compile(r'/reset-password'))\n    page.locator('#newPassword').fill('123')\n    page.locator('#confirmPassword').fill('123')\n    page.get_by_role('button', name='Restablecer contraseña').click()\n    expect(page.get_by_test_id('reset-error').or_(page.get_by_test_id('reset-token-invalid'))).to_be_visible()\n\n\ndef tc_009(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_role('heading', name='Inicio')).to_be_visible()\n    page.reload()\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_role('heading', name='Inicio')).to_be_visible()\n\n\ndef tc_010(page, base_url, usuario, contrasena):\n    \"\"\"TC-010: Given un invitado en el formulario de recuperación. When envía solicitudes repetidas conse\"\"\"\n    page.goto(base_url + '/')\n    page.goto(base_url + '/login')\n    page.get_by_role('link', name='¿Olvidaste tu contraseña?').first.click()\n    page.goto(base_url + '/forgot-password')\n    page.get_by_role('textbox', name='Correo').first.fill('test.ratelimit@example.com')\n    page.get_by_role('button', name='Enviar enlace').first.click()\n    page.get_by_role('button', name='Enviar enlace').first.click()\n    page.get_by_role('button', name='Enviar enlace').first.click()\n    page.get_by_role('button', name='Enviar enlace').first.click()\n    page.get_by_role('button', name='Enviar enlace').first.click()\n    expect(page.get_by_text('Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.').first).to_be_visible()\n\n\ndef tc_011(page, base_url, usuario, contrasena):\n    http_url = re.sub(r'^https?://', 'http://', base_url)\n    try:\n        page.goto(http_url + '/forgot-password')\n        expect(page).to_have_url(re.compile(r'^https://'))\n    except Exception:\n        # HTTP rechazado: aceptable\n        pass\n    page.goto(base_url + '/forgot-password')\n    expect(page).to_have_url(re.compile(r'^https://'))\n    expect(page.get_by_role('heading', name='Recuperar contraseña')).to_be_visible()\n\n\ndef tc_012(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/forgot-password')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_role('button', name='Enviar enlace').click()\n    expect(page.get_by_test_id('forgot-success')).to_be_visible()\n    expect(page.get_by_test_id('forgot-success')).to_contain_text('Si el correo existe, recibirás instrucciones')\n    expect(page.get_by_test_id('forgot-error')).to_have_count(0)\n\n\ndef tc_013(page, base_url, usuario, contrasena):\n    \"\"\"TC-013: Given cuentas de prueba bloqueada, inactiva y deshabilitada. When un invitado solicita rec\"\"\"\n    page.goto(base_url + '/')\n    page.get_by_text('contraseña').first.wait_for(state='visible')\n    page.get_by_role('link', name='¿Olvidaste tu contraseña?').first.click()\n\n\ndef tc_014(page, base_url, usuario, contrasena):\n    \"\"\"TC-014: Given un admin con acceso al registro de auditoría y un usuario_final que realiza una soli\"\"\"\n    page.goto(base_url + '/')\n    page.get_by_text('Iniciar sesión').first.wait_for(state='visible')\n    page.get_by_label('Correo').first.fill(usuario)\n    page.get_by_label('Contraseña').first.fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').first.click()\n    page.goto(base_url + '/auditoria')\n\n\nif __name__ == \"__main__\":\n    import os\n\n    from playwright.sync_api import sync_playwright\n\n    BASE = os.environ.get(\"TEST_BASE_URL\", 'https://inventarios-web-118746543308.us-central1.run.app').rstrip(\"/\")\n    with sync_playwright() as p:\n        browser = p.chromium.launch()\n        for nombre, funcion in sorted((n, f) for n, f in globals().items() if n.startswith(\"tc_\") and callable(f)):\n            page = browser.new_page(viewport={\"width\": 1280, \"height\": 800})\n            try:\n                funcion(page, BASE, os.environ.get(\"TEST_USER\", \"\"), os.environ.get(\"TEST_PASSWORD\", \"\"))\n                print(nombre, \"pasa\")\n            except Exception as error:\n                print(nombre, \"FALLA\", str(error).splitlines()[0][:160])\n            page.close()\n        browser.close()\n",
+  "resultados": [
+   {
+    "tc_id": "TC-001",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-002",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-003",
+    "rol": "invitado",
+    "resultado": "bloqueado",
+    "motivo": "Con un correo no registrado, la página muestra el mensaje genérico \"Si el correo existe, recibirás instrucciones para restablecer tu contraseña.\" y no revela nada más. No pude ejecutar la comparación: el caso indica que no hay cuenta de prueba, así que no tengo un correo registrado para repetir la solicitud. Tampoco puedo revisar los correos recibidos. Sin esa comparación no se puede confirmar que ambos mensajes, redirecciones y estados HTTP sean idénticos. · Script: AssertionError: Locator expected to be visible Actual value: None Error: element(s) not found Call log:",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está casi vacía; pruebo la ruta típica de recuperación.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/recuperar",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/recuperar"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "/recuperar redirigió a login; el enlace real de recuperación es /forgot-password.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "link",
+       "objetivo": "¿Olvidaste tu contraseña?",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "El enlace lleva a /login en vez de recuperación; sigo el enlace real /forgot-password.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/forgot-password",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/forgot-password"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Escribir correo no registrado con formato válido.",
+       "accion": "escribir",
+       "estrategia": "rol",
+       "rol": "textbox",
+       "objetivo": "Correo",
+       "texto": "noexiste.qa.test@example.com",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió «noexiste.qa.test@example.com»"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "Enviar el formulario con el correo no registrado.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Enviar enlace",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "La página no muestra mensaje tras enviar; espero texto de confirmación genérico.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "recibirás",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «recibirás»"
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-004",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-005",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-006",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-007",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-008",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-009",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-010",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "Tras 5 envíos consecutivos para el mismo correo, la página mostró «Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.», es decir, se aplica rate limiting. No se pudo verificar el buzón, la variante con distintos correos desde la misma IP ni la recuperación tras la ventana de espera.",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está vacía; intento ir a la ruta de login para hallar el formulario de recuperación.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/login",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/login"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Abrir el formulario de recuperación desde el enlace.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "link",
+       "objetivo": "¿Olvidaste tu contraseña?",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "El clic previo no navegó; sigo en /login. Voy directo a /forgot-password.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/forgot-password",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/forgot-password"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Iniciar solicitudes repetidas: escribir correo.",
+       "accion": "escribir",
+       "estrategia": "rol",
+       "rol": "textbox",
+       "objetivo": "Correo",
+       "texto": "test.ratelimit@example.com",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió «test.ratelimit@example.com»"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "Enviar la primera solicitud de recuperación.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Enviar enlace",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "Repetir el envío para el mismo correo; primero observar la respuesta tras el primer envío.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Enviar enlace",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 8,
+      "accion": {
+       "razonamiento": "Repetir el envío para el mismo correo y observar si aparece limitación.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Enviar enlace",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 9,
+      "accion": {
+       "razonamiento": "Seguir superando el límite con más solicitudes repetidas.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Enviar enlace",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 10,
+      "accion": {
+       "razonamiento": "Seguir enviando para intentar superar el límite",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Enviar enlace",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 11,
+      "accion": {
+       "razonamiento": "Se observó el bloqueo por rate limiting; verifico el mensaje en pantalla.",
+       "accion": "verificar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "verificado: «Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.» está visible"
+     }
+    ],
+    "origen": "agente (el script estaba mal)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-011",
+    "rol": "invitado",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-012",
+    "rol": "invitado",
+    "resultado": "bloqueado",
+    "motivo": "El caso requiere un entorno con el servicio de correo configurado para fallar, una cuenta registrada y acceso a los logs del sistema. No hay cuenta de prueba (no hay correo registrado que usar) y desde la UI no se puede forzar el fallo del correo ni consultar logs. Solo se llegó a /forgot-password, con el formulario \"Correo\" y el botón \"Enviar enlace\". · Script: AssertionError: Locator expected to be visible Actual value: None Error: element(s) not found Call log:",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está casi vacía; no hay enlace de recuperación visible. Espero a que cargue contenido.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "contraseña",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «contraseña»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Ir a recuperación de contraseña desde el enlace.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "link",
+       "objetivo": "¿Olvidaste tu contraseña?",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Estoy en /login; el clic previo no navegó, reintento el enlace de recuperación.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "link",
+       "objetivo": "¿Olvidaste tu contraseña?",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "Locator.click: Timeout 8000ms exceeded."
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-013",
+    "rol": "invitado",
+    "resultado": "bloqueado",
+    "motivo": "El caso exige cuentas de prueba bloqueada, inactiva y deshabilitada y acceso a sus buzones para confirmar que no se envía enlace. No se dispone de ninguna cuenta ni buzón (cuenta de prueba: no). La página /forgot-password sí carga, con campo \"Correo\" y botón \"Enviar enlace\", pero no se puede ejecutar el escenario ni verificar el resultado esperado. · Script: El script generado no era válido (sintaxis inválida: expected '(' (línea 1)).",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página no muestra contenido; espero a que cargue algún texto de recuperación.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "contraseña",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «contraseña»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Ir a la recuperación de contraseña; primero abrir el enlace.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "link",
+       "objetivo": "¿Olvidaste tu contraseña?",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Estoy en login; el enlace de recuperación no navegó aún, hago clic de nuevo.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "link",
+       "objetivo": "¿Olvidaste tu contraseña?",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "Locator.click: Timeout 8000ms exceeded."
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-014",
+    "rol": "admin",
+    "resultado": "falla",
+    "motivo": "Tras iniciar sesión como admin, la página de inicio solo muestra el encabezado \"Inicio\" y \"Cerrar sesión\", sin ninguna opción de \"Auditoría\". Al abrir /auditoria, la app redirigió a /home. No hay registro de auditoría accesible para revisar las entradas de solicitud y restablecimiento, por lo que la funcionalidad no existe o no está disponible para el admin. · Script: El script generado no era válido (la IA no generó su función).",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está casi vacía; espero a que cargue contenido (login).",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Iniciar sesión»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Iniciar sesión como admin para acceder al registro de auditoría.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Correo",
+       "texto": "",
+       "secreto": "usuario",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió el usuario de la cuenta de prueba"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Ingresar la contraseña del admin.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Contraseña",
+       "texto": "",
+       "secreto": "contrasena",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió el contrasena de la cuenta de prueba"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Enviar el login como admin.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Iniciar sesión",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "La página sigue en /login; espero a ver si la sesión se inicia y aparece navegación de auditoría.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Auditoría",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "Locator.wait_for: Timeout 8000ms exceeded."
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "En /home no hay enlace a Auditoría; confirmo la ausencia de la sección buscando el texto.",
+       "accion": "verificar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Auditoría",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": false,
+      "detalle": "Locator.wait_for: Timeout 5000ms exceeded."
+     },
+     {
+      "n": 8,
+      "accion": {
+       "razonamiento": "El inicio no muestra enlace a auditoría; pruebo la ruta directa /auditoria.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/auditoria",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/auditoria"
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   }
+  ],
+  "pasan": 10,
+  "fallan": 1,
+  "bloqueados": 3,
+  "regresiones": [],
+  "duracion_ms": 308162
+ },
+ {
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "hu_id": "HU-003",
+  "corrida": 1,
+  "tcs_version": 1,
+  "ronda": 1,
+  "modo": "completo",
+  "fecha": "2026-09-21T14:56:28.682990+00:00",
+  "ambiente": "https://inventarios-web-118746543308.us-central1.run.app",
+  "proveedor": "claude_cli",
+  "suite": "\"\"\"Smoke testing de HU-003 — Cerrar sesión manualmente y expirar sesión por inactividad\nGenerado por Loom (skill 08, ADR-0059) a partir del código del aplicativo y los casos de prueba de la HU.\nEjecución manual: TEST_BASE_URL, TEST_USER y TEST_PASSWORD como variables de entorno y `python este_archivo.py`.\"\"\"\n\nimport re\n\nfrom playwright.sync_api import Page, expect\n\n\ndef tc_001(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n    page.goto(base_url + '/perfil')\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n    expect(page.get_by_test_id('logout-button')).to_have_count(0)\n\n\ndef tc_002(page, base_url, usuario, contrasena):\n    page.clock.install()\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.clock.fast_forward('01:00:00')\n    expect(page).to_have_url(re.compile(r'/login'))\n    page.goto(base_url + '/home')\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n\n\ndef tc_003(page, base_url, usuario, contrasena):\n    page.clock.install()\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.clock.fast_forward('00:10')\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_test_id('logout-button')).to_be_visible()\n    expect(page.get_by_test_id('login-expired-notice')).to_have_count(0)\n\n\ndef tc_004(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    for ruta in ['/home', '/perfil', '/historial']:\n        page.goto(base_url + ruta)\n        expect(page).to_have_url(re.compile(r'/login'))\n        expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n        expect(page.get_by_test_id('logout-button')).to_have_count(0)\n    expect(page.get_by_label('Correo')).to_have_value('')\n    expect(page.get_by_label('Contraseña')).to_have_value('')\n\n\ndef tc_005(page, base_url, usuario, contrasena):\n    page.clock.install()\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.clock.fast_forward('01:00:00')\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_label('Correo')).to_have_value('')\n    expect(page.get_by_label('Contraseña')).to_have_value('')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_test_id('logout-button')).to_be_visible()\n    expect(page.get_by_test_id('login-expired-notice')).to_have_count(0)\n\n\ndef tc_006(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    with page.expect_response(re.compile(r'/api/v1/auth/login')) as resp_info:\n        page.get_by_role('button', name='Iniciar sesión').click()\n    login_url = resp_info.value.url\n    api_base = login_url.split('/api/v1/auth/login')[0]\n    expect(page).to_have_url(re.compile(r'/home'))\n    token = page.evaluate(\"() => sessionStorage.getItem('auth.token')\")\n    assert token\n    with page.expect_response(re.compile(r'/api/v1/auth/logout')):\n        page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    respuesta = page.request.get(\n        api_base + '/api/v1/users/me',\n        headers={'Authorization': 'Bearer ' + token},\n    )\n    assert respuesta.status == 401\n\n\ndef tc_007(page, base_url, usuario, contrasena):\n    \"\"\"TC-007: Given un usuario autenticado que navegó por varias pantallas protegidas. When cierra sesió\"\"\"\n    page.goto(base_url + '/')\n    page.get_by_text('Iniciar sesión').first.wait_for(state='visible')\n    page.get_by_label('Correo').first.fill(usuario)\n    page.get_by_label('Contraseña').first.fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').first.click()\n    page.get_by_text('Cerrar sesión').first.wait_for(state='visible')\n    page.get_by_role('button', name='Cerrar sesión').first.click()\n    page.keyboard.press('Alt+ArrowLeft')\n    expect(page.get_by_text('Iniciar sesión').first).to_be_visible()\n\n\ndef tc_008(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    assert page.evaluate(\"() => sessionStorage.getItem('auth.token')\") is not None\n    page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    claves_session = page.evaluate(\"() => Object.keys(sessionStorage).filter(k => k.startsWith('auth.'))\")\n    claves_local = page.evaluate(\"() => Object.keys(localStorage).filter(k => k.startsWith('auth.'))\")\n    assert claves_session == []\n    assert claves_local == []\n    assert page.evaluate(\"() => sessionStorage.getItem('auth.token')\") is None\n    cookies = page.context.cookies()\n    assert not [c for c in cookies if 'token' in c['name'].lower() or 'session' in c['name'].lower()]\n\n\ndef tc_009(page, base_url, usuario, contrasena):\n    page.clock.install()\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.clock.fast_forward('00:20')\n    page.mouse.click(10, 300)\n    page.clock.fast_forward('00:20')\n    page.keyboard.press('Shift')\n    page.clock.fast_forward('00:20')\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_test_id('logout-button')).to_be_visible()\n\n\ndef tc_010(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_test_id('logout-button')).to_be_visible()\n\n    def vencida(route):\n        route.fulfill(\n            status=401,\n            content_type='application/json',\n            body='{\"detail\": \"La sesión venció por inactividad.\"}',\n        )\n\n    page.route(re.compile(r'/api/v1/(?!auth/login|auth/logout).*'), vencida)\n    page.evaluate(\"() => sessionStorage.setItem('auth.token', sessionStorage.getItem('auth.token'))\")\n    page.reload()\n    page.mouse.click(10, 300)\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_test_id('login-expired-notice')).to_be_visible()\n    expect(page.get_by_test_id('login-expired-notice')).to_contain_text('venció por inactividad')\n\n\ndef tc_011(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    token = page.evaluate(\"() => sessionStorage.getItem('auth.token')\")\n    page2 = page.context.new_page()\n    page2.goto(base_url + '/login')\n    page2.evaluate(\"t => sessionStorage.setItem('auth.token', t)\", token)\n    page2.goto(base_url + '/home')\n    expect(page2.get_by_test_id('logout-button')).to_be_visible()\n    page.bring_to_front()\n    page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page2).to_have_url(re.compile(r'/login'))\n    expect(page2.get_by_test_id('logout-button')).to_have_count(0)\n    expect(page2.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n\n\ndef tc_012(page, base_url, usuario, contrasena):\n    page.clock.install()\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    token = page.evaluate(\"() => sessionStorage.getItem('auth.token')\")\n    page2 = page.context.new_page()\n    page2.clock.install()\n    page2.goto(base_url + '/login')\n    page2.evaluate(\"t => sessionStorage.setItem('auth.token', t)\", token)\n    page2.goto(base_url + '/home')\n    expect(page2.get_by_test_id('logout-button')).to_be_visible()\n    page.clock.fast_forward('01:00:00')\n    page2.clock.fast_forward('01:00:00')\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page2).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n    expect(page2.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n\n\ndef tc_013(page, base_url, usuario, contrasena):\n    page.clock.install()\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    page.clock.fast_forward('01:00:00')\n    expect(page).to_have_url(re.compile(r'/login'))\n    aviso = page.get_by_test_id('login-expired-notice')\n    expect(aviso).to_be_visible()\n    expect(aviso).to_contain_text('La sesión venció por inactividad')\n    expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n\n\ndef tc_014(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    expect(page.get_by_test_id('logout-button')).to_be_visible()\n    expect(page.get_by_test_id('logout-button')).to_have_text('Cerrar sesión')\n    page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    expect(page.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n\n\ndef tc_015(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    with page.expect_response(re.compile(r'/api/v1/auth/login')) as resp_info:\n        page.get_by_role('button', name='Iniciar sesión').click()\n    api_base = resp_info.value.url.split('/api/v1/auth/login')[0]\n    expect(page).to_have_url(re.compile(r'/home'))\n    token = page.evaluate(\"() => sessionStorage.getItem('auth.token')\")\n    page2 = page.context.new_page()\n    page2.goto(base_url + '/login')\n    page2.evaluate(\"t => sessionStorage.setItem('auth.token', t)\", token)\n    page2.goto(base_url + '/home')\n    expect(page2.get_by_test_id('logout-button')).to_be_visible()\n    page.bring_to_front()\n    page.get_by_test_id('logout-button').click()\n    expect(page).to_have_url(re.compile(r'/login'))\n    respuesta = page.request.post(\n        api_base + '/api/v1/auth/logout',\n        headers={'Authorization': 'Bearer ' + token},\n    )\n    assert respuesta.status < 500\n    expect(page2).to_have_url(re.compile(r'/login'))\n    expect(page2.get_by_role('heading', name='Iniciar sesión')).to_be_visible()\n\n\ndef tc_016(page, base_url, usuario, contrasena):\n    page.goto(base_url + '/login')\n    page.get_by_label('Correo').fill(usuario)\n    page.get_by_label('Contraseña').fill(contrasena)\n    page.get_by_role('button', name='Iniciar sesión').click()\n    expect(page).to_have_url(re.compile(r'/home'))\n    enlace = page.get_by_role('link', name=re.compile(r'Bit[áa]cora|Auditor[íi]a', re.I))\n    expect(enlace.first).to_be_visible()\n    enlace.first.click()\n    expect(page.get_by_text(re.compile(r'cierre manual|logout', re.I)).first).to_be_visible()\n    expect(page.get_by_text(re.compile(r'inactividad', re.I)).first).to_be_visible()\n\n\nif __name__ == \"__main__\":\n    import os\n\n    from playwright.sync_api import sync_playwright\n\n    BASE = os.environ.get(\"TEST_BASE_URL\", 'https://inventarios-web-118746543308.us-central1.run.app').rstrip(\"/\")\n    with sync_playwright() as p:\n        browser = p.chromium.launch()\n        for nombre, funcion in sorted((n, f) for n, f in globals().items() if n.startswith(\"tc_\") and callable(f)):\n            page = browser.new_page(viewport={\"width\": 1280, \"height\": 800})\n            try:\n                funcion(page, BASE, os.environ.get(\"TEST_USER\", \"\"), os.environ.get(\"TEST_PASSWORD\", \"\"))\n                print(nombre, \"pasa\")\n            except Exception as error:\n                print(nombre, \"FALLA\", str(error).splitlines()[0][:160])\n            page.close()\n        browser.close()\n",
+  "resultados": [
+   {
+    "tc_id": "TC-001",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-002",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-003",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-004",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-005",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-006",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-007",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "Tras cerrar sesión y pulsar atrás, la página permanece en /login mostrando «Iniciar sesión» y sin contenido protegido.",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página está casi vacía; espero a que cargue el login.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Iniciar sesión»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Iniciar sesión con el usuario de prueba.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Correo",
+       "texto": "",
+       "secreto": "usuario",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió el usuario de la cuenta de prueba"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Escribir la contraseña de la cuenta de prueba.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Contraseña",
+       "texto": "",
+       "secreto": "contrasena",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió el contrasena de la cuenta de prueba"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Enviar el formulario de login.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Iniciar sesión",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "El botón está deshabilitado (login en curso); espero a que aparezca contenido autenticado.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Cerrar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Cerrar sesión»"
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "Navegar por otra pantalla protegida sería ideal, pero no hay enlaces; cierro sesión.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Cerrar sesión",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 8,
+      "accion": {
+       "razonamiento": "Tras cerrar sesión se ve el login; ahora pulsar atrás en el navegador.",
+       "accion": "presionar",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Alt+ArrowLeft",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "presionó Alt+ArrowLeft"
+     },
+     {
+      "n": 9,
+      "accion": {
+       "razonamiento": "Tras cerrar sesión y pulsar atrás, se ve el login; verifico el texto.",
+       "accion": "verificar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "verificado: «Iniciar sesión» está visible"
+     }
+    ],
+    "origen": "agente (el script estaba mal)",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-008",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-009",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-010",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-011",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-012",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-013",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-014",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-015",
+    "rol": "usuario_final",
+    "resultado": "pasa",
+    "motivo": "",
+    "pasos": [],
+    "origen": "script",
+    "tiene_captura": true
+   },
+   {
+    "tc_id": "TC-016",
+    "rol": "admin",
+    "resultado": "falla",
+    "motivo": "Como admin, al abrir /bitacora la app redirige a /home, que solo muestra el encabezado \"Inicio\" y el botón \"Cerrar sesión\". No hay menú, enlace ni pantalla de bitácora/auditoría, así que no se puede ver el registro de cierre manual ni de expiración por inactividad. Se esperaba un registro por evento con usuario, fecha/hora y tipo. La funcionalidad no existe o no es accesible. · Script: AssertionError: Locator expected to be visible Actual value: None Error: element(s) not found Call log:",
+    "pasos": [
+     {
+      "n": 1,
+      "accion": {
+       "accion": "ir_a",
+       "texto": "/"
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/"
+     },
+     {
+      "n": 2,
+      "accion": {
+       "razonamiento": "La página aparece vacía; espero a que cargue el formulario de login.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Iniciar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Iniciar sesión»"
+     },
+     {
+      "n": 3,
+      "accion": {
+       "razonamiento": "Iniciar sesión como admin: escribir correo.",
+       "accion": "escribir",
+       "estrategia": "etiqueta",
+       "rol": "",
+       "objetivo": "Correo",
+       "texto": "",
+       "secreto": "usuario",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió el usuario de la cuenta de prueba"
+     },
+     {
+      "n": 4,
+      "accion": {
+       "razonamiento": "Escribir la contraseña de la cuenta de prueba.",
+       "accion": "escribir",
+       "estrategia": "rol",
+       "rol": "textbox",
+       "objetivo": "Contraseña",
+       "texto": "",
+       "secreto": "contrasena",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "escribió el contrasena de la cuenta de prueba"
+     },
+     {
+      "n": 5,
+      "accion": {
+       "razonamiento": "Enviar el formulario de inicio de sesión.",
+       "accion": "clic",
+       "estrategia": "rol",
+       "rol": "button",
+       "objetivo": "Iniciar sesión",
+       "texto": "",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "clic"
+     },
+     {
+      "n": 6,
+      "accion": {
+       "razonamiento": "La página sigue en login tras el clic; espero a ver si carga el panel.",
+       "accion": "esperar_texto",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "Cerrar sesión",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "apareció «Cerrar sesión»"
+     },
+     {
+      "n": 7,
+      "accion": {
+       "razonamiento": "No hay enlace visible a bitácora; pruebo la ruta /bitacora.",
+       "accion": "ir_a",
+       "estrategia": "",
+       "rol": "",
+       "objetivo": "",
+       "texto": "/bitacora",
+       "secreto": "",
+       "veredicto": "",
+       "motivo": ""
+      },
+      "ok": true,
+      "detalle": "abrió https://inventarios-web-118746543308.us-central1.run.app/bitacora"
+     }
+    ],
+    "origen": "agente (fallo confirmado)",
+    "tiene_captura": true
+   }
+  ],
+  "pasan": 15,
+  "fallan": 1,
+  "bloqueados": 0,
+  "regresiones": [],
+  "duracion_ms": 197189
+ }
+]

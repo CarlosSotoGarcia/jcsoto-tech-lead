@@ -1,0 +1,607 @@
+[
+ {
+  "id": "HU-001",
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "casos_prueba": [
+   {
+    "id": "TC-001",
+    "criterio_ref": "Dado un usuario registrado con credenciales válidas (correo y contraseña), cuando envía el formulario de inicio de sesión, entonces el sistema lo autentica y le da acceso al sistema.",
+    "escenario": "Given un usuario registrado con correo y contraseña válidos y la página de login abierta. When ingresa ambos datos y pulsa 'Iniciar sesión'. Then se procesa la autenticación.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El usuario es redirigido a la página principal/dashboard, se muestra su nombre o indicador de sesión activa y no aparece mensaje de error.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-002",
+    "criterio_ref": "Dado un usuario autenticado, cuando navega o consulta información, entonces solo puede ver/acceder a la información que le corresponde (la asociada a su cuenta/permisos), y no la de otros usuarios.",
+    "escenario": "Given usuario_final A autenticado y existen datos de usuario B. When navega por las secciones y listados del sistema (perfil, pedidos, etc.). Then se revisa la información mostrada.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Solo se muestran datos asociados a la cuenta de A; ningún dato de B aparece en pantallas, listados ni búsquedas.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-003",
+    "criterio_ref": "Dado un correo o contraseña incorrectos, cuando intenta iniciar sesión, entonces se rechaza el acceso con un mensaje genérico que no revela cuál de los dos datos falló (evita enumeración de usuarios).",
+    "escenario": "Given un correo registrado y la página de login. When ingresa el correo correcto con una contraseña incorrecta y envía el formulario. Then se evalúa la respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Se rechaza el acceso, permanece en login y se muestra un mensaje genérico (p. ej. 'Correo o contraseña incorrectos') sin indicar cuál dato falló.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-004",
+    "criterio_ref": "Dado un correo no registrado, cuando intenta iniciar sesión, entonces recibe el mismo mensaje que con contraseña incorrecta.",
+    "escenario": "Given un correo que no existe en el sistema. When ingresa ese correo con cualquier contraseña y envía. Then se compara el mensaje con el del caso de contraseña incorrecta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "El mensaje mostrado es idéntico en texto (y sin diferencias apreciables de estructura) al de contraseña incorrecta; el acceso es rechazado.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-005",
+    "criterio_ref": "Dado que el correo o la contraseña están vacíos, o el correo tiene formato inválido, cuando intenta enviar, entonces se muestra una validación de campo y no se procesa la autenticación.",
+    "escenario": "Given la página de login. When intenta enviar (a) con correo vacío, (b) con contraseña vacía, (c) con correo 'usuario@' de formato inválido. Then se observa la interfaz y las peticiones de red.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Para cada caso se muestra un mensaje de validación junto al campo correspondiente, no se envía petición de autenticación y no se inicia sesión.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-006",
+    "criterio_ref": "Dado que un usuario intenta acceder directamente a un recurso de otro usuario (por URL o API), cuando la solicitud llega, entonces el servidor la rechaza (403/404) y la autorización se valida en backend, no solo ocultando elementos en la interfaz.",
+    "escenario": "Given usuario_final A autenticado y el identificador de un recurso de B. When escribe manualmente la URL del recurso de B en el navegador y también solicita el endpoint de API correspondiente con la sesión de A. Then se revisa la respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El servidor responde 403 o 404 en ambos casos, no se muestran datos de B y se ve una página/mensaje de acceso denegado o no encontrado.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-007",
+    "criterio_ref": "Dado un usuario no autenticado o con sesión expirada, cuando intenta acceder a una página o endpoint protegido, entonces es redirigido al inicio de sesión / recibe 401.",
+    "escenario": "Given un visitante sin sesión. When navega directamente a una URL protegida y consulta un endpoint protegido sin credenciales. Then se observa la respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "La página redirige al login y el endpoint responde 401; no se muestra contenido protegido.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-008",
+    "criterio_ref": "Dado un usuario no autenticado o con sesión expirada, cuando intenta acceder a una página o endpoint protegido, entonces es redirigido al inicio de sesión / recibe 401.",
+    "escenario": "Given usuario_final autenticado cuya sesión/token ha expirado (esperando la vigencia o invalidando la cookie). When recarga o navega a una página protegida. Then se observa el resultado.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Es redirigido a la página de inicio de sesión y las llamadas a la API responden 401; no se muestra contenido protegido.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-009",
+    "criterio_ref": "Las contraseñas nunca se almacenan ni se transmiten en texto plano (hash con sal en almacenamiento, tráfico por HTTPS) y no aparecen en logs; el campo de contraseña se enmascara.",
+    "escenario": "Given la página de login cargada. When escribe una contraseña en el campo y envía el formulario, inspeccionando el campo y el tráfico de red. Then se verifica el enmascaramiento y el protocolo.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "El campo es type=password (caracteres enmascarados), la URL de la página y la petición usan HTTPS, y la contraseña no aparece en la URL ni en query params. (El hash con sal y los logs se verifican por revisión de backend fuera de UI.)",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-010",
+    "criterio_ref": "Dado un inicio de sesión exitoso, cuando se crea la sesión/token, entonces este tiene vigencia limitada y se invalida al cerrar sesión.",
+    "escenario": "Given usuario_final autenticado con cookie/token de sesión. When pulsa 'Cerrar sesión' y luego intenta volver a una página protegida con el botón Atrás o reutilizando el token anterior. Then se observa el acceso.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "La sesión se cierra, se redirige al login y el token anterior es rechazado (401); la cookie/token tiene fecha de expiración definida.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-011",
+    "criterio_ref": "Dados varios intentos fallidos consecutivos, cuando se supera un umbral, entonces se aplica una protección contra fuerza bruta (bloqueo temporal, retardo o captcha).",
+    "escenario": "Given un correo registrado. When realiza intentos fallidos consecutivos por encima del umbral configurado (p. ej. 5) y luego intenta con la contraseña correcta. Then se observa la respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Tras superar el umbral se muestra bloqueo temporal, retardo o captcha y el intento con contraseña correcta durante el bloqueo no concede acceso; el mensaje no revela si la cuenta existe.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-012",
+    "criterio_ref": "La comparación del correo no distingue mayúsculas/minúsculas y se ignoran espacios al inicio o final.",
+    "escenario": "Given un usuario registrado con correo 'usuario@ejemplo.com'. When ingresa '  USUARIO@Ejemplo.COM  ' con su contraseña válida y envía. Then se evalúa el resultado.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "La autenticación es exitosa y accede al sistema como el mismo usuario.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-013",
+    "criterio_ref": "Dado que el servicio de autenticación no está disponible, cuando el usuario intenta iniciar sesión, entonces ve un mensaje de error amigable sin perder lo escrito en el correo.",
+    "escenario": "Given la página de login y el servicio de autenticación simulado como caído (interceptando la petición con error 503/timeout). When escribe correo y contraseña y envía. Then se observa la interfaz.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Se muestra un mensaje amigable de error temporal (sin detalles técnicos), el campo de correo conserva el valor escrito y no se inicia sesión.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-014",
+    "criterio_ref": "Se registran los intentos de inicio de sesión (exitosos y fallidos) para auditoría.",
+    "escenario": "Given un usuario registrado. When realiza un inicio de sesión fallido y luego uno exitoso. Then un admin consulta el registro de auditoría.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "admin",
+    "resultado_esperado": "El registro de auditoría contiene ambas entradas con fecha/hora, correo, resultado (fallido/exitoso) y origen; ninguna entrada contiene la contraseña.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   }
+  ],
+  "clasificacion": "hu",
+  "criterios_explicitos": [
+   "Dado un usuario registrado con credenciales válidas (correo y contraseña), cuando envía el formulario de inicio de sesión, entonces el sistema lo autentica y le da acceso al sistema.",
+   "Dado un usuario autenticado, cuando navega o consulta información, entonces solo puede ver/acceder a la información que le corresponde (la asociada a su cuenta/permisos), y no la de otros usuarios."
+  ],
+  "criterios_inferidos": [
+   "Dado un correo o contraseña incorrectos, cuando intenta iniciar sesión, entonces se rechaza el acceso con un mensaje genérico que no revela cuál de los dos datos falló (evita enumeración de usuarios).",
+   "Dado un correo no registrado, cuando intenta iniciar sesión, entonces recibe el mismo mensaje que con contraseña incorrecta.",
+   "Dado que el correo o la contraseña están vacíos, o el correo tiene formato inválido, cuando intenta enviar, entonces se muestra una validación de campo y no se procesa la autenticación.",
+   "Dado que un usuario intenta acceder directamente a un recurso de otro usuario (por URL o API), cuando la solicitud llega, entonces el servidor la rechaza (403/404) y la autorización se valida en backend, no solo ocultando elementos en la interfaz.",
+   "Dado un usuario no autenticado o con sesión expirada, cuando intenta acceder a una página o endpoint protegido, entonces es redirigido al inicio de sesión / recibe 401.",
+   "Las contraseñas nunca se almacenan ni se transmiten en texto plano (hash con sal en almacenamiento, tráfico por HTTPS) y no aparecen en logs; el campo de contraseña se enmascara.",
+   "Dado un inicio de sesión exitoso, cuando se crea la sesión/token, entonces este tiene vigencia limitada y se invalida al cerrar sesión.",
+   "Dados varios intentos fallidos consecutivos, cuando se supera un umbral, entonces se aplica una protección contra fuerza bruta (bloqueo temporal, retardo o captcha).",
+   "La comparación del correo no distingue mayúsculas/minúsculas y se ignoran espacios al inicio o final.",
+   "Dado que el servicio de autenticación no está disponible, cuando el usuario intenta iniciar sesión, entonces ve un mensaje de error amigable sin perder lo escrito en el correo.",
+   "Se registran los intentos de inicio de sesión (exitosos y fallidos) para auditoría."
+  ],
+  "decisiones": [
+   "Autorización por rol (administrador y usuario final). El registro de usuarios es de otra HU. Fuera de alcance: recordarme, MFA y SSO; recuperación y cierre de sesión son las HU-002 y HU-003. Bloqueo tras 5 intentos fallidos por 15 minutos; sesión de 30 minutos; contraseña de mínimo 8 caracteres con letra y número. Cuenta desactivada o bloqueada: mismo mensaje genérico que credenciales inválidas. Solo web; tras entrar se redirige a la pantalla de inicio."
+  ],
+  "depende_de": [],
+  "descripcion": "Como usuario del sistema quiero iniciar sesión con mi correo y contraseña para acceder únicamente a la información que me corresponde. Intención de negocio: autenticar la identidad del usuario y, con ella, establecer una sesión que limite el acceso a los datos y funciones propios de su cuenta/rol (autenticación + base para la autorización).",
+  "estado": "pendiente",
+  "fase": "descompuesta",
+  "fecha_descubrimiento": "2026-09-21",
+  "fuente_actualizada_en": "2026-09-17T21:51:32.414-0600",
+  "fuente_hash": "4f733edb8b87209cbb300a423439f2dfdb166799da6bae2b94511850b73484d6",
+  "fuente_ref": "ITZINV-12",
+  "fuente_tipo": "jira",
+  "notas": "La HU mezcla dos preocupaciones: autenticación (login) y autorización/aislamiento de datos ('únicamente la información que me corresponde'). Se recomienda confirmar si la segunda se cubre aquí o en una HU aparte de control de acceso; si es aparte, esta HU quedaría acotada a autenticación y creación de sesión. Ausencia de criterios de aceptación en la fuente: los explícitos se derivaron del texto de la narrativa.",
+  "orden": 1,
+  "orden_fuente": 1,
+  "prototipo_ref": null,
+  "spec_md": "---\nid: HU-001\nclasificacion: hu\nfuente_tipo: jira\nfuente_ref: ITZINV-12\nfase: especificada\nestado: pendiente\nfecha_descubrimiento: 2026-09-21\ntiene_supuestos: true\nprototipo_ref: null\ndepende_de: []\n---\n\n# Iniciar sesión con correo y contraseña\n\nComo usuario del sistema quiero iniciar sesión con mi correo y contraseña para acceder únicamente a la información que me corresponde. Intención de negocio: autenticar la identidad del usuario y, con ella, establecer una sesión que limite el acceso a los datos y funciones propios de su cuenta/rol (autenticación + base para la autorización).\n\n## Criterios de aceptación explícitos\n\n- Dado un usuario registrado con credenciales válidas (correo y contraseña), cuando envía el formulario de inicio de sesión, entonces el sistema lo autentica y le da acceso al sistema.\n- Dado un usuario autenticado, cuando navega o consulta información, entonces solo puede ver/acceder a la información que le corresponde (la asociada a su cuenta/permisos), y no la de otros usuarios.\n\n## Criterios de aceptación inferidos\n\n- Dado un correo o contraseña incorrectos, cuando intenta iniciar sesión, entonces se rechaza el acceso con un mensaje genérico que no revela cuál de los dos datos falló (evita enumeración de usuarios).\n- Dado un correo no registrado, cuando intenta iniciar sesión, entonces recibe el mismo mensaje que con contraseña incorrecta.\n- Dado que el correo o la contraseña están vacíos, o el correo tiene formato inválido, cuando intenta enviar, entonces se muestra una validación de campo y no se procesa la autenticación.\n- Dado que un usuario intenta acceder directamente a un recurso de otro usuario (por URL o API), cuando la solicitud llega, entonces el servidor la rechaza (403/404) y la autorización se valida en backend, no solo ocultando elementos en la interfaz.\n- Dado un usuario no autenticado o con sesión expirada, cuando intenta acceder a una página o endpoint protegido, entonces es redirigido al inicio de sesión / recibe 401.\n- Las contraseñas nunca se almacenan ni se transmiten en texto plano (hash con sal en almacenamiento, tráfico por HTTPS) y no aparecen en logs; el campo de contraseña se enmascara.\n- Dado un inicio de sesión exitoso, cuando se crea la sesión/token, entonces este tiene vigencia limitada y se invalida al cerrar sesión.\n- Dados varios intentos fallidos consecutivos, cuando se supera un umbral, entonces se aplica una protección contra fuerza bruta (bloqueo temporal, retardo o captcha).\n- La comparación del correo no distingue mayúsculas/minúsculas y se ignoran espacios al inicio o final.\n- Dado que el servicio de autenticación no está disponible, cuando el usuario intenta iniciar sesión, entonces ve un mensaje de error amigable sin perder lo escrito en el correo.\n- Se registran los intentos de inicio de sesión (exitosos y fallidos) para auditoría.\n\n## Supuestos y vacíos identificados\n\n- No se define el modelo de autorización (por rol, por propietario de los datos, por organización/tenant). 'Información que me corresponde' admite varias interpretaciones; para cerrarlo hace falta la matriz de roles/permisos y qué datos ve cada uno.\n- Se asume que el registro de usuarios ya existe o se gestiona en otra HU; el alcance no incluye registro, activación de cuenta ni verificación de correo.\n- Fuera de alcance salvo confirmación: recuperación/restablecimiento de contraseña, 'recordarme', cierre de sesión como funcionalidad explícita, MFA/2FA e inicio de sesión social/SSO.\n- Se desconocen las políticas de bloqueo (número de intentos, duración), la duración de la sesión y las reglas de complejidad de contraseña; los criterios inferidos las mencionan solo de forma genérica y requieren valores definidos por negocio/seguridad.\n- No se especifica el comportamiento para cuentas desactivadas o bloqueadas (mensaje y si se distingue del error de credenciales).\n- Se desconoce la plataforma (web, móvil, ambas) y a dónde se redirige tras un login exitoso.\n\n## Notas\n\nLa HU mezcla dos preocupaciones: autenticación (login) y autorización/aislamiento de datos ('únicamente la información que me corresponde'). Se recomienda confirmar si la segunda se cubre aquí o en una HU aparte de control de acceso; si es aparte, esta HU quedaría acotada a autenticación y creación de sesión. Ausencia de criterios de aceptación en la fuente: los explícitos se derivaron del texto de la narrativa.\n",
+  "supuestos": [
+   "No se define el modelo de autorización (por rol, por propietario de los datos, por organización/tenant). 'Información que me corresponde' admite varias interpretaciones; para cerrarlo hace falta la matriz de roles/permisos y qué datos ve cada uno.",
+   "Se asume que el registro de usuarios ya existe o se gestiona en otra HU; el alcance no incluye registro, activación de cuenta ni verificación de correo.",
+   "Fuera de alcance salvo confirmación: recuperación/restablecimiento de contraseña, 'recordarme', cierre de sesión como funcionalidad explícita, MFA/2FA e inicio de sesión social/SSO.",
+   "Se desconocen las políticas de bloqueo (número de intentos, duración), la duración de la sesión y las reglas de complejidad de contraseña; los criterios inferidos las mencionan solo de forma genérica y requieren valores definidos por negocio/seguridad.",
+   "No se especifica el comportamiento para cuentas desactivadas o bloqueadas (mensaje y si se distingue del error de credenciales).",
+   "Se desconoce la plataforma (web, móvil, ambas) y a dónde se redirige tras un login exitoso."
+  ],
+  "supuestos_confirmados_en": "2026-09-21T06:24:36.893199+00:00",
+  "test_cases_md": "---\nhu_id: HU-001\nfase: tcs_generados\ntotal_tcs: 14\nfecha_generacion: 2026-09-21\n---\n\n### TC-001 — deriva de: Dado un usuario registrado con credenciales válidas (correo y contraseña), cuando envía el formulario de inicio de sesión, entonces el sistema lo autentica y le da acceso al sistema.\n\nGiven un usuario registrado con correo y contraseña válidos y la página de login abierta. When ingresa ambos datos y pulsa 'Iniciar sesión'. Then se procesa la autenticación.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El usuario es redirigido a la página principal/dashboard, se muestra su nombre o indicador de sesión activa y no aparece mensaje de error.\n\n\n### TC-002 — deriva de: Dado un usuario autenticado, cuando navega o consulta información, entonces solo puede ver/acceder a la información que le corresponde (la asociada a su cuenta/permisos), y no la de otros usuarios.\n\nGiven usuario_final A autenticado y existen datos de usuario B. When navega por las secciones y listados del sistema (perfil, pedidos, etc.). Then se revisa la información mostrada.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Solo se muestran datos asociados a la cuenta de A; ningún dato de B aparece en pantallas, listados ni búsquedas.\n\n\n### TC-003 — deriva de: Dado un correo o contraseña incorrectos, cuando intenta iniciar sesión, entonces se rechaza el acceso con un mensaje genérico que no revela cuál de los dos datos falló (evita enumeración de usuarios).\n\nGiven un correo registrado y la página de login. When ingresa el correo correcto con una contraseña incorrecta y envía el formulario. Then se evalúa la respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Se rechaza el acceso, permanece en login y se muestra un mensaje genérico (p. ej. 'Correo o contraseña incorrectos') sin indicar cuál dato falló.\n\n\n### TC-004 — deriva de: Dado un correo no registrado, cuando intenta iniciar sesión, entonces recibe el mismo mensaje que con contraseña incorrecta.\n\nGiven un correo que no existe en el sistema. When ingresa ese correo con cualquier contraseña y envía. Then se compara el mensaje con el del caso de contraseña incorrecta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** El mensaje mostrado es idéntico en texto (y sin diferencias apreciables de estructura) al de contraseña incorrecta; el acceso es rechazado.\n\n\n### TC-005 — deriva de: Dado que el correo o la contraseña están vacíos, o el correo tiene formato inválido, cuando intenta enviar, entonces se muestra una validación de campo y no se procesa la autenticación.\n\nGiven la página de login. When intenta enviar (a) con correo vacío, (b) con contraseña vacía, (c) con correo 'usuario@' de formato inválido. Then se observa la interfaz y las peticiones de red.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Para cada caso se muestra un mensaje de validación junto al campo correspondiente, no se envía petición de autenticación y no se inicia sesión.\n\n\n### TC-006 — deriva de: Dado que un usuario intenta acceder directamente a un recurso de otro usuario (por URL o API), cuando la solicitud llega, entonces el servidor la rechaza (403/404) y la autorización se valida en backend, no solo ocultando elementos en la interfaz.\n\nGiven usuario_final A autenticado y el identificador de un recurso de B. When escribe manualmente la URL del recurso de B en el navegador y también solicita el endpoint de API correspondiente con la sesión de A. Then se revisa la respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El servidor responde 403 o 404 en ambos casos, no se muestran datos de B y se ve una página/mensaje de acceso denegado o no encontrado.\n\n\n### TC-007 — deriva de: Dado un usuario no autenticado o con sesión expirada, cuando intenta acceder a una página o endpoint protegido, entonces es redirigido al inicio de sesión / recibe 401.\n\nGiven un visitante sin sesión. When navega directamente a una URL protegida y consulta un endpoint protegido sin credenciales. Then se observa la respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** La página redirige al login y el endpoint responde 401; no se muestra contenido protegido.\n\n\n### TC-008 — deriva de: Dado un usuario no autenticado o con sesión expirada, cuando intenta acceder a una página o endpoint protegido, entonces es redirigido al inicio de sesión / recibe 401.\n\nGiven usuario_final autenticado cuya sesión/token ha expirado (esperando la vigencia o invalidando la cookie). When recarga o navega a una página protegida. Then se observa el resultado.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Es redirigido a la página de inicio de sesión y las llamadas a la API responden 401; no se muestra contenido protegido.\n\n\n### TC-009 — deriva de: Las contraseñas nunca se almacenan ni se transmiten en texto plano (hash con sal en almacenamiento, tráfico por HTTPS) y no aparecen en logs; el campo de contraseña se enmascara.\n\nGiven la página de login cargada. When escribe una contraseña en el campo y envía el formulario, inspeccionando el campo y el tráfico de red. Then se verifica el enmascaramiento y el protocolo.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** El campo es type=password (caracteres enmascarados), la URL de la página y la petición usan HTTPS, y la contraseña no aparece en la URL ni en query params. (El hash con sal y los logs se verifican por revisión de backend fuera de UI.)\n\n\n### TC-010 — deriva de: Dado un inicio de sesión exitoso, cuando se crea la sesión/token, entonces este tiene vigencia limitada y se invalida al cerrar sesión.\n\nGiven usuario_final autenticado con cookie/token de sesión. When pulsa 'Cerrar sesión' y luego intenta volver a una página protegida con el botón Atrás o reutilizando el token anterior. Then se observa el acceso.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La sesión se cierra, se redirige al login y el token anterior es rechazado (401); la cookie/token tiene fecha de expiración definida.\n\n\n### TC-011 — deriva de: Dados varios intentos fallidos consecutivos, cuando se supera un umbral, entonces se aplica una protección contra fuerza bruta (bloqueo temporal, retardo o captcha).\n\nGiven un correo registrado. When realiza intentos fallidos consecutivos por encima del umbral configurado (p. ej. 5) y luego intenta con la contraseña correcta. Then se observa la respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Tras superar el umbral se muestra bloqueo temporal, retardo o captcha y el intento con contraseña correcta durante el bloqueo no concede acceso; el mensaje no revela si la cuenta existe.\n\n\n### TC-012 — deriva de: La comparación del correo no distingue mayúsculas/minúsculas y se ignoran espacios al inicio o final.\n\nGiven un usuario registrado con correo 'usuario@ejemplo.com'. When ingresa '  USUARIO@Ejemplo.COM  ' con su contraseña válida y envía. Then se evalúa el resultado.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La autenticación es exitosa y accede al sistema como el mismo usuario.\n\n\n### TC-013 — deriva de: Dado que el servicio de autenticación no está disponible, cuando el usuario intenta iniciar sesión, entonces ve un mensaje de error amigable sin perder lo escrito en el correo.\n\nGiven la página de login y el servicio de autenticación simulado como caído (interceptando la petición con error 503/timeout). When escribe correo y contraseña y envía. Then se observa la interfaz.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Se muestra un mensaje amigable de error temporal (sin detalles técnicos), el campo de correo conserva el valor escrito y no se inicia sesión.\n\n\n### TC-014 — deriva de: Se registran los intentos de inicio de sesión (exitosos y fallidos) para auditoría.\n\nGiven un usuario registrado. When realiza un inicio de sesión fallido y luego uno exitoso. Then un admin consulta el registro de auditoría.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** admin\n- **Resultado esperado:** El registro de auditoría contiene ambas entradas con fecha/hora, correo, resultado (fallido/exitoso) y origen; ninguna entrada contiene la contraseña.\n",
+  "tiene_supuestos": true,
+  "titulo": "Iniciar sesión con correo y contraseña"
+ },
+ {
+  "id": "HU-002",
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "casos_prueba": [
+   {
+    "id": "TC-001",
+    "criterio_ref": "Dado que soy un usuario que olvidó su contraseña, cuando solicito recuperarla indicando mi correo, entonces el sistema me envía un mensaje a ese correo con el medio para restablecerla.",
+    "escenario": "Given un usuario_final con cuenta activa registrada con su correo y en la página de login. When hace clic en '¿Olvidaste tu contraseña?', ingresa su correo registrado y envía el formulario. Then se muestra el mensaje de confirmación y se revisa el buzón de prueba.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Se muestra el mensaje 'si el correo existe, recibirás instrucciones' y en el buzón del correo llega un único mensaje con un enlace de restablecimiento (HTTPS) en un plazo razonable (p. ej. < 1 min).",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-002",
+    "criterio_ref": "Dado que recibí el correo de recuperación, cuando sigo el procedimiento indicado y defino una nueva contraseña, entonces recupero el acceso a mi cuenta sin intervención del administrador.",
+    "escenario": "Given un usuario_final que recibió el correo de recuperación con enlace vigente. When abre el enlace, ingresa una nueva contraseña válida y su confirmación idéntica y envía el formulario; luego va al login e ingresa con la nueva contraseña. Then accede a su cuenta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Se muestra confirmación de cambio exitoso, el login con la nueva contraseña da acceso al panel de la cuenta y el login con la contraseña anterior es rechazado. No se requirió ninguna acción de administrador.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-003",
+    "criterio_ref": "Dado un correo no registrado o cuenta inexistente, cuando solicito recuperación, entonces el sistema muestra el mismo mensaje genérico ('si el correo existe, recibirás instrucciones') para no revelar qué correos están registrados.",
+    "escenario": "Given un invitado en el formulario de recuperación. When envía un correo con formato válido que no está registrado, y luego repite con un correo registrado. Then se comparan mensajes, comportamiento de pantalla y correos recibidos.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Ambas solicitudes muestran exactamente el mismo mensaje genérico, con la misma redirección/estado HTTP y sin diferencias visibles; no se envía ningún correo al correo no registrado.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-004",
+    "criterio_ref": "Dado un correo con formato inválido o vacío, cuando envío la solicitud, entonces se muestra un error de validación y no se envía nada.",
+    "escenario": "Given un invitado en el formulario de recuperación. When deja el campo de correo vacío y envía; luego repite con valores de formato inválido ('usuario', 'usuario@', 'a@b'). Then se observa la respuesta de UI y el buzón.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Se muestra un mensaje de error de validación de correo en cada caso, no se muestra el mensaje genérico de éxito y no se envía ningún correo ni se genera token.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-005",
+    "criterio_ref": "Dado que se generó un enlace/token de restablecimiento, cuando pasa su tiempo de vigencia, entonces deja de ser válido y se informa al usuario que debe solicitar uno nuevo.",
+    "escenario": "Given un enlace de restablecimiento generado para un usuario_final y cuyo tiempo de vigencia configurado ya transcurrió (esperando o simulando el paso del tiempo en el entorno de prueba). When abre el enlace y trata de definir una nueva contraseña. Then se observa la respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El sistema rechaza el enlace, no cambia la contraseña y muestra un mensaje indicando que el enlace expiró y que debe solicitar uno nuevo, con acceso al formulario de recuperación.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-006",
+    "criterio_ref": "Dado un token ya utilizado, cuando intento usarlo de nuevo, entonces el sistema lo rechaza (uso único).",
+    "escenario": "Given un usuario_final que ya restableció su contraseña con un enlace. When vuelve a abrir el mismo enlace e intenta definir otra contraseña. Then se observa la respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El sistema rechaza el enlace por ya utilizado/inválido con mensaje claro, no permite cambiar la contraseña y la contraseña vigente sigue siendo la definida en el primer uso.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-007",
+    "criterio_ref": "Dado que solicito un nuevo enlace, cuando ya existía uno vigente, entonces el anterior queda invalidado.",
+    "escenario": "Given un usuario_final que solicitó recuperación y recibió el enlace A vigente. When solicita recuperación de nuevo, recibe el enlace B, y abre primero el enlace A y luego el enlace B. Then se observa el resultado de cada uno.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El enlace A es rechazado como inválido/expirado con mensaje para solicitar uno nuevo; el enlace B permite definir la nueva contraseña con éxito.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-008",
+    "criterio_ref": "Dada la nueva contraseña, cuando no cumple la política de contraseñas vigente o la confirmación no coincide, entonces se rechaza con un mensaje claro y el token sigue siendo válido hasta su expiración.",
+    "escenario": "Given un usuario_final con enlace vigente abierto. When ingresa una contraseña que incumple la política (p. ej. demasiado corta/sin complejidad) y envía; luego ingresa una contraseña válida con confirmación distinta y envía; finalmente ingresa una contraseña válida con confirmación coincidente. Then se observa cada respuesta.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "En los dos primeros intentos se muestra un mensaje claro (requisitos de la política / las contraseñas no coinciden), la contraseña no cambia y el token sigue válido; en el tercer intento el cambio se completa con éxito.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-009",
+    "criterio_ref": "Dado que se restableció la contraseña con éxito, entonces se invalidan las sesiones activas previas y se notifica por correo el cambio realizado.",
+    "escenario": "Given un usuario_final con una sesión activa en el navegador A (contexto Playwright 1) y que restablece su contraseña desde el navegador B (contexto 2) con un enlace válido. When completa el restablecimiento y luego en el navegador A recarga o navega a una página protegida. Then se revisa la sesión y el buzón.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "La sesión del navegador A es cerrada y redirige al login; el usuario recibe un correo notificando el cambio de contraseña (sin incluir la contraseña).",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-010",
+    "criterio_ref": "Dadas múltiples solicitudes repetidas, cuando se supera un límite razonable por correo/IP, entonces se aplica limitación de frecuencia (rate limiting) para evitar abuso y spam.",
+    "escenario": "Given un invitado en el formulario de recuperación. When envía solicitudes repetidas consecutivas para el mismo correo (y luego con distintos correos desde la misma IP) superando el límite configurado. Then se observa la respuesta y el buzón.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Al superar el límite el sistema bloquea o ralentiza las solicitudes (mensaje de demasiados intentos / HTTP 429 o respuesta genérica sin envío), no se envían correos adicionales más allá del límite y tras la ventana de espera se puede solicitar de nuevo.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-011",
+    "criterio_ref": "Dado que el token se almacena, entonces se guarda de forma segura (hash) y es no predecible; la comunicación se realiza sobre HTTPS.",
+    "escenario": "Given un invitado que solicita recuperación varias veces con distintas cuentas de prueba. When se comparan los enlaces recibidos por correo, se inspecciona la URL del enlace y se intenta abrir la versión HTTP del formulario y del enlace. Then se revisan además los datos almacenados con acceso de consulta de prueba.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "Los tokens de los enlaces son largos, distintos y sin patrón secuencial; los enlaces usan HTTPS y HTTP redirige a HTTPS o se rechaza; el token almacenado en base de datos es un hash y no coincide con el valor del enlace.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-012",
+    "criterio_ref": "Dado un fallo en el envío del correo, entonces el error se registra y el usuario no recibe información que comprometa la seguridad.",
+    "escenario": "Given un entorno de prueba con el servicio de correo configurado para fallar y una cuenta registrada. When un invitado solicita recuperación con el correo registrado. Then se observa la UI y los logs del sistema.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "La UI muestra el mismo mensaje genérico (sin detalles técnicos ni indicación de que el correo existe o de que falló el envío); el error queda registrado en los logs del sistema sin datos sensibles.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-013",
+    "criterio_ref": "Dada una cuenta bloqueada/inactiva/deshabilitada, cuando se solicita recuperación, entonces no se permite el restablecimiento (comportamiento externo idéntico al genérico).",
+    "escenario": "Given cuentas de prueba bloqueada, inactiva y deshabilitada. When un invitado solicita recuperación con el correo de cada una. Then se observan la UI y los buzones.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "invitado",
+    "resultado_esperado": "En cada caso se muestra el mismo mensaje genérico que para un correo inexistente, no se envía enlace de restablecimiento y no es posible restablecer la contraseña de esas cuentas.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-014",
+    "criterio_ref": "Los eventos de solicitud y restablecimiento quedan registrados en auditoría (sin incluir contraseñas ni tokens).",
+    "escenario": "Given un admin con acceso al registro de auditoría y un usuario_final que realiza una solicitud de recuperación y un restablecimiento exitoso. When el admin consulta el registro de auditoría de esos eventos. Then se revisa el contenido de las entradas.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "admin",
+    "resultado_esperado": "Existen entradas de auditoría para la solicitud y para el restablecimiento con fecha/hora, tipo de evento e identificador de la cuenta/IP; ninguna entrada contiene la contraseña ni el token.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   }
+  ],
+  "clasificacion": "hu",
+  "criterios_explicitos": [
+   "Dado que soy un usuario que olvidó su contraseña, cuando solicito recuperarla indicando mi correo, entonces el sistema me envía un mensaje a ese correo con el medio para restablecerla.",
+   "Dado que recibí el correo de recuperación, cuando sigo el procedimiento indicado y defino una nueva contraseña, entonces recupero el acceso a mi cuenta sin intervención del administrador."
+  ],
+  "criterios_inferidos": [
+   "Dado un correo no registrado o cuenta inexistente, cuando solicito recuperación, entonces el sistema muestra el mismo mensaje genérico ('si el correo existe, recibirás instrucciones') para no revelar qué correos están registrados.",
+   "Dado un correo con formato inválido o vacío, cuando envío la solicitud, entonces se muestra un error de validación y no se envía nada.",
+   "Dado que se generó un enlace/token de restablecimiento, cuando pasa su tiempo de vigencia, entonces deja de ser válido y se informa al usuario que debe solicitar uno nuevo.",
+   "Dado un token ya utilizado, cuando intento usarlo de nuevo, entonces el sistema lo rechaza (uso único).",
+   "Dado que solicito un nuevo enlace, cuando ya existía uno vigente, entonces el anterior queda invalidado.",
+   "Dada la nueva contraseña, cuando no cumple la política de contraseñas vigente o la confirmación no coincide, entonces se rechaza con un mensaje claro y el token sigue siendo válido hasta su expiración.",
+   "Dado que se restableció la contraseña con éxito, entonces se invalidan las sesiones activas previas y se notifica por correo el cambio realizado.",
+   "Dadas múltiples solicitudes repetidas, cuando se supera un límite razonable por correo/IP, entonces se aplica limitación de frecuencia (rate limiting) para evitar abuso y spam.",
+   "Dado que el token se almacena, entonces se guarda de forma segura (hash) y es no predecible; la comunicación se realiza sobre HTTPS.",
+   "Dado un fallo en el envío del correo, entonces el error se registra y el usuario no recibe información que comprometa la seguridad.",
+   "Dada una cuenta bloqueada/inactiva/deshabilitada, cuando se solicita recuperación, entonces no se permite el restablecimiento (comportamiento externo idéntico al genérico).",
+   "Los eventos de solicitud y restablecimiento quedan registrados en auditoría (sin incluir contraseñas ni tokens)."
+  ],
+  "decisiones": [
+   "Enlace con token de un solo uso, vigencia de 30 minutos. Se aplica la política de contraseñas del sistema (mínimo 8 caracteres con letra y número). Solo cuentas con contraseña local. El usuario se identifica por correo electrónico. Sin verificación adicional para ningún rol. Se asume infraestructura de correo transaccional disponible; mensaje en español. Tras restablecer no hay inicio de sesión automático: se redirige al inicio de sesión."
+  ],
+  "depende_de": [
+   "HU-001"
+  ],
+  "descripcion": "Como usuario registrado que olvidó su contraseña, quiero solicitar un restablecimiento mediante un enlace/código enviado a mi correo, para recuperar el acceso a mi cuenta de forma autónoma sin depender del administrador. Problema de negocio: reducir la carga de soporte/administración y el tiempo de indisponibilidad del usuario, manteniendo la seguridad de la cuenta.",
+  "estado": "pendiente",
+  "fase": "descompuesta",
+  "fecha_descubrimiento": "2026-09-21",
+  "fuente_actualizada_en": "2026-09-17T21:51:29.703-0600",
+  "fuente_hash": "7bcecacd046f325b73d24650f39443f8ecbb362f4fec2bf4d114f40465c6c9af",
+  "fuente_ref": "ITZINV-13",
+  "fuente_tipo": "jira",
+  "notas": "Para cerrar los supuestos hace falta: decisión de producto sobre enlace vs. OTP, vigencia del token, política de contraseñas, alcance respecto a SSO/MFA y umbrales de rate limiting. Los criterios de seguridad inferidos (respuesta genérica, uso único, expiración) son estándar y se consideran parte del alcance mínimo.",
+  "orden": 2,
+  "orden_fuente": 2,
+  "prototipo_ref": null,
+  "spec_md": "---\nid: HU-002\nclasificacion: hu\nfuente_tipo: jira\nfuente_ref: ITZINV-13\nfase: especificada\nestado: pendiente\nfecha_descubrimiento: 2026-09-21\ntiene_supuestos: true\nprototipo_ref: null\ndepende_de: []\n---\n\n# Recuperar contraseña olvidada por correo electrónico\n\nComo usuario registrado que olvidó su contraseña, quiero solicitar un restablecimiento mediante un enlace/código enviado a mi correo, para recuperar el acceso a mi cuenta de forma autónoma sin depender del administrador. Problema de negocio: reducir la carga de soporte/administración y el tiempo de indisponibilidad del usuario, manteniendo la seguridad de la cuenta.\n\n## Criterios de aceptación explícitos\n\n- Dado que soy un usuario que olvidó su contraseña, cuando solicito recuperarla indicando mi correo, entonces el sistema me envía un mensaje a ese correo con el medio para restablecerla.\n- Dado que recibí el correo de recuperación, cuando sigo el procedimiento indicado y defino una nueva contraseña, entonces recupero el acceso a mi cuenta sin intervención del administrador.\n\n## Criterios de aceptación inferidos\n\n- Dado un correo no registrado o cuenta inexistente, cuando solicito recuperación, entonces el sistema muestra el mismo mensaje genérico ('si el correo existe, recibirás instrucciones') para no revelar qué correos están registrados.\n- Dado un correo con formato inválido o vacío, cuando envío la solicitud, entonces se muestra un error de validación y no se envía nada.\n- Dado que se generó un enlace/token de restablecimiento, cuando pasa su tiempo de vigencia, entonces deja de ser válido y se informa al usuario que debe solicitar uno nuevo.\n- Dado un token ya utilizado, cuando intento usarlo de nuevo, entonces el sistema lo rechaza (uso único).\n- Dado que solicito un nuevo enlace, cuando ya existía uno vigente, entonces el anterior queda invalidado.\n- Dada la nueva contraseña, cuando no cumple la política de contraseñas vigente o la confirmación no coincide, entonces se rechaza con un mensaje claro y el token sigue siendo válido hasta su expiración.\n- Dado que se restableció la contraseña con éxito, entonces se invalidan las sesiones activas previas y se notifica por correo el cambio realizado.\n- Dadas múltiples solicitudes repetidas, cuando se supera un límite razonable por correo/IP, entonces se aplica limitación de frecuencia (rate limiting) para evitar abuso y spam.\n- Dado que el token se almacena, entonces se guarda de forma segura (hash) y es no predecible; la comunicación se realiza sobre HTTPS.\n- Dado un fallo en el envío del correo, entonces el error se registra y el usuario no recibe información que comprometa la seguridad.\n- Dada una cuenta bloqueada/inactiva/deshabilitada, cuando se solicita recuperación, entonces no se permite el restablecimiento (comportamiento externo idéntico al genérico).\n- Los eventos de solicitud y restablecimiento quedan registrados en auditoría (sin incluir contraseñas ni tokens).\n\n## Supuestos y vacíos identificados\n\n- No se especifica el mecanismo: enlace con token o código numérico (OTP). Se asume enlace, pero requiere confirmación.\n- No se define la vigencia del token (se sugiere 15–60 min); falta que negocio la fije.\n- No se define la política de contraseñas (longitud, complejidad, historial/no reutilizar las últimas N); se asume la política existente del sistema.\n- No se indica si aplica a cuentas con SSO/login externo o MFA; se asume que solo aplica a cuentas con contraseña local y que MFA, si existe, se mantiene tras el restablecimiento.\n- No se especifica si el usuario se identifica por correo o por nombre de usuario; se asume correo.\n- No se define si se requiere verificación adicional (pregunta de seguridad/MFA) para cuentas de alto privilegio.\n- Se desconoce el proveedor/plantilla de correo, idioma y canal de envío; se asume que existe infraestructura de correo transaccional.\n- No se define si se hace login automático tras el restablecimiento; se asume que no, redirigiendo al inicio de sesión.\n\n## Notas\n\nPara cerrar los supuestos hace falta: decisión de producto sobre enlace vs. OTP, vigencia del token, política de contraseñas, alcance respecto a SSO/MFA y umbrales de rate limiting. Los criterios de seguridad inferidos (respuesta genérica, uso único, expiración) son estándar y se consideran parte del alcance mínimo.\n",
+  "supuestos": [
+   "No se especifica el mecanismo: enlace con token o código numérico (OTP). Se asume enlace, pero requiere confirmación.",
+   "No se define la vigencia del token (se sugiere 15–60 min); falta que negocio la fije.",
+   "No se define la política de contraseñas (longitud, complejidad, historial/no reutilizar las últimas N); se asume la política existente del sistema.",
+   "No se indica si aplica a cuentas con SSO/login externo o MFA; se asume que solo aplica a cuentas con contraseña local y que MFA, si existe, se mantiene tras el restablecimiento.",
+   "No se especifica si el usuario se identifica por correo o por nombre de usuario; se asume correo.",
+   "No se define si se requiere verificación adicional (pregunta de seguridad/MFA) para cuentas de alto privilegio.",
+   "Se desconoce el proveedor/plantilla de correo, idioma y canal de envío; se asume que existe infraestructura de correo transaccional.",
+   "No se define si se hace login automático tras el restablecimiento; se asume que no, redirigiendo al inicio de sesión."
+  ],
+  "supuestos_confirmados_en": "2026-09-21T06:24:39.924499+00:00",
+  "test_cases_md": "---\nhu_id: HU-002\nfase: tcs_generados\ntotal_tcs: 14\nfecha_generacion: 2026-09-21\n---\n\n### TC-001 — deriva de: Dado que soy un usuario que olvidó su contraseña, cuando solicito recuperarla indicando mi correo, entonces el sistema me envía un mensaje a ese correo con el medio para restablecerla.\n\nGiven un usuario_final con cuenta activa registrada con su correo y en la página de login. When hace clic en '¿Olvidaste tu contraseña?', ingresa su correo registrado y envía el formulario. Then se muestra el mensaje de confirmación y se revisa el buzón de prueba.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se muestra el mensaje 'si el correo existe, recibirás instrucciones' y en el buzón del correo llega un único mensaje con un enlace de restablecimiento (HTTPS) en un plazo razonable (p. ej. < 1 min).\n\n\n### TC-002 — deriva de: Dado que recibí el correo de recuperación, cuando sigo el procedimiento indicado y defino una nueva contraseña, entonces recupero el acceso a mi cuenta sin intervención del administrador.\n\nGiven un usuario_final que recibió el correo de recuperación con enlace vigente. When abre el enlace, ingresa una nueva contraseña válida y su confirmación idéntica y envía el formulario; luego va al login e ingresa con la nueva contraseña. Then accede a su cuenta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se muestra confirmación de cambio exitoso, el login con la nueva contraseña da acceso al panel de la cuenta y el login con la contraseña anterior es rechazado. No se requirió ninguna acción de administrador.\n\n\n### TC-003 — deriva de: Dado un correo no registrado o cuenta inexistente, cuando solicito recuperación, entonces el sistema muestra el mismo mensaje genérico ('si el correo existe, recibirás instrucciones') para no revelar qué correos están registrados.\n\nGiven un invitado en el formulario de recuperación. When envía un correo con formato válido que no está registrado, y luego repite con un correo registrado. Then se comparan mensajes, comportamiento de pantalla y correos recibidos.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Ambas solicitudes muestran exactamente el mismo mensaje genérico, con la misma redirección/estado HTTP y sin diferencias visibles; no se envía ningún correo al correo no registrado.\n\n\n### TC-004 — deriva de: Dado un correo con formato inválido o vacío, cuando envío la solicitud, entonces se muestra un error de validación y no se envía nada.\n\nGiven un invitado en el formulario de recuperación. When deja el campo de correo vacío y envía; luego repite con valores de formato inválido ('usuario', 'usuario@', 'a@b'). Then se observa la respuesta de UI y el buzón.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Se muestra un mensaje de error de validación de correo en cada caso, no se muestra el mensaje genérico de éxito y no se envía ningún correo ni se genera token.\n\n\n### TC-005 — deriva de: Dado que se generó un enlace/token de restablecimiento, cuando pasa su tiempo de vigencia, entonces deja de ser válido y se informa al usuario que debe solicitar uno nuevo.\n\nGiven un enlace de restablecimiento generado para un usuario_final y cuyo tiempo de vigencia configurado ya transcurrió (esperando o simulando el paso del tiempo en el entorno de prueba). When abre el enlace y trata de definir una nueva contraseña. Then se observa la respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El sistema rechaza el enlace, no cambia la contraseña y muestra un mensaje indicando que el enlace expiró y que debe solicitar uno nuevo, con acceso al formulario de recuperación.\n\n\n### TC-006 — deriva de: Dado un token ya utilizado, cuando intento usarlo de nuevo, entonces el sistema lo rechaza (uso único).\n\nGiven un usuario_final que ya restableció su contraseña con un enlace. When vuelve a abrir el mismo enlace e intenta definir otra contraseña. Then se observa la respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El sistema rechaza el enlace por ya utilizado/inválido con mensaje claro, no permite cambiar la contraseña y la contraseña vigente sigue siendo la definida en el primer uso.\n\n\n### TC-007 — deriva de: Dado que solicito un nuevo enlace, cuando ya existía uno vigente, entonces el anterior queda invalidado.\n\nGiven un usuario_final que solicitó recuperación y recibió el enlace A vigente. When solicita recuperación de nuevo, recibe el enlace B, y abre primero el enlace A y luego el enlace B. Then se observa el resultado de cada uno.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El enlace A es rechazado como inválido/expirado con mensaje para solicitar uno nuevo; el enlace B permite definir la nueva contraseña con éxito.\n\n\n### TC-008 — deriva de: Dada la nueva contraseña, cuando no cumple la política de contraseñas vigente o la confirmación no coincide, entonces se rechaza con un mensaje claro y el token sigue siendo válido hasta su expiración.\n\nGiven un usuario_final con enlace vigente abierto. When ingresa una contraseña que incumple la política (p. ej. demasiado corta/sin complejidad) y envía; luego ingresa una contraseña válida con confirmación distinta y envía; finalmente ingresa una contraseña válida con confirmación coincidente. Then se observa cada respuesta.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** En los dos primeros intentos se muestra un mensaje claro (requisitos de la política / las contraseñas no coinciden), la contraseña no cambia y el token sigue válido; en el tercer intento el cambio se completa con éxito.\n\n\n### TC-009 — deriva de: Dado que se restableció la contraseña con éxito, entonces se invalidan las sesiones activas previas y se notifica por correo el cambio realizado.\n\nGiven un usuario_final con una sesión activa en el navegador A (contexto Playwright 1) y que restablece su contraseña desde el navegador B (contexto 2) con un enlace válido. When completa el restablecimiento y luego en el navegador A recarga o navega a una página protegida. Then se revisa la sesión y el buzón.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La sesión del navegador A es cerrada y redirige al login; el usuario recibe un correo notificando el cambio de contraseña (sin incluir la contraseña).\n\n\n### TC-010 — deriva de: Dadas múltiples solicitudes repetidas, cuando se supera un límite razonable por correo/IP, entonces se aplica limitación de frecuencia (rate limiting) para evitar abuso y spam.\n\nGiven un invitado en el formulario de recuperación. When envía solicitudes repetidas consecutivas para el mismo correo (y luego con distintos correos desde la misma IP) superando el límite configurado. Then se observa la respuesta y el buzón.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Al superar el límite el sistema bloquea o ralentiza las solicitudes (mensaje de demasiados intentos / HTTP 429 o respuesta genérica sin envío), no se envían correos adicionales más allá del límite y tras la ventana de espera se puede solicitar de nuevo.\n\n\n### TC-011 — deriva de: Dado que el token se almacena, entonces se guarda de forma segura (hash) y es no predecible; la comunicación se realiza sobre HTTPS.\n\nGiven un invitado que solicita recuperación varias veces con distintas cuentas de prueba. When se comparan los enlaces recibidos por correo, se inspecciona la URL del enlace y se intenta abrir la versión HTTP del formulario y del enlace. Then se revisan además los datos almacenados con acceso de consulta de prueba.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** Los tokens de los enlaces son largos, distintos y sin patrón secuencial; los enlaces usan HTTPS y HTTP redirige a HTTPS o se rechaza; el token almacenado en base de datos es un hash y no coincide con el valor del enlace.\n\n\n### TC-012 — deriva de: Dado un fallo en el envío del correo, entonces el error se registra y el usuario no recibe información que comprometa la seguridad.\n\nGiven un entorno de prueba con el servicio de correo configurado para fallar y una cuenta registrada. When un invitado solicita recuperación con el correo registrado. Then se observa la UI y los logs del sistema.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** La UI muestra el mismo mensaje genérico (sin detalles técnicos ni indicación de que el correo existe o de que falló el envío); el error queda registrado en los logs del sistema sin datos sensibles.\n\n\n### TC-013 — deriva de: Dada una cuenta bloqueada/inactiva/deshabilitada, cuando se solicita recuperación, entonces no se permite el restablecimiento (comportamiento externo idéntico al genérico).\n\nGiven cuentas de prueba bloqueada, inactiva y deshabilitada. When un invitado solicita recuperación con el correo de cada una. Then se observan la UI y los buzones.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** invitado\n- **Resultado esperado:** En cada caso se muestra el mismo mensaje genérico que para un correo inexistente, no se envía enlace de restablecimiento y no es posible restablecer la contraseña de esas cuentas.\n\n\n### TC-014 — deriva de: Los eventos de solicitud y restablecimiento quedan registrados en auditoría (sin incluir contraseñas ni tokens).\n\nGiven un admin con acceso al registro de auditoría y un usuario_final que realiza una solicitud de recuperación y un restablecimiento exitoso. When el admin consulta el registro de auditoría de esos eventos. Then se revisa el contenido de las entradas.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** admin\n- **Resultado esperado:** Existen entradas de auditoría para la solicitud y para el restablecimiento con fecha/hora, tipo de evento e identificador de la cuenta/IP; ninguna entrada contiene la contraseña ni el token.\n",
+  "tiene_supuestos": true,
+  "titulo": "Recuperar contraseña olvidada por correo electrónico"
+ },
+ {
+  "id": "HU-003",
+  "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+  "casos_prueba": [
+   {
+    "id": "TC-001",
+    "criterio_ref": "Dado un usuario autenticado, cuando elige cerrar sesión (salir), entonces su sesión termina y ya no puede acceder a funciones protegidas.",
+    "escenario": "Given un usuario_final autenticado en el dashboard. When hace clic en 'Cerrar sesión' y luego intenta navegar por URL directa a una ruta protegida (p. ej. /perfil). Then el sistema no le permite acceder.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "La sesión termina, se muestra la pantalla de login y al abrir /perfil se redirige al login sin mostrar contenido protegido.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-002",
+    "criterio_ref": "Dado un usuario autenticado sin actividad, cuando transcurre el periodo de inactividad definido, entonces la sesión se cierra automáticamente.",
+    "escenario": "Given un usuario_final autenticado en una pantalla protegida. When no realiza ninguna interacción durante el periodo de inactividad configurado (T). Then la sesión se cierra automáticamente.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Al cumplirse T sin actividad, la UI redirige al login y las rutas protegidas ya no son accesibles.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-003",
+    "criterio_ref": "Dado un usuario autenticado sin actividad, cuando transcurre el periodo de inactividad definido, entonces la sesión se cierra automáticamente.",
+    "escenario": "Given un usuario autenticado inactivo durante un tiempo ligeramente menor a T (T-10 s). When observa la pantalla sin interactuar y se verifica el estado antes de T. Then la sesión sigue activa.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "No hay cierre de sesión antes de T; la pantalla protegida sigue visible y funcional.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-004",
+    "criterio_ref": "Dado un equipo compartido, cuando la sesión se cerró (manual o por inactividad), entonces el siguiente usuario no puede ver información ni ejecutar acciones de la sesión anterior.",
+    "escenario": "Given un equipo compartido donde el usuario A cerró sesión manualmente. When el usuario B abre el navegador en la misma ventana, visita la URL de la app y prueba abrir rutas de A (historial, /perfil). Then no ve datos de A.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Se muestra solo el login; ninguna pantalla, campo autocompletado ni dato de A es visible y no se puede ejecutar ninguna acción de A.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-005",
+    "criterio_ref": "Dado un equipo compartido, cuando la sesión se cerró (manual o por inactividad), entonces el siguiente usuario no puede ver información ni ejecutar acciones de la sesión anterior.",
+    "escenario": "Given un equipo compartido donde la sesión de A expiró por inactividad. When el usuario B inicia sesión con sus credenciales. Then ve únicamente sus propios datos.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "B ve solo su información; no aparece ningún dato, filtro, formulario en borrador ni estado de A.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-006",
+    "criterio_ref": "Al cerrar sesión, el token/sesión se invalida en el servidor (no solo en el cliente); reutilizarlo devuelve 401/no autorizado.",
+    "escenario": "Given un usuario autenticado cuyo token/cookie de sesión fue capturado. When cierra sesión desde la UI y luego se reenvía una petición autenticada a un endpoint protegido con el token capturado. Then el servidor rechaza la petición.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El servidor responde 401 (no autorizado) al reutilizar el token; no se devuelven datos protegidos.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-007",
+    "criterio_ref": "Tras el cierre, el usuario es redirigido al inicio de sesión y el botón 'atrás' del navegador no muestra contenido protegido.",
+    "escenario": "Given un usuario autenticado que navegó por varias pantallas protegidas. When cierra sesión y pulsa el botón 'atrás' del navegador varias veces. Then no se muestra contenido protegido.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Tras cerrar sesión se muestra el login; al ir atrás se muestra el login o se redirige a él, nunca contenido protegido (ni desde caché/bfcache).",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-008",
+    "criterio_ref": "Se eliminan los datos de sesión en el cliente (cookies, localStorage/sessionStorage, caché con datos sensibles).",
+    "escenario": "Given un usuario autenticado con cookies de sesión y datos en localStorage/sessionStorage/caché. When cierra sesión y se inspeccionan el almacenamiento del navegador. Then los datos de sesión no existen.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Cookies de sesión eliminadas, localStorage y sessionStorage sin tokens ni datos de usuario, y caché sin respuestas con datos sensibles.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-009",
+    "criterio_ref": "La actividad del usuario (clics, teclado, navegación, peticiones iniciadas por el usuario) reinicia el temporizador de inactividad.",
+    "escenario": "Given un usuario autenticado que lleva casi T de inactividad. When realiza una acción (clic, pulsación de tecla, navegación o acción que dispara petición) y después espera un tiempo menor a T. Then la sesión sigue activa.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El temporizador se reinicia con cada tipo de actividad; la sesión no expira hasta que pasa T completo desde la última actividad.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-010",
+    "criterio_ref": "La expiración se valida también en el servidor: una petición con sesión vencida es rechazada aunque el cliente no haya cerrado la sesión.",
+    "escenario": "Given un usuario autenticado cuya sesión superó T en el servidor, con el cliente sin haber ejecutado el cierre (temporizador cliente detenido/pestaña suspendida). When realiza una acción protegida. Then el servidor rechaza la petición.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El servidor responde 401 y la UI redirige al login con el aviso de sesión vencida; no se ejecuta la acción.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-011",
+    "criterio_ref": "Si hay varias pestañas o ventanas abiertas, el cierre de sesión (manual o por expiración) se refleja en todas.",
+    "escenario": "Given un usuario autenticado con dos pestañas abiertas en pantallas protegidas. When cierra sesión manualmente en la pestaña 1. Then la pestaña 2 refleja el cierre.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "La pestaña 2 redirige al login (inmediatamente o al siguiente evento) y no permite acciones protegidas.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-012",
+    "criterio_ref": "Si hay varias pestañas o ventanas abiertas, el cierre de sesión (manual o por expiración) se refleja en todas.",
+    "escenario": "Given un usuario autenticado con dos pestañas abiertas y sin actividad en ninguna. When transcurre T. Then ambas pestañas cierran sesión.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Ambas pestañas muestran el login; la actividad en una pestaña reinicia el temporizador para ambas antes de T.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-013",
+    "criterio_ref": "Al expirar, se informa al usuario con un mensaje claro de que la sesión venció por inactividad y se le lleva al login.",
+    "escenario": "Given un usuario autenticado inactivo. When transcurre T y la sesión expira. Then se le informa y se le lleva al login.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "Se muestra el login con un mensaje visible como 'Tu sesión venció por inactividad', distinto de un cierre manual.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-014",
+    "criterio_ref": "Cerrar sesión debe estar disponible desde cualquier pantalla autenticada y ser idempotente (cerrar una sesión ya cerrada no genera error).",
+    "escenario": "Given un usuario autenticado. When navega por cada pantalla autenticada principal (dashboard, perfil, listados, configuración). Then la opción 'Cerrar sesión' está visible y funciona.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "El control de cerrar sesión está presente y operativo en todas las pantallas autenticadas.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-015",
+    "criterio_ref": "Cerrar sesión debe estar disponible desde cualquier pantalla autenticada y ser idempotente (cerrar una sesión ya cerrada no genera error).",
+    "escenario": "Given un usuario con dos pestañas donde la sesión ya fue cerrada en la pestaña 1. When en la pestaña 2 (aún mostrando la pantalla) hace clic en 'Cerrar sesión', o se invoca el endpoint de logout de nuevo. Then no ocurre error.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "usuario_final",
+    "resultado_esperado": "No se muestra error ni respuesta 5xx; el endpoint responde de forma exitosa/idempotente y el usuario queda en el login.",
+    "cobertura": null,
+    "cobertura_detalle": null
+   },
+   {
+    "id": "TC-016",
+    "criterio_ref": "El cierre y la expiración de sesión quedan registrados en bitácora/auditoría.",
+    "escenario": "Given un usuario_final que cierra sesión manualmente y otro cuya sesión expira por inactividad. When un admin consulta la bitácora de auditoría. Then aparecen ambos eventos.",
+    "tipo_verificacion": "ui_playwright",
+    "rol_requerido": "admin",
+    "resultado_esperado": "Hay un registro por cada evento, con usuario, fecha/hora y tipo (cierre manual vs. expiración por inactividad).",
+    "cobertura": null,
+    "cobertura_detalle": null
+   }
+  ],
+  "clasificacion": "hu",
+  "criterios_explicitos": [
+   "Dado un usuario autenticado, cuando elige cerrar sesión (salir), entonces su sesión termina y ya no puede acceder a funciones protegidas.",
+   "Dado un usuario autenticado sin actividad, cuando transcurre el periodo de inactividad definido, entonces la sesión se cierra automáticamente.",
+   "Dado un equipo compartido, cuando la sesión se cerró (manual o por inactividad), entonces el siguiente usuario no puede ver información ni ejecutar acciones de la sesión anterior."
+  ],
+  "criterios_inferidos": [
+   "Al cerrar sesión, el token/sesión se invalida en el servidor (no solo en el cliente); reutilizarlo devuelve 401/no autorizado.",
+   "Tras el cierre, el usuario es redirigido al inicio de sesión y el botón 'atrás' del navegador no muestra contenido protegido.",
+   "Se eliminan los datos de sesión en el cliente (cookies, localStorage/sessionStorage, caché con datos sensibles).",
+   "La actividad del usuario (clics, teclado, navegación, peticiones iniciadas por el usuario) reinicia el temporizador de inactividad.",
+   "La expiración se valida también en el servidor: una petición con sesión vencida es rechazada aunque el cliente no haya cerrado la sesión.",
+   "Si hay varias pestañas o ventanas abiertas, el cierre de sesión (manual o por expiración) se refleja en todas.",
+   "Al expirar, se informa al usuario con un mensaje claro de que la sesión venció por inactividad y se le lleva al login.",
+   "Cerrar sesión debe estar disponible desde cualquier pantalla autenticada y ser idempotente (cerrar una sesión ya cerrada no genera error).",
+   "El cierre y la expiración de sesión quedan registrados en bitácora/auditoría."
+  ],
+  "decisiones": [
+   "Inactividad de 30 minutos, fija (no configurable). Sin aviso previo. «Al salir» significa solo el botón de cerrar sesión, no cerrar la pestaña. Solo web. Al expirar se descarta el trabajo no guardado. Aplica igual a todos los roles."
+  ],
+  "depende_de": [
+   "HU-001"
+  ],
+  "descripcion": "Como usuario quiero poder cerrar mi sesión y que esta se cierre automáticamente tras un periodo de inactividad, para evitar accesos no autorizados cuando uso equipos compartidos. Problema de negocio: reducir el riesgo de uso indebido de sesiones abandonadas y cumplir buenas prácticas de seguridad.",
+  "estado": "pendiente",
+  "fase": "descompuesta",
+  "fecha_descubrimiento": "2026-09-21",
+  "fuente_actualizada_en": "2026-09-17T21:51:43.182-0600",
+  "fuente_hash": "1d018206ff7e778fdd7576f766a4762f6f171173f6d7ea2a5d4161df93c2f6e8",
+  "fuente_ref": "ITZINV-14",
+  "fuente_tipo": "jira",
+  "notas": "Para cerrar los supuestos hace falta: valor y configurabilidad del tiempo de inactividad, decisión sobre aviso previo/extensión de sesión, definición de 'salir' (cierre de pestaña/navegador), plataformas cubiertas y política para datos no guardados.",
+  "orden": 3,
+  "orden_fuente": 3,
+  "prototipo_ref": null,
+  "spec_md": "---\nid: HU-003\nclasificacion: hu\nfuente_tipo: jira\nfuente_ref: ITZINV-14\nfase: especificada\nestado: pendiente\nfecha_descubrimiento: 2026-09-21\ntiene_supuestos: true\nprototipo_ref: null\ndepende_de: []\n---\n\n# Cerrar sesión manualmente y expirar sesión por inactividad\n\nComo usuario quiero poder cerrar mi sesión y que esta se cierre automáticamente tras un periodo de inactividad, para evitar accesos no autorizados cuando uso equipos compartidos. Problema de negocio: reducir el riesgo de uso indebido de sesiones abandonadas y cumplir buenas prácticas de seguridad.\n\n## Criterios de aceptación explícitos\n\n- Dado un usuario autenticado, cuando elige cerrar sesión (salir), entonces su sesión termina y ya no puede acceder a funciones protegidas.\n- Dado un usuario autenticado sin actividad, cuando transcurre el periodo de inactividad definido, entonces la sesión se cierra automáticamente.\n- Dado un equipo compartido, cuando la sesión se cerró (manual o por inactividad), entonces el siguiente usuario no puede ver información ni ejecutar acciones de la sesión anterior.\n\n## Criterios de aceptación inferidos\n\n- Al cerrar sesión, el token/sesión se invalida en el servidor (no solo en el cliente); reutilizarlo devuelve 401/no autorizado.\n- Tras el cierre, el usuario es redirigido al inicio de sesión y el botón 'atrás' del navegador no muestra contenido protegido.\n- Se eliminan los datos de sesión en el cliente (cookies, localStorage/sessionStorage, caché con datos sensibles).\n- La actividad del usuario (clics, teclado, navegación, peticiones iniciadas por el usuario) reinicia el temporizador de inactividad.\n- La expiración se valida también en el servidor: una petición con sesión vencida es rechazada aunque el cliente no haya cerrado la sesión.\n- Si hay varias pestañas o ventanas abiertas, el cierre de sesión (manual o por expiración) se refleja en todas.\n- Al expirar, se informa al usuario con un mensaje claro de que la sesión venció por inactividad y se le lleva al login.\n- Cerrar sesión debe estar disponible desde cualquier pantalla autenticada y ser idempotente (cerrar una sesión ya cerrada no genera error).\n- El cierre y la expiración de sesión quedan registrados en bitácora/auditoría.\n\n## Supuestos y vacíos identificados\n\n- El tiempo de inactividad no está definido en la fuente (p. ej. 5, 15 o 30 min); se requiere que negocio/seguridad lo fije y si es configurable.\n- No se especifica si se muestra un aviso previo con opción de extender la sesión; se asume deseable pero se debe confirmar, pues cambia el alcance.\n- No se aclara qué significa 'al salir': solo el botón cerrar sesión, o también cerrar pestaña/navegador; se debe confirmar si cerrar el navegador debe terminar la sesión.\n- No se indica la plataforma (web, móvil, ambas); se asume web.\n- No se define el tratamiento de trabajo no guardado (formularios en edición) al expirar la sesión.\n- No se aclara si aplica a todos los roles o si algunos (p. ej. administradores) tienen tiempos distintos.\n\n## Notas\n\nPara cerrar los supuestos hace falta: valor y configurabilidad del tiempo de inactividad, decisión sobre aviso previo/extensión de sesión, definición de 'salir' (cierre de pestaña/navegador), plataformas cubiertas y política para datos no guardados.\n",
+  "supuestos": [
+   "El tiempo de inactividad no está definido en la fuente (p. ej. 5, 15 o 30 min); se requiere que negocio/seguridad lo fije y si es configurable.",
+   "No se especifica si se muestra un aviso previo con opción de extender la sesión; se asume deseable pero se debe confirmar, pues cambia el alcance.",
+   "No se aclara qué significa 'al salir': solo el botón cerrar sesión, o también cerrar pestaña/navegador; se debe confirmar si cerrar el navegador debe terminar la sesión.",
+   "No se indica la plataforma (web, móvil, ambas); se asume web.",
+   "No se define el tratamiento de trabajo no guardado (formularios en edición) al expirar la sesión.",
+   "No se aclara si aplica a todos los roles o si algunos (p. ej. administradores) tienen tiempos distintos."
+  ],
+  "supuestos_confirmados_en": "2026-09-21T06:24:42.978765+00:00",
+  "test_cases_md": "---\nhu_id: HU-003\nfase: tcs_generados\ntotal_tcs: 16\nfecha_generacion: 2026-09-21\n---\n\n### TC-001 — deriva de: Dado un usuario autenticado, cuando elige cerrar sesión (salir), entonces su sesión termina y ya no puede acceder a funciones protegidas.\n\nGiven un usuario_final autenticado en el dashboard. When hace clic en 'Cerrar sesión' y luego intenta navegar por URL directa a una ruta protegida (p. ej. /perfil). Then el sistema no le permite acceder.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La sesión termina, se muestra la pantalla de login y al abrir /perfil se redirige al login sin mostrar contenido protegido.\n\n\n### TC-002 — deriva de: Dado un usuario autenticado sin actividad, cuando transcurre el periodo de inactividad definido, entonces la sesión se cierra automáticamente.\n\nGiven un usuario_final autenticado en una pantalla protegida. When no realiza ninguna interacción durante el periodo de inactividad configurado (T). Then la sesión se cierra automáticamente.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Al cumplirse T sin actividad, la UI redirige al login y las rutas protegidas ya no son accesibles.\n\n\n### TC-003 — deriva de: Dado un usuario autenticado sin actividad, cuando transcurre el periodo de inactividad definido, entonces la sesión se cierra automáticamente.\n\nGiven un usuario autenticado inactivo durante un tiempo ligeramente menor a T (T-10 s). When observa la pantalla sin interactuar y se verifica el estado antes de T. Then la sesión sigue activa.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** No hay cierre de sesión antes de T; la pantalla protegida sigue visible y funcional.\n\n\n### TC-004 — deriva de: Dado un equipo compartido, cuando la sesión se cerró (manual o por inactividad), entonces el siguiente usuario no puede ver información ni ejecutar acciones de la sesión anterior.\n\nGiven un equipo compartido donde el usuario A cerró sesión manualmente. When el usuario B abre el navegador en la misma ventana, visita la URL de la app y prueba abrir rutas de A (historial, /perfil). Then no ve datos de A.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se muestra solo el login; ninguna pantalla, campo autocompletado ni dato de A es visible y no se puede ejecutar ninguna acción de A.\n\n\n### TC-005 — deriva de: Dado un equipo compartido, cuando la sesión se cerró (manual o por inactividad), entonces el siguiente usuario no puede ver información ni ejecutar acciones de la sesión anterior.\n\nGiven un equipo compartido donde la sesión de A expiró por inactividad. When el usuario B inicia sesión con sus credenciales. Then ve únicamente sus propios datos.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** B ve solo su información; no aparece ningún dato, filtro, formulario en borrador ni estado de A.\n\n\n### TC-006 — deriva de: Al cerrar sesión, el token/sesión se invalida en el servidor (no solo en el cliente); reutilizarlo devuelve 401/no autorizado.\n\nGiven un usuario autenticado cuyo token/cookie de sesión fue capturado. When cierra sesión desde la UI y luego se reenvía una petición autenticada a un endpoint protegido con el token capturado. Then el servidor rechaza la petición.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El servidor responde 401 (no autorizado) al reutilizar el token; no se devuelven datos protegidos.\n\n\n### TC-007 — deriva de: Tras el cierre, el usuario es redirigido al inicio de sesión y el botón 'atrás' del navegador no muestra contenido protegido.\n\nGiven un usuario autenticado que navegó por varias pantallas protegidas. When cierra sesión y pulsa el botón 'atrás' del navegador varias veces. Then no se muestra contenido protegido.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Tras cerrar sesión se muestra el login; al ir atrás se muestra el login o se redirige a él, nunca contenido protegido (ni desde caché/bfcache).\n\n\n### TC-008 — deriva de: Se eliminan los datos de sesión en el cliente (cookies, localStorage/sessionStorage, caché con datos sensibles).\n\nGiven un usuario autenticado con cookies de sesión y datos en localStorage/sessionStorage/caché. When cierra sesión y se inspeccionan el almacenamiento del navegador. Then los datos de sesión no existen.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Cookies de sesión eliminadas, localStorage y sessionStorage sin tokens ni datos de usuario, y caché sin respuestas con datos sensibles.\n\n\n### TC-009 — deriva de: La actividad del usuario (clics, teclado, navegación, peticiones iniciadas por el usuario) reinicia el temporizador de inactividad.\n\nGiven un usuario autenticado que lleva casi T de inactividad. When realiza una acción (clic, pulsación de tecla, navegación o acción que dispara petición) y después espera un tiempo menor a T. Then la sesión sigue activa.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El temporizador se reinicia con cada tipo de actividad; la sesión no expira hasta que pasa T completo desde la última actividad.\n\n\n### TC-010 — deriva de: La expiración se valida también en el servidor: una petición con sesión vencida es rechazada aunque el cliente no haya cerrado la sesión.\n\nGiven un usuario autenticado cuya sesión superó T en el servidor, con el cliente sin haber ejecutado el cierre (temporizador cliente detenido/pestaña suspendida). When realiza una acción protegida. Then el servidor rechaza la petición.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El servidor responde 401 y la UI redirige al login con el aviso de sesión vencida; no se ejecuta la acción.\n\n\n### TC-011 — deriva de: Si hay varias pestañas o ventanas abiertas, el cierre de sesión (manual o por expiración) se refleja en todas.\n\nGiven un usuario autenticado con dos pestañas abiertas en pantallas protegidas. When cierra sesión manualmente en la pestaña 1. Then la pestaña 2 refleja el cierre.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** La pestaña 2 redirige al login (inmediatamente o al siguiente evento) y no permite acciones protegidas.\n\n\n### TC-012 — deriva de: Si hay varias pestañas o ventanas abiertas, el cierre de sesión (manual o por expiración) se refleja en todas.\n\nGiven un usuario autenticado con dos pestañas abiertas y sin actividad en ninguna. When transcurre T. Then ambas pestañas cierran sesión.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Ambas pestañas muestran el login; la actividad en una pestaña reinicia el temporizador para ambas antes de T.\n\n\n### TC-013 — deriva de: Al expirar, se informa al usuario con un mensaje claro de que la sesión venció por inactividad y se le lleva al login.\n\nGiven un usuario autenticado inactivo. When transcurre T y la sesión expira. Then se le informa y se le lleva al login.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** Se muestra el login con un mensaje visible como 'Tu sesión venció por inactividad', distinto de un cierre manual.\n\n\n### TC-014 — deriva de: Cerrar sesión debe estar disponible desde cualquier pantalla autenticada y ser idempotente (cerrar una sesión ya cerrada no genera error).\n\nGiven un usuario autenticado. When navega por cada pantalla autenticada principal (dashboard, perfil, listados, configuración). Then la opción 'Cerrar sesión' está visible y funciona.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** El control de cerrar sesión está presente y operativo en todas las pantallas autenticadas.\n\n\n### TC-015 — deriva de: Cerrar sesión debe estar disponible desde cualquier pantalla autenticada y ser idempotente (cerrar una sesión ya cerrada no genera error).\n\nGiven un usuario con dos pestañas donde la sesión ya fue cerrada en la pestaña 1. When en la pestaña 2 (aún mostrando la pantalla) hace clic en 'Cerrar sesión', o se invoca el endpoint de logout de nuevo. Then no ocurre error.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** usuario_final\n- **Resultado esperado:** No se muestra error ni respuesta 5xx; el endpoint responde de forma exitosa/idempotente y el usuario queda en el login.\n\n\n### TC-016 — deriva de: El cierre y la expiración de sesión quedan registrados en bitácora/auditoría.\n\nGiven un usuario_final que cierra sesión manualmente y otro cuya sesión expira por inactividad. When un admin consulta la bitácora de auditoría. Then aparecen ambos eventos.\n\n- **Tipo de verificación:** ui_playwright\n- **Rol requerido:** admin\n- **Resultado esperado:** Hay un registro por cada evento, con usuario, fecha/hora y tipo (cierre manual vs. expiración por inactividad).\n",
+  "tiene_supuestos": true,
+  "titulo": "Cerrar sesión manualmente y expirar sesión por inactividad"
+ }
+]

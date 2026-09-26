@@ -1,0 +1,131 @@
+{
+ "nombre": "PILOTO E1c ITZ Inventarios (Claude cuenta normal CLI)",
+ "estado": "activo",
+ "modo_arranque": "nuevo",
+ "repositorios": [
+  {
+   "tipo": "fullstack",
+   "url": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+   "rama_base": "main"
+  }
+ ],
+ "tecnologia_backend": "java",
+ "herramientas_backend": [
+  "Spring Boot",
+  "Spring Security",
+  "Spring Data JPA",
+  "Hibernate",
+  "Maven",
+  "Lombok",
+  "MapStruct",
+  "Flyway",
+  "JUnit 5"
+ ],
+ "tecnologia_frontend": "angular",
+ "herramientas_frontend": [
+  "PrimeNG",
+  "RxJS",
+  "Tailwind CSS",
+  "Jest"
+ ],
+ "plantilla_frontend": null,
+ "proveedor_nube": "gcp",
+ "estructura_repositorios": "monorepo",
+ "numero_microservicios": 0,
+ "tipo_autenticacion": "jwt",
+ "despliegue_gcp": {
+  "proyecto_id": "itz-inventario",
+  "region": "us-central1",
+  "servicio_backend": "cloud_run",
+  "nombre_servicio_backend": "inventarios-api",
+  "hosting_frontend": "cloud_run",
+  "nombre_servicio_frontend": "inventarios-web",
+  "artifact_registry": "inventarios",
+  "disparador": "manual",
+  "rama_release": "main",
+  "ci_plataforma": "github_actions",
+  "autenticacion": "workload_identity_federation",
+  "service_account_email": "loom-release-deployer@itz-inventario.iam.gserviceaccount.com",
+  "wif_provider": "projects/118746543308/locations/global/workloadIdentityPools/loom-github/providers/github",
+  "secret_ref": null,
+  "base_de_datos": "cloud_sql_postgres",
+  "bd_instancia": "inventarios-db",
+  "bd_nombre": "inventarios",
+  "bd_usuario": "inventarios",
+  "bd_tier": "db-f1-micro",
+  "bd_version": "POSTGRES_15",
+  "variables_entorno": "SPRING_PROFILES_ACTIVE=prod\nADMIN_EMAIL=jnc.soga@gmail.com\nADMIN_NOMBRE=Administrador\nADMIN_PASSWORD_HASH=***\nAPP_CORS_ALLOWED_ORIGINS={URL_FRONTEND}",
+  "secretos_generados": "JWT_SECRET",
+  "servicio_publico": true,
+  "release_al_fusionar": true
+ },
+ "ambiente_dev_url": "https://inventarios-web-118746543308.us-central1.run.app",
+ "cuenta_desarrollo_usuario": "CarlosSotoGarcia",
+ "cuenta_desarrollo_token": "***",
+ "cuentas_prueba": [
+  {
+   "rol": "admin",
+   "usuario": "jnc.soga@gmail.com",
+   "contrasena": "***"
+  },
+  {
+   "rol": "usuario_final",
+   "usuario": "usuario.final@pruebas.itz.test",
+   "contrasena": "***"
+  },
+  {
+   "rol": "usuario_inactivo",
+   "usuario": "usuario.inactivo@pruebas.itz.test",
+   "contrasena": "***"
+  }
+ ],
+ "proveedor_llm": "claude_cli",
+ "gemini_api_key": "***",
+ "plan_md_ref": null,
+ "requiere_revision_manual": false,
+ "fuente_hu_tipo": "jira",
+ "fuente_hu_referencia": "https://jncsoga.atlassian.net/jira/software/projects/ITZINV/boards/1/backlog",
+ "fuente_hu_jira_email": "jnc.soga@gmail.com",
+ "fuente_hu_jira_api_token": "***",
+ "id": "9c764535fb44470a8dc92fc74c8b835e",
+ "tipo": "web",
+ "creado_en": "2026-09-19T22:14:48.746608Z",
+ "fases_ultima_ejecucion": {
+  "1": "2026-09-21T06:06:35.898941+00:00",
+  "2": "2026-09-21T06:15:16.314712+00:00",
+  "3": "2026-09-21T10:12:40.087042+00:00",
+  "4": "2026-09-21T14:56:28.889885+00:00"
+ },
+ "arquitectura_generada_en": "2026-09-21T06:15:16.312252+00:00",
+ "publicaciones_despliegue": [
+  {
+   "repositorio": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli",
+   "rama": "loom/despliegue-gcp",
+   "url_pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e1c-claude-cli/pull/44",
+   "publicada_en": "2026-09-21T10:18:18.533680+00:00"
+  }
+ ],
+ "despliegue_desactualizado": [],
+ "release_ejecutado_en": "2026-09-21T14:33:40.241289+00:00",
+ "release_resultado": "Release ejecutado con jnc.soga@gmail.com — https://inventarios-api-118746543308.us-central1.run.app, https://inventarios-api-tkcf64mczq-uc.a.run.app, https://inventarios-web-118746543308.us-central1.run.app, https://inventarios-web-tkcf64mczq-uc.a.run.app",
+ "propuesta_stack": null,
+ "fuente_md_archivos": 0,
+ "cuenta_desarrollo_guardada": true,
+ "fases_configuradas": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "arquitectura_hus": [
+  "HU-001",
+  "HU-002",
+  "HU-003"
+ ],
+ "arquitectura_specs": {
+  "HU-001": 1,
+  "HU-002": 1,
+  "HU-003": 1
+ },
+ "arquitectura_aprobada_en": "2026-09-21T06:16:42.366426+00:00"
+}

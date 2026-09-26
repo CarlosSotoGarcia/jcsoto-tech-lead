@@ -29,7 +29,9 @@ En el repositorio de control, carpeta `despliegue/` (un commit):
   tag `v*` o solo manual; siempre `workflow_dispatch`). Si es Cloud Build: `cloudbuild*.yaml`.
 - `LEEME.md` con los pasos de una sola vez rellenados con los valores del Proyecto.
 
-Ningún archivo contiene credenciales: el workflow se autentica antes de ejecutar el script.
+Ningún archivo contiene credenciales: el workflow se autentica antes de ejecutar el script. El pool y el proveedor de
+Workload Identity son uno por proyecto de GCP y su condición acumula los repositorios de todos los Proyectos que despliegan
+ahí; `release.py` agrega el del Proyecto si falta, sin quitar los demás ([ADR-0085](../decisiones/0085-proveedor-wif-compartido-entre-proyectos.md)).
 
 ## Qué hace (alto nivel)
 
