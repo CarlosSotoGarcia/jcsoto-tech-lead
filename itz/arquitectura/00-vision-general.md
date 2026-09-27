@@ -236,6 +236,9 @@
 - [ADR-0083](decisiones/0083-procesos-concurrentes-con-reglas-de-exclusion.md) — propuesta: varios procesos a la vez con reglas de exclusión y el release exclusivo.
 - [ADR-0084](decisiones/0084-historial-de-procesos-y-cancelacion.md) — los procesos se guardan en Mongo (cuándo empezó, cuándo terminó, cómo) y se pueden cancelar, deteniendo también sus procesos externos.
 - [ADR-0085](decisiones/0085-proveedor-wif-compartido-entre-proyectos.md) — el proveedor de Workload Identity es uno por proyecto de GCP y acumula los repositorios de todos los Proyectos que despliegan ahí.
+- [ADR-0086](decisiones/0086-release-ubica-los-servicios-en-monorepos-con-workspaces.md) — el release ubica el Dockerfile de cada servicio en monorepos con workspaces (`apps/`, `packages/`, `services/`) y construye desde la raíz cuando el Dockerfile lo pide.
+- [ADR-0087](decisiones/0087-release-entrega-cadena-de-conexion-y-url-de-la-api-al-compilar.md) — el release entrega `DATABASE_URL` (como secreto) a stacks que no son Java y pasa la URL del backend como build-arg a los frontends que la fijan al compilar.
+- [ADR-0088](decisiones/0088-rol-principal-de-un-caso-de-prueba.md) — el smoke testing asigna la cuenta de prueba por el actor principal del rol del caso (texto libre) y no exige cuenta si ese actor es invitado.
 
 ## Problema
 

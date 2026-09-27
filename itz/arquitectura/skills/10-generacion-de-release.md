@@ -31,7 +31,7 @@ En el repositorio de control, carpeta `despliegue/` (un commit):
 
 Ningún archivo contiene credenciales: el workflow se autentica antes de ejecutar el script. El pool y el proveedor de
 Workload Identity son uno por proyecto de GCP y su condición acumula los repositorios de todos los Proyectos que despliegan
-ahí; `release.py` agrega el del Proyecto si falta, sin quitar los demás ([ADR-0085](../decisiones/0085-proveedor-wif-compartido-entre-proyectos.md)).
+ahí; `release.py` agrega el del Proyecto si falta, sin quitar los demás ([ADR-0085](../decisiones/0085-proveedor-wif-compartido-entre-proyectos.md)). Cada servicio se construye desde su carpeta o, en monorepos con workspaces (`apps/`, `packages/`, `services/`), desde la raíz con `-f` cuando su Dockerfile lo pide ([ADR-0086](../decisiones/0086-release-ubica-los-servicios-en-monorepos-con-workspaces.md)). El backend recibe `DATABASE_URL` como secreto si su stack no es Java, y el frontend recibe la URL del backend como build-arg si su Dockerfile la fija al compilar ([ADR-0087](../decisiones/0087-release-entrega-cadena-de-conexion-y-url-de-la-api-al-compilar.md)).
 
 ## Qué hace (alto nivel)
 
