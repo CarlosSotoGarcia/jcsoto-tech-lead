@@ -1,0 +1,222 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Avanzando con HU-001: 1 paquete(s), hasta 1 ronda(s) de corrección por paquete."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 1,
+  "mensaje": "1 paquete(s) por completar en HU-001."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04: Frontend: pantalla Resultado de verificación (/verificar-correo?token=)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · la integración continua falló (CI, Frontend (lint, typecheck, Vitest, Docker)); corrección 1/2 con el log"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: Corrigiendo HU-001/PT-04 — 5 observaciones"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: Preparando la rama del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "Rama hu/IAT-2/PT-04 lista (237 archivos) [Rama]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: El agente está aplicando las correcciones..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/nginx.conf"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/src/features/registro/components/ResultadoVerificacion.tsx"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/src/features/registro/components/ResultadoVerificacion.tsx"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/src/features/registro/pages/VerificarCorreoPage.tsx"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/src/test/renderRuta.tsx"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/src/features/registro/__tests__/VerificarCorreoPage.test.tsx"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1:   escribió apps/frontend/src/features/registro/components/ResultadoVerificacion.tsx"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "Correcciones: Corregí las dos observaciones bloqueantes y las tres menores. No pude ejecutar las pruebas ni compilar aquí, así que falta confirmar que el CI pase en verde.\n\n* [6 archivos]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: Compilando en un contenedor (intento 1)..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "Compilación omitida: no se reconoce cómo compilar la capa «frontend» [Sin compilar]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: Commit y push a la rama del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "Commit 34772d33 en hu/IAT-2/PT-04 [Push]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: Respondiendo las observaciones en el PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "HU-001/PT-04: 5 observaciones respondidas en el PR (5 corregidas, 3 conversaciones resueltas) [3 resueltas] [5/5 corregidas]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04 · corrección por CI 1",
+  "mensaje": "HU-001/PT-04 · corrección por CI 1: HU-001/PT-04: correcciones subidas al PR. Vuelve a revisarlo."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · esperando la integración continua: Frontend (lint, typecheck, Vitest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · esperando la integración continua: Frontend (lint, typecheck, Vitest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · esperando la integración continua: Frontend (lint, typecheck, Vitest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · esperando la integración continua: Frontend (lint, typecheck, Vitest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 1,
+  "clave": "HU-001/PT-04",
+  "mensaje": "HU-001/PT-04 · CI en verde (4 check(s))"
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-001/PT-04: PR fusionado (en_revision, 0 observación(es) al cierre)",
+  "tags": [
+   {
+    "texto": "fusionado",
+    "severidad": "success"
+   }
+  ]
+ },
+ {
+  "tipo": "completado",
+  "total": 1,
+  "mensaje": "HU-001 completa: 1 paquete(s) fusionados. Se lanzó el release automático."
+ }
+]

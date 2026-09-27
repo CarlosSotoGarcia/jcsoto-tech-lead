@@ -2,8 +2,9 @@ loom
 ./loom
 
 loom_repo
-itz/tesis/evidencia/corrida-E1c-2026-09-21/capturas/
-itz/tesis/evidencia/corrida-E1c-2026-09-21/logs/descartadas/
 __pycache__/
-
-itz/tesis/evidencia/config-E3c/
+# Evidencia de las corridas: capturas y descartes solo en disco local (pesan decenas de MB)
+itz/tesis/evidencia/*/capturas/
+itz/tesis/evidencia/*/logs/descartadas/
+itz/tesis/evidencia/config-*/
+itz/tesis/evidencia/*/artefactos/**/*.png

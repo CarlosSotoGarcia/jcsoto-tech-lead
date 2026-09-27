@@ -1,0 +1,255 @@
+{
+ "fecha": "2026-09-27",
+ "precios_usd_por_millon": {
+  "claude-sonnet-5": {
+   "in": 2.0,
+   "out": 10.0,
+   "cache_in": 0.2
+  },
+  "gemini-3.6-flash": {
+   "in": 0.75,
+   "out": 3.75
+  },
+  "gemini-pro-latest": {
+   "in": 2.0,
+   "out": 12.0
+  }
+ },
+ "E3c_costo_nocional_cli_usd": 120.99,
+ "E3_claude_api": {
+  "a_volumen_de_tokens_de_E3c": 57.05,
+  "escalando_E1c_por_paquete": 23.61
+ },
+ "E4_gemini_api": {
+  "a_volumen_de_tokens_de_E3c_sin_cache": 31.92,
+  "escalando_E2_por_paquete": 16.21
+ },
+ "datos": {
+  "E1c": {
+   "por_skill": {
+    "descubrir": {
+     "llamadas": 3,
+     "in": 49121,
+     "out": 6782,
+     "cache": 82259,
+     "usd": 0.2807398
+    },
+    "generar-tcs": {
+     "llamadas": 3,
+     "in": 46488,
+     "out": 10407,
+     "cache": 80528,
+     "usd": 0.3061156
+    },
+    "arquitectura": {
+     "llamadas": 1,
+     "in": 53454,
+     "out": 12504,
+     "cache": 0,
+     "usd": 0.338848
+    },
+    "descomponer": {
+     "llamadas": 10,
+     "in": 146207,
+     "out": 23826,
+     "cache": 370396,
+     "usd": 0.8971192
+    },
+    "generar-codigo": {
+     "llamadas": 15,
+     "in": 855897,
+     "out": 387314,
+     "cache": 9862238,
+     "usd": 9.268535599999998
+    },
+    "revisar-codigo": {
+     "llamadas": 12,
+     "in": 528048,
+     "out": 24550,
+     "cache": 409080,
+     "usd": 2.43946
+    },
+    "corregir-codigo": {
+     "llamadas": 3,
+     "in": 155788,
+     "out": 16142,
+     "cache": 806392,
+     "usd": 0.9457784
+    },
+    "smoke-testing": {
+     "llamadas": 81,
+     "in": 311216,
+     "out": 34958,
+     "cache": 2989541,
+     "usd": 2.1920281999999993
+    }
+   },
+   "total": {
+    "llamadas": 128,
+    "in": 2146219,
+    "out": 516483,
+    "cache": 14600434,
+    "usd": 16.668624799999996
+   },
+   "modelos": {
+    "claude-sonnet-5": 128
+   },
+   "paquetes": 12,
+   "fusionados": 12
+  },
+  "E2": {
+   "por_skill": {
+    "descubrir": {
+     "llamadas": 3,
+     "in": 1519,
+     "out": 1829,
+     "cache": 0,
+     "usd": 0.02037
+    },
+    "generar-tcs": {
+     "llamadas": 3,
+     "in": 2060,
+     "out": 3629,
+     "cache": 0,
+     "usd": 0.035955
+    },
+    "arquitectura": {
+     "llamadas": 1,
+     "in": 2007,
+     "out": 2586,
+     "cache": 0,
+     "usd": 0.023446
+    },
+    "descomponer": {
+     "llamadas": 4,
+     "in": 15501,
+     "out": 3508,
+     "cache": 0,
+     "usd": 0.054271
+    },
+    "generar-codigo": {
+     "llamadas": 55,
+     "in": 670448,
+     "out": 37331,
+     "cache": 375251,
+     "usd": 3.082153999999999
+    },
+    "revisar-codigo": {
+     "llamadas": 10,
+     "in": 135186,
+     "out": 3902,
+     "cache": 27847,
+     "usd": 0.290419
+    },
+    "corregir-codigo": {
+     "llamadas": 35,
+     "in": 353395,
+     "out": 7389,
+     "cache": 165185,
+     "usd": 1.252644
+    },
+    "prueba-hilos": {
+     "llamadas": 2,
+     "in": 914,
+     "out": 250,
+     "cache": 0,
+     "usd": 0.007053
+    }
+   },
+   "total": {
+    "llamadas": 113,
+    "in": 1181030,
+    "out": 60424,
+    "cache": 568283,
+    "usd": 4.766311999999999
+   },
+   "modelos": {
+    "gemini-3.6-flash": 23,
+    "gemini-pro-latest": 90
+   },
+   "paquetes": 10,
+   "fusionados": 5
+  },
+  "E3c": {
+   "por_skill": {
+    "descubrir": {
+     "llamadas": 3,
+     "in": 4978,
+     "out": 11780,
+     "cache": 2208,
+     "usd": 0.2801616
+    },
+    "generar-tcs": {
+     "llamadas": 3,
+     "in": 8359,
+     "out": 35317,
+     "cache": 1816,
+     "usd": 0.7805062
+    },
+    "arquitectura": {
+     "llamadas": 1,
+     "in": 4625,
+     "out": 10488,
+     "cache": 0,
+     "usd": 0.24859400000000004
+    },
+    "descomponer": {
+     "llamadas": 4,
+     "in": 49949,
+     "out": 21038,
+     "cache": 2510,
+     "usd": 0.856895
+    },
+    "generar-codigo": {
+     "llamadas": 21,
+     "in": 3251090,
+     "out": 1358948,
+     "cache": 77172438,
+     "usd": 68.14673559999999
+    },
+    "revisar-codigo": {
+     "llamadas": 17,
+     "in": 1186289,
+     "out": 69197,
+     "cache": 20176,
+     "usd": 11.467347200000004
+    },
+    "avanzar-hu": {
+     "llamadas": 8,
+     "in": 854665,
+     "out": 198089,
+     "cache": 14672556,
+     "usd": 13.990409200000002
+    },
+    "corregir-codigo": {
+     "llamadas": 2,
+     "in": 271467,
+     "out": 85825,
+     "cache": 5400190,
+     "usd": 5.001857000000001
+    },
+    "smoke-testing": {
+     "llamadas": 473,
+     "in": 1400897,
+     "out": 242811,
+     "cache": 15970781,
+     "usd": 20.221300400000022
+    }
+   },
+   "total": {
+    "llamadas": 532,
+    "in": 7032319,
+    "out": 2033493,
+    "cache": 113242675,
+    "usd": 120.99380620000001
+   },
+   "modelos": {
+    "claude-haiku-4-5-20251001+claude-opus-5-5": 523,
+    "claude-haiku-4-5-20251001+claude-opus-5-5+claude-opus-5": 7,
+    "claude-cli": 2
+   },
+   "paquetes": 17,
+   "fusionados": 17
+  }
+ }
+}

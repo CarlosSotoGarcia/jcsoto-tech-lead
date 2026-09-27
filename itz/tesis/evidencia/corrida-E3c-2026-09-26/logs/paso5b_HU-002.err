@@ -1,0 +1,14 @@
+Exception in thread Thread-1 (llamar):
+Traceback (most recent call last):
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\jsoto\jcsoto-tech-lead\itz\tesis\evidencia\corrida-E3c-2026-09-26\paso5b_avanzar_api.py", line 14, in llamar
+    cancelar(); return
+    ~~~~~~~~^^
+  File "C:\jsoto\jcsoto-tech-lead\itz\tesis\evidencia\corrida-E3c-2026-09-26\paso5b_avanzar_api.py", line 16, in cancelar
+    from pymongo import MongoClient
+ModuleNotFoundError: No module named 'pymongo'

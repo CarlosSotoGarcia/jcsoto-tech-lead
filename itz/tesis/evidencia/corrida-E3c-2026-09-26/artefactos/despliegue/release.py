@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generado por Loom (ADR-0054) para el Proyecto PILOTO E1c ITZ Inventarios (Claude cuenta normal CLI). No lo edites a mano: regenéralo
+"""Generado por Loom (ADR-0054) para el Proyecto PILOTO E3c ITZ Agenda Taller (Claude cuenta normal CLI). No lo edites a mano: regenéralo
 desde la plataforma. No contiene credenciales: quien lo ejecuta (GitHub Actions o Cloud Build) se
 autentica con gcloud antes, así que aquí solo se construye y se despliega. Solo usa la biblioteca
 estándar de Python 3 y funciona igual en Linux, macOS y Windows."""
@@ -16,7 +16,7 @@ from datetime import datetime
 
 PROJECT_ID = "itz-inventario"
 REGION = "us-central1"
-REPO = "inventarios"
+REPO = "taller"
 
 
 def ejecutar(*comando: str) -> None:
@@ -42,32 +42,32 @@ TAG = etiqueta_de_release()
 
 # --- Configuración del despliegue (la fija Loom al generar este script; no lleva secretos) ---------------------
 BD = {'instancia': 'inventarios-db',
- 'nombre': 'inventarios',
- 'usuario': 'inventarios',
+ 'nombre': 'taller',
+ 'usuario': 'taller',
  'tier': 'db-f1-micro',
  'version': 'POSTGRES_15'}
 """Base de datos administrada (Cloud SQL) que se crea y conecta, o None."""
-VARIABLES = {'SPRING_PROFILES_ACTIVE': 'prod',
+VARIABLES = {'NODE_ENV': 'production',
  'ADMIN_EMAIL': 'jnc.soga@gmail.com',
  'ADMIN_NOMBRE': 'Administrador',
  'ADMIN_PASSWORD_HASH': '***',
- 'APP_CORS_ALLOWED_ORIGINS': '{URL_FRONTEND}'}
+ 'CORS_ORIGINS': '{URL_FRONTEND}'}
 """Variables de entorno sin secretos que recibe el servicio. «{URL_BACKEND}» y «{URL_FRONTEND}» se reemplazan por las URL."""
 SECRETOS_GENERADOS = ['JWT_SECRET']
 """Variables de entorno cuyo valor es un secreto aleatorio guardado en Secret Manager (p. ej. JWT_SECRET)."""
 PUBLICO = True
 """El servicio acepta llamadas sin autenticación de GCP (la autenticación es la de la propia aplicación)."""
-FRONTEND = {'hosting': 'cloud_run', 'servicio': 'inventarios-web'}
+FRONTEND = {'hosting': 'cloud_run', 'servicio': 'taller-web'}
 """Frontend: {"hosting": "firebase_hosting" | "cloud_run", "servicio": nombre} o None. Sirve para conocer su URL antes de desplegar (CORS)."""
 WIF = {'dueno': 'CarlosSotoGarcia',
- 'repo': 'loom-piloto-e1c-claude-cli',
+ 'repo': 'loom-piloto-e3c-claude-cli',
  'pool': 'loom-github',
  'proveedor': 'github',
  'cuenta': 'loom-release-deployer'}
 """Despliegue automático con GitHub Actions + Workload Identity Federation (ADR-0081), o None."""
 TRIGGER = None
 """Trigger de Cloud Build que reejecuta este script en cada cambio de la rama base (o tag), o None."""
-JDBC = True
+JDBC = False
 """La aplicación conecta con JDBC: además de DB_HOST, DB_PORT y DB_NAME se entrega DB_URL."""
 
 
@@ -183,13 +183,40 @@ def url_de_servicio(servicio: str) -> str:
     return f"https://{servicio}-{numero}.{REGION}.run.app"
 
 
-def construir_imagen(directorio: str, imagen: str) -> None:
+def ubicar_servicio(directorio: str) -> tuple[str, str]:
+    """Devuelve (contexto de build, Dockerfile) de un servicio (ADR-0086). Busca el Dockerfile en `directorio` y, si no está,
+    en `apps/`, `packages/` y `services/` (monorepos con workspaces). Si el Dockerfile copia rutas de su propia carpeta desde la
+    raíz (p. ej. `COPY apps/backend/package.json`), el contexto es la raíz del repositorio y el Dockerfile se pasa aparte."""
+    for d in (directorio, f"apps/{directorio}", f"packages/{directorio}", f"services/{directorio}"):
+        dockerfile = os.path.join(d, "Dockerfile")
+        if os.path.isfile(dockerfile):
+            ruta = d.replace(os.sep, "/").strip("./")
+            with open(dockerfile, encoding="utf-8") as f:
+                contexto = "." if ruta and f"{ruta}/" in f.read() else d
+            if d != directorio:
+                print(f"==> {directorio}: se usa {dockerfile} (contexto {contexto})", flush=True)
+            return contexto, dockerfile
+    return directorio, os.path.join(directorio, "Dockerfile")
+
+
+def construir_imagen(directorio: str, imagen: str, dockerfile: str | None = None) -> None:
     """Construye la imagen con Cloud Build. En una máquina con sesión de persona transmite el registro del build; sin ella
-    (GitHub Actions, Cloud Build) la cuenta de servicio no puede leerlo, así que lanza el build sin esperar y consulta su estado."""
+    (GitHub Actions, Cloud Build) la cuenta de servicio no puede leerlo, así que lanza el build sin esperar y consulta su estado.
+    Si el Dockerfile no es `<directorio>/Dockerfile`, se construye con un cloudbuild temporal que lo pasa con `-f`."""
+    fuente = ["--tag", imagen]
+    if dockerfile and os.path.normpath(dockerfile) != os.path.normpath(os.path.join(directorio, "Dockerfile")):
+        config = os.path.join(tempfile.mkdtemp(), "cloudbuild.yaml")
+        with open(config, "w", encoding="utf-8") as f:
+            f.write(
+                "steps:\n- name: gcr.io/cloud-builders/docker\n"
+                f"  args: ['build', '-f', '{dockerfile.replace(os.sep, '/')}', '-t', '{imagen}', '.']\n"
+                f"images: ['{imagen}']\n"
+            )
+        fuente = ["--config", config]
     if not (os.environ.get("GITHUB_ACTIONS") or os.environ.get("RELEASE_TAG")):
-        ejecutar("gcloud", "builds", "submit", directorio, "--project", PROJECT_ID, "--tag", imagen)
+        ejecutar("gcloud", "builds", "submit", directorio, "--project", PROJECT_ID, *fuente)
         return
-    r = gcloud("builds", "submit", directorio, "--project", PROJECT_ID, "--tag", imagen, "--async", "--format=value(id)", capturar=True)
+    r = gcloud("builds", "submit", directorio, "--project", PROJECT_ID, *fuente, "--async", "--format=value(id)", capturar=True)
     identificador = r.stdout.strip().splitlines()[-1].strip()
     print(f"Build {identificador} en marcha (sin transmitir su registro: esta cuenta no puede leerlo).", flush=True)
     ultimo = ""
@@ -213,14 +240,15 @@ def desplegar_cloud_run(
     secretos: list[str] | None = None, cuenta: str | None = None, publico: bool = False,
 ) -> None:
     imagen = f"{REGION}-docker.pkg.dev/{PROJECT_ID}/{REPO}/{servicio}:{TAG}"
-    if not os.path.isfile(os.path.join(directorio, "Dockerfile")):
+    contexto, dockerfile = ubicar_servicio(directorio)
+    if not os.path.isfile(dockerfile):
         sys.exit(
-            f"ERROR: no existe {directorio}/Dockerfile, que Cloud Build necesita para construir {nombre}. "
+            f"ERROR: no existe {directorio}/Dockerfile (ni en apps/, packages/ o services/), que Cloud Build necesita para construir {nombre}. "
             "El esqueleto solo trae Dockerfile.dev (desarrollo): el Dockerfile de producción lo crea el paquete "
             "«Dockerfiles de producción y CI». Genera y fusiona ese paquete antes de ejecutar el release."
         )
     print(f"==> {nombre}: construyendo {imagen}", flush=True)
-    construir_imagen(directorio, imagen)
+    construir_imagen(contexto, imagen, dockerfile)
     print(f"==> {nombre}: desplegando en Cloud Run", flush=True)
     argumentos = ["run", "deploy", servicio, "--project", PROJECT_ID, "--region", REGION, "--image", imagen, "--quiet", "--memory", "1Gi", "--cpu-boost"]
     if cuenta:
@@ -332,7 +360,7 @@ def asegurar_trigger() -> None:
 
 def asegurar_wif() -> None:
     """Deja listo el despliegue automático con GitHub Actions y Workload Identity Federation (ADR-0081): un pool y un
-    proveedor OIDC que solo aceptan a este repositorio, la cuenta de servicio desplegadora con sus roles y las variables
+    proveedor OIDC que aceptan a este repositorio (y a los de otros Proyectos del mismo proyecto de GCP, ADR-0085), la cuenta de servicio desplegadora con sus roles y las variables
     del repositorio que usa el workflow. Es idempotente y no necesita ningún paso manual. Dentro de GitHub Actions no
     hace nada (ahí el script solo despliega)."""
     if not WIF or os.environ.get("GITHUB_ACTIONS") or os.environ.get("RELEASE_TAG"):
@@ -353,12 +381,20 @@ def asegurar_wif() -> None:
     pool, proveedor = WIF["pool"], WIF["proveedor"]
     if gcloud("iam", "workload-identity-pools", "describe", pool, "--location", "global", "--project", PROJECT_ID, capturar=True, permitir_fallo=True).returncode != 0:
         gcloud("iam", "workload-identity-pools", "create", pool, "--location", "global", "--project", PROJECT_ID, "--display-name", "GitHub Actions (Loom)")
-    if gcloud("iam", "workload-identity-pools", "providers", "describe", proveedor, "--workload-identity-pool", pool, "--location", "global",
-              "--project", PROJECT_ID, capturar=True, permitir_fallo=True).returncode != 0:
+    regla = f"assertion.repository=='{WIF['dueno']}/{WIF['repo']}'"
+    existente = gcloud("iam", "workload-identity-pools", "providers", "describe", proveedor, "--workload-identity-pool", pool, "--location", "global",
+                       "--project", PROJECT_ID, "--format=value(attributeCondition)", capturar=True, permitir_fallo=True)
+    if existente.returncode != 0:
         gcloud("iam", "workload-identity-pools", "providers", "create-oidc", proveedor, "--workload-identity-pool", pool, "--location", "global",
                "--project", PROJECT_ID, "--issuer-uri", "https://token.actions.githubusercontent.com",
                "--attribute-mapping", "google.subject=assertion.sub,attribute.repository=assertion.repository",
-               "--attribute-condition", f"assertion.repository=='{WIF['dueno']}/{WIF['repo']}'")
+               "--attribute-condition", regla)
+    elif regla not in existente.stdout:
+        # El proveedor es compartido por todos los Proyectos del mismo proyecto de GCP (ADR-0085): se agrega este
+        # repositorio a la condición sin quitar los que ya estaban.
+        condicion = f"{existente.stdout.strip()} || {regla}" if existente.stdout.strip() else regla
+        gcloud("iam", "workload-identity-pools", "providers", "update-oidc", proveedor, "--workload-identity-pool", pool, "--location", "global",
+               "--project", PROJECT_ID, "--attribute-condition", condicion)
     miembro = f"principalSet://iam.googleapis.com/projects/{numero}/locations/global/workloadIdentityPools/{pool}/attribute.repository/{WIF['dueno']}/{WIF['repo']}"
     gcloud("iam", "service-accounts", "add-iam-policy-binding", cuenta, "--project", PROJECT_ID, "--role", "roles/iam.workloadIdentityUser",
            "--member", miembro, "--quiet", capturar=True)
@@ -390,8 +426,8 @@ def main() -> None:
  'cloudresourcemanager.googleapis.com',
  'secretmanager.googleapis.com',
  'sqladmin.googleapis.com'])
-    preparar_y_desplegar_backend("inventarios-api", os.environ.get("BACKEND_DIR", "backend"))
-    preparar_y_desplegar_frontend("inventarios-web", os.environ.get("FRONTEND_DIR", "frontend"), "inventarios-api")
+    preparar_y_desplegar_backend("taller-api", os.environ.get("BACKEND_DIR", "backend"))
+    preparar_y_desplegar_frontend("taller-web", os.environ.get("FRONTEND_DIR", "frontend"), "taller-api")
     asegurar_wif()
     print(f"==> Release {TAG} terminado", flush=True)
 

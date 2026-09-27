@@ -1,0 +1,966 @@
+[
+ {
+  "tipo": "inicio",
+  "mensaje": "Avanzando con HU-002: 3 paquete(s), hasta 1 ronda(s) de corrección por paquete."
+ },
+ {
+  "tipo": "items_encontrados",
+  "total": 3,
+  "mensaje": "3 paquete(s) por completar en HU-002."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02: Backend: sesión (refresh, logout, /me), expiración por inactividad del personal y permisos por rol"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · revisión",
+  "mensaje": "HU-002/PT-02 · revisión: Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · revisión: HU-002/PT-02: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · revisión: HU-002/PT-02: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · revisión: HU-002/PT-02: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · revisión",
+  "mensaje": "HU-002/PT-02 — El PR cubre bien el paquete: tiene refresh con rotación, logout con revocación y auditoría, /me, validación de la sesión en cada petición, inactividad [Con observaciones] [4 observaciones]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · revisión",
+  "mensaje": "HU-002/PT-02 · revisión: 0 aprobado(s), 1 con observaciones."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: Corrigiendo HU-002/PT-02 — 4 observaciones"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: Preparando la rama del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "Rama hu/IAT-3/PT-02 lista (271 archivos) [Rama]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: El agente está aplicando las correcciones..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/config/env.schema.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/config/env.schema.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/config/env.schema.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/sesiones.repository.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/sesiones.repository.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/sesiones.repository.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/prisma/migrations/20260926140000_hu002_sesion/migration.sql"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/prisma/migrations/20260926150000_hu002_refresh_rotado/migration.sql"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.service.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.controller.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/auth.controller.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/src/modules/auth/dto/refresh-response.dto.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió docs/adr/0002-rotacion-refresh-en-la-misma-sesion.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió .env.example"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/.env.example"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió .github/workflows/deploy.yml"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió .github/workflows/deploy.yml"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió .github/workflows/deploy.yml"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió docs/despliegue.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1:   escribió README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "Correcciones: Las cuatro observaciones están atendidas: la mayor y las dos primeras menores del todo, la tercera en parte y la cuarta completa. No he podido compilar ni ejecu [21 archivos]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: Compilando en un contenedor (intento 1)..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "Compilación omitida: no se reconoce cómo compilar la capa «backend» [Sin compilar]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: Commit y push a la rama del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "Commit 5eb844b2 en hu/IAT-3/PT-02 [Push]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: Respondiendo las observaciones en el PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "HU-002/PT-02: 4 observaciones respondidas en el PR (1 corregidas, 1 conversaciones resueltas) [1 resueltas] [1/4 corregidas]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección 1/1",
+  "mensaje": "HU-002/PT-02 · corrección 1/1: HU-002/PT-02: correcciones subidas al PR. Vuelve a revisarlo."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · revisión tras la corrección 1",
+  "mensaje": "HU-002/PT-02 · revisión tras la corrección 1: Revisando 1 PR(s)..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · revisión tras la corrección 1: HU-002/PT-02: leyendo el diff del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · revisión tras la corrección 1: HU-002/PT-02: analizando el código..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · revisión tras la corrección 1: HU-002/PT-02: publicando la revisión en el PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · revisión tras la corrección 1",
+  "mensaje": "HU-002/PT-02 — Cubre bien el paquete: refresh con rotación y detección de reutilización, logout con revocación y auditoría, /me, sesión validada en cada petición, ex [Con observaciones] [6 observaciones]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · revisión tras la corrección 1",
+  "mensaje": "HU-002/PT-02 · revisión tras la corrección 1: 0 aprobado(s), 1 con observaciones."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: Backend (lint, typecheck, Jest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: Backend (lint, typecheck, Jest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · la integración continua falló (CI, Backend (lint, typecheck, Jest, Docker)); corrección 1/2 con el log"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: Corrigiendo HU-002/PT-02 — 8 observaciones"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: Preparando la rama del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "Rama hu/IAT-3/PT-02 lista (272 archivos) [Rama]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: El agente está aplicando las correcciones..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/domain/politica-sesion.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/sesiones.repository.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/sesiones.repository.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/auth.service.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/auth.service.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/borrar-cookie-refresh.filter.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/borrar-cookie-refresh.filter.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/auth.controller.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/auth.controller.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/modules/auth/dto/refresh-response.dto.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/config/env.schema.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/src/config/env.schema.spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/prisma/migrations/20260926150000_hu002_refresh_rotado/migration.sql"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/prisma/schema.prisma"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/test/auth-sesion.e2e-spec.ts"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/.env.example"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió .env.example"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió .github/workflows/deploy.yml"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió .github/workflows/deploy.yml"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió .github/workflows/deploy.yml"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió docs/despliegue.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió docs/adr/0002-rotacion-refresh-en-la-misma-sesion.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1:   escribió apps/backend/README.md"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "Correcciones: Corregí las 8 observaciones de la revisión. No pude ejecutar lint, typecheck, Jest ni los e2e aquí, así que el CI no está confirmado en verde: lo revisé solo le [23 archivos]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: Compilando en un contenedor (intento 1)..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "Compilación omitida: no se reconoce cómo compilar la capa «backend» [Sin compilar]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: Commit y push a la rama del PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "Commit dca5fba3 en hu/IAT-3/PT-02 [Push]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: Respondiendo las observaciones en el PR..."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "HU-002/PT-02: 8 observaciones respondidas en el PR (4 corregidas, 4 conversaciones resueltas) [4 resueltas] [4/8 corregidas]"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02 · corrección por CI 1",
+  "mensaje": "HU-002/PT-02 · corrección por CI 1: HU-002/PT-02: correcciones subidas al PR. Vuelve a revisarlo."
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: Backend (lint, typecheck, Jest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: Backend (lint, typecheck, Jest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: Backend (lint, typecheck, Jest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: Backend (lint, typecheck, Jest, Docker)"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · esperando la integración continua: CI"
+ },
+ {
+  "tipo": "procesando",
+  "indice": 1,
+  "total": 3,
+  "clave": "HU-002/PT-02",
+  "mensaje": "HU-002/PT-02 · CI en verde (4 check(s))"
+ },
+ {
+  "tipo": "item_listo",
+  "mensaje": "HU-002/PT-02: PR fusionado (en_revision, 0 observación(es) al cierre)",
+  "tags": [
+   {
+    "texto": "fusionado",
+    "severidad": "success"
+   }
+  ]
+ }
+]

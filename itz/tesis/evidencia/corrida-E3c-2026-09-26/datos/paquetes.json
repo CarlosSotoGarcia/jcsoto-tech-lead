@@ -1,0 +1,1420 @@
+[
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-01",
+  "grupo": "BASE",
+  "titulo": "Entorno de desarrollo dockerizado del monorepo",
+  "descripcion": "Crea el monorepo con workspaces de npm (apps/backend, apps/frontend) y deja todo el entorno de desarrollo en contenedores: un docker-compose.yml en la raíz con postgres, mailpit, api y web; un Dockerfile.dev por app con el código montado como volumen y recarga en caliente (nest start --watch / vite dev); .env.example en la raíz y en cada app; y un README.md en la raíz que explica cómo levantar el aplicativo en modo desarrollo. Sin lógica de negocio.",
+  "capa": "infra",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "package.json raíz con workspaces [apps/backend, apps/frontend] y scripts comunes (lint, test, typecheck)",
+   "docker-compose.yml de desarrollo: postgres:16 (volumen persistente y healthcheck), mailpit (SMTP 1025, UI 8025), api (apps/backend/Dockerfile.dev, puerto 3000, depende de postgres healthy), web (apps/frontend/Dockerfile.dev, puerto 5173)",
+   "apps/backend/Dockerfile.dev y apps/frontend/Dockerfile.dev con código montado como volumen, node_modules en volumen anónimo y recarga en caliente",
+   "docker-compose.test o perfil 'test' con una base postgres de pruebas para los e2e",
+   "Archivos .env.example (raíz, apps/backend, apps/frontend) con DATABASE_URL, JWT_ACCESS_SECRET, JWT_ACCESS_TTL, REFRESH_TTL_DAYS, VERIFICACION_TTL_HORAS, RESET_TTL_MINUTOS, FRONTEND_URL, MAIL_ADAPTER, SMTP_*, MAIL_FROM y VITE_API_BASE_URL",
+   "README.md en la raíz: requisitos previos (Docker, Docker Compose, Node 20 opcional), cómo levantarlo (cp .env.example .env && docker compose up), puertos y URLs (web :5173, api :3000, Swagger /api/docs, mailpit :8025, postgres :5432), variables de entorno, cómo correr las pruebas dentro de los contenedores (docker compose exec api npm test / exec web npm test), cómo detenerlo y limpiarlo (docker compose down -v) y enlaces a apps/backend/README.md y apps/frontend/README.md",
+   "Archivos .gitignore, .dockerignore, .editorconfig, configuración base de Prettier/ESLint compartida y la carpeta docs/adr/ con el ADR del estilo arquitectónico"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/1",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «infra»"
+  },
+  "observaciones": [
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "README.md",
+    "linea": 53,
+    "descripcion": "Varias tablas Markdown tienen columnas desalineadas: la fila de POSTGRES_USER y la tabla de puertos del README raíz, la última fila de scripts de apps/backend/README.md (línea 55) y la tabla de variables de apps/frontend/README.md (línea 34). Además, la línea del expect en apps/frontend/src/App.test.tsx (línea 9) pasa de printWidth 100. Prettier las reformatearía, así que el script `npm run format:check` que anuncia el README fallaría de entrada.",
+    "sugerencia": "Ejecutar `npm run format` una vez y subir el resultado para que el repositorio nazca conforme a la configuración de Prettier compartida.",
+    "comentario_id": 4112569850
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "README.md",
+    "linea": 110,
+    "descripcion": "No se versiona package-lock.json. Los Dockerfile.dev usan `npm install` sin lockfile, así que las versiones no son reproducibles. Además, los Dockerfile de producción y la CI previstos por la arquitectura usan `npm ci`, que falla sin lockfile. El README solo lo deja como recomendación.",
+    "sugerencia": "Generar package-lock.json con `npm install` en la raíz y subirlo en este mismo PR.",
+    "comentario_id": 4112569852
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "docker-compose.yml",
+    "linea": 45,
+    "descripcion": "La imagen `axllent/mailpit:latest` no tiene versión fija, a diferencia de postgres:16 y node:20-alpine. Un cambio de la imagen puede romper el entorno sin que cambie el repositorio.",
+    "sugerencia": "Fijar una versión concreta, por ejemplo `axllent/mailpit:v1.20`.",
+    "comentario_id": 4112569855
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/backend/test/app.e2e-spec.ts",
+    "linea": 29,
+    "descripcion": "El test 'responde CORS solo al origen del frontend configurado' solo manda el origen permitido. Con `origin` fijo como string, el middleware cors devuelve siempre ese valor en Access-Control-Allow-Origin, así que la prueba no demuestra ninguna restricción.",
+    "sugerencia": "Agregar un caso con un Origin distinto (p. ej. http://evil.test) y comprobar que la cabecera es el origen configurado y no el recibido, o renombrar el test para que describa lo que realmente verifica.",
+    "comentario_id": 4112569856
+   }
+  ],
+  "revisado_en": "2026-09-26T19:52:38.514640+00:00",
+  "id_externo": null,
+  "rama": "base/PT-01",
+  "md": "---\nid: PT-01\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: infra\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/1\nrondas_revision: 1\ndepende_de: []\nid_externo: null\nrama: base/PT-01\nfecha: 2026-09-26\n---\n\n# PT-01 — Entorno de desarrollo dockerizado del monorepo\n\n_BASE: Esqueleto del aplicativo_\n\nCrea el monorepo con workspaces de npm (apps/backend, apps/frontend) y deja todo el entorno de desarrollo en contenedores: un docker-compose.yml en la raíz con postgres, mailpit, api y web; un Dockerfile.dev por app con el código montado como volumen y recarga en caliente (nest start --watch / vite dev); .env.example en la raíz y en cada app; y un README.md en la raíz que explica cómo levantar el aplicativo en modo desarrollo. Sin lógica de negocio.\n\n## Entregables\n\n- package.json raíz con workspaces [apps/backend, apps/frontend] y scripts comunes (lint, test, typecheck)\n- docker-compose.yml de desarrollo: postgres:16 (volumen persistente y healthcheck), mailpit (SMTP 1025, UI 8025), api (apps/backend/Dockerfile.dev, puerto 3000, depende de postgres healthy), web (apps/frontend/Dockerfile.dev, puerto 5173)\n- apps/backend/Dockerfile.dev y apps/frontend/Dockerfile.dev con código montado como volumen, node_modules en volumen anónimo y recarga en caliente\n- docker-compose.test o perfil 'test' con una base postgres de pruebas para los e2e\n- Archivos .env.example (raíz, apps/backend, apps/frontend) con DATABASE_URL, JWT_ACCESS_SECRET, JWT_ACCESS_TTL, REFRESH_TTL_DAYS, VERIFICACION_TTL_HORAS, RESET_TTL_MINUTOS, FRONTEND_URL, MAIL_ADAPTER, SMTP_*, MAIL_FROM y VITE_API_BASE_URL\n- README.md en la raíz: requisitos previos (Docker, Docker Compose, Node 20 opcional), cómo levantarlo (cp .env.example .env && docker compose up), puertos y URLs (web :5173, api :3000, Swagger /api/docs, mailpit :8025, postgres :5432), variables de entorno, cómo correr las pruebas dentro de los contenedores (docker compose exec api npm test / exec web npm test), cómo detenerlo y limpiarlo (docker compose down -v) y enlaces a apps/backend/README.md y apps/frontend/README.md\n- Archivos .gitignore, .dockerignore, .editorconfig, configuración base de Prettier/ESLint compartida y la carpeta docs/adr/ con el ADR del estilo arquitectónico\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **menor** (buenas_practicas) `README.md:53`: Varias tablas Markdown tienen columnas desalineadas: la fila de POSTGRES_USER y la tabla de puertos del README raíz, la última fila de scripts de apps/backend/README.md (línea 55) y la tabla de variables de apps/frontend/README.md (línea 34). Además, la línea del expect en apps/frontend/src/App.test.tsx (línea 9) pasa de printWidth 100. Prettier las reformatearía, así que el script `npm run format:check` que anuncia el README fallaría de entrada.\n- **menor** (buenas_practicas) `README.md:110`: No se versiona package-lock.json. Los Dockerfile.dev usan `npm install` sin lockfile, así que las versiones no son reproducibles. Además, los Dockerfile de producción y la CI previstos por la arquitectura usan `npm ci`, que falla sin lockfile. El README solo lo deja como recomendación.\n- **menor** (buenas_practicas) `docker-compose.yml:45`: La imagen `axllent/mailpit:latest` no tiene versión fija, a diferencia de postgres:16 y node:20-alpine. Un cambio de la imagen puede romper el entorno sin que cambie el repositorio.\n- **menor** (pruebas) `apps/backend/test/app.e2e-spec.ts:29`: El test 'responde CORS solo al origen del frontend configurado' solo manda el origen permitido. Con `origin` fijo como string, el middleware cors devuelve siempre ese valor en Access-Control-Allow-Origin, así que la prueba no demuestra ninguna restricción.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-02",
+  "grupo": "BASE",
+  "titulo": "Base del backend NestJS: configuración, Prisma, Swagger y health",
+  "descripcion": "Scaffolding de apps/backend según la arquitectura: módulos vacíos, configuración validada, PrismaModule con el esquema y la migración inicial del modelo de datos, manejo uniforme de errores, Swagger en /api/docs y el healthcheck. También crea el README del backend. Sin endpoints de negocio.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "Proyecto NestJS con nest-cli.json (plugin de @nestjs/swagger activado), tsconfig y scripts: start:dev, build, test, test:e2e, lint, typecheck",
+   "src/main.ts: prefijo global /api con versión v1, ValidationPipe global (whitelist, transform), cookie-parser y enableShutdownHooks",
+   "src/config/: esquema de variables de entorno validado con zod y ConfigModule global",
+   "src/prisma/: PrismaModule y PrismaService",
+   "prisma/schema.prisma con Usuario, Cliente, TokenUnUso, Sesion, DocumentoLegal, AceptacionLegal y EventoAuditoria, sus enums e índices únicos (correoNormalizado, tokenHash, refreshTokenHash e índices parciales de Cliente mediante SQL en la migración); migración inicial versionada",
+   "prisma/seed.ts idempotente: usuario ADMIN desde variables de entorno y documentos legales vigentes de ejemplo",
+   "src/common/: ErrorDto {codigo, mensaje, campos?}, filtro global de excepciones que mapea errores de validación y de negocio a ErrorDto, clase base BusinessException con código estable",
+   "Swagger (OpenAPI 3) en /api/docs con la especificación en /api/docs-json, esquema bearer configurado y ErrorDto registrado",
+   "Módulo health: GET /api/health (liveness y ping a la BD), excluido de Swagger y de /v1",
+   "Carpetas de módulos vacías según la estructura (auth, registro, password-recovery, usuarios, clientes, tokens, notificaciones, legal, auditoria), sin lógica",
+   "Jest configurado con un spec unitario de ejemplo y un e2e con supertest de /api/health contra la BD de pruebas",
+   "apps/backend/README.md: qué hace, cómo levantarlo solo y con compose, variables de entorno, migraciones y seed, cómo correr las pruebas unitarias y e2e, estructura de carpetas y la URL de Swagger (http://localhost:3000/api/docs)",
+   "Actualización del README de la raíz con los comandos de migración y seed dentro del contenedor"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/2",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/app.setup.ts",
+    "linea": 40,
+    "descripcion": "La arquitectura pone helmet en main.ts y en la sección de seguridad, pero configureApp no lo aplica y helmet no está entre las dependencias. El paquete no lo exige de forma explícita, pero es la configuración HTTP común que este PR establece.",
+    "sugerencia": "Agregar la dependencia helmet y llamar a app.use(helmet()) en configureApp, o dejar documentado en qué paquete se incorporará.",
+    "comentario_id": 4112682735
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/prisma/seed.ts",
+    "linea": 124,
+    "descripcion": "Cuando el ADMIN ya existe, el upsert vuelve a poner estado ACTIVA y rol ADMIN. Si ese usuario se bloqueó o desactivó a propósito, volver a correr el seed lo reactiva sin avisar. Eso contradice la idea de un seed idempotente que respeta los datos existentes.",
+    "sugerencia": "Dejar update vacío ({}) para que el seed solo cree el ADMIN si no existe, o documentar en el README que re-ejecutarlo lo reactiva.",
+    "comentario_id": 4112682739
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": "apps/backend/.env.example",
+    "linea": 32,
+    "descripcion": "SEED_ADMIN_PASSWORD de ejemplo ('reemplazar-password-admin-1') cumple la política de contraseñas. Si alguien copia el .env.example tal cual, el seed crea un ADMIN con una contraseña pública, porque la validación no lo rechaza. Esto aplica también al .env.example de la raíz.",
+    "sugerencia": "Dejar la variable vacía en los .env.example, o hacer que leerConfigSeed rechace ese valor de ejemplo cuando NODE_ENV=production.",
+    "comentario_id": 4112682742
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/prisma/seed.ts",
+    "linea": 47,
+    "descripcion": "La política de contraseña (8 o más caracteres, letra y número) queda escrita a mano en el seed. Según la arquitectura, esa regla pertenece al dominio compartido (usuarios/domain) y la usan también el frontend y el backend. Duplicarla aquí puede hacer que las copias se desalineen.",
+    "sugerencia": "Cuando exista la política en el dominio de usuarios, importarla desde el seed; mientras tanto, dejar un TODO que lo indique.",
+    "comentario_id": 4112682744
+   }
+  ],
+  "revisado_en": "2026-09-26T20:30:38.491471+00:00",
+  "id_externo": null,
+  "rama": "base/PT-02",
+  "md": "---\nid: PT-02\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/2\nrondas_revision: 1\ndepende_de: [PT-01]\nid_externo: null\nrama: base/PT-02\nfecha: 2026-09-26\n---\n\n# PT-02 — Base del backend NestJS: configuración, Prisma, Swagger y health\n\n_BASE: Esqueleto del aplicativo_\n\nScaffolding de apps/backend según la arquitectura: módulos vacíos, configuración validada, PrismaModule con el esquema y la migración inicial del modelo de datos, manejo uniforme de errores, Swagger en /api/docs y el healthcheck. También crea el README del backend. Sin endpoints de negocio.\n\n## Entregables\n\n- Proyecto NestJS con nest-cli.json (plugin de @nestjs/swagger activado), tsconfig y scripts: start:dev, build, test, test:e2e, lint, typecheck\n- src/main.ts: prefijo global /api con versión v1, ValidationPipe global (whitelist, transform), cookie-parser y enableShutdownHooks\n- src/config/: esquema de variables de entorno validado con zod y ConfigModule global\n- src/prisma/: PrismaModule y PrismaService\n- prisma/schema.prisma con Usuario, Cliente, TokenUnUso, Sesion, DocumentoLegal, AceptacionLegal y EventoAuditoria, sus enums e índices únicos (correoNormalizado, tokenHash, refreshTokenHash e índices parciales de Cliente mediante SQL en la migración); migración inicial versionada\n- prisma/seed.ts idempotente: usuario ADMIN desde variables de entorno y documentos legales vigentes de ejemplo\n- src/common/: ErrorDto {codigo, mensaje, campos?}, filtro global de excepciones que mapea errores de validación y de negocio a ErrorDto, clase base BusinessException con código estable\n- Swagger (OpenAPI 3) en /api/docs con la especificación en /api/docs-json, esquema bearer configurado y ErrorDto registrado\n- Módulo health: GET /api/health (liveness y ping a la BD), excluido de Swagger y de /v1\n- Carpetas de módulos vacías según la estructura (auth, registro, password-recovery, usuarios, clientes, tokens, notificaciones, legal, auditoria), sin lógica\n- Jest configurado con un spec unitario de ejemplo y un e2e con supertest de /api/health contra la BD de pruebas\n- apps/backend/README.md: qué hace, cómo levantarlo solo y con compose, variables de entorno, migraciones y seed, cómo correr las pruebas unitarias y e2e, estructura de carpetas y la URL de Swagger (http://localhost:3000/api/docs)\n- Actualización del README de la raíz con los comandos de migración y seed dentro del contenedor\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **menor** (arquitectura) `apps/backend/src/app.setup.ts:40`: La arquitectura pone helmet en main.ts y en la sección de seguridad, pero configureApp no lo aplica y helmet no está entre las dependencias. El paquete no lo exige de forma explícita, pero es la configuración HTTP común que este PR establece.\n- **menor** (buenas_practicas) `apps/backend/prisma/seed.ts:124`: Cuando el ADMIN ya existe, el upsert vuelve a poner estado ACTIVA y rol ADMIN. Si ese usuario se bloqueó o desactivó a propósito, volver a correr el seed lo reactiva sin avisar. Eso contradice la idea de un seed idempotente que respeta los datos existentes.\n- **menor** (seguridad) `apps/backend/.env.example:32`: SEED_ADMIN_PASSWORD de ejemplo ('reemplazar-password-admin-1') cumple la política de contraseñas. Si alguien copia el .env.example tal cual, el seed crea un ADMIN con una contraseña pública, porque la validación no lo rechaza. Esto aplica también al .env.example de la raíz.\n- **menor** (arquitectura) `apps/backend/prisma/seed.ts:47`: La política de contraseña (8 o más caracteres, letra y número) queda escrita a mano en el seed. Según la arquitectura, esa regla pertenece al dominio compartido (usuarios/domain) y la usan también el frontend y el backend. Duplicarla aquí puede hacer que las copias se desalineen.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-03",
+  "grupo": "BASE",
+  "titulo": "Seguridad base y puertos transversales del backend",
+  "descripcion": "Deja la infraestructura de seguridad y los adaptadores compartidos que usarán las HUs, sin reglas ni endpoints de negocio: guard JWT global con @Public, RolesGuard con @Roles, helmet, CORS restringido, throttler, servicio de hashing argon2id, firma JWT, puerto de correo con adaptadores de consola y SMTP, y el servicio de escritura de auditoría.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "helmet y CORS restringido a FRONTEND_URL con credentials en main.ts",
+   "JwtModule y JwtStrategy (HS256, claims sub/rol/sesionId); JwtAuthGuard global y decorador @Public() (health y Swagger públicos)",
+   "RolesGuard y decorador @Roles(); enum Rol compartido (CLIENTE, RECEPCION, ADMIN)",
+   "ThrottlerModule configurado con un decorador de límite reutilizable",
+   "infrastructure: PasswordHasher (argon2id) y utilidad de hash SHA-256 para tokens opacos, con pruebas unitarias",
+   "Módulo notificaciones: MailerPort, ConsoleMailerAdapter y SmtpMailerAdapter (nodemailer) seleccionados con MAIL_ADAPTER; en dev usa SMTP hacia mailpit; sin plantillas de negocio",
+   "Módulo auditoria: AuditoriaService.registrar(evento) append-only que toma IP y user-agent del request, sin tipos de negocio adicionales",
+   "Pruebas e2e: ruta protegida de prueba devuelve 401 sin token y 403 con un rol incorrecto (solo en el entorno de test)",
+   "Actualización de apps/backend/README.md (variables JWT/SMTP, cómo ver correos en mailpit)"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01",
+   "PT-02"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/3",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "apps/backend/src/modules/notificaciones/console.adapter.ts",
+    "linea": 16,
+    "descripcion": "ConsoleMailerAdapter escribe en el log el texto completo del correo. Ese texto incluirá los enlaces con los tokens de verificación y de restablecimiento. Además, MAIL_ADAPTER vale 'console' por defecto (README, tabla de variables), así que un despliegue en producción sin esa variable escribiría tokens de un solo uso en Cloud Logging. Quien pueda leer los logs podría restablecer contraseñas ajenas.",
+    "sugerencia": "En env.schema, rechazar MAIL_ADAPTER=console (o exigir MAIL_ADAPTER=smtp) cuando NODE_ENV=production, o no poner valor por defecto en producción. Otra opción es que crearMailer lance un error si recibe 'console' en producción. Añadir una prueba unitaria de esa regla.",
+    "comentario_id": 4112723997
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/app.setup.ts",
+    "linea": 53,
+    "descripcion": "'trust proxy' está fijo en 1 salto. La arquitectura recomienda poner un Load Balancer delante de Cloud Run, y en ese caso puede haber más de un proxy. Entonces req.ip, que usan el throttler y la auditoría, podría ser la IP de un proxy y no la del cliente: todos los usuarios compartirían el mismo límite de frecuencia y la auditoría registraría una IP incorrecta.",
+    "sugerencia": "Leer el número de saltos o la lista de proxies de confianza de una variable de entorno (p. ej. TRUST_PROXY_HOPS) validada en env.schema y documentarla en el README del backend.",
+    "comentario_id": 4112724000
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/common/throttling/throttling.ts",
+    "linea": 13,
+    "descripcion": "El throttler guarda sus contadores en memoria. En Cloud Run con varias instancias, cada instancia cuenta por su lado, así que el límite real es el configurado multiplicado por el número de instancias. El README no menciona esta limitación.",
+    "sugerencia": "Documentar la limitación en apps/backend/README.md (sección Seguridad) o dejar preparado un almacenamiento compartido (ThrottlerStorage) para cuando se escale.",
+    "comentario_id": 4112724003
+   }
+  ],
+  "revisado_en": "2026-09-26T20:45:29.430541+00:00",
+  "id_externo": null,
+  "rama": "base/PT-03",
+  "md": "---\nid: PT-03\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/3\nrondas_revision: 1\ndepende_de: [PT-01, PT-02]\nid_externo: null\nrama: base/PT-03\nfecha: 2026-09-26\n---\n\n# PT-03 — Seguridad base y puertos transversales del backend\n\n_BASE: Esqueleto del aplicativo_\n\nDeja la infraestructura de seguridad y los adaptadores compartidos que usarán las HUs, sin reglas ni endpoints de negocio: guard JWT global con @Public, RolesGuard con @Roles, helmet, CORS restringido, throttler, servicio de hashing argon2id, firma JWT, puerto de correo con adaptadores de consola y SMTP, y el servicio de escritura de auditoría.\n\n## Entregables\n\n- helmet y CORS restringido a FRONTEND_URL con credentials en main.ts\n- JwtModule y JwtStrategy (HS256, claims sub/rol/sesionId); JwtAuthGuard global y decorador @Public() (health y Swagger públicos)\n- RolesGuard y decorador @Roles(); enum Rol compartido (CLIENTE, RECEPCION, ADMIN)\n- ThrottlerModule configurado con un decorador de límite reutilizable\n- infrastructure: PasswordHasher (argon2id) y utilidad de hash SHA-256 para tokens opacos, con pruebas unitarias\n- Módulo notificaciones: MailerPort, ConsoleMailerAdapter y SmtpMailerAdapter (nodemailer) seleccionados con MAIL_ADAPTER; en dev usa SMTP hacia mailpit; sin plantillas de negocio\n- Módulo auditoria: AuditoriaService.registrar(evento) append-only que toma IP y user-agent del request, sin tipos de negocio adicionales\n- Pruebas e2e: ruta protegida de prueba devuelve 401 sin token y 403 con un rol incorrecto (solo en el entorno de test)\n- Actualización de apps/backend/README.md (variables JWT/SMTP, cómo ver correos en mailpit)\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (seguridad) `apps/backend/src/modules/notificaciones/console.adapter.ts:16`: ConsoleMailerAdapter escribe en el log el texto completo del correo. Ese texto incluirá los enlaces con los tokens de verificación y de restablecimiento. Además, MAIL_ADAPTER vale 'console' por defecto (README, tabla de variables), así que un despliegue en producción sin esa variable escribiría tokens de un solo uso en Cloud Logging. Quien pueda leer los logs podría restablecer contraseñas ajenas.\n- **menor** (buenas_practicas) `apps/backend/src/app.setup.ts:53`: 'trust proxy' está fijo en 1 salto. La arquitectura recomienda poner un Load Balancer delante de Cloud Run, y en ese caso puede haber más de un proxy. Entonces req.ip, que usan el throttler y la auditoría, podría ser la IP de un proxy y no la del cliente: todos los usuarios compartirían el mismo límite de frecuencia y la auditoría registraría una IP incorrecta.\n- **menor** (arquitectura) `apps/backend/src/common/throttling/throttling.ts:13`: El throttler guarda sus contadores en memoria. En Cloud Run con varias instancias, cada instancia cuenta por su lado, así que el límite real es el configurado multiplicado por el número de instancias. El README no menciona esta limitación.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-04",
+  "grupo": "BASE",
+  "titulo": "Shell del frontend React + MUI",
+  "descripcion": "Scaffolding de apps/frontend: Vite + React + TypeScript, theme de MUI, router con layouts y rutas placeholder, TanStack Query, cliente HTTP con refresh automático, AuthContext y guards de ruta vacíos de reglas de negocio, generación de tipos desde OpenAPI y setup de pruebas. También crea el README del frontend.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "Proyecto Vite + React + TS con scripts: dev, build, preview, test, lint, typecheck y gen:api (openapi-typescript desde /api/docs-json hacia src/api/schema.d.ts)",
+   "src/app/: theme.ts (theme MUI central), queryClient.ts, providers.tsx (ThemeProvider, CssBaseline, QueryClientProvider, AuthProvider) y router.tsx con layout público y layout autenticado",
+   "Rutas placeholder: /login, /registro, /verificar-correo, /olvide-contrasena, /restablecer, /mis-vehiculos y /interno, además de una página 404",
+   "src/api/http.ts: wrapper de fetch con VITE_API_BASE_URL, credentials include, header Authorization desde memoria, reintento único tras un 401 vía /auth/refresh y parseo de ErrorDto",
+   "src/auth/: AuthContext (access token en memoria, sin flujos de negocio), RequireAuth, RequireRole y rutaInicialPorRol.ts",
+   "src/shared/: mapa único de códigos de error a mensajes (vacío o extensible) y carpeta validation/",
+   "Vitest + Testing Library + MSW configurados en src/test/, con una prueba del router y otra del reintento del cliente HTTP",
+   "apps/frontend/README.md: qué hace, cómo levantarlo solo y con compose, variables de entorno (VITE_API_BASE_URL), cómo generar los tipos de la API, cómo correr las pruebas y la estructura de carpetas",
+   "Actualización del README de la raíz con el comando gen:api"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/4",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "apps/frontend/package.json",
+    "linea": 21,
+    "descripcion": "Se agregan dependencias nuevas (@tanstack/react-query, react-router-dom, msw, openapi-typescript), pero el diff no incluye la actualización del package-lock.json del workspace. La arquitectura indica que la CI y los Dockerfile usan `npm ci`, que falla cuando package.json y el lockfile no coinciden. Eso impediría cumplir «compila, corre y pasa sus pruebas».",
+    "sugerencia": "Ejecutar `npm install` en la raíz del monorepo y commitear el package-lock.json actualizado en este mismo PR.",
+    "comentario_id": 4112761948
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/api/http.ts",
+    "linea": 168,
+    "descripcion": "Una petición enviada con el token viejo puede recibir su 401 cuando otro refresh concurrente ya terminó (refreshEnCurso vuelve a null). En ese caso dispara un segundo POST /auth/refresh innecesario, que rota otra vez el refresh token. El caso de prueba concurrente solo cubre los 401 que llegan mientras el refresh sigue en curso.",
+    "sugerencia": "Guardar el token usado en la petición. Ante un 401, si tokenStore.get() ya es distinto y no es nulo, reintentar directamente sin refrescar. Agregar una prueba para ese caso.",
+    "comentario_id": 4112761955
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/auth/AuthContext.tsx",
+    "linea": 62,
+    "descripcion": "Cuando el cliente HTTP limpia el token (refresh fallido), el estado pasa a anónimo, pero `usuario` sigue en el state y la caché de TanStack Query conserva los datos del usuario anterior. Si luego alguien vuelve a poner un token en el store, el usuario anterior 'reaparece'. Además, la arquitectura pide limpiar la caché de Query al cerrar la sesión.",
+    "sugerencia": "Suscribirse al tokenStore para ejecutar setUsuario(null) cuando el token pase a null, y exponer un punto (o recibir el QueryClient) para llamar a queryClient.clear() al cerrar la sesión o al perderla.",
+    "comentario_id": 4112761965
+   }
+  ],
+  "revisado_en": "2026-09-26T20:58:06.216985+00:00",
+  "id_externo": null,
+  "rama": "base/PT-04",
+  "md": "---\nid: PT-04\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/4\nrondas_revision: 1\ndepende_de: [PT-01]\nid_externo: null\nrama: base/PT-04\nfecha: 2026-09-26\n---\n\n# PT-04 — Shell del frontend React + MUI\n\n_BASE: Esqueleto del aplicativo_\n\nScaffolding de apps/frontend: Vite + React + TypeScript, theme de MUI, router con layouts y rutas placeholder, TanStack Query, cliente HTTP con refresh automático, AuthContext y guards de ruta vacíos de reglas de negocio, generación de tipos desde OpenAPI y setup de pruebas. También crea el README del frontend.\n\n## Entregables\n\n- Proyecto Vite + React + TS con scripts: dev, build, preview, test, lint, typecheck y gen:api (openapi-typescript desde /api/docs-json hacia src/api/schema.d.ts)\n- src/app/: theme.ts (theme MUI central), queryClient.ts, providers.tsx (ThemeProvider, CssBaseline, QueryClientProvider, AuthProvider) y router.tsx con layout público y layout autenticado\n- Rutas placeholder: /login, /registro, /verificar-correo, /olvide-contrasena, /restablecer, /mis-vehiculos y /interno, además de una página 404\n- src/api/http.ts: wrapper de fetch con VITE_API_BASE_URL, credentials include, header Authorization desde memoria, reintento único tras un 401 vía /auth/refresh y parseo de ErrorDto\n- src/auth/: AuthContext (access token en memoria, sin flujos de negocio), RequireAuth, RequireRole y rutaInicialPorRol.ts\n- src/shared/: mapa único de códigos de error a mensajes (vacío o extensible) y carpeta validation/\n- Vitest + Testing Library + MSW configurados en src/test/, con una prueba del router y otra del reintento del cliente HTTP\n- apps/frontend/README.md: qué hace, cómo levantarlo solo y con compose, variables de entorno (VITE_API_BASE_URL), cómo generar los tipos de la API, cómo correr las pruebas y la estructura de carpetas\n- Actualización del README de la raíz con el comando gen:api\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `apps/frontend/package.json:21`: Se agregan dependencias nuevas (@tanstack/react-query, react-router-dom, msw, openapi-typescript), pero el diff no incluye la actualización del package-lock.json del workspace. La arquitectura indica que la CI y los Dockerfile usan `npm ci`, que falla cuando package.json y el lockfile no coinciden. Eso impediría cumplir «compila, corre y pasa sus pruebas».\n- **menor** (buenas_practicas) `apps/frontend/src/api/http.ts:168`: Una petición enviada con el token viejo puede recibir su 401 cuando otro refresh concurrente ya terminó (refreshEnCurso vuelve a null). En ese caso dispara un segundo POST /auth/refresh innecesario, que rota otra vez el refresh token. El caso de prueba concurrente solo cubre los 401 que llegan mientras el refresh sigue en curso.\n- **menor** (buenas_practicas) `apps/frontend/src/auth/AuthContext.tsx:62`: Cuando el cliente HTTP limpia el token (refresh fallido), el estado pasa a anónimo, pero `usuario` sigue en el state y la caché de TanStack Query conserva los datos del usuario anterior. Si luego alguien vuelve a poner un token en el store, el usuario anterior 'reaparece'. Además, la arquitectura pide limpiar la caché de Query al cerrar la sesión.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-05",
+  "grupo": "BASE",
+  "titulo": "Dockerfiles de producción y CI/CD a Cloud Run",
+  "descripcion": "Deja el aplicativo desplegable: Dockerfiles de producción multi-stage para los dos servicios de Cloud Run, nginx.conf del frontend y los workflows de GitHub Actions para PR y para el despliegue desde main.",
+  "capa": "infra",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "apps/backend/Dockerfile (producción): build node:20-alpine (npm ci, prisma generate, nest build) y runtime node:20-alpine con dependencias de producción, dist y prisma; usuario no root; PORT=8080; CMD npx prisma migrate deploy && node dist/main.js",
+   "apps/frontend/Dockerfile (producción): build node:20-alpine (npm ci, vite build con ARG VITE_API_BASE_URL) y runtime nginx:1.27-alpine sirviendo dist en $PORT=8080",
+   "apps/frontend/nginx.conf: fallback SPA, GET /healthz y escucha en $PORT mediante una plantilla envsubst",
+   "Archivo .github/workflows/ci.yml en cada PR, con filtros por app afectada: lint, typecheck, Jest con un servicio postgres para los e2e, prisma validate, Vitest y build de las dos imágenes Docker de producción",
+   "Archivo .github/workflows/deploy.yml en main: autenticación con Workload Identity Federation, build y push a Artifact Registry con el tag del SHA y gcloud run deploy de itz-agenda-api (Cloud SQL, secretos de Secret Manager, probes a /api/health) y de itz-agenda-web (probe a /healthz)",
+   "docs/despliegue.md o una sección en el README de la raíz con las variables, secretos y recursos GCP necesarios (Cloud SQL, Secret Manager, Artifact Registry, Load Balancer /api → backend)"
+  ],
+  "tcs_asociados": [],
+  "depende_de": [
+   "PT-01",
+   "PT-02",
+   "PT-03",
+   "PT-04"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": null,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/5",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «infra»"
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": ".github/workflows/ci.yml",
+    "linea": 122,
+    "descripcion": "El criterio de terminado es «compila, corre y pasa sus pruebas», pero el CI solo construye las imágenes y nunca las ejecuta. Si nginx.conf tiene un error, el envsubst de ${PORT} falla o la API no arranca como usuario node, la CI no lo detecta y el problema aparecería recién en el primer despliegue.",
+    "sugerencia": "Agregar una prueba de humo después del build. En web: `load: true`, `docker run -d -p 8080:8080` y `curl -f localhost:8080/healthz` (y también una ruta SPA como /login). En la API: arrancar contra el postgres del job con `--network host` y hacer `curl -f localhost:8080/api/health`.",
+    "comentario_id": 4112785269
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": ".github/workflows/deploy.yml",
+    "linea": 13,
+    "descripcion": "El deploy se dispara con cualquier push a main sin comprobar que la CI haya pasado para ese commit. La única protección es la regla de rama que recomienda la documentación, así que un push directo o un merge que se salte los checks despliega a producción sin pruebas.",
+    "sugerencia": "Disparar el deploy con `workflow_run` cuando termine CI en main con `conclusion == 'success'`. Otra opción es reutilizar ci.yml mediante `workflow_call` como job previo a `api`.",
+    "comentario_id": 4112785274
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": ".github/workflows/deploy.yml",
+    "linea": 89,
+    "descripcion": "Las variables no definidas en GitHub llegan a Cloud Run como cadenas vacías (SMTP_PORT, SMTP_HOST, MAIL_FROM, etc.). El comentario dice que la API las trata como no definidas, pero env.schema.ts no forma parte del diff. Si el esquema usa, por ejemplo, `z.coerce.number()`, un SMTP_PORT vacío se convierte en 0 y la API no arrancaría.",
+    "sugerencia": "Descartar las claves vacías en el propio jq, por ejemplo agregando `| with_entries(select(.value != \"\"))` al final del filtro, para no depender del comportamiento del esquema.",
+    "comentario_id": 4112785280
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/Dockerfile",
+    "linea": 27,
+    "descripcion": "Los Dockerfiles y el CI usan `npm install` como alternativa cuando no existe package-lock.json. Así los builds de producción no son reproducibles y pueden desplegar versiones de dependencias distintas de las que se probaron. Además, `cache: npm` de setup-node supone que existe un lockfile.",
+    "sugerencia": "Hacer obligatorio el lockfile: versionar package-lock.json y usar siempre `npm ci`, sin la rama `npm install`, en apps/backend/Dockerfile, apps/frontend/Dockerfile y ci.yml.",
+    "comentario_id": 4112785281
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": ".github/workflows/deploy.yml",
+    "linea": 48,
+    "descripcion": "Las acciones de terceros (dorny/paths-filter, docker/*, google-github-actions/*) se referencian por tag mutable. El workflow de deploy tiene `id-token: write` y acceso a producción, así que una acción comprometida podría hacerse pasar por la cuenta de servicio de despliegue.",
+    "sugerencia": "Fijar las acciones por SHA de commit (`uses: owner/action@<sha> # v2`) al menos en deploy.yml y mantenerlas actualizadas con Dependabot.",
+    "comentario_id": 4112785285
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/nginx.conf",
+    "linea": 35,
+    "descripcion": "El comentario promete caché «larga e inmutable» para /assets/, pero `expires 1y` solo genera `Cache-Control: max-age`, sin `immutable`.",
+    "sugerencia": "Agregar `add_header Cache-Control \"public, max-age=31536000, immutable\" always;` en ese location. Hay que repetir ahí también los headers de seguridad del server, porque en nginx un add_header dentro del location anula los que se heredan.",
+    "comentario_id": 4112785287
+   }
+  ],
+  "revisado_en": "2026-09-26T21:06:16.579561+00:00",
+  "id_externo": null,
+  "rama": "base/PT-05",
+  "md": "---\nid: PT-05\nhu_id: BASE\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: infra\nestado: fusionado\nronda: 1\ntcs_asociados: []\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/5\nrondas_revision: 1\ndepende_de: [PT-01, PT-02, PT-03, PT-04]\nid_externo: null\nrama: base/PT-05\nfecha: 2026-09-26\n---\n\n# PT-05 — Dockerfiles de producción y CI/CD a Cloud Run\n\n_BASE: Esqueleto del aplicativo_\n\nDeja el aplicativo desplegable: Dockerfiles de producción multi-stage para los dos servicios de Cloud Run, nginx.conf del frontend y los workflows de GitHub Actions para PR y para el despliegue desde main.\n\n## Entregables\n\n- apps/backend/Dockerfile (producción): build node:20-alpine (npm ci, prisma generate, nest build) y runtime node:20-alpine con dependencias de producción, dist y prisma; usuario no root; PORT=8080; CMD npx prisma migrate deploy && node dist/main.js\n- apps/frontend/Dockerfile (producción): build node:20-alpine (npm ci, vite build con ARG VITE_API_BASE_URL) y runtime nginx:1.27-alpine sirviendo dist en $PORT=8080\n- apps/frontend/nginx.conf: fallback SPA, GET /healthz y escucha en $PORT mediante una plantilla envsubst\n- Archivo .github/workflows/ci.yml en cada PR, con filtros por app afectada: lint, typecheck, Jest con un servicio postgres para los e2e, prisma validate, Vitest y build de las dos imágenes Docker de producción\n- Archivo .github/workflows/deploy.yml en main: autenticación con Workload Identity Federation, build y push a Artifact Registry con el tag del SHA y gcloud run deploy de itz-agenda-api (Cloud SQL, secretos de Secret Manager, probes a /api/health) y de itz-agenda-web (probe a /healthz)\n- docs/despliegue.md o una sección en el README de la raíz con las variables, secretos y recursos GCP necesarios (Cloud SQL, Secret Manager, Artifact Registry, Load Balancer /api → backend)\n\n## Se da por terminado cuando\n\n- Compila, corre y pasa sus pruebas.\n\n## Observaciones de la revisión\n\n- **menor** (criterio_aceptacion) `.github/workflows/ci.yml:122`: El criterio de terminado es «compila, corre y pasa sus pruebas», pero el CI solo construye las imágenes y nunca las ejecuta. Si nginx.conf tiene un error, el envsubst de ${PORT} falla o la API no arranca como usuario node, la CI no lo detecta y el problema aparecería recién en el primer despliegue.\n- **menor** (buenas_practicas) `.github/workflows/deploy.yml:13`: El deploy se dispara con cualquier push a main sin comprobar que la CI haya pasado para ese commit. La única protección es la regla de rama que recomienda la documentación, así que un push directo o un merge que se salte los checks despliega a producción sin pruebas.\n- **menor** (buenas_practicas) `.github/workflows/deploy.yml:89`: Las variables no definidas en GitHub llegan a Cloud Run como cadenas vacías (SMTP_PORT, SMTP_HOST, MAIL_FROM, etc.). El comentario dice que la API las trata como no definidas, pero env.schema.ts no forma parte del diff. Si el esquema usa, por ejemplo, `z.coerce.number()`, un SMTP_PORT vacío se convierte en 0 y la API no arrancaría.\n- **menor** (buenas_practicas) `apps/backend/Dockerfile:27`: Los Dockerfiles y el CI usan `npm install` como alternativa cuando no existe package-lock.json. Así los builds de producción no son reproducibles y pueden desplegar versiones de dependencias distintas de las que se probaron. Además, `cache: npm` de setup-node supone que existe un lockfile.\n- **menor** (seguridad) `.github/workflows/deploy.yml:48`: Las acciones de terceros (dorny/paths-filter, docker/*, google-github-actions/*) se referencian por tag mutable. El workflow de deploy tiene `id-token: write` y acceso a producción, así que una acción comprometida podría hacerse pasar por la cuenta de servicio de despliegue.\n- **menor** (buenas_practicas) `apps/frontend/nginx.conf:35`: El comentario promete caché «larga e inmutable» para /assets/, pero `expires 1y` solo genera `Cache-Control: max-age`, sin `immutable`.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-01",
+  "grupo": "HU-001",
+  "titulo": "Backend: alta de cuenta de cliente (POST /registro) con documentos legales, política de contraseña y auditoría",
+  "descripcion": "Modelo de datos y endpoint de autorregistro. Crea la cuenta con rol CLIENTE en estado PENDIENTE_VERIFICACION y guarda la contraseña con hash argon2id. Registra la aceptación del aviso de privacidad y de los términos con fecha, hora e IP. Emite el token de verificación (vigencia de 24 h, configurable con VERIFICACION_TTL_HORAS) y envía el correo a través de MailerPort. Si el envío falla, la cuenta se crea igual y el error queda en el log. Los datos se validan en el DTO y en el dominio: campos obligatorios, formato del correo, celular normalizado a 10 dígitos, política de contraseña que indica qué regla no se cumple, y aceptación obligatoria del aviso y los términos. La unicidad del correo normalizado se garantiza en el servicio y con un índice único en la base de datos (responde 409 CORREO_DUPLICADO, también cuando llegan dos registros a la vez). El alta se audita sin datos sensibles. Este paquete no hace la vinculación con el expediente de cliente: esa ocurre al verificar el correo (paquete 2).",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "apps/backend/prisma/schema.prisma: modelos Usuario, Cliente, TokenUnUso, DocumentoLegal, AceptacionLegal y EventoAuditoria con sus enums, índice único en Usuario.correoNormalizado e índices únicos parciales o indexados en Cliente.correoNormalizado y Cliente.celular",
+   "apps/backend/prisma/migrations/<timestamp>_hu001_registro/migration.sql (incluye los índices únicos parciales)",
+   "apps/backend/prisma/seed.ts: documentos legales vigentes (AVISO_PRIVACIDAD y TERMINOS)",
+   "src/modules/usuarios/domain/politica-password.ts, normalizar-correo.ts, normalizar-celular.ts, estado-cuenta.ts y sus pruebas *.spec.ts",
+   "src/modules/usuarios/usuarios.repository.ts",
+   "src/modules/legal/legal.controller.ts: GET /api/v1/legal/documentos-vigentes (@Public, @ApiTags('legal'), @ApiOperation HU-001, @ApiOkResponse con DocumentoLegalDto), legal.service.ts y legal.repository.ts (registro de AceptacionLegal)",
+   "src/modules/registro/dto/registro.dto.ts: class-validator + @ApiProperty con ejemplos; whatsapp opcional; aceptaAvisoPrivacidad y aceptaTerminos obligatorios (IsIn true)",
+   "src/modules/registro/registro.controller.ts: POST /api/v1/registro (@Public, @ApiTags('registro'), @ApiCreatedResponse RegistroRespuestaDto, @ApiConflictResponse y @ApiBadRequestResponse con ErrorDto)",
+   "src/modules/registro/registro.service.ts: hash argon2id, creación de Usuario y AceptacionLegal dentro de prisma.$transaction, conversión de P2002 en CORREO_DUPLICADO, emisión del token y envío tolerante a fallos (logger sin la contraseña)",
+   "src/modules/tokens/tokens.service.ts: emitir(usuarioId, tipo, ttl) guardando el hash SHA-256 del token",
+   "src/modules/notificaciones/mailer.port.ts, console.adapter.ts, smtp.adapter.ts y templates/verificacion-correo (enlace FRONTEND_URL/verificar-correo?token=)",
+   "src/modules/auditoria/auditoria.service.ts: evento REGISTRO con ip, userAgent y metadata (incluye aceptadoEn de los documentos legales, nunca la contraseña)",
+   "Códigos de error en common/: CORREO_DUPLICADO, VALIDACION (con campos[] y la regla de contraseña que no se cumple), ACEPTACION_LEGAL_REQUERIDA",
+   "src/modules/registro/registro.service.spec.ts, src/modules/tokens/tokens.service.spec.ts",
+   "test/registro.e2e-spec.ts: registro exitoso, duplicado con distinta capitalización y espacios, registros concurrentes, cada regla de contraseña, cada campo obligatorio, sin aceptación legal, correo inválido, celular inválido y normalizado, hash en la base de datos, auditoría sin contraseña, fallo del mailer",
+   "apps/backend/README.md: variables VERIFICACION_TTL_HORAS, MAIL_ADAPTER y FRONTEND_URL, seed de documentos legales y cómo ver los correos en mailpit o en la consola"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-007",
+   "TC-008",
+   "TC-009",
+   "TC-012",
+   "TC-013",
+   "TC-014",
+   "TC-015",
+   "TC-016",
+   "TC-017",
+   "TC-018",
+   "TC-019",
+   "TC-021",
+   "TC-022",
+   "TC-023",
+   "TC-024",
+   "TC-025",
+   "TC-030",
+   "TC-034"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/6",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "pruebas",
+    "severidad": "mayor",
+    "archivo": "apps/backend/test/registro.e2e-spec.ts",
+    "linea": 61,
+    "descripcion": "El afterAll borra EventoAuditoria y luego Usuario. Pero cada registro exitoso también crea filas en AceptacionLegal y TokenUnUso, que son relaciones obligatorias hacia Usuario. En Prisma, si el schema no declara onDelete: Cascade, la acción por defecto es Restrict. En ese caso `prisma.usuario.deleteMany` falla por FK, la suite e2e termina en error y quedan datos residuales en la base de pruebas.",
+    "sugerencia": "Antes de borrar los usuarios, borra explícitamente `aceptacionLegal` y `tokenUnUso` con `where: { usuario: deEstaCorrida }`. Otra opción es comprobar en schema.prisma que esas relaciones tienen onDelete: Cascade y dejarlo comentado en la prueba.",
+    "comentario_id": 4113214474
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/registro/registro.service.ts",
+    "linea": 194,
+    "descripcion": "La validación de dominio no se comporta igual que la del DTO. Si fallan otros campos y además faltan las aceptaciones, el servicio lanza VALIDACION sin incluir aceptaAvisoPrivacidad ni aceptaTerminos en `campos`, mientras que el DTO sí las lista. Además, un celular formado solo por espacios se reporta como inválido y no como obligatorio.",
+    "sugerencia": "Acumula también las aceptaciones faltantes en `campos` cuando se lanza VALIDACION, y usa `ACEPTACION_LEGAL_REQUERIDA` solo cuando son el único error, igual que codigoDeNegocioComun. Evalúa el vacío del celular después de quitar los separadores.",
+    "comentario_id": 4113214478
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/common/errors/request-validation.exception.ts",
+    "linea": 14,
+    "descripcion": "El parámetro `codigo` está tipado como `string`, así que el tipo ErrorCode ya no protege los códigos estables. ContextoCodigoValidacion.codigo también es `string`.",
+    "sugerencia": "Tipa `codigo` como `ErrorCode` en RequestValidationException y en ContextoCodigoValidacion.",
+    "comentario_id": 4113214480
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/registro/registro.service.spec.ts",
+    "linea": 100,
+    "descripcion": "La prueba sustituye el logger privado y readonly con un cast (`(service as unknown as {logger}).logger = logger`). Esto acopla la prueba a un detalle interno de la implementación.",
+    "sugerencia": "Espía `Logger.prototype.error` con jest.spyOn, o inyecta el logger por constructor con un valor por defecto.",
+    "comentario_id": 4113214483
+   }
+  ],
+  "revisado_en": "2026-09-26T23:00:29.336370+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-2/PT-01",
+  "md": "---\nid: PT-01\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-007, TC-008, TC-009, TC-012, TC-013, TC-014, TC-015, TC-016, TC-017, TC-018, TC-019, TC-021, TC-022, TC-023, TC-024, TC-025, TC-030, TC-034]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/6\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05]\nid_externo: null\nrama: hu/IAT-2/PT-01\nfecha: 2026-09-26\n---\n\n# PT-01 — Backend: alta de cuenta de cliente (POST /registro) con documentos legales, política de contraseña y auditoría\n\n_HU-001: Autorregistro de cliente en el portal del taller con verificación de correo y vinculación a expediente existente_\n\nModelo de datos y endpoint de autorregistro. Crea la cuenta con rol CLIENTE en estado PENDIENTE_VERIFICACION y guarda la contraseña con hash argon2id. Registra la aceptación del aviso de privacidad y de los términos con fecha, hora e IP. Emite el token de verificación (vigencia de 24 h, configurable con VERIFICACION_TTL_HORAS) y envía el correo a través de MailerPort. Si el envío falla, la cuenta se crea igual y el error queda en el log. Los datos se validan en el DTO y en el dominio: campos obligatorios, formato del correo, celular normalizado a 10 dígitos, política de contraseña que indica qué regla no se cumple, y aceptación obligatoria del aviso y los términos. La unicidad del correo normalizado se garantiza en el servicio y con un índice único en la base de datos (responde 409 CORREO_DUPLICADO, también cuando llegan dos registros a la vez). El alta se audita sin datos sensibles. Este paquete no hace la vinculación con el expediente de cliente: esa ocurre al verificar el correo (paquete 2).\n\n## Entregables\n\n- apps/backend/prisma/schema.prisma: modelos Usuario, Cliente, TokenUnUso, DocumentoLegal, AceptacionLegal y EventoAuditoria con sus enums, índice único en Usuario.correoNormalizado e índices únicos parciales o indexados en Cliente.correoNormalizado y Cliente.celular\n- apps/backend/prisma/migrations/<timestamp>_hu001_registro/migration.sql (incluye los índices únicos parciales)\n- apps/backend/prisma/seed.ts: documentos legales vigentes (AVISO_PRIVACIDAD y TERMINOS)\n- src/modules/usuarios/domain/politica-password.ts, normalizar-correo.ts, normalizar-celular.ts, estado-cuenta.ts y sus pruebas *.spec.ts\n- src/modules/usuarios/usuarios.repository.ts\n- src/modules/legal/legal.controller.ts: GET /api/v1/legal/documentos-vigentes (@Public, @ApiTags('legal'), @ApiOperation HU-001, @ApiOkResponse con DocumentoLegalDto), legal.service.ts y legal.repository.ts (registro de AceptacionLegal)\n- src/modules/registro/dto/registro.dto.ts: class-validator + @ApiProperty con ejemplos; whatsapp opcional; aceptaAvisoPrivacidad y aceptaTerminos obligatorios (IsIn true)\n- src/modules/registro/registro.controller.ts: POST /api/v1/registro (@Public, @ApiTags('registro'), @ApiCreatedResponse RegistroRespuestaDto, @ApiConflictResponse y @ApiBadRequestResponse con ErrorDto)\n- src/modules/registro/registro.service.ts: hash argon2id, creación de Usuario y AceptacionLegal dentro de prisma.$transaction, conversión de P2002 en CORREO_DUPLICADO, emisión del token y envío tolerante a fallos (logger sin la contraseña)\n- src/modules/tokens/tokens.service.ts: emitir(usuarioId, tipo, ttl) guardando el hash SHA-256 del token\n- src/modules/notificaciones/mailer.port.ts, console.adapter.ts, smtp.adapter.ts y templates/verificacion-correo (enlace FRONTEND_URL/verificar-correo?token=)\n- src/modules/auditoria/auditoria.service.ts: evento REGISTRO con ip, userAgent y metadata (incluye aceptadoEn de los documentos legales, nunca la contraseña)\n- Códigos de error en common/: CORREO_DUPLICADO, VALIDACION (con campos[] y la regla de contraseña que no se cumple), ACEPTACION_LEGAL_REQUERIDA\n- src/modules/registro/registro.service.spec.ts, src/modules/tokens/tokens.service.spec.ts\n- test/registro.e2e-spec.ts: registro exitoso, duplicado con distinta capitalización y espacios, registros concurrentes, cada regla de contraseña, cada campo obligatorio, sin aceptación legal, correo inválido, celular inválido y normalizado, hash en la base de datos, auditoría sin contraseña, fallo del mailer\n- apps/backend/README.md: variables VERIFICACION_TTL_HORAS, MAIL_ADAPTER y FRONTEND_URL, seed de documentos legales y cómo ver los correos en mailpit o en la consola\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-007 pasa\n- TC-008 pasa\n- TC-009 pasa\n- TC-012 pasa\n- TC-013 pasa\n- TC-014 pasa\n- TC-015 pasa\n- TC-016 pasa\n- TC-017 pasa\n- TC-018 pasa\n- TC-019 pasa\n- TC-021 pasa\n- TC-022 pasa\n- TC-023 pasa\n- TC-024 pasa\n- TC-025 pasa\n- TC-030 pasa\n- TC-034 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (pruebas) `apps/backend/test/registro.e2e-spec.ts:61`: El afterAll borra EventoAuditoria y luego Usuario. Pero cada registro exitoso también crea filas en AceptacionLegal y TokenUnUso, que son relaciones obligatorias hacia Usuario. En Prisma, si el schema no declara onDelete: Cascade, la acción por defecto es Restrict. En ese caso `prisma.usuario.deleteMany` falla por FK, la suite e2e termina en error y quedan datos residuales en la base de pruebas.\n- **menor** (buenas_practicas) `apps/backend/src/modules/registro/registro.service.ts:194`: La validación de dominio no se comporta igual que la del DTO. Si fallan otros campos y además faltan las aceptaciones, el servicio lanza VALIDACION sin incluir aceptaAvisoPrivacidad ni aceptaTerminos en `campos`, mientras que el DTO sí las lista. Además, un celular formado solo por espacios se reporta como inválido y no como obligatorio.\n- **menor** (buenas_practicas) `apps/backend/src/common/errors/request-validation.exception.ts:14`: El parámetro `codigo` está tipado como `string`, así que el tipo ErrorCode ya no protege los códigos estables. ContextoCodigoValidacion.codigo también es `string`.\n- **menor** (pruebas) `apps/backend/src/modules/registro/registro.service.spec.ts:100`: La prueba sustituye el logger privado y readonly con un cast (`(service as unknown as {logger}).logger = logger`). Esto acopla la prueba a un detalle interno de la implementación.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-02",
+  "grupo": "HU-001",
+  "titulo": "Backend: verificación de correo, reenvío del enlace y vinculación al expediente de cliente",
+  "descripcion": "POST /registro/verificar-correo corre en una sola transacción: consume el token (UPDATE … WHERE usadoEn IS NULL AND expiraEn > now()), activa la cuenta y la vincula al expediente de cliente existente, buscando primero por correo normalizado y luego por celular. Si no hay coincidencia, crea un Cliente con origen AUTORREGISTRO. En la vinculación por teléfono se respetan los supuestos del spec sobre conflictos y seguridad tal como están. Los datos que capturó recepción no se sobrescriben: las diferencias quedan registradas en la metadata de auditoría. Hasta que se verifica el correo, la cuenta no tiene expediente vinculado, así que los vehículos y el historial solo se ven después de la verificación. Respuestas: TOKEN_INVALIDO si el enlace fue alterado o no existe, TOKEN_EXPIRADO si tiene más de 24 h (la cuenta sigue pendiente) y CUENTA_YA_VERIFICADA si ya se usó (sin cambios). POST /registro/reenviar-verificacion responde de forma neutra, con throttler, e invalida los tokens anteriores. También se añade la regla de dominio que impide el acceso a cuentas PENDIENTE_VERIFICACION, con el código CUENTA_NO_VERIFICADA, para que la use el login de HU-002. Se auditan los eventos VERIFICACION y VINCULACION (con el id del cliente).",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "src/modules/registro/dto/verificar-correo.dto.ts, verificacion-respuesta.dto.ts y reenviar-verificacion.dto.ts con @ApiProperty",
+   "registro.controller.ts: POST /api/v1/registro/verificar-correo y POST /api/v1/registro/reenviar-verificacion (@Public, @ApiOperation HU-001, @ApiOkResponse o @ApiAcceptedResponse, respuestas de error con ErrorDto, @Throttle en el reenvío)",
+   "registro.service.ts: verificarCorreo() dentro de prisma.$transaction y reenviarVerificacion() con respuesta neutra",
+   "src/modules/tokens/tokens.service.ts: consumir(token, tipo) atómico que distingue inválido, expirado y usado, e invalidarPendientes()",
+   "src/modules/clientes/clientes.repository.ts y clientes.service.ts: buscarCoincidencia(correoNormalizado, celular), vincular(usuarioId, clienteId), crearDesdeAutorregistro() y detección de diferencias sin sobrescribir",
+   "src/modules/usuarios/domain/estado-cuenta.ts: puedeIniciarSesion(estado), que lanza CUENTA_NO_VERIFICADA, y su prueba",
+   "Códigos de error: TOKEN_INVALIDO, TOKEN_EXPIRADO, CUENTA_YA_VERIFICADA, CUENTA_NO_VERIFICADA",
+   "auditoria: eventos VERIFICACION y VINCULACION (clienteId, criterio correo|celular, diferencias detectadas)",
+   "src/modules/clientes/clientes.service.spec.ts, src/modules/registro/registro.service.spec.ts (verificación)",
+   "test/verificacion.e2e-spec.ts: enlace vigente activa la cuenta, enlace expirado (reloj simulado a más de 24 h), token alterado, segundo uso, vinculación por correo con distinta capitalización, vinculación por celular, datos de recepción sin sobrescribir con las diferencias auditadas, expediente sin vincular antes de verificar, reenvío tras un fallo del mailer, auditoría completa",
+   "apps/backend/README.md: flujo de verificación y reenvío en desarrollo"
+  ],
+  "tcs_asociados": [
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-010",
+   "TC-011",
+   "TC-016",
+   "TC-020",
+   "TC-026",
+   "TC-027",
+   "TC-028",
+   "TC-029",
+   "TC-031",
+   "TC-032",
+   "TC-033",
+   "TC-034"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/7",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "arquitectura",
+    "severidad": "mayor",
+    "archivo": "apps/backend/src/modules/usuarios/domain/estado-cuenta.ts",
+    "linea": 1,
+    "descripcion": "La capa domain debe ser pura, sin dependencias de framework. Sin embargo, estado-cuenta.ts importa CuentaNoVerificadaException de usuarios.errors.ts, que extiende BusinessException (HttpException de Nest, con HttpStatus.FORBIDDEN). Así la regla de dominio queda acoplada a @nestjs/common y a un código HTTP. Además, un predicado que devuelve boolean y que lanza excepción solo para un estado es un contrato ambiguo para el login de HU-002.",
+    "sugerencia": "Definir en domain un error puro (p. ej. class CuentaNoVerificadaError extends Error con codigo 'CUENTA_NO_VERIFICADA') y que puedeIniciarSesion lance ese error. El mapeo a 403 CUENTA_NO_VERIFICADA debe hacerse en la capa api o application (filtro o el servicio de auth). Otra opción es devolver un resultado discriminado ({ permitido: false, motivo: 'NO_VERIFICADA' }).",
+    "comentario_id": 4113324537
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/registro/registro.service.ts",
+    "linea": 258,
+    "descripcion": "reenviarVerificacion devuelve siempre el mismo cuerpo, pero cuando la cuenta existe y está pendiente ejecuta una transacción y un envío SMTP síncrono antes de responder. Cuando el correo no existe, responde de inmediato. Esa diferencia de tiempo permite enumerar las cuentas pendientes, lo que va contra la decisión de 'respuestas neutras' de la arquitectura.",
+    "sugerencia": "Enviar el correo sin bloquear la respuesta (fire-and-forget con manejo y log del error, después del commit) o igualar el tiempo de respuesta en ambas ramas.",
+    "comentario_id": 4113324541
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/registro/registro.controller.ts",
+    "linea": 25,
+    "descripcion": "La decisión 'Protección contra enumeración y abuso' pide throttler por IP y por correo. El reenvío solo limita por IP (5/min), así que desde varias IPs se puede inundar de correos de verificación la bandeja de una misma cuenta pendiente.",
+    "sugerencia": "Añadir un límite por correo normalizado: un tracker del throttler basado en el body, o un control en el servicio basado en el creadoEn del último token emitido (p. ej. no reemitir si hay uno de hace menos de N minutos).",
+    "comentario_id": 4113324546
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/tokens/tokens.service.ts",
+    "linea": 95,
+    "descripcion": "consumir e invalidarPendientes usan la hora del Reloj inyectado, pero emitir (sin cambios en este PR) sigue calculando expiraEn con la hora del sistema. Con un reloj simulado, invalidarPendientes fija expiraEn en una hora distinta a la de emisión. Hoy funciona, pero mezclar dos fuentes de tiempo en el mismo servicio es frágil.",
+    "sugerencia": "Hacer que TokensService.emitir también reciba o use Reloj, para que emisión, consumo e invalidación compartan la misma fuente de tiempo.",
+    "comentario_id": 4113324550
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/clientes/clientes.service.ts",
+    "linea": 150,
+    "descripcion": "La arquitectura supone que solo se vincula automáticamente por correo y que una coincidencia solo por celular crea un expediente nuevo marcado para revisión. La implementación sí vincula automáticamente por celular cuando hay un único expediente sin cuenta y sin correo. Así se cumple TC-011 y la RN explícita de la HU, pero esta desviación de un supuesto de seguridad no quedó registrada.",
+    "sugerencia": "Registrar la decisión (vincular por celular solo con candidato único, sin cuenta y sin correo) en docs/adr o en los supuestos de la arquitectura, y pedir la confirmación del PO y de seguridad.",
+    "comentario_id": 4113324553
+   }
+  ],
+  "revisado_en": "2026-09-26T23:22:03.014459+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-2/PT-02",
+  "md": "---\nid: PT-02\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-004, TC-005, TC-006, TC-010, TC-011, TC-016, TC-020, TC-026, TC-027, TC-028, TC-029, TC-031, TC-032, TC-033, TC-034]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/7\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/IAT-2/PT-02\nfecha: 2026-09-26\n---\n\n# PT-02 — Backend: verificación de correo, reenvío del enlace y vinculación al expediente de cliente\n\n_HU-001: Autorregistro de cliente en el portal del taller con verificación de correo y vinculación a expediente existente_\n\nPOST /registro/verificar-correo corre en una sola transacción: consume el token (UPDATE … WHERE usadoEn IS NULL AND expiraEn > now()), activa la cuenta y la vincula al expediente de cliente existente, buscando primero por correo normalizado y luego por celular. Si no hay coincidencia, crea un Cliente con origen AUTORREGISTRO. En la vinculación por teléfono se respetan los supuestos del spec sobre conflictos y seguridad tal como están. Los datos que capturó recepción no se sobrescriben: las diferencias quedan registradas en la metadata de auditoría. Hasta que se verifica el correo, la cuenta no tiene expediente vinculado, así que los vehículos y el historial solo se ven después de la verificación. Respuestas: TOKEN_INVALIDO si el enlace fue alterado o no existe, TOKEN_EXPIRADO si tiene más de 24 h (la cuenta sigue pendiente) y CUENTA_YA_VERIFICADA si ya se usó (sin cambios). POST /registro/reenviar-verificacion responde de forma neutra, con throttler, e invalida los tokens anteriores. También se añade la regla de dominio que impide el acceso a cuentas PENDIENTE_VERIFICACION, con el código CUENTA_NO_VERIFICADA, para que la use el login de HU-002. Se auditan los eventos VERIFICACION y VINCULACION (con el id del cliente).\n\n## Entregables\n\n- src/modules/registro/dto/verificar-correo.dto.ts, verificacion-respuesta.dto.ts y reenviar-verificacion.dto.ts con @ApiProperty\n- registro.controller.ts: POST /api/v1/registro/verificar-correo y POST /api/v1/registro/reenviar-verificacion (@Public, @ApiOperation HU-001, @ApiOkResponse o @ApiAcceptedResponse, respuestas de error con ErrorDto, @Throttle en el reenvío)\n- registro.service.ts: verificarCorreo() dentro de prisma.$transaction y reenviarVerificacion() con respuesta neutra\n- src/modules/tokens/tokens.service.ts: consumir(token, tipo) atómico que distingue inválido, expirado y usado, e invalidarPendientes()\n- src/modules/clientes/clientes.repository.ts y clientes.service.ts: buscarCoincidencia(correoNormalizado, celular), vincular(usuarioId, clienteId), crearDesdeAutorregistro() y detección de diferencias sin sobrescribir\n- src/modules/usuarios/domain/estado-cuenta.ts: puedeIniciarSesion(estado), que lanza CUENTA_NO_VERIFICADA, y su prueba\n- Códigos de error: TOKEN_INVALIDO, TOKEN_EXPIRADO, CUENTA_YA_VERIFICADA, CUENTA_NO_VERIFICADA\n- auditoria: eventos VERIFICACION y VINCULACION (clienteId, criterio correo|celular, diferencias detectadas)\n- src/modules/clientes/clientes.service.spec.ts, src/modules/registro/registro.service.spec.ts (verificación)\n- test/verificacion.e2e-spec.ts: enlace vigente activa la cuenta, enlace expirado (reloj simulado a más de 24 h), token alterado, segundo uso, vinculación por correo con distinta capitalización, vinculación por celular, datos de recepción sin sobrescribir con las diferencias auditadas, expediente sin vincular antes de verificar, reenvío tras un fallo del mailer, auditoría completa\n- apps/backend/README.md: flujo de verificación y reenvío en desarrollo\n\n## Se da por terminado cuando\n\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-010 pasa\n- TC-011 pasa\n- TC-016 pasa\n- TC-020 pasa\n- TC-026 pasa\n- TC-027 pasa\n- TC-028 pasa\n- TC-029 pasa\n- TC-031 pasa\n- TC-032 pasa\n- TC-033 pasa\n- TC-034 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (arquitectura) `apps/backend/src/modules/usuarios/domain/estado-cuenta.ts:1`: La capa domain debe ser pura, sin dependencias de framework. Sin embargo, estado-cuenta.ts importa CuentaNoVerificadaException de usuarios.errors.ts, que extiende BusinessException (HttpException de Nest, con HttpStatus.FORBIDDEN). Así la regla de dominio queda acoplada a @nestjs/common y a un código HTTP. Además, un predicado que devuelve boolean y que lanza excepción solo para un estado es un contrato ambiguo para el login de HU-002.\n- **menor** (seguridad) `apps/backend/src/modules/registro/registro.service.ts:258`: reenviarVerificacion devuelve siempre el mismo cuerpo, pero cuando la cuenta existe y está pendiente ejecuta una transacción y un envío SMTP síncrono antes de responder. Cuando el correo no existe, responde de inmediato. Esa diferencia de tiempo permite enumerar las cuentas pendientes, lo que va contra la decisión de 'respuestas neutras' de la arquitectura.\n- **menor** (arquitectura) `apps/backend/src/modules/registro/registro.controller.ts:25`: La decisión 'Protección contra enumeración y abuso' pide throttler por IP y por correo. El reenvío solo limita por IP (5/min), así que desde varias IPs se puede inundar de correos de verificación la bandeja de una misma cuenta pendiente.\n- **menor** (buenas_practicas) `apps/backend/src/modules/tokens/tokens.service.ts:95`: consumir e invalidarPendientes usan la hora del Reloj inyectado, pero emitir (sin cambios en este PR) sigue calculando expiraEn con la hora del sistema. Con un reloj simulado, invalidarPendientes fija expiraEn en una hora distinta a la de emisión. Hoy funciona, pero mezclar dos fuentes de tiempo en el mismo servicio es frágil.\n- **menor** (arquitectura) `apps/backend/src/modules/clientes/clientes.service.ts:150`: La arquitectura supone que solo se vincula automáticamente por correo y que una coincidencia solo por celular crea un expediente nuevo marcado para revisión. La implementación sí vincula automáticamente por celular cuando hay un único expediente sin cuenta y sin correo. Así se cumple TC-011 y la RN explícita de la HU, pero esta desviación de un supuesto de seguridad no quedó registrada.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-03",
+  "grupo": "HU-001",
+  "titulo": "Frontend: pantalla Crear cuenta y Revisa tu correo con reenvío",
+  "descripcion": "Formulario de registro con react-hook-form y zod, con reglas equivalentes a las del backend: campos obligatorios, formato del correo, celular de 10 dígitos (sin espacios ni guiones), política de contraseña con la regla incumplida y casillas obligatorias del aviso de privacidad y de los términos, con su mensaje junto a las casillas. WhatsApp es opcional. Los documentos vigentes se muestran con useQuery. Los códigos del backend se traducen a mensajes: CORREO_DUPLICADO muestra \"Este correo ya tiene una cuenta\" con un enlace a recuperar contraseña. Si hay errores, el formulario conserva los datos capturados salvo la contraseña. Después de crear la cuenta se muestra la pantalla Revisa tu correo con el botón de reenvío. El mapa de errores también incluye CUENTA_NO_VERIFICADA, con un mensaje que pide verificar el correo, para que lo use el login.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "apps/frontend/src/api/schema.d.ts regenerado desde /api/docs-json",
+   "src/shared/validation/password.ts, celular.ts y correo.ts con sus pruebas .test.ts",
+   "src/features/registro/hooks/useDocumentosVigentesQuery.ts, useRegistroMutation.ts y useReenviarVerificacionMutation.ts",
+   "src/features/registro/components/RegistroForm.tsx y AceptacionLegalCheckboxes.tsx (MUI)",
+   "src/features/registro/pages/CrearCuentaPage.tsx y RevisaTuCorreoPage.tsx",
+   "Mapa central de errores: CORREO_DUPLICADO, VALIDACION, ACEPTACION_LEGAL_REQUERIDA, CUENTA_NO_VERIFICADA",
+   "src/app/router.tsx: rutas públicas /registro y /registro/revisa-tu-correo",
+   "src/features/registro/__tests__/CrearCuentaPage.test.tsx y RevisaTuCorreoPage.test.tsx (Vitest + Testing Library + MSW): registro exitoso, duplicado con enlace a recuperar, cada regla de contraseña, campos obligatorios, casillas sin marcar que no envían la solicitud, correo inválido, celular inválido, conservación de los datos salvo la contraseña, reenvío"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-007",
+   "TC-008",
+   "TC-009",
+   "TC-013",
+   "TC-014",
+   "TC-015",
+   "TC-017",
+   "TC-018",
+   "TC-021",
+   "TC-023",
+   "TC-026",
+   "TC-034",
+   "TC-035"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01",
+   "PT-02"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/8",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "arquitectura",
+    "severidad": "mayor",
+    "archivo": "apps/frontend/src/api/schema.d.ts",
+    "linea": 6,
+    "descripcion": "El entregable pide `schema.d.ts` regenerado desde /api/docs-json con openapi-typescript, y la arquitectura lo fija como única fuente de verdad del contrato. El PR reconoce que el archivo se escribió a mano y que los nombres de las operaciones (`LegalController_documentosVigentes_v1`, etc.) son supuestos. Si el backend difiere en algún detalle (el enum `TipoDocumentoLegal`, la nulabilidad de `url`/`contenido`, si `whatsapp` es opcional), los tipos del frontend dejarán de coincidir con el contrato sin que el typecheck lo detecte.",
+    "sugerencia": "Correr `npm run gen:api` con la API de PT-01/PT-02 levantada y confirmar este archivo con el resultado generado, sin editarlo a mano. Si es posible, agregar a la CI un paso que compruebe que el archivo generado no difiere del confirmado.",
+    "comentario_id": 4113384441
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/app/router.tsx",
+    "linea": 10,
+    "descripcion": "El router deja de importar `RegistroPage` (lo reemplaza `CrearCuentaPage`), pero el diff no elimina `src/features/registro/pages/RegistroPage.tsx`. Si el archivo sigue en el repositorio, queda como código muerto y además contradice la estructura que describe el README actualizado (pages/: CrearCuentaPage, RevisaTuCorreoPage, VerificarCorreoPage).",
+    "sugerencia": "Eliminar `RegistroPage.tsx`, que era el placeholder anterior, si ya no se usa.",
+    "comentario_id": 4113384442
+   }
+  ],
+  "revisado_en": "2026-09-26T23:39:23.069961+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-2/PT-03",
+  "md": "---\nid: PT-03\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-007, TC-008, TC-009, TC-013, TC-014, TC-015, TC-017, TC-018, TC-021, TC-023, TC-026, TC-034, TC-035]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/8\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-01, PT-02]\nid_externo: null\nrama: hu/IAT-2/PT-03\nfecha: 2026-09-26\n---\n\n# PT-03 — Frontend: pantalla Crear cuenta y Revisa tu correo con reenvío\n\n_HU-001: Autorregistro de cliente en el portal del taller con verificación de correo y vinculación a expediente existente_\n\nFormulario de registro con react-hook-form y zod, con reglas equivalentes a las del backend: campos obligatorios, formato del correo, celular de 10 dígitos (sin espacios ni guiones), política de contraseña con la regla incumplida y casillas obligatorias del aviso de privacidad y de los términos, con su mensaje junto a las casillas. WhatsApp es opcional. Los documentos vigentes se muestran con useQuery. Los códigos del backend se traducen a mensajes: CORREO_DUPLICADO muestra \"Este correo ya tiene una cuenta\" con un enlace a recuperar contraseña. Si hay errores, el formulario conserva los datos capturados salvo la contraseña. Después de crear la cuenta se muestra la pantalla Revisa tu correo con el botón de reenvío. El mapa de errores también incluye CUENTA_NO_VERIFICADA, con un mensaje que pide verificar el correo, para que lo use el login.\n\n## Entregables\n\n- apps/frontend/src/api/schema.d.ts regenerado desde /api/docs-json\n- src/shared/validation/password.ts, celular.ts y correo.ts con sus pruebas .test.ts\n- src/features/registro/hooks/useDocumentosVigentesQuery.ts, useRegistroMutation.ts y useReenviarVerificacionMutation.ts\n- src/features/registro/components/RegistroForm.tsx y AceptacionLegalCheckboxes.tsx (MUI)\n- src/features/registro/pages/CrearCuentaPage.tsx y RevisaTuCorreoPage.tsx\n- Mapa central de errores: CORREO_DUPLICADO, VALIDACION, ACEPTACION_LEGAL_REQUERIDA, CUENTA_NO_VERIFICADA\n- src/app/router.tsx: rutas públicas /registro y /registro/revisa-tu-correo\n- src/features/registro/__tests__/CrearCuentaPage.test.tsx y RevisaTuCorreoPage.test.tsx (Vitest + Testing Library + MSW): registro exitoso, duplicado con enlace a recuperar, cada regla de contraseña, campos obligatorios, casillas sin marcar que no envían la solicitud, correo inválido, celular inválido, conservación de los datos salvo la contraseña, reenvío\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-007 pasa\n- TC-008 pasa\n- TC-009 pasa\n- TC-013 pasa\n- TC-014 pasa\n- TC-015 pasa\n- TC-017 pasa\n- TC-018 pasa\n- TC-021 pasa\n- TC-023 pasa\n- TC-026 pasa\n- TC-034 pasa\n- TC-035 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (arquitectura) `apps/frontend/src/api/schema.d.ts:6`: El entregable pide `schema.d.ts` regenerado desde /api/docs-json con openapi-typescript, y la arquitectura lo fija como única fuente de verdad del contrato. El PR reconoce que el archivo se escribió a mano y que los nombres de las operaciones (`LegalController_documentosVigentes_v1`, etc.) son supuestos. Si el backend difiere en algún detalle (el enum `TipoDocumentoLegal`, la nulabilidad de `url`/`contenido`, si `whatsapp` es opcional), los tipos del frontend dejarán de coincidir con el contrato sin que el typecheck lo detecte.\n- **menor** (buenas_practicas) `apps/frontend/src/app/router.tsx:10`: El router deja de importar `RegistroPage` (lo reemplaza `CrearCuentaPage`), pero el diff no elimina `src/features/registro/pages/RegistroPage.tsx`. Si el archivo sigue en el repositorio, queda como código muerto y además contradice la estructura que describe el README actualizado (pages/: CrearCuentaPage, RevisaTuCorreoPage, VerificarCorreoPage).\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-04",
+  "grupo": "HU-001",
+  "titulo": "Frontend: pantalla Resultado de verificación (/verificar-correo?token=)",
+  "descripcion": "Pantalla que toma el token de la URL y llama a POST /registro/verificar-correo. Estados que muestra: cuenta activada (con enlace a iniciar sesión), enlace expirado (con opción de reenviar), cuenta ya verificada (lleva al inicio de sesión) y enlace inválido (mensaje genérico).",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "src/features/registro/hooks/useVerificarCorreoMutation.ts",
+   "src/features/registro/pages/VerificarCorreoPage.tsx (MUI) y su ruta pública /verificar-correo en src/app/router.tsx",
+   "Mensajes para TOKEN_EXPIRADO, TOKEN_INVALIDO y CUENTA_YA_VERIFICADA en el mapa de errores",
+   "src/features/registro/__tests__/VerificarCorreoPage.test.tsx (Vitest + MSW): activación, enlace expirado con reenvío, cuenta ya verificada, token inválido"
+  ],
+  "tcs_asociados": [
+   "TC-004",
+   "TC-005",
+   "TC-010",
+   "TC-027",
+   "TC-028",
+   "TC-029"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-02",
+   "PT-03"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/9",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [],
+  "revisado_en": "2026-09-26T23:47:09.228726+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-2/PT-04",
+  "md": "---\nid: PT-04\nhu_id: HU-001\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-004, TC-005, TC-010, TC-027, TC-028, TC-029]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/9\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-02, PT-03]\nid_externo: null\nrama: hu/IAT-2/PT-04\nfecha: 2026-09-27\n---\n\n# PT-04 — Frontend: pantalla Resultado de verificación (/verificar-correo?token=)\n\n_HU-001: Autorregistro de cliente en el portal del taller con verificación de correo y vinculación a expediente existente_\n\nPantalla que toma el token de la URL y llama a POST /registro/verificar-correo. Estados que muestra: cuenta activada (con enlace a iniciar sesión), enlace expirado (con opción de reenviar), cuenta ya verificada (lleva al inicio de sesión) y enlace inválido (mensaje genérico).\n\n## Entregables\n\n- src/features/registro/hooks/useVerificarCorreoMutation.ts\n- src/features/registro/pages/VerificarCorreoPage.tsx (MUI) y su ruta pública /verificar-correo en src/app/router.tsx\n- Mensajes para TOKEN_EXPIRADO, TOKEN_INVALIDO y CUENTA_YA_VERIFICADA en el mapa de errores\n- src/features/registro/__tests__/VerificarCorreoPage.test.tsx (Vitest + MSW): activación, enlace expirado con reenvío, cuenta ya verificada, token inválido\n\n## Se da por terminado cuando\n\n- TC-004 pasa\n- TC-005 pasa\n- TC-010 pasa\n- TC-027 pasa\n- TC-028 pasa\n- TC-029 pasa\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-01",
+  "grupo": "HU-002",
+  "titulo": "Backend: login con correo y contraseña, bloqueo por intentos y auditoría de acceso",
+  "descripcion": "Implementa POST /api/v1/auth/login en el módulo auth. Valida el DTO en el backend: campos obligatorios y formato de correo. Un correo con formato inválido responde 400 y no cuenta como intento fallido. Normaliza el correo y verifica la contraseña con argon2id. Cuando el correo no existe, ejecuta igualmente una verificación argon2 contra un hash señuelo para que el tiempo de respuesta sea comparable. Ante credenciales inválidas responde 401 con el código CREDENCIALES_INVALIDAS y un mensaje genérico. Aplica la política de bloqueo: con 5 fallos consecutivos la cuenta pasa a BLOQUEADA con bloqueadoHasta = ahora + 15 min y responde 423 CUENTA_BLOQUEADA, aunque las credenciales sean correctas mientras el bloqueo esté vigente. Pasados los 15 minutos se permite volver a intentar. Un login correcto reinicia intentosFallidos a 0. Las cuentas PENDIENTE_VERIFICACION o INACTIVA con credenciales correctas reciben 403 CUENTA_NO_VERIFICADA o CUENTA_INACTIVA. Si el login es correcto, crea la Sesion (familiaId y refreshTokenHash) y responde accessToken (HS256, 15 min, claims sub, rol y sesionId), usuario, rol y rutaInicial: CLIENTE → /mis-vehiculos; RECEPCION y ADMIN → pantalla 'Agenda del día' del shell interno. El refresh token viaja en una cookie httpOnly, Secure y SameSite=Strict con path /api/v1/auth. Registra EventoAuditoria (LOGIN_OK, LOGIN_FALLIDO, bloqueado o cuenta no habilitada) con usuarioId o correo, IP, user-agent y resultado, y nunca la contraseña. Aplica throttling al endpoint.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "prisma/migrations/<timestamp>_login_bloqueo: campo Usuario.bloqueadoHasta y Sesion.ultimaActividadEn",
+   "src/modules/usuarios/domain/politica-bloqueo.ts (5 intentos, 15 min, configurable) + politica-bloqueo.spec.ts",
+   "src/modules/usuarios/usuarios.repository.ts: registrarIntentoFallido, reiniciarIntentos, bloquear/desbloquear",
+   "src/modules/auth/auth.controller.ts: POST /api/v1/auth/login (@Public, @Throttle)",
+   "src/modules/auth/dto/login.dto.ts y login-response.dto.ts (class-validator + @ApiProperty con ejemplo)",
+   "src/modules/auth/auth.service.ts: login con hash señuelo, bloqueo, estados no habilitados y rutaInicial por rol",
+   "src/modules/auth/rutas-iniciales.ts (mapa rol → rutaInicial)",
+   "src/modules/auth/sesiones.repository.ts: crear sesión con refreshTokenHash",
+   "src/infrastructure/jwt y hashing argon2 (firma de access token, hash de refresh)",
+   "src/modules/auditoria/auditoria.service.ts: registrar eventos LOGIN_OK/LOGIN_FALLIDO con resultado (BLOQUEADA, NO_HABILITADA), sin datos sensibles",
+   "src/common: códigos CREDENCIALES_INVALIDAS, CUENTA_BLOQUEADA, CUENTA_NO_VERIFICADA, CUENTA_INACTIVA en ErrorDto/filtro; interceptor/logger que excluye password de los logs",
+   "Swagger: @ApiTags('auth'), @ApiOperation({summary, description:'HU-002'}), @ApiOkResponse(LoginResponseDto), @ApiBadRequestResponse, @ApiUnauthorizedResponse, @ApiForbiddenResponse, @ApiResponse(423) con ErrorDto",
+   "src/modules/auth/auth.service.spec.ts (unitarias: éxito por rol, fallo genérico, bloqueo al 5.º fallo, desbloqueo a los 15 min con reloj simulado, reinicio del contador, formato inválido no cuenta, estados no habilitados)",
+   "test/auth-login.e2e-spec.ts (supertest: respuestas 200/400/401/403/423, cookie httpOnly/Secure, eventos de auditoría, la respuesta no contiene password/passwordHash, tiempo comparable con correo inexistente)",
+   "src/config: variables LOGIN_MAX_INTENTOS, BLOQUEO_MINUTOS en el esquema validado y .env.example",
+   "apps/backend/README.md: nuevas variables y cómo probar el login (usuarios seed por rol)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-007",
+   "TC-008",
+   "TC-013",
+   "TC-014",
+   "TC-015",
+   "TC-016",
+   "TC-017",
+   "TC-018",
+   "TC-019",
+   "TC-020",
+   "TC-021",
+   "TC-022",
+   "TC-023",
+   "TC-024",
+   "TC-025",
+   "TC-026",
+   "TC-037",
+   "TC-038",
+   "TC-039"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/10",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "mayor",
+    "archivo": "apps/backend/src/modules/auth/auth.errors.ts",
+    "linea": 6,
+    "descripcion": "HTTP_STATUS_BLOQUEADA es el literal 423 y se pasa a BusinessException como estado (línea 30). La firma de BusinessException no está en el diff. Si el parámetro está tipado como `HttpStatus`, con TypeScript 5+ asignar un literal numérico que no está en el enum da error de compilación. El código no se ejecutó ni se comprobaron los tipos, así que puede romper el build.",
+    "sugerencia": "Revisar la firma de BusinessException. Si recibe `HttpStatus`, ampliarla a `HttpStatus | number` o convertir explícitamente (`423 as HttpStatus`). Correr `tsc --noEmit` antes de fusionar.",
+    "comentario_id": 4113555268
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/auth/auth.controller.ts",
+    "linea": 40,
+    "descripcion": "La arquitectura pide throttler por IP y por correo en el login. Solo se aplica un límite por IP (20/60 s). El bloqueo por cuenta cubre parte del riesgo, pero no limita la frecuencia sobre correos inexistentes ni sobre cuentas pendientes o inactivas, que no acumulan intentos.",
+    "sugerencia": "Añadir un tracker del throttler por correo normalizado (por ejemplo, un ThrottlerGuard propio con getTracker basado en el body) o documentar la desviación en un ADR.",
+    "comentario_id": 4113555269
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/common/logging/logging.interceptor.ts",
+    "linea": 51,
+    "descripcion": "Ante cualquier error, el interceptor escribe el cuerpo de la petición con el correo en claro. Como cada login fallido es un error, cada intento deja en el log el correo (dato personal), y el spec lo exige de forma explícita (`toContain('ana@test.com')`). La auditoría ya guarda el correo, así que tenerlo también en el log de acceso sobra.",
+    "sugerencia": "Redactar o enmascarar también las claves de correo (o no escribir el body en errores 4xx de negocio) y ajustar el spec.",
+    "comentario_id": 4113555271
+   },
+   {
+    "fuente": "arquitectura",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/auth/refresh-cookie.ts",
+    "linea": 2,
+    "descripcion": "Un archivo del módulo auth importa de `app.setup`, la raíz de composición, que a su vez importa filtros, interceptores y Swagger. Invierte la dirección de dependencias y puede crear ciclos de imports.",
+    "sugerencia": "Mover API_PREFIX y API_DEFAULT_VERSION a un archivo de constantes en src/common (o config) y que app.setup y refresh-cookie importen de ahí.",
+    "comentario_id": 4113555273
+   },
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/auth/auth.controller.ts",
+    "linea": 75,
+    "descripcion": "El README documenta `429 DEMASIADAS_SOLICITUDES` para el login, pero Swagger no. Además, la descripción del 403 no incluye el mensaje de CUENTA_NO_VERIFICADA, aunque sí el de CUENTA_INACTIVA. Esto es relevante para I14/TC-039.",
+    "sugerencia": "Añadir @ApiTooManyRequestsResponse({ type: ErrorDto }) y el mensaje de CUENTA_NO_VERIFICADA en @ApiForbiddenResponse.",
+    "comentario_id": 4113555275
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/auth/auth.service.ts",
+    "linea": 122,
+    "descripcion": "Se ignora el resultado de `desbloquear`, que devuelve false si otra petición ya levantó o cambió el bloqueo. El servicio sigue como si la cuenta estuviera ACTIVA a partir del objeto `usuario` leído antes, que puede estar desactualizado.",
+    "sugerencia": "Si desbloquear devuelve false, releer el usuario (o tratarlo en un UPDATE condicional dentro de la misma transacción del intento) antes de continuar.",
+    "comentario_id": 4113555276
+   },
+   {
+    "fuente": "seguridad",
+    "severidad": "menor",
+    "archivo": ".env.example",
+    "linea": 60,
+    "descripcion": "Los `.env.example` traen valores de contraseña de prueba (`reemplazar-password-cliente-1`) que pasan la validación del seed. Quien copie el ejemplo tal cual crea cuentas RECEPCION y CLIENTE activas con contraseñas públicas.",
+    "sugerencia": "Dejar SEED_RECEPCION_* y SEED_CLIENTE_* vacíos en los .env.example (son opcionales) o rechazar en el seed los valores que empiecen por `reemplazar`.",
+    "comentario_id": 4113555278
+   }
+  ],
+  "revisado_en": "2026-09-27T00:44:13.949634+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-3/PT-01",
+  "md": "---\nid: PT-01\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-007, TC-008, TC-013, TC-014, TC-015, TC-016, TC-017, TC-018, TC-019, TC-020, TC-021, TC-022, TC-023, TC-024, TC-025, TC-026, TC-037, TC-038, TC-039]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/10\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05]\nid_externo: null\nrama: hu/IAT-3/PT-01\nfecha: 2026-09-27\n---\n\n# PT-01 — Backend: login con correo y contraseña, bloqueo por intentos y auditoría de acceso\n\n_HU-002: Inicio y cierre de sesión con correo y contraseña, con redirección por rol_\n\nImplementa POST /api/v1/auth/login en el módulo auth. Valida el DTO en el backend: campos obligatorios y formato de correo. Un correo con formato inválido responde 400 y no cuenta como intento fallido. Normaliza el correo y verifica la contraseña con argon2id. Cuando el correo no existe, ejecuta igualmente una verificación argon2 contra un hash señuelo para que el tiempo de respuesta sea comparable. Ante credenciales inválidas responde 401 con el código CREDENCIALES_INVALIDAS y un mensaje genérico. Aplica la política de bloqueo: con 5 fallos consecutivos la cuenta pasa a BLOQUEADA con bloqueadoHasta = ahora + 15 min y responde 423 CUENTA_BLOQUEADA, aunque las credenciales sean correctas mientras el bloqueo esté vigente. Pasados los 15 minutos se permite volver a intentar. Un login correcto reinicia intentosFallidos a 0. Las cuentas PENDIENTE_VERIFICACION o INACTIVA con credenciales correctas reciben 403 CUENTA_NO_VERIFICADA o CUENTA_INACTIVA. Si el login es correcto, crea la Sesion (familiaId y refreshTokenHash) y responde accessToken (HS256, 15 min, claims sub, rol y sesionId), usuario, rol y rutaInicial: CLIENTE → /mis-vehiculos; RECEPCION y ADMIN → pantalla 'Agenda del día' del shell interno. El refresh token viaja en una cookie httpOnly, Secure y SameSite=Strict con path /api/v1/auth. Registra EventoAuditoria (LOGIN_OK, LOGIN_FALLIDO, bloqueado o cuenta no habilitada) con usuarioId o correo, IP, user-agent y resultado, y nunca la contraseña. Aplica throttling al endpoint.\n\n## Entregables\n\n- prisma/migrations/<timestamp>_login_bloqueo: campo Usuario.bloqueadoHasta y Sesion.ultimaActividadEn\n- src/modules/usuarios/domain/politica-bloqueo.ts (5 intentos, 15 min, configurable) + politica-bloqueo.spec.ts\n- src/modules/usuarios/usuarios.repository.ts: registrarIntentoFallido, reiniciarIntentos, bloquear/desbloquear\n- src/modules/auth/auth.controller.ts: POST /api/v1/auth/login (@Public, @Throttle)\n- src/modules/auth/dto/login.dto.ts y login-response.dto.ts (class-validator + @ApiProperty con ejemplo)\n- src/modules/auth/auth.service.ts: login con hash señuelo, bloqueo, estados no habilitados y rutaInicial por rol\n- src/modules/auth/rutas-iniciales.ts (mapa rol → rutaInicial)\n- src/modules/auth/sesiones.repository.ts: crear sesión con refreshTokenHash\n- src/infrastructure/jwt y hashing argon2 (firma de access token, hash de refresh)\n- src/modules/auditoria/auditoria.service.ts: registrar eventos LOGIN_OK/LOGIN_FALLIDO con resultado (BLOQUEADA, NO_HABILITADA), sin datos sensibles\n- src/common: códigos CREDENCIALES_INVALIDAS, CUENTA_BLOQUEADA, CUENTA_NO_VERIFICADA, CUENTA_INACTIVA en ErrorDto/filtro; interceptor/logger que excluye password de los logs\n- Swagger: @ApiTags('auth'), @ApiOperation({summary, description:'HU-002'}), @ApiOkResponse(LoginResponseDto), @ApiBadRequestResponse, @ApiUnauthorizedResponse, @ApiForbiddenResponse, @ApiResponse(423) con ErrorDto\n- src/modules/auth/auth.service.spec.ts (unitarias: éxito por rol, fallo genérico, bloqueo al 5.º fallo, desbloqueo a los 15 min con reloj simulado, reinicio del contador, formato inválido no cuenta, estados no habilitados)\n- test/auth-login.e2e-spec.ts (supertest: respuestas 200/400/401/403/423, cookie httpOnly/Secure, eventos de auditoría, la respuesta no contiene password/passwordHash, tiempo comparable con correo inexistente)\n- src/config: variables LOGIN_MAX_INTENTOS, BLOQUEO_MINUTOS en el esquema validado y .env.example\n- apps/backend/README.md: nuevas variables y cómo probar el login (usuarios seed por rol)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-007 pasa\n- TC-008 pasa\n- TC-013 pasa\n- TC-014 pasa\n- TC-015 pasa\n- TC-016 pasa\n- TC-017 pasa\n- TC-018 pasa\n- TC-019 pasa\n- TC-020 pasa\n- TC-021 pasa\n- TC-022 pasa\n- TC-023 pasa\n- TC-024 pasa\n- TC-025 pasa\n- TC-026 pasa\n- TC-037 pasa\n- TC-038 pasa\n- TC-039 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (buenas_practicas) `apps/backend/src/modules/auth/auth.errors.ts:6`: HTTP_STATUS_BLOQUEADA es el literal 423 y se pasa a BusinessException como estado (línea 30). La firma de BusinessException no está en el diff. Si el parámetro está tipado como `HttpStatus`, con TypeScript 5+ asignar un literal numérico que no está en el enum da error de compilación. El código no se ejecutó ni se comprobaron los tipos, así que puede romper el build.\n- **menor** (arquitectura) `apps/backend/src/modules/auth/auth.controller.ts:40`: La arquitectura pide throttler por IP y por correo en el login. Solo se aplica un límite por IP (20/60 s). El bloqueo por cuenta cubre parte del riesgo, pero no limita la frecuencia sobre correos inexistentes ni sobre cuentas pendientes o inactivas, que no acumulan intentos.\n- **menor** (seguridad) `apps/backend/src/common/logging/logging.interceptor.ts:51`: Ante cualquier error, el interceptor escribe el cuerpo de la petición con el correo en claro. Como cada login fallido es un error, cada intento deja en el log el correo (dato personal), y el spec lo exige de forma explícita (`toContain('ana@test.com')`). La auditoría ya guarda el correo, así que tenerlo también en el log de acceso sobra.\n- **menor** (arquitectura) `apps/backend/src/modules/auth/refresh-cookie.ts:2`: Un archivo del módulo auth importa de `app.setup`, la raíz de composición, que a su vez importa filtros, interceptores y Swagger. Invierte la dirección de dependencias y puede crear ciclos de imports.\n- **menor** (criterio_aceptacion) `apps/backend/src/modules/auth/auth.controller.ts:75`: El README documenta `429 DEMASIADAS_SOLICITUDES` para el login, pero Swagger no. Además, la descripción del 403 no incluye el mensaje de CUENTA_NO_VERIFICADA, aunque sí el de CUENTA_INACTIVA. Esto es relevante para I14/TC-039.\n- **menor** (buenas_practicas) `apps/backend/src/modules/auth/auth.service.ts:122`: Se ignora el resultado de `desbloquear`, que devuelve false si otra petición ya levantó o cambió el bloqueo. El servicio sigue como si la cuenta estuviera ACTIVA a partir del objeto `usuario` leído antes, que puede estar desactualizado.\n- **menor** (seguridad) `.env.example:60`: Los `.env.example` traen valores de contraseña de prueba (`reemplazar-password-cliente-1`) que pasan la validación del seed. Quien copie el ejemplo tal cual crea cuentas RECEPCION y CLIENTE activas con contraseñas públicas.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-02",
+  "grupo": "HU-002",
+  "titulo": "Backend: sesión (refresh, logout, /me), expiración por inactividad del personal y permisos por rol",
+  "descripcion": "Completa el ciclo de sesión en el módulo auth. POST /api/v1/auth/refresh rota el refresh token de la cookie; si se reutiliza uno ya rotado, revoca toda la familia. POST /api/v1/auth/logout revoca la Sesion actual, borra la cookie y audita LOGOUT. GET /api/v1/auth/me devuelve el perfil, el rol y la rutaInicial. JwtAuthGuard es global y además comprueba que la sesionId del token no esté revocada, de modo que un token reutilizado tras el logout recibe 401. Para los roles internos (RECEPCION, ADMIN) aplica una expiración por inactividad de 30 minutos basada en Sesion.ultimaActividadEn. Cada petición autenticada o refresh renueva ese valor. Si se superan los 30 minutos, la sesión se revoca, se responde 401 SESION_EXPIRADA y se audita la expiración. RolesGuard con @Roles() responde 403 ante un rol no permitido. Refuerza el transporte seguro con helmet (HSTS), trust proxy y cookie Secure.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "src/modules/auth/auth.controller.ts: POST /api/v1/auth/refresh, POST /api/v1/auth/logout, GET /api/v1/auth/me",
+   "src/modules/auth/dto/me-response.dto.ts y refresh-response.dto.ts (@ApiProperty con ejemplo)",
+   "src/modules/auth/auth.service.ts: refresh con rotación y detección de reutilización, logout con revocación",
+   "src/modules/auth/jwt.strategy.ts + src/common/guards/jwt-auth.guard.ts: validación de sesión no revocada, control de inactividad de 30 min para el personal interno y actualización de ultimaActividadEn",
+   "src/common/guards/roles.guard.ts y decoradores @Roles/@Public",
+   "src/modules/auditoria: eventos LOGOUT y SESION_EXPIRADA",
+   "src/common: código SESION_EXPIRADA y SESION_INVALIDA en ErrorDto",
+   "src/main.ts: helmet con HSTS, trust proxy, cookie-parser",
+   "Swagger: @ApiBearerAuth() en logout y me, @ApiOperation({description:'HU-002'}), @ApiOkResponse/@ApiUnauthorizedResponse/@ApiForbiddenResponse con ErrorDto",
+   "src/modules/auth/auth.service.spec.ts y roles.guard.spec.ts (unitarias: rotación, revocación, inactividad a los 29 y 31 min con reloj simulado, el cliente no expira por inactividad)",
+   "test/auth-sesion.e2e-spec.ts (supertest: logout → 401 con el token anterior y el refresh anterior; inactividad del personal → 401 SESION_EXPIRADA; actividad antes de 30 min renueva; 403 con controller de prueba @Roles en el módulo de test; auditoría de logout/expiración; cabecera HSTS y cookie Secure)",
+   "src/config: INACTIVIDAD_PERSONAL_MINUTOS y REFRESH_TTL_DAYS en el esquema y .env.example",
+   "apps/backend/README.md: variables de sesión e inactividad"
+  ],
+  "tcs_asociados": [
+   "TC-009",
+   "TC-010",
+   "TC-011",
+   "TC-012",
+   "TC-027",
+   "TC-028",
+   "TC-029",
+   "TC-030",
+   "TC-031",
+   "TC-032",
+   "TC-033",
+   "TC-034",
+   "TC-037",
+   "TC-038",
+   "TC-039"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/11",
+  "rondas_revision": 3,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [],
+  "revisado_en": "2026-09-27T04:05:11.674711+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-3/PT-02",
+  "md": "---\nid: PT-02\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-009, TC-010, TC-011, TC-012, TC-027, TC-028, TC-029, TC-030, TC-031, TC-032, TC-033, TC-034, TC-037, TC-038, TC-039]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/11\nrondas_revision: 3\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/IAT-3/PT-02\nfecha: 2026-09-27\n---\n\n# PT-02 — Backend: sesión (refresh, logout, /me), expiración por inactividad del personal y permisos por rol\n\n_HU-002: Inicio y cierre de sesión con correo y contraseña, con redirección por rol_\n\nCompleta el ciclo de sesión en el módulo auth. POST /api/v1/auth/refresh rota el refresh token de la cookie; si se reutiliza uno ya rotado, revoca toda la familia. POST /api/v1/auth/logout revoca la Sesion actual, borra la cookie y audita LOGOUT. GET /api/v1/auth/me devuelve el perfil, el rol y la rutaInicial. JwtAuthGuard es global y además comprueba que la sesionId del token no esté revocada, de modo que un token reutilizado tras el logout recibe 401. Para los roles internos (RECEPCION, ADMIN) aplica una expiración por inactividad de 30 minutos basada en Sesion.ultimaActividadEn. Cada petición autenticada o refresh renueva ese valor. Si se superan los 30 minutos, la sesión se revoca, se responde 401 SESION_EXPIRADA y se audita la expiración. RolesGuard con @Roles() responde 403 ante un rol no permitido. Refuerza el transporte seguro con helmet (HSTS), trust proxy y cookie Secure.\n\n## Entregables\n\n- src/modules/auth/auth.controller.ts: POST /api/v1/auth/refresh, POST /api/v1/auth/logout, GET /api/v1/auth/me\n- src/modules/auth/dto/me-response.dto.ts y refresh-response.dto.ts (@ApiProperty con ejemplo)\n- src/modules/auth/auth.service.ts: refresh con rotación y detección de reutilización, logout con revocación\n- src/modules/auth/jwt.strategy.ts + src/common/guards/jwt-auth.guard.ts: validación de sesión no revocada, control de inactividad de 30 min para el personal interno y actualización de ultimaActividadEn\n- src/common/guards/roles.guard.ts y decoradores @Roles/@Public\n- src/modules/auditoria: eventos LOGOUT y SESION_EXPIRADA\n- src/common: código SESION_EXPIRADA y SESION_INVALIDA en ErrorDto\n- src/main.ts: helmet con HSTS, trust proxy, cookie-parser\n- Swagger: @ApiBearerAuth() en logout y me, @ApiOperation({description:'HU-002'}), @ApiOkResponse/@ApiUnauthorizedResponse/@ApiForbiddenResponse con ErrorDto\n- src/modules/auth/auth.service.spec.ts y roles.guard.spec.ts (unitarias: rotación, revocación, inactividad a los 29 y 31 min con reloj simulado, el cliente no expira por inactividad)\n- test/auth-sesion.e2e-spec.ts (supertest: logout → 401 con el token anterior y el refresh anterior; inactividad del personal → 401 SESION_EXPIRADA; actividad antes de 30 min renueva; 403 con controller de prueba @Roles en el módulo de test; auditoría de logout/expiración; cabecera HSTS y cookie Secure)\n- src/config: INACTIVIDAD_PERSONAL_MINUTOS y REFRESH_TTL_DAYS en el esquema y .env.example\n- apps/backend/README.md: variables de sesión e inactividad\n\n## Se da por terminado cuando\n\n- TC-009 pasa\n- TC-010 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-027 pasa\n- TC-028 pasa\n- TC-029 pasa\n- TC-030 pasa\n- TC-031 pasa\n- TC-032 pasa\n- TC-033 pasa\n- TC-034 pasa\n- TC-037 pasa\n- TC-038 pasa\n- TC-039 pasa\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-03",
+  "grupo": "HU-002",
+  "titulo": "Frontend: pantalla de login con validación, mensajes de error y redirección por rol",
+  "descripcion": "Implementa la feature login. El formulario Iniciar sesión usa react-hook-form + zod: correo y contraseña obligatorios, formato de correo y campo contraseña de tipo password. Si la validación falla, la petición no se envía. Añade el hook useLoginMutation y el mapa de códigos de negocio a mensajes: genérico para credenciales inválidas, bloqueo temporal y cuenta no habilitada. AuthContext guarda el access token en memoria y la sesión se restaura con /auth/refresh al recargar. Tras el login redirige a la rutaInicial que devuelve el backend: /mis-vehiculos para CLIENTE y la pantalla 'Agenda del día' (placeholder InicioInternoPage) para el personal. Un usuario ya autenticado que entra a /login es enviado a su pantalla inicial. El cliente HTTP usa VITE_API_BASE_URL (HTTPS en producción) con credentials: 'include'.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "src/features/login/pages/LoginPage.tsx",
+   "src/features/login/components/LoginForm.tsx (MUI, TextField type=password)",
+   "src/features/login/hooks/useLoginMutation.ts",
+   "src/shared/validation/login.schema.ts (zod)",
+   "src/shared/errores/mensajesError.ts: CREDENCIALES_INVALIDAS, CUENTA_BLOQUEADA, CUENTA_NO_VERIFICADA, CUENTA_INACTIVA",
+   "src/auth/AuthContext.tsx (token en memoria, restauración vía refresh)",
+   "src/auth/rutaInicialPorRol.ts",
+   "src/api/http.ts (base URL, credentials include) y src/api/schema.d.ts regenerado desde /api/docs-json",
+   "src/app/router.tsx: /login con redirección si ya está autenticado, /mis-vehiculos y la ruta de Agenda del día",
+   "src/features/cliente/MisVehiculosPage.tsx y src/features/interno/InicioInternoPage.tsx (placeholders con título 'Mis vehículos' / 'Agenda del día')",
+   "src/test/mocks (MSW handlers de /auth/login y /auth/refresh)",
+   "src/features/login/LoginPage.test.tsx (Vitest + Testing Library + MSW: éxito por rol, mensaje genérico, bloqueo, cuenta no habilitada, campos vacíos sin petición, formato inválido, campo oculto, usuario autenticado redirigido)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-007",
+   "TC-008",
+   "TC-013",
+   "TC-014",
+   "TC-015",
+   "TC-016",
+   "TC-017",
+   "TC-018",
+   "TC-019",
+   "TC-020",
+   "TC-021",
+   "TC-022",
+   "TC-023",
+   "TC-024",
+   "TC-025",
+   "TC-035",
+   "TC-036",
+   "TC-038"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/12",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/features/login/LoginPage.test.tsx",
+    "linea": 181,
+    "descripcion": "La aserción `expect(ERRORES_LOGIN[codigo].status).toBe(403)` es tautológica: comprueba un dato del propio mock, no el comportamiento de la pantalla. No aporta verificación y puede dar una falsa sensación de que se cubre el código HTTP de TC-013/TC-014.",
+    "sugerencia": "Elimina la aserción. Si se quiere fijar el contrato, basta con que el mock responda con el status documentado en schema.d.ts.",
+    "comentario_id": 4114104778
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/features/login/LoginPage.test.tsx",
+    "linea": 192,
+    "descripcion": "La prueba etiquetada como TC-017 simula un 400 del backend, pero TC-017 verifica que el propio backend rechace cuerpos vacíos o incompletos (APIRequestContext). Pasa lo mismo con TC-019/TC-021/TC-022/TC-023: dependen de la lógica del backend y no se validan con los mocks del frontend. Etiquetarlas así puede hacer creer que esos TCs quedan cubiertos por este paquete.",
+    "sugerencia": "Renombra la prueba (p. ej. 'muestra junto a cada campo los errores VALIDACION del backend') y deja claro en el PR que TC-017, TC-019 y TC-021 a TC-023 dependen del backend y de la prueba E2E.",
+    "comentario_id": 4114104780
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/auth/AuthContext.test.tsx",
+    "linea": 80,
+    "descripcion": "La prueba de restauración espera '/interno' para un usuario RECEPCION, que coincide con la ruta de respaldo por rol. Así no distingue si AuthProvider guarda la `rutaInicial` que devuelve el refresh o solo usa la del rol. Tampoco se puede confirmar en el diff que el efecto de restauración pase por `iniciarSesion`.",
+    "sugerencia": "En esa prueba usa una `rutaInicial` distinta de la del rol (p. ej. '/mis-vehiculos' para RECEPCION, o una ruta interna ficticia) para comprobar que se respeta la del backend al restaurar.",
+    "comentario_id": 4114104783
+   }
+  ],
+  "revisado_en": "2026-09-27T04:42:04.204265+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-3/PT-03",
+  "md": "---\nid: PT-03\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-002, TC-003, TC-004, TC-005, TC-006, TC-007, TC-008, TC-013, TC-014, TC-015, TC-016, TC-017, TC-018, TC-019, TC-020, TC-021, TC-022, TC-023, TC-024, TC-025, TC-035, TC-036, TC-038]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/12\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/IAT-3/PT-03\nfecha: 2026-09-27\n---\n\n# PT-03 — Frontend: pantalla de login con validación, mensajes de error y redirección por rol\n\n_HU-002: Inicio y cierre de sesión con correo y contraseña, con redirección por rol_\n\nImplementa la feature login. El formulario Iniciar sesión usa react-hook-form + zod: correo y contraseña obligatorios, formato de correo y campo contraseña de tipo password. Si la validación falla, la petición no se envía. Añade el hook useLoginMutation y el mapa de códigos de negocio a mensajes: genérico para credenciales inválidas, bloqueo temporal y cuenta no habilitada. AuthContext guarda el access token en memoria y la sesión se restaura con /auth/refresh al recargar. Tras el login redirige a la rutaInicial que devuelve el backend: /mis-vehiculos para CLIENTE y la pantalla 'Agenda del día' (placeholder InicioInternoPage) para el personal. Un usuario ya autenticado que entra a /login es enviado a su pantalla inicial. El cliente HTTP usa VITE_API_BASE_URL (HTTPS en producción) con credentials: 'include'.\n\n## Entregables\n\n- src/features/login/pages/LoginPage.tsx\n- src/features/login/components/LoginForm.tsx (MUI, TextField type=password)\n- src/features/login/hooks/useLoginMutation.ts\n- src/shared/validation/login.schema.ts (zod)\n- src/shared/errores/mensajesError.ts: CREDENCIALES_INVALIDAS, CUENTA_BLOQUEADA, CUENTA_NO_VERIFICADA, CUENTA_INACTIVA\n- src/auth/AuthContext.tsx (token en memoria, restauración vía refresh)\n- src/auth/rutaInicialPorRol.ts\n- src/api/http.ts (base URL, credentials include) y src/api/schema.d.ts regenerado desde /api/docs-json\n- src/app/router.tsx: /login con redirección si ya está autenticado, /mis-vehiculos y la ruta de Agenda del día\n- src/features/cliente/MisVehiculosPage.tsx y src/features/interno/InicioInternoPage.tsx (placeholders con título 'Mis vehículos' / 'Agenda del día')\n- src/test/mocks (MSW handlers de /auth/login y /auth/refresh)\n- src/features/login/LoginPage.test.tsx (Vitest + Testing Library + MSW: éxito por rol, mensaje genérico, bloqueo, cuenta no habilitada, campos vacíos sin petición, formato inválido, campo oculto, usuario autenticado redirigido)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-007 pasa\n- TC-008 pasa\n- TC-013 pasa\n- TC-014 pasa\n- TC-015 pasa\n- TC-016 pasa\n- TC-017 pasa\n- TC-018 pasa\n- TC-019 pasa\n- TC-020 pasa\n- TC-021 pasa\n- TC-022 pasa\n- TC-023 pasa\n- TC-024 pasa\n- TC-025 pasa\n- TC-035 pasa\n- TC-036 pasa\n- TC-038 pasa\n\n## Observaciones de la revisión\n\n- **menor** (pruebas) `apps/frontend/src/features/login/LoginPage.test.tsx:181`: La aserción `expect(ERRORES_LOGIN[codigo].status).toBe(403)` es tautológica: comprueba un dato del propio mock, no el comportamiento de la pantalla. No aporta verificación y puede dar una falsa sensación de que se cubre el código HTTP de TC-013/TC-014.\n- **menor** (pruebas) `apps/frontend/src/features/login/LoginPage.test.tsx:192`: La prueba etiquetada como TC-017 simula un 400 del backend, pero TC-017 verifica que el propio backend rechace cuerpos vacíos o incompletos (APIRequestContext). Pasa lo mismo con TC-019/TC-021/TC-022/TC-023: dependen de la lógica del backend y no se validan con los mocks del frontend. Etiquetarlas así puede hacer creer que esos TCs quedan cubiertos por este paquete.\n- **menor** (pruebas) `apps/frontend/src/auth/AuthContext.test.tsx:80`: La prueba de restauración espera '/interno' para un usuario RECEPCION, que coincide con la ruta de respaldo por rol. Así no distingue si AuthProvider guarda la `rutaInicial` que devuelve el refresh o solo usa la del rol. Tampoco se puede confirmar en el diff que el efecto de restauración pase por `iniciarSesion`.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-04",
+  "grupo": "HU-002",
+  "titulo": "Frontend: cierre de sesión, sesión expirada y rutas protegidas por rol",
+  "descripcion": "Añade el menú de usuario con 'Cerrar sesión'. Al usarlo llama a /auth/logout, limpia AuthContext y la caché de TanStack Query y navega a /login. El cliente HTTP reintenta una vez tras un 401 pasando por refresh. Si el refresh falla con SESION_EXPIRADA o SESION_INVALIDA, limpia la sesión y lleva a /login con el mensaje 'sesión expirada'. De este modo, al usar 'Atrás' después del logout no se muestra contenido protegido. RequireAuth y RequireRole protegen las rutas: un rol no permitido se redirige a su pantalla inicial.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "src/features/login/components/MenuUsuario.tsx (MUI, opción Cerrar sesión)",
+   "src/features/login/hooks/useLogoutMutation.ts",
+   "src/api/http.ts: reintento tras 401 con refresh y manejo de SESION_EXPIRADA",
+   "src/auth/AuthContext.tsx: logout, limpieza de queryClient, estado de sesión expirada",
+   "src/auth/RequireAuth.tsx y src/auth/RequireRole.tsx",
+   "src/app/router.tsx: rutas de cliente e internas envueltas en RequireAuth/RequireRole",
+   "src/shared/errores/mensajesError.ts: SESION_EXPIRADA",
+   "src/test/mocks (MSW handlers de /auth/logout, /auth/refresh y /auth/me)",
+   "src/features/login/Logout.test.tsx, src/auth/RequireRole.test.tsx, src/api/http.test.ts (logout cliente y personal, 401 tras logout sin contenido protegido, expiración con mensaje, actividad que renueva vía refresh, redirección por rol no permitido)"
+  ],
+  "tcs_asociados": [
+   "TC-009",
+   "TC-010",
+   "TC-011",
+   "TC-012",
+   "TC-027",
+   "TC-028",
+   "TC-029",
+   "TC-030",
+   "TC-031",
+   "TC-032",
+   "TC-033",
+   "TC-034"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-02",
+   "PT-03"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/13",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "apps/frontend/src/features/login/Logout.test.tsx",
+    "linea": 39,
+    "descripcion": "La expiración de la sesión solo se detecta cuando alguna petición recibe un 401. Las pantallas con sesión (AuthenticatedLayout, MisVehiculosPage, InicioInternoPage) no hacen ninguna petición, y RequireAuth solo revisa el estado en memoria. Por eso, al navegar dentro de la SPA o al hacer clic en la agenda después de 30 min, no se vuelve al login ni aparece el aviso (TC-011 en su variante de navegación, TC-029 y TC-031 con Playwright). Las pruebas lo ocultan: `hacerAccion` llama a `http.get('/auth/me')` directamente y no a través de un elemento de la interfaz.",
+    "sugerencia": "Hay que validar la sesión desde la interfaz. Por ejemplo, un hook `useMeQuery` (la arquitectura ya prevé useQuery sobre /auth/me) montado en AuthenticatedLayout que se vuelva a ejecutar al cambiar de ruta o al recuperar el foco. Luego, reescribir las pruebas de expiración y renovación para que disparen la petición con una navegación o un clic, no con `http.get` directo.",
+    "comentario_id": 4114141191
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/api/http.ts",
+    "linea": 183,
+    "descripcion": "Si el refresh falla por un error de red (ERROR_RED), `motivoFinSesion` devuelve 'invalida' y se avisa del fin de la sesión. Un corte de red pasajero cierra la sesión del usuario igual que un logout, aunque la cookie de refresh siga siendo válida.",
+    "sugerencia": "No avisar del fin de la sesión (y, si se puede, no borrar el token) cuando `renovacion.codigo === CODIGO_ERROR_RED`: basta con lanzar el ApiError de red y dejar que la siguiente acción lo intente de nuevo. Añadir una prueba de este caso.",
+    "comentario_id": 4114141195
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/test/renderRuta.tsx",
+    "linea": 39,
+    "descripcion": "`tokenStore.set(usuario ? TOKEN_DE_PRUEBA : null)` pasa null a `set`. En el resto del código, `set` solo recibe strings y el token se borra con `clear()`. Si la firma de `TokenStore.set` es `(token: string)`, el typecheck falla.",
+    "sugerencia": "Usar `if (usuario) tokenStore.set(TOKEN_DE_PRUEBA); else tokenStore.clear();`.",
+    "comentario_id": 4114141199
+   }
+  ],
+  "revisado_en": "2026-09-27T04:57:38.843296+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-3/PT-04",
+  "md": "---\nid: PT-04\nhu_id: HU-002\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-009, TC-010, TC-011, TC-012, TC-027, TC-028, TC-029, TC-030, TC-031, TC-032, TC-033, TC-034]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/13\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-02, PT-03]\nid_externo: null\nrama: hu/IAT-3/PT-04\nfecha: 2026-09-27\n---\n\n# PT-04 — Frontend: cierre de sesión, sesión expirada y rutas protegidas por rol\n\n_HU-002: Inicio y cierre de sesión con correo y contraseña, con redirección por rol_\n\nAñade el menú de usuario con 'Cerrar sesión'. Al usarlo llama a /auth/logout, limpia AuthContext y la caché de TanStack Query y navega a /login. El cliente HTTP reintenta una vez tras un 401 pasando por refresh. Si el refresh falla con SESION_EXPIRADA o SESION_INVALIDA, limpia la sesión y lleva a /login con el mensaje 'sesión expirada'. De este modo, al usar 'Atrás' después del logout no se muestra contenido protegido. RequireAuth y RequireRole protegen las rutas: un rol no permitido se redirige a su pantalla inicial.\n\n## Entregables\n\n- src/features/login/components/MenuUsuario.tsx (MUI, opción Cerrar sesión)\n- src/features/login/hooks/useLogoutMutation.ts\n- src/api/http.ts: reintento tras 401 con refresh y manejo de SESION_EXPIRADA\n- src/auth/AuthContext.tsx: logout, limpieza de queryClient, estado de sesión expirada\n- src/auth/RequireAuth.tsx y src/auth/RequireRole.tsx\n- src/app/router.tsx: rutas de cliente e internas envueltas en RequireAuth/RequireRole\n- src/shared/errores/mensajesError.ts: SESION_EXPIRADA\n- src/test/mocks (MSW handlers de /auth/logout, /auth/refresh y /auth/me)\n- src/features/login/Logout.test.tsx, src/auth/RequireRole.test.tsx, src/api/http.test.ts (logout cliente y personal, 401 tras logout sin contenido protegido, expiración con mensaje, actividad que renueva vía refresh, redirección por rol no permitido)\n\n## Se da por terminado cuando\n\n- TC-009 pasa\n- TC-010 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-027 pasa\n- TC-028 pasa\n- TC-029 pasa\n- TC-030 pasa\n- TC-031 pasa\n- TC-032 pasa\n- TC-033 pasa\n- TC-034 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `apps/frontend/src/features/login/Logout.test.tsx:39`: La expiración de la sesión solo se detecta cuando alguna petición recibe un 401. Las pantallas con sesión (AuthenticatedLayout, MisVehiculosPage, InicioInternoPage) no hacen ninguna petición, y RequireAuth solo revisa el estado en memoria. Por eso, al navegar dentro de la SPA o al hacer clic en la agenda después de 30 min, no se vuelve al login ni aparece el aviso (TC-011 en su variante de navegación, TC-029 y TC-031 con Playwright). Las pruebas lo ocultan: `hacerAccion` llama a `http.get('/auth/me')` directamente y no a través de un elemento de la interfaz.\n- **menor** (buenas_practicas) `apps/frontend/src/api/http.ts:183`: Si el refresh falla por un error de red (ERROR_RED), `motivoFinSesion` devuelve 'invalida' y se avisa del fin de la sesión. Un corte de red pasajero cierra la sesión del usuario igual que un logout, aunque la cookie de refresh siga siendo válida.\n- **menor** (buenas_practicas) `apps/frontend/src/test/renderRuta.tsx:39`: `tokenStore.set(usuario ? TOKEN_DE_PRUEBA : null)` pasa null a `set`. En el resto del código, `set` solo recibe strings y el token se borra con `clear()`. Si la firma de `TokenStore.set` es `(token: string)`, el typecheck falla.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-01",
+  "grupo": "HU-003",
+  "titulo": "Backend: solicitud de enlace de restablecimiento (POST /auth/password/solicitar)",
+  "descripcion": "Crea el módulo password-recovery con el endpoint de solicitud. Siempre responde 202 con el mismo cuerpo neutro, exista o no el correo. Si el usuario existe, emite un TokenUnUso RESTABLECER_PASSWORD: aleatorio con crypto.randomBytes, guardado como hash SHA-256 y con expiración de RESET_TTL_MINUTOS=60. El correo con el enlace HTTPS ${FRONTEND_URL}/restablecer?token= se envía de forma asíncrona para que el tiempo de respuesta no dependa de si el correo existe. Si el correo no existe, no se envía nada. Aplica límite de frecuencia por IP y por correo normalizado con @nestjs/throttler, sin cambiar la respuesta visible. Valida el formato del correo con class-validator y responde 400 con ErrorDto. Audita RESET_SOLICITADO con usuario (si existe), IP y user-agent, sin datos sensibles. Supuesto abierto que confirma el PO: no se define si una nueva solicitud invalida los enlaces anteriores que siguen vigentes. Este paquete no lo decide y lo deja documentado como pendiente.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "apps/backend/src/modules/password-recovery/password-recovery.module.ts",
+   "apps/backend/src/modules/password-recovery/password-recovery.controller.ts (POST /api/v1/auth/password/solicitar, @Public)",
+   "apps/backend/src/modules/password-recovery/password-recovery.service.ts (solicitar)",
+   "apps/backend/src/modules/password-recovery/dto/solicitar-restablecimiento.dto.ts y dto/respuesta-neutra.dto.ts (@ApiProperty con ejemplo)",
+   "apps/backend/src/modules/tokens/tokens.service.ts: emitir(tipo RESTABLECER_PASSWORD, ttl) con token aleatorio seguro y hash SHA-256 (si falta)",
+   "apps/backend/src/modules/notificaciones/templates/restablecer-password.* y método enviarRestablecimiento en MailerPort con sus adaptadores SMTP y consola",
+   "Throttler por IP y por correo normalizado en la solicitud (guard/decorador en common/)",
+   "Registro de auditoría RESET_SOLICITADO en el módulo auditoria",
+   "Swagger: @ApiTags('password-recovery'), @ApiOperation({summary, description:'HU-003'}), @ApiAcceptedResponse(RespuestaNeutraDto), @ApiBadRequestResponse(ErrorDto), @ApiTooManyRequestsResponse(ErrorDto)",
+   "Variable RESET_TTL_MINUTOS=60 en src/config (esquema validado) y en .env.example",
+   "apps/backend/src/modules/password-recovery/password-recovery.service.spec.ts (correo existente o no: misma respuesta y sin envío si no existe; se guarda el hash del token, no el texto; auditoría sin datos sensibles)",
+   "apps/backend/test/password-recovery-solicitar.e2e-spec.ts (202 idéntico con correo registrado y no registrado, 400 con correo vacío o inválido, límite de frecuencia por correo y por IP, tiempos de respuesta comparables, correo capturado por el adaptador de consola)",
+   "apps/backend/README.md: variable RESET_TTL_MINUTOS y cómo ver el correo de restablecimiento en desarrollo (consola o mailpit)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-007",
+   "TC-009",
+   "TC-010",
+   "TC-011",
+   "TC-012",
+   "TC-013",
+   "TC-020",
+   "TC-023",
+   "TC-024",
+   "TC-025",
+   "TC-027"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/14",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "seguridad",
+    "severidad": "mayor",
+    "archivo": "apps/backend/src/modules/password-recovery/password-recovery.service.ts",
+    "linea": 71,
+    "descripcion": "Todos los eventos RESET_SOLICITADO guardan `metadata.correo` con el correo normalizado en claro, también cuando el correo no está registrado o se superó un límite. Así, la auditoría append-only acumula cualquier correo que alguien teclee, sea de un tercero o de una lista de enumeración. Es un dato personal, y la HU y la arquitectura piden auditar 'usuario (si existe) e IP, sin guardar datos sensibles'. Además choca con el propio LimitadorFrecuencia, que hashea el correo precisamente 'para no dejar correos legibles'. Las pruebas unitarias (y la limpieza del e2e) fijan este comportamiento.",
+    "sugerencia": "No guardar el correo en metadata. Si existe el usuario, basta con usuarioId. Si no existe, guardar como mucho una huella SHA-256 (o HMAC) del correo normalizado para correlacionar abusos. Hay que ajustar password-recovery.service.spec.ts y la limpieza del e2e (limpiarCorrida filtra por metadata.correo) para que filtren, por ejemplo, por userAgent o por la huella.",
+    "comentario_id": 4115746663
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/backend/src/modules/password-recovery/password-recovery.service.spec.ts",
+    "linea": 271,
+    "descripcion": "En la prueba 'termina igual que con un correo registrado', la variable `conCuenta` guarda el resultado del caso SIN cuenta (el beforeAll simula buscarPorCorreoNormalizado → null) y `registrado` el del caso con cuenta. Los nombres están invertidos y confunden al leerla.",
+    "sugerencia": "Renombrar a `noRegistrado`/`registrado`, o comparar directamente los dos resultados con `toEqual`.",
+    "comentario_id": 4115746666
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/backend/test/password-recovery-solicitar.e2e-spec.ts",
+    "linea": 322,
+    "descripcion": "La prueba de tiempos (TC-010) compara medianas de 20 muestras contra una base de datos real en CI. El camino con cuenta hace un INSERT más (el token) y construye el enlace, así que en runners cargados la prueba puede fallar de forma intermitente.",
+    "sugerencia": "Subir el número de muestras o repetir la medición antes de fallar. También se puede marcar la prueba como tolerante a ruido (por ejemplo, reintento con jest.retryTimes) y documentar ese margen en el README.",
+    "comentario_id": 4115746671
+   }
+  ],
+  "revisado_en": "2026-09-27T14:42:39.524470+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-4/PT-01",
+  "md": "---\nid: PT-01\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-007, TC-009, TC-010, TC-011, TC-012, TC-013, TC-020, TC-023, TC-024, TC-025, TC-027]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/14\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05]\nid_externo: null\nrama: hu/IAT-4/PT-01\nfecha: 2026-09-27\n---\n\n# PT-01 — Backend: solicitud de enlace de restablecimiento (POST /auth/password/solicitar)\n\n_HU-003: Recuperación de contraseña mediante enlace enviado por correo_\n\nCrea el módulo password-recovery con el endpoint de solicitud. Siempre responde 202 con el mismo cuerpo neutro, exista o no el correo. Si el usuario existe, emite un TokenUnUso RESTABLECER_PASSWORD: aleatorio con crypto.randomBytes, guardado como hash SHA-256 y con expiración de RESET_TTL_MINUTOS=60. El correo con el enlace HTTPS ${FRONTEND_URL}/restablecer?token= se envía de forma asíncrona para que el tiempo de respuesta no dependa de si el correo existe. Si el correo no existe, no se envía nada. Aplica límite de frecuencia por IP y por correo normalizado con @nestjs/throttler, sin cambiar la respuesta visible. Valida el formato del correo con class-validator y responde 400 con ErrorDto. Audita RESET_SOLICITADO con usuario (si existe), IP y user-agent, sin datos sensibles. Supuesto abierto que confirma el PO: no se define si una nueva solicitud invalida los enlaces anteriores que siguen vigentes. Este paquete no lo decide y lo deja documentado como pendiente.\n\n## Entregables\n\n- apps/backend/src/modules/password-recovery/password-recovery.module.ts\n- apps/backend/src/modules/password-recovery/password-recovery.controller.ts (POST /api/v1/auth/password/solicitar, @Public)\n- apps/backend/src/modules/password-recovery/password-recovery.service.ts (solicitar)\n- apps/backend/src/modules/password-recovery/dto/solicitar-restablecimiento.dto.ts y dto/respuesta-neutra.dto.ts (@ApiProperty con ejemplo)\n- apps/backend/src/modules/tokens/tokens.service.ts: emitir(tipo RESTABLECER_PASSWORD, ttl) con token aleatorio seguro y hash SHA-256 (si falta)\n- apps/backend/src/modules/notificaciones/templates/restablecer-password.* y método enviarRestablecimiento en MailerPort con sus adaptadores SMTP y consola\n- Throttler por IP y por correo normalizado en la solicitud (guard/decorador en common/)\n- Registro de auditoría RESET_SOLICITADO en el módulo auditoria\n- Swagger: @ApiTags('password-recovery'), @ApiOperation({summary, description:'HU-003'}), @ApiAcceptedResponse(RespuestaNeutraDto), @ApiBadRequestResponse(ErrorDto), @ApiTooManyRequestsResponse(ErrorDto)\n- Variable RESET_TTL_MINUTOS=60 en src/config (esquema validado) y en .env.example\n- apps/backend/src/modules/password-recovery/password-recovery.service.spec.ts (correo existente o no: misma respuesta y sin envío si no existe; se guarda el hash del token, no el texto; auditoría sin datos sensibles)\n- apps/backend/test/password-recovery-solicitar.e2e-spec.ts (202 idéntico con correo registrado y no registrado, 400 con correo vacío o inválido, límite de frecuencia por correo y por IP, tiempos de respuesta comparables, correo capturado por el adaptador de consola)\n- apps/backend/README.md: variable RESET_TTL_MINUTOS y cómo ver el correo de restablecimiento en desarrollo (consola o mailpit)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-007 pasa\n- TC-009 pasa\n- TC-010 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-013 pasa\n- TC-020 pasa\n- TC-023 pasa\n- TC-024 pasa\n- TC-025 pasa\n- TC-027 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (seguridad) `apps/backend/src/modules/password-recovery/password-recovery.service.ts:71`: Todos los eventos RESET_SOLICITADO guardan `metadata.correo` con el correo normalizado en claro, también cuando el correo no está registrado o se superó un límite. Así, la auditoría append-only acumula cualquier correo que alguien teclee, sea de un tercero o de una lista de enumeración. Es un dato personal, y la HU y la arquitectura piden auditar 'usuario (si existe) e IP, sin guardar datos sensibles'. Además choca con el propio LimitadorFrecuencia, que hashea el correo precisamente 'para no dejar correos legibles'. Las pruebas unitarias (y la limpieza del e2e) fijan este comportamiento.\n- **menor** (pruebas) `apps/backend/src/modules/password-recovery/password-recovery.service.spec.ts:271`: En la prueba 'termina igual que con un correo registrado', la variable `conCuenta` guarda el resultado del caso SIN cuenta (el beforeAll simula buscarPorCorreoNormalizado → null) y `registrado` el del caso con cuenta. Los nombres están invertidos y confunden al leerla.\n- **menor** (pruebas) `apps/backend/test/password-recovery-solicitar.e2e-spec.ts:322`: La prueba de tiempos (TC-010) compara medianas de 20 muestras contra una base de datos real en CI. El camino con cuenta hace un INSERT más (el token) y construye el enlace, así que en runners cargados la prueba puede fallar de forma intermitente.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-02",
+  "grupo": "HU-003",
+  "titulo": "Backend: validación del enlace y restablecimiento de contraseña con revocación de sesiones",
+  "descripcion": "GET /auth/password/token/{token} responde si el enlace está VIGENTE, EXPIRADO, USADO o INVALIDO. Un token mal formado o inexistente recibe la respuesta genérica INVALIDO. POST /auth/password/restablecer valida la nueva contraseña con la política de dominio compartida y devuelve un error que indica qué regla no se cumple. Si la contraseña no es válida, no consume el token. Después, en una sola prisma.$transaction: consume el token (UPDATE … WHERE usadoEn IS NULL AND expiraEn > now()), lo que valida en el servidor la vigencia y el uso único; actualiza passwordHash con argon2id; invalida los demás tokens de restablecimiento pendientes y revoca todas las Sesiones del usuario. Los errores usan los códigos TOKEN_EXPIRADO, TOKEN_USADO y TOKEN_INVALIDO. Audita RESET_COMPLETADO y el cierre de sesiones sin registrar la contraseña.",
+  "capa": "backend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "password-recovery.controller.ts: GET /api/v1/auth/password/token/{token} y POST /api/v1/auth/password/restablecer (@Public)",
+   "password-recovery.service.ts: estadoToken() y restablecer() transaccional",
+   "apps/backend/src/modules/password-recovery/dto/estado-token.dto.ts y dto/restablecer-password.dto.ts (token y nuevaPassword, con @ApiProperty)",
+   "tokens.service.ts: consultarEstado() y consumir() atómico, e invalidarPendientes(usuarioId, tipo)",
+   "Revocación de todas las sesiones del usuario (Sesion.revocadaEn) desde el repositorio de sesiones de auth/usuarios",
+   "Uso de la política de contraseña de dominio (usuarios/domain) con códigos por regla incumplida",
+   "Auditoría RESET_COMPLETADO con metadata de sesiones revocadas, sin contraseña ni token",
+   "Swagger: @ApiOperation(description:'HU-003'), @ApiOkResponse(EstadoTokenDto), @ApiOkResponse o @ApiNoContentResponse del restablecimiento, @ApiBadRequestResponse(ErrorDto: PASSWORD_POLITICA, TOKEN_INVALIDO), @ApiGoneResponse o @ApiConflictResponse(ErrorDto: TOKEN_EXPIRADO, TOKEN_USADO)",
+   "apps/backend/src/modules/password-recovery/password-recovery.service.spec.ts (casos de restablecimiento; la contraseña no aparece en logs ni en la auditoría)",
+   "apps/backend/test/password-recovery-restablecer.e2e-spec.ts (vigente, luego cambio y login con la nueva contraseña; la anterior es rechazada; token expirado a más de 60 min con reloj simulado; reutilización rechazada; token alterado o inexistente; política incumplida sin consumir el token; enlace abierto a los 59 min y enviado a los 61 rechazado; varias sesiones revocadas y refresh con 401; hash argon2 en BD)"
+  ],
+  "tcs_asociados": [
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-008",
+   "TC-014",
+   "TC-016",
+   "TC-017",
+   "TC-018",
+   "TC-019",
+   "TC-020",
+   "TC-021",
+   "TC-022",
+   "TC-025",
+   "TC-027"
+  ],
+  "depende_de": [
+   "BASE/PT-02",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/15",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «backend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "criterio_aceptacion",
+    "severidad": "mayor",
+    "archivo": "apps/backend/src/modules/password-recovery/password-recovery.service.ts",
+    "linea": 124,
+    "descripcion": "restablecer() acepta a propósito cuentas con bloqueo temporal por intentos de login (así lo fija la prueba 'acepta a una cuenta con bloqueo temporal…'). Sin embargo, solo actualiza passwordHash: no reinicia intentosFallidos, bloqueadoHasta ni el estado BLOQUEADA. Esa persona cambia la contraseña con éxito y después el login la sigue rechazando hasta que venza el bloqueo, lo que contradice el Escenario 2 ('se actualiza y puedo iniciar sesión con ella'). Ningún e2e cubre este caso.",
+    "sugerencia": "Dentro de la misma transacción, al restablecer, reinicia el contador de intentos fallidos y levanta el bloqueo temporal (por ejemplo, UsuariosRepository.reiniciarIntentos o un update combinado con passwordHash). Solo aplica al bloqueo por intentos, no al de un administrador. Añade una prueba unitaria y un e2e: cuenta bloqueada por intentos → restablecer → login 200 con la nueva contraseña.",
+    "comentario_id": 4115814800
+   }
+  ],
+  "revisado_en": "2026-09-27T15:01:36.410694+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-4/PT-02",
+  "md": "---\nid: PT-02\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: backend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-002, TC-003, TC-004, TC-005, TC-006, TC-008, TC-014, TC-016, TC-017, TC-018, TC-019, TC-020, TC-021, TC-022, TC-025, TC-027]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/15\nrondas_revision: 1\ndepende_de: [BASE/PT-02, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/IAT-4/PT-02\nfecha: 2026-09-27\n---\n\n# PT-02 — Backend: validación del enlace y restablecimiento de contraseña con revocación de sesiones\n\n_HU-003: Recuperación de contraseña mediante enlace enviado por correo_\n\nGET /auth/password/token/{token} responde si el enlace está VIGENTE, EXPIRADO, USADO o INVALIDO. Un token mal formado o inexistente recibe la respuesta genérica INVALIDO. POST /auth/password/restablecer valida la nueva contraseña con la política de dominio compartida y devuelve un error que indica qué regla no se cumple. Si la contraseña no es válida, no consume el token. Después, en una sola prisma.$transaction: consume el token (UPDATE … WHERE usadoEn IS NULL AND expiraEn > now()), lo que valida en el servidor la vigencia y el uso único; actualiza passwordHash con argon2id; invalida los demás tokens de restablecimiento pendientes y revoca todas las Sesiones del usuario. Los errores usan los códigos TOKEN_EXPIRADO, TOKEN_USADO y TOKEN_INVALIDO. Audita RESET_COMPLETADO y el cierre de sesiones sin registrar la contraseña.\n\n## Entregables\n\n- password-recovery.controller.ts: GET /api/v1/auth/password/token/{token} y POST /api/v1/auth/password/restablecer (@Public)\n- password-recovery.service.ts: estadoToken() y restablecer() transaccional\n- apps/backend/src/modules/password-recovery/dto/estado-token.dto.ts y dto/restablecer-password.dto.ts (token y nuevaPassword, con @ApiProperty)\n- tokens.service.ts: consultarEstado() y consumir() atómico, e invalidarPendientes(usuarioId, tipo)\n- Revocación de todas las sesiones del usuario (Sesion.revocadaEn) desde el repositorio de sesiones de auth/usuarios\n- Uso de la política de contraseña de dominio (usuarios/domain) con códigos por regla incumplida\n- Auditoría RESET_COMPLETADO con metadata de sesiones revocadas, sin contraseña ni token\n- Swagger: @ApiOperation(description:'HU-003'), @ApiOkResponse(EstadoTokenDto), @ApiOkResponse o @ApiNoContentResponse del restablecimiento, @ApiBadRequestResponse(ErrorDto: PASSWORD_POLITICA, TOKEN_INVALIDO), @ApiGoneResponse o @ApiConflictResponse(ErrorDto: TOKEN_EXPIRADO, TOKEN_USADO)\n- apps/backend/src/modules/password-recovery/password-recovery.service.spec.ts (casos de restablecimiento; la contraseña no aparece en logs ni en la auditoría)\n- apps/backend/test/password-recovery-restablecer.e2e-spec.ts (vigente, luego cambio y login con la nueva contraseña; la anterior es rechazada; token expirado a más de 60 min con reloj simulado; reutilización rechazada; token alterado o inexistente; política incumplida sin consumir el token; enlace abierto a los 59 min y enviado a los 61 rechazado; varias sesiones revocadas y refresh con 401; hash argon2 en BD)\n\n## Se da por terminado cuando\n\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-008 pasa\n- TC-014 pasa\n- TC-016 pasa\n- TC-017 pasa\n- TC-018 pasa\n- TC-019 pasa\n- TC-020 pasa\n- TC-021 pasa\n- TC-022 pasa\n- TC-025 pasa\n- TC-027 pasa\n\n## Observaciones de la revisión\n\n- **mayor** (criterio_aceptacion) `apps/backend/src/modules/password-recovery/password-recovery.service.ts:124`: restablecer() acepta a propósito cuentas con bloqueo temporal por intentos de login (así lo fija la prueba 'acepta a una cuenta con bloqueo temporal…'). Sin embargo, solo actualiza passwordHash: no reinicia intentosFallidos, bloqueadoHasta ni el estado BLOQUEADA. Esa persona cambia la contraseña con éxito y después el login la sigue rechazando hasta que venza el bloqueo, lo que contradice el Escenario 2 ('se actualiza y puedo iniciar sesión con ella'). Ningún e2e cubre este caso.\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-03",
+  "grupo": "HU-003",
+  "titulo": "Frontend: pantalla 'Olvidé mi contraseña'",
+  "descripcion": "Pantalla pública con un formulario de correo (react-hook-form + zod) que valida que el campo no esté vacío y que el formato sea correcto antes de enviar. Tras enviar, muestra siempre el mismo mensaje genérico de confirmación, incluso si el backend limita la frecuencia. Incluye un enlace a la pantalla desde Iniciar sesión.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "apps/frontend/src/features/password-recovery/pages/OlvideContrasenaPage.tsx (ruta /olvide-contrasena en app/router.tsx)",
+   "apps/frontend/src/features/password-recovery/components/SolicitarRestablecimientoForm.tsx",
+   "apps/frontend/src/features/password-recovery/hooks/useSolicitarRestablecimientoMutation.ts",
+   "Enlace '¿Olvidaste tu contraseña?' en la pantalla de login",
+   "Tipos regenerados en src/api/schema.d.ts desde /api/docs-json",
+   "apps/frontend/src/features/password-recovery/OlvideContrasenaPage.test.tsx (Vitest + MSW: mismo mensaje con correo registrado o no registrado y con 429; errores con correo vacío o inválido sin llamar a la API)"
+  ],
+  "tcs_asociados": [
+   "TC-001",
+   "TC-007",
+   "TC-009",
+   "TC-011",
+   "TC-012",
+   "TC-013",
+   "TC-023",
+   "TC-024"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-01"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/16",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [],
+  "revisado_en": "2026-09-27T15:12:25.428209+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-4/PT-03",
+  "md": "---\nid: PT-03\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-001, TC-007, TC-009, TC-011, TC-012, TC-013, TC-023, TC-024]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/16\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-01]\nid_externo: null\nrama: hu/IAT-4/PT-03\nfecha: 2026-09-27\n---\n\n# PT-03 — Frontend: pantalla 'Olvidé mi contraseña'\n\n_HU-003: Recuperación de contraseña mediante enlace enviado por correo_\n\nPantalla pública con un formulario de correo (react-hook-form + zod) que valida que el campo no esté vacío y que el formato sea correcto antes de enviar. Tras enviar, muestra siempre el mismo mensaje genérico de confirmación, incluso si el backend limita la frecuencia. Incluye un enlace a la pantalla desde Iniciar sesión.\n\n## Entregables\n\n- apps/frontend/src/features/password-recovery/pages/OlvideContrasenaPage.tsx (ruta /olvide-contrasena en app/router.tsx)\n- apps/frontend/src/features/password-recovery/components/SolicitarRestablecimientoForm.tsx\n- apps/frontend/src/features/password-recovery/hooks/useSolicitarRestablecimientoMutation.ts\n- Enlace '¿Olvidaste tu contraseña?' en la pantalla de login\n- Tipos regenerados en src/api/schema.d.ts desde /api/docs-json\n- apps/frontend/src/features/password-recovery/OlvideContrasenaPage.test.tsx (Vitest + MSW: mismo mensaje con correo registrado o no registrado y con 429; errores con correo vacío o inválido sin llamar a la API)\n\n## Se da por terminado cuando\n\n- TC-001 pasa\n- TC-007 pasa\n- TC-009 pasa\n- TC-011 pasa\n- TC-012 pasa\n- TC-013 pasa\n- TC-023 pasa\n- TC-024 pasa\n"
+ },
+ {
+  "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+  "id": "PT-04",
+  "grupo": "HU-003",
+  "titulo": "Frontend: pantalla 'Restablecer contraseña' con estados del enlace",
+  "descripcion": "En /restablecer?token=, la pantalla consulta el estado del enlace. Si es vigente, muestra un formulario de nueva contraseña y confirmación con las reglas de la política compartida, y solo envía si las dos coinciden. Si el enlace está expirado, ya usado o no es válido, muestra el mensaje correspondiente con la opción de pedir uno nuevo. También traduce los errores del backend al enviar (TOKEN_EXPIRADO y TOKEN_USADO, que cubren el caso de los 59 y 61 minutos, y PASSWORD_POLITICA con la regla incumplida) y, si todo sale bien, redirige al login. Evita que el token se filtre a terceros con Referrer-Policy: no-referrer, tanto en una meta etiqueta como en una cabecera de nginx, y quita el token de la URL visible.",
+  "capa": "frontend",
+  "repo": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli",
+  "entregables": [
+   "apps/frontend/src/features/password-recovery/pages/RestablecerContrasenaPage.tsx (ruta /restablecer)",
+   "apps/frontend/src/features/password-recovery/components/RestablecerContrasenaForm.tsx y EnlaceNoValido.tsx",
+   "apps/frontend/src/features/password-recovery/hooks/useEstadoTokenQuery.ts y useRestablecerContrasenaMutation.ts",
+   "Reglas de contraseña y confirmación en src/shared/validation/",
+   "Mensajes TOKEN_EXPIRADO, TOKEN_USADO, TOKEN_INVALIDO y PASSWORD_POLITICA en el mapa único de errores",
+   "apps/frontend/nginx.conf: cabecera Referrer-Policy no-referrer",
+   "apps/frontend/src/features/password-recovery/RestablecerContrasenaPage.test.tsx (Vitest + MSW: enlace vigente con cambio y redirección; expirado, usado e inválido con opción de pedir uno nuevo; contraseñas que no coinciden sin llamar a la API; regla de política incumplida; expiración recibida al enviar; meta referrer presente)"
+  ],
+  "tcs_asociados": [
+   "TC-002",
+   "TC-003",
+   "TC-004",
+   "TC-005",
+   "TC-006",
+   "TC-014",
+   "TC-015",
+   "TC-016",
+   "TC-017",
+   "TC-018",
+   "TC-019",
+   "TC-026"
+  ],
+  "depende_de": [
+   "BASE/PT-04",
+   "BASE/PT-01",
+   "BASE/PT-05",
+   "PT-02"
+  ],
+  "estado": "fusionado",
+  "ronda": 1,
+  "tcs_version": 1,
+  "tipo": "original",
+  "paquete_origen": null,
+  "evidencia_origen": null,
+  "pr": "https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/17",
+  "rondas_revision": 1,
+  "compilacion": {
+   "ok": null,
+   "omitida": "no se reconoce cómo compilar la capa «frontend»"
+  },
+  "observaciones": [
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/features/password-recovery/pages/RestablecerPage.tsx",
+    "linea": null,
+    "descripcion": "El placeholder anterior `RestablecerPage.tsx` sigue en el repositorio aunque el router ya no lo importa, como reconoce la propia descripción del PR. Es código muerto, y el README de frontend ya no lo menciona, así que la documentación y el código no coinciden.",
+    "sugerencia": "Eliminarlo con `git rm apps/frontend/src/features/password-recovery/pages/RestablecerPage.tsx` en este mismo PR.",
+    "comentario_id": null
+   },
+   {
+    "fuente": "pruebas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/nginx.conf",
+    "linea": 22,
+    "descripcion": "La cabecera `Referrer-Policy: no-referrer` solo llega a /restablecer si ninguna `location` del recorrido de fallback SPA (try_files → index.html) declara su propio `add_header`. En nginx, un `add_header` dentro de una location anula todas las cabeceras heredadas del server. El comentario da por hecho que esto se cumple, pero el README describe reglas de caché distintas para `/assets/` e `index.html`, y ninguna prueba verifica la cabecera. Las pruebas de Vitest solo comprueban la meta (TC-026).",
+    "sugerencia": "Confirmar que las reglas de caché usan `expires` y no `add_header` dentro de las locations, o repetir las cabeceras de seguridad en esas locations. En el job de CI que construye la imagen, añadir una comprobación rápida (p. ej. `curl -sI localhost:8080/restablecer | grep -i 'referrer-policy: no-referrer'`).",
+    "comentario_id": 4115908805
+   },
+   {
+    "fuente": "buenas_practicas",
+    "severidad": "menor",
+    "archivo": "apps/frontend/src/features/login/pages/LoginPage.tsx",
+    "linea": 23,
+    "descripcion": "El aviso 'PASSWORD_ACTUALIZADA' se lee de `location.state`, que el navegador conserva en la entrada del historial. Si el usuario recarga /login o vuelve a esa entrada más tarde, el aviso de contraseña actualizada aparece de nuevo aunque ya no venga del flujo de restablecimiento.",
+    "sugerencia": "Consumir el aviso una sola vez: guardarlo en estado local y limpiar el `state` con `navigate(location.pathname, { replace: true, state: null })` tras el primer render.",
+    "comentario_id": 4115908808
+   }
+  ],
+  "revisado_en": "2026-09-27T15:28:57.554934+00:00",
+  "id_externo": null,
+  "rama": "hu/IAT-4/PT-04",
+  "md": "---\nid: PT-04\nhu_id: HU-003\nrepo: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli\ncapa: frontend\nestado: fusionado\nronda: 1\ntcs_asociados: [TC-002, TC-003, TC-004, TC-005, TC-006, TC-014, TC-015, TC-016, TC-017, TC-018, TC-019, TC-026]\npr: https://github.com/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pull/17\nrondas_revision: 1\ndepende_de: [BASE/PT-04, BASE/PT-01, BASE/PT-05, PT-02]\nid_externo: null\nrama: hu/IAT-4/PT-04\nfecha: 2026-09-27\n---\n\n# PT-04 — Frontend: pantalla 'Restablecer contraseña' con estados del enlace\n\n_HU-003: Recuperación de contraseña mediante enlace enviado por correo_\n\nEn /restablecer?token=, la pantalla consulta el estado del enlace. Si es vigente, muestra un formulario de nueva contraseña y confirmación con las reglas de la política compartida, y solo envía si las dos coinciden. Si el enlace está expirado, ya usado o no es válido, muestra el mensaje correspondiente con la opción de pedir uno nuevo. También traduce los errores del backend al enviar (TOKEN_EXPIRADO y TOKEN_USADO, que cubren el caso de los 59 y 61 minutos, y PASSWORD_POLITICA con la regla incumplida) y, si todo sale bien, redirige al login. Evita que el token se filtre a terceros con Referrer-Policy: no-referrer, tanto en una meta etiqueta como en una cabecera de nginx, y quita el token de la URL visible.\n\n## Entregables\n\n- apps/frontend/src/features/password-recovery/pages/RestablecerContrasenaPage.tsx (ruta /restablecer)\n- apps/frontend/src/features/password-recovery/components/RestablecerContrasenaForm.tsx y EnlaceNoValido.tsx\n- apps/frontend/src/features/password-recovery/hooks/useEstadoTokenQuery.ts y useRestablecerContrasenaMutation.ts\n- Reglas de contraseña y confirmación en src/shared/validation/\n- Mensajes TOKEN_EXPIRADO, TOKEN_USADO, TOKEN_INVALIDO y PASSWORD_POLITICA en el mapa único de errores\n- apps/frontend/nginx.conf: cabecera Referrer-Policy no-referrer\n- apps/frontend/src/features/password-recovery/RestablecerContrasenaPage.test.tsx (Vitest + MSW: enlace vigente con cambio y redirección; expirado, usado e inválido con opción de pedir uno nuevo; contraseñas que no coinciden sin llamar a la API; regla de política incumplida; expiración recibida al enviar; meta referrer presente)\n\n## Se da por terminado cuando\n\n- TC-002 pasa\n- TC-003 pasa\n- TC-004 pasa\n- TC-005 pasa\n- TC-006 pasa\n- TC-014 pasa\n- TC-015 pasa\n- TC-016 pasa\n- TC-017 pasa\n- TC-018 pasa\n- TC-019 pasa\n- TC-026 pasa\n\n## Observaciones de la revisión\n\n- **menor** (buenas_practicas) `apps/frontend/src/features/password-recovery/pages/RestablecerPage.tsx`: El placeholder anterior `RestablecerPage.tsx` sigue en el repositorio aunque el router ya no lo importa, como reconoce la propia descripción del PR. Es código muerto, y el README de frontend ya no lo menciona, así que la documentación y el código no coinciden.\n- **menor** (pruebas) `apps/frontend/nginx.conf:22`: La cabecera `Referrer-Policy: no-referrer` solo llega a /restablecer si ninguna `location` del recorrido de fallback SPA (try_files → index.html) declara su propio `add_header`. En nginx, un `add_header` dentro de una location anula todas las cabeceras heredadas del server. El comentario da por hecho que esto se cumple, pero el README describe reglas de caché distintas para `/assets/` e `index.html`, y ninguna prueba verifica la cabecera. Las pruebas de Vitest solo comprueban la meta (TC-026).\n- **menor** (buenas_practicas) `apps/frontend/src/features/login/pages/LoginPage.tsx:23`: El aviso 'PASSWORD_ACTUALIZADA' se lee de `location.state`, que el navegador conserva en la entrada del historial. Si el usuario recarga /login o vuelve a esa entrada más tarde, el aviso de contraseña actualizada aparece de nuevo aunque ya no venga del flujo de restablecimiento.\n"
+ }
+]

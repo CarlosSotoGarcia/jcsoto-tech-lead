@@ -1,0 +1,74 @@
+17 generar ok=True
+17 BASE-PT-01 tras revisión: aprobado obs=4
+17 BASE-PT-01 tras revisión: aprobado obs=4
+17 BASE-PT-01 checks CI: ['sin checks']
+17 BASE-PT-01 fusión: fusionado
+18 generar ok=True
+18 BASE-PT-02 tras revisión: aprobado obs=4
+18 BASE-PT-02 checks CI: ['sin checks']
+18 BASE-PT-02 fusión: fusionado
+19 generar ok=True
+19 BASE-PT-03 tras revisión: con_observaciones obs=3
+19 BASE-PT-03 checks CI: ['sin checks']
+19 BASE-PT-03 fusión: fusionado
+20 generar ok=True
+20 BASE-PT-04 tras revisión: con_observaciones obs=3
+20 BASE-PT-04 checks CI: ['sin checks']
+20 BASE-PT-04 fusión: fusionado
+21 generar ok=True
+21 BASE-PT-05 tras revisión: aprobado obs=6
+21 BASE-PT-05 checks CI: ['pass']
+21 BASE-PT-05 fusión: fusionado
+22 generar ok=True
+22 sin paquete en revision tras generar: []
+22 generar ok=True
+22 HU-001-PT-01 tras revisión: con_observaciones obs=4
+22 HU-001-PT-01 checks CI: ['pass', 'skipping']
+22 HU-001-PT-01 fusión: fusionado
+23 generar ok=True
+23 HU-001-PT-02 tras revisión: con_observaciones obs=5
+23 HU-001-PT-02 checks CI: ['pass', 'skipping']
+23 HU-001-PT-02 fusión: fusionado
+24 generar ok=True
+24 HU-001-PT-03 tras revisión: con_observaciones obs=2
+24 HU-001-PT-03 checks CI: ['pass', 'skipping']
+24 HU-001-PT-03 fusión: fusionado
+25 generar ok=True
+25 HU-001-PT-04 tras revisión: aprobado obs=3
+25 HU-001-PT-04 checks CI: ['fail', 'pass', 'skipping']
+25 HU-001-PT-04 fusión: aprobado
+26 generar ok=True
+26 HU-002-PT-01 tras revisión: con_observaciones obs=7
+26 HU-002-PT-01 checks CI: ['pass', 'skipping']
+26 HU-002-PT-01 fusión: fusionado
+27 generar ok=True
+27 sin paquete en revision tras generar: []
+27 generar ok=True
+27 HU-002-PT-02 tras revisión: con_observaciones obs=5
+27 HU-002-PT-02 checks CI: ['fail', 'pass', 'skipping']
+28 generar ok=True
+28 HU-002-PT-03 tras revisión: aprobado obs=3
+28 HU-002-PT-03 checks CI: ['pass', 'skipping']
+28 HU-002-PT-03 fusión: fusionado
+29 generar ok=True
+29 HU-002-PT-04 tras revisión: con_observaciones obs=3
+29 HU-002-PT-04 checks CI: ['pass', 'skipping']
+29 HU-002-PT-04 fusión: fusionado
+30 generar ok=True
+30 sin paquete en revision tras generar: []
+30 generar ok=True
+30 HU-003-PT-01 tras revisión: con_observaciones obs=3
+30 HU-003-PT-01 checks CI: ['pass', 'skipping']
+30 HU-003-PT-01 fusión: fusionado
+31 generar ok=True
+31 HU-003-PT-02 tras revisión: con_observaciones obs=1
+31 HU-003-PT-02 checks CI: ['pass', 'skipping']
+31 HU-003-PT-02 fusión: fusionado
+32 generar ok=True
+32 HU-003-PT-03 tras revisión: aprobado obs=0
+32 HU-003-PT-03 checks CI: ['pass', 'skipping']
+32 HU-003-PT-03 fusión: fusionado
+33 generar ok=True
+33 HU-003-PT-04 tras revisión: aprobado obs=3
+33 HU-003-PT-04 checks CI: ['pass', 'skipping']
+33 HU-003-PT-04 fusión: fusionado

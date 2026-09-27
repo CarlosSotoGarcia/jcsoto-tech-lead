@@ -1,0 +1,91 @@
+inicio corrida E3c: 2026-09-26 13:29:46
+fase 1 OK 1m56s: HU-001 (IAT-2), HU-002 (IAT-3), HU-003 (IAT-4), las 3 con supuestos
+fase 2: {'HU-001': ('IAT-2', 35), 'HU-002': ('IAT-3', 39), 'HU-003': ('IAT-4', 27)}
+  proceso descubrir terminada 1.9 min
+  proceso generar-tcs terminada 4.7 min
+  proceso arquitectura terminada 1.5 min
+arquitectura aprobada: 2026-09-26T19:39:40.486531+00:00 | 7 entidades, 8 decisiones, 10 preguntas
+descomposición al primer intento: 17 paquetes (BASE 5, HU-001 4, HU-002 4, HU-003 4)
+  BASE PT-01 Entorno de desarrollo dockerizado del monorepo | dep: []
+  BASE PT-02 Base del backend NestJS: configuración, Prisma, Swagger y health | dep: ['PT-01']
+  BASE PT-03 Seguridad base y puertos transversales del backend | dep: ['PT-01', 'PT-02']
+  BASE PT-04 Shell del frontend React + MUI | dep: ['PT-01']
+  BASE PT-05 Dockerfiles de producción y CI/CD a Cloud Run | dep: ['PT-01', 'PT-02', 'PT-03', 'PT-04']
+  HU-001 PT-01 Backend: alta de cuenta de cliente (POST /registro) con documentos legales, polí | dep: ['BASE/PT-02', 'BASE/PT-01', 'BASE/PT-05']
+  HU-001 PT-02 Backend: verificación de correo, reenvío del enlace y vinculación al expediente  | dep: ['BASE/PT-02', 'BASE/PT-01', 'BASE/PT-05', 'PT-01']
+  HU-001 PT-03 Frontend: pantalla Crear cuenta y Revisa tu correo con reenvío | dep: ['BASE/PT-04', 'BASE/PT-01', 'BASE/PT-05', 'PT-01', 'PT-02']
+  HU-001 PT-04 Frontend: pantalla Resultado de verificación (/verificar-correo?token=) | dep: ['BASE/PT-04', 'BASE/PT-01', 'BASE/PT-05', 'PT-02', 'PT-03']
+  HU-002 PT-01 Backend: login con correo y contraseña, bloqueo por intentos y auditoría de acce | dep: ['BASE/PT-02', 'BASE/PT-01', 'BASE/PT-05']
+  HU-002 PT-02 Backend: sesión (refresh, logout, /me), expiración por inactividad del personal  | dep: ['BASE/PT-02', 'BASE/PT-01', 'BASE/PT-05', 'PT-01']
+  HU-002 PT-03 Frontend: pantalla de login con validación, mensajes de error y redirección por  | dep: ['BASE/PT-04', 'BASE/PT-01', 'BASE/PT-05', 'PT-01']
+  HU-002 PT-04 Frontend: cierre de sesión, sesión expirada y rutas protegidas por rol | dep: ['BASE/PT-04', 'BASE/PT-01', 'BASE/PT-05', 'PT-02', 'PT-03']
+  HU-003 PT-01 Backend: solicitud de enlace de restablecimiento (POST /auth/password/solicitar) | dep: ['BASE/PT-02', 'BASE/PT-01', 'BASE/PT-05']
+  HU-003 PT-02 Backend: validación del enlace y restablecimiento de contraseña con revocación d | dep: ['BASE/PT-02', 'BASE/PT-01', 'BASE/PT-05', 'PT-01']
+  HU-003 PT-03 Frontend: pantalla 'Olvidé mi contraseña' | dep: ['BASE/PT-04', 'BASE/PT-01', 'BASE/PT-05', 'PT-01']
+  HU-003 PT-04 Frontend: pantalla 'Restablecer contraseña' con estados del enlace | dep: ['BASE/PT-04', 'BASE/PT-01', 'BASE/PT-05', 'PT-02']
+decisiones sobre supuestos confirmadas (texto en decisiones-supuestos.json); inicio ciclo de paquetes 13:44
+ciclo relanzado 14:15: la espera de CI se atoraba en paquetes previos al CI (sin checks); corregido en ciclo_ui.py
+15:32 HU-001/PT-01: generación falló a los 17.7 min por límite de sesión del CLI de Claude (resets 6pm); 5/17 fusionados; reanudación programada 18:02
+16:43 el CLI responde antes de la hora indicada por el mensaje de límite; se reanuda el ciclo
+18:13 HU-001/PT-04: CI en rojo (Vitest VerificarCorreoPage 'muestra Verificando…' falla); Loom rechaza la fusión; se aplica 1 corrección desde la UI
+18:23 HU-001/PT-04 corregido con avanzar-hu por API (1 ronda, corrección con el log del CI) y fusionado; HU-001 completa; Loom lanzó el release automático
+release automático tras HU-001: terminada []
+  resultado: Release automático FALLÓ (todos los paquetes de HU-001 fusionados): release.py terminó con error (código 1). Revisa la salida del log.
+18:24 HALLAZGO: el release automático tras HU-001 falló (código 1): release.py asume backend/ y frontend/ en la raíz y este monorepo usa apps/backend y apps/frontend. Alcanzó a crear la BD 'taller' en inventarios-db antes de fallar; no hubo build. Pendiente de corregir en Loom antes de la Fase 4. Se relanza el ciclo desde HU-002.
+19:30 HU-002/PT-02: generación falló a los 8.4 min por límite de sesión del CLI (resets 8:30pm); el CLI responde, se reanuda; 10/17 fusionados
+19:52 HU-002/PT-02: CI en rojo (Jest backend src/modules/auth/auth.service.spec.ts); estado con_observaciones: 1 corrección desde la UI
+21:37 la corrección de HU-002/PT-02 quedó 'interrumpida': se cayeron el backend y el frontend de Loom al reiniciarse la sesión de trabajo (no por Loom); sin cambios subidos al PR; se levanta Loom y se repite la corrección desde la UI
+21:54 HALLAZGO: la corrección desde el botón de la UI aplica las observaciones de la revisión pero no recibe el log del CI; el CI siguió en rojo (misma prueba Jest: refrescar sin cookie → 401). Se usa avanzar-hu por API (1 ronda: revisa de nuevo, corrige con el log del CI) y se cancela a propósito al fusionar PT-02 para no tocar PT-03/PT-04
+22:28 HU-002/PT-02: avanzar-hu hizo 2.ª revisión + corrección con el log del CI; CI verde; fusionado (11/17). La cancelación automática falló (error de mi guion) y se canceló a mano al empezar la generación de PT-03 (sin rama ni PR). Se reanuda el ciclo normal.
+2026-09-27 08:27 eventos de la noche: HU-002/PT-04 fusionado (13/17), HU-002 completa; release automático tras HU-002 FALLÓ de nuevo (código 1, mismo problema de apps/); HU-003/PT-01: generación falló a los 14.2 min por límite de sesión del CLI (resets 2:30am). El CLI responde; se reanuda.
+09:48 FASE 3 COMPLETA: 17/17 paquetes fusionados. Release automático tras HU-003 FALLÓ (plantilla vieja en memoria). Se implementa ADR-0086 (release ubica servicios en apps/ y construye desde la raíz con -f) y se reinicia el backend de Loom.
+09:49 Fase 4: release.py generado y publicado (PR #18, con la plantilla de ADR-0086); fusionado con POST /despliegue/fusionar (la UI no tiene botón), CI en verde
+09:50 HALLAZGO: la app generada siembra usuarios con su propio seed (prisma/seed.ts, variables SEED_ADMIN_CORREO/SEED_ADMIN_PASSWORD, SEED_CLIENTE_*) y el contenedor no lo ejecuta al arrancar; las variables de entorno de la configuración del Proyecto (ADMIN_EMAIL, ADMIN_PASSWORD_HASH, copiadas del patrón del E1c) no coinciden con las del código. Loom no valida la correspondencia entre las variables configuradas y las que lee la aplicación.
+09:59 release manual 1 FALLÓ: imagen construida (ADR-0086 funciona) pero el backend no arrancó: faltaba DATABASE_URL (el release solo da DB_HOST/.. y DB_URL JDBC). HALLAZGO: variables de la configuración (JWT_SECRET, CORS_ORIGINS) no coinciden con env.schema.ts (JWT_ACCESS_SECRET, FRONTEND_URL). Se agrega DATABASE_URL como secreto al release (ADR-0087) y se ajustan las variables desde la UI; se reinicia Loom y se relanza el release.
+10:09 release manual 2 TERMINÓ BIEN: backend taller-api arrancó con DATABASE_URL; frontend desplegado aún sin la URL de la API al compilar (plantilla anterior a ADR-0087). Se reinicia Loom y se lanza el release 3.
+10:10 HALLAZGO: el monorepo generado no incluye package-lock.json (el Dockerfile instala con npm install si falta): builds no reproducibles, como el hallazgo A8 del E1c.
+10:13 cuentas de prueba sembradas con el seed propio de la app (npm run db:seed contra Cloud SQL, DATABASE_URL leída del secreto sin imprimirla) + UPDATE a INACTIVA de la cuenta inactiva; verificado contra la API desplegada: admin 200, cliente 200, inactiva 403 CUENTA_INACTIVA.
+10:21 release manual 3 TERMINÓ BIEN (8.8 min): el frontend quedó compilado con VITE_API_BASE_URL=https://taller-api-.../api/v1 (ADR-0087). Ambiente: https://taller-web-118746543308.us-central1.run.app
+10:21 inicio de pruebas de humo (HU-001, HU-002, HU-003, en serie)
+10:25 HALLAZGO (validez): E3c corrió con claude-opus-5-5 (+ haiku-4-5 para subtareas) vía CLI, mientras E1c usó claude-sonnet-5. Loom no fija LOOM_CLAUDE_CLI_MODEL y el CLI tomó el modelo predeterminado de Claude Code, cambiado a Opus el 2026-09-26 (/model opus). Costo y calidad de E3c no son comparables directamente con E1c; fijar el modelo en futuras corridas.
+10:27 creados E3 (Claude API, id 97f2dfa3…, repo loom-piloto-e3-claude) y E4 (Gemini, id d832089e…, repo loom-piloto-e4-gemini) copiando la config de E3c; GCP con servicios y BD propios (taller-e3-*, taller_e3; taller-e4-*, taller_e4). APIs bloqueadas: Anthropic sin saldo; Gemini 403 por facturación. Estimación de costos en evidencia/costos/.
+13:43 SMOKE HU-001: 1 pasa, 1 falla, 33 bloqueados (5.6 min). HALLAZGO: los TCs del E3c usan 32 roles distintos en texto libre (usuario_final, personal_interno, cliente_bloqueable, 'invitado (sin sesión); admin para verificar'...) y Loom empareja cuenta por nombre exacto con las 3 cuentas configuradas (admin, cliente, usuario_inactivo); incluso casos de invitado quedan bloqueados. En E1c solo había 3 roles y coincidían. SMOKE HU-002 y HU-003: fallaron por límite de sesión del CLI (resets 1:20pm). Se corrige Loom (rol principal, ADR-0088) y se agregan cuentas por rol.
+13:45 cuentas por rol sembradas con el seed de la app (recepcion, usuario_final, cliente_bloqueable, cliente pendiente) y agregadas desde la UI (9 cuentas: + personal_interno=recepción, cuenta_inactiva=inactiva); Loom corregido para tomar el rol principal (ADR-0088). Se relanzan las pruebas de humo de las 3 HUs (corrida 2 de HU-001). Capturas de la corrida 1 renombradas con prefijo r1-.
+13:46 HALLAZGO (Loom): procesos que terminan por el límite de sesión del CLI quedan 'corriendo' en el historial de Mongo aunque ya no existen en memoria (smoke HU-002 de las 10:28 y un generar-codigo de la noche); no bloquean, pero el historial queda inconsistente.
+13:53 la corrida 2 de smoke dio lo mismo (el backend no había recargado el cambio del ADR-0088 pese a --reload); se reinicia Loom a mano y se lanza la corrida 3 de las 3 HUs (capturas de la 2 con prefijo r2-).
+14:11 SMOKE corrida 3 HU-001 (con ADR-0088 y cuentas por rol): 28 pasan, 4 fallan, 3 bloqueados de 35 (17.8 min). Fallos reales: recepción sin sección «Clientes» (/interno solo muestra Agenda del día) y admin sin módulo de Auditoría; bloqueos por precondiciones (verificar correo de un usuario creado en el caso).
+14:47 SMOKE corrida 1 HU-002: 19 pasan, 4 fallan, 16 bloqueados de 39 (34.7 min)
+    TC-006 bloqueado | cliente_bloqueable | Tras el primer intento con contraseña errónea («ClaveErronea#1») apareció el aviso «Tu cuenta está bloqueada temporalmente por demasiados intentos fallidos. Intenta de nu
+    TC-007 bloqueado | cliente_bloqueable | Ingresé con las credenciales correctas de cliente_bloqueable. La página se quedó en /login con la alerta «Tu cuenta está bloqueada temporalmente por demasiados intentos f
+    TC-008 bloqueado | cliente_bloqueable | Tras el primer intento fallido la página mostró la alerta de bloqueo temporal («Tu cuenta está bloqueada temporalmente por demasiados intentos fallidos…») y la URL siguió
+    TC-011 bloqueado | personal_interno | Se inició sesión como personal interno y se llegó a «Agenda del día» (/interno). El escenario pide que pasen 30 minutos sin actividad adelantando page.clock o el reloj de
+    TC-012 bloqueado | personal_interno | Inicié sesión como personal interno (recepcion@pruebas.taller.test) y llegué a «Agenda del día» (/interno). No pude seguir: la prueba pide 29 minutos sin actividad y el e
+    TC-017 bloqueado | invitado | El escenario pide enviar al endpoint de login, sin sesión, cuerpos con el correo o la contraseña vacíos o sin incluir. Luego hay que comprobar tres cosas: que responda 40
+    TC-022 bloqueado | cliente_bloqueable | Se inició sesión con las credenciales correctas de la cuenta de prueba (cliente.bloqueable@pruebas.taller.test). No se redirigió a «Mis vehículos»: la página sigue en /lo
+    TC-023 bloqueado | cliente_bloqueable | Después de apenas 1 intento fallido (el que servía para preparar la precondición), la página mostró «Tu cuenta está bloqueada temporalmente por demasiados intentos fallid
+    TC-024 bloqueado | cliente_bloqueable | No se cumplió la precondición: la cuenta cliente_bloqueable no estaba bloqueada por 5 intentos fallidos en los últimos 15 minutos. Con el correo y la contraseña correctos
+    TC-026 bloqueado | cliente | El inicio de sesión funcionó: la app redirigió a /mis-vehiculos y muestra el encabezado «Mis vehículos» y el menú de usuario con la cuenta cliente@pruebas.taller.test. La
+    TC-028 bloqueado | cliente | El escenario pide capturar el token del cliente antes del logout y luego llamar directamente a un endpoint protegido (listado de vehículos) con APIRequestContext usando e
+    TC-029 bloqueado | personal_interno | Inicié sesión como personal interno y llegué a /interno («Agenda del día»). No pude probar la expiración por dos motivos. Primero, la página no ofrece forma de simular el
+    TC-030 bloqueado | personal_interno | Inicié sesión como personal interno y llegué a «Agenda del día» sin problema. El caso pide dos esperas de 25 minutos, con una acción entre ellas, para comprobar que la ac
+    TC-031 bloqueado | personal_interno | Se completó el login y el botón «Iniciar sesión» quedó deshabilitado mientras se procesaba. Para verificar el caso habría que hacer una acción en el minuto 25, esperar 30
+    TC-033 falla | personal_interno | Personal interno autenticado (se vio «Agenda del día»). Al navegar por URL a /mis-vehiculos no se mostraron los vehículos del cliente, pero tampoco hubo redirección a «Ag
+    TC-034 bloqueado | cliente | No se pudo ejecutar el caso con este agente de navegador. Se enviaron las credenciales del cliente, pero la página seguía en /login con el botón «Iniciar sesión» deshabil
+    TC-035 falla | cliente | Después de iniciar sesión como cliente (apareció «Mis vehículos»), entré directamente a /login. La URL final quedó en /login y se ve el formulario «Iniciar sesión» con lo
+    TC-036 falla | personal_interno | Esperado: si ya hay sesión, entrar a /login lleva a "Agenda del día" y no muestra el formulario. Observado: el login funcionó y apareció "Agenda del día". Después, al ent
+    TC-038 bloqueado | cliente | El inicio de sesión, la navegación autenticada y el cierre de sesión se hicieron en https://taller-web-118746543308.us-central1.run.app. Después del login apareció el «Me
+    TC-039 falla | invitado (o el rol con acceso a la docum | No encontré documentación de la API en el ambiente. Probé /swagger-ui/index.html, /swagger-ui.html, /v3/api-docs, /docs, /api-docs, /api/swagger-ui/index.html, /api/v3/ap
+14:59 proceso smoke HU-003: terminada ['27 caso(s) de prueba ejecutados en 1 HU(s).']
+   HU-001 corrida 1 : 1 pasan, 1 fallan, 33 bloqueados de 35 (5.6 min)
+   HU-001 corrida 2 : 1 pasan, 1 fallan, 33 bloqueados de 35 (5.8 min)
+   HU-001 corrida 3 : 28 pasan, 4 fallan, 3 bloqueados de 35 (17.8 min)
+   HU-002 corrida 1 : 19 pasan, 4 fallan, 16 bloqueados de 39 (34.7 min)
+   HU-003 corrida 1 : 21 pasan, 1 fallan, 5 bloqueados de 27 (11.2 min)
+    TC-009 bloqueado | invitado | Al enviar no.existe.9f3a@test.local se ve el mensaje genérico «Si el correo está registrado, te enviaremos un enlace para restablecer tu contraseña.», así que l
+    TC-010 bloqueado | invitado | No se pudo ejecutar. El caso pide medir con Playwright cuánto tarda cada petición al endpoint de solicitud y calcular la mediana y el percentil 95 de 40 solicit
+    TC-023 bloqueado | invitado (sobre la cuenta de usuario_fin | Envié solicitudes seguidas para qa.user01@test.local. Cada una mostró el mismo mensaje genérico: «Si el correo está registrado, te enviaremos un enlace para res
+    TC-024 bloqueado | invitado | El formulario de "Olvidé mi contraseña" funciona: envié prueba1@example.com y el botón "Enviar" quedó deshabilitado. Pero no se puede completar el caso por caus
+    TC-026 bloqueado | usuario_final | No pude ejecutar el caso. Faltan tres cosas: 1) No tengo el enlace vigente de restablecimiento de qa.user01, porque no hay acceso a la bandeja de pruebas. 2) La
+    TC-027 falla | invitado (o el rol con acceso a la docum | No se encontró documentación de la API publicada en el entorno de pruebas. Se probaron /docs, /api/docs, /api-docs, /swagger, /openapi.json, /redoc, /swagger-ui
+15:01 HALLAZGO: la compuerta de compilación en Docker quedó 'omitida' en 21 de 25 ejecuciones del E3c (en E1c corrió en 10 de 12 paquetes). compilacion.detectar busca package.json en backend/ y luego en la raíz; encuentra el package.json raíz de los workspaces, que no tiene tsconfig.json, y omite la compuerta sin revisar apps/backend ni apps/frontend. Por eso los CI en rojo de HU-001/PT-04 y HU-002/PT-02 no se anticiparon. Mismo supuesto de estructura que ADR-0086; corregir antes de E3/E4.
+15:01 CIERRE E3c: 17/17 paquetes fusionados; 19 revisiones (7 aprobado, 12 con observaciones; 69 observaciones: 12 mayores, 57 menores); 4 correcciones; release OK al 3.er intento; smoke final 68 pasan, 9 fallan, 24 bloqueados de 101 casos; 532 llamadas al modelo, costo nocional 120.99 USD (Opus 5.5 vía CLI).
