@@ -1,0 +1,351 @@
+  BASE/PT-01 · solo_diff: 3 observaciones
+  BASE/PT-01 · contexto: 8 observaciones
+  BASE/PT-02 · contexto: 3 observaciones
+  BASE/PT-02 · solo_diff: 3 observaciones
+  BASE/PT-03 · contexto: 4 observaciones
+  BASE/PT-03 · solo_diff: 3 observaciones
+  BASE/PT-04 · solo_diff: 3 observaciones
+  BASE/PT-04 · contexto: 6 observaciones
+  BASE/PT-05 · solo_diff: 6 observaciones
+  BASE/PT-05 · contexto: 8 observaciones
+  HU-001/PT-01 · solo_diff: 5 observaciones
+  HU-001/PT-01 · contexto: 10 observaciones
+  HU-001/PT-02 · contexto: 5 observaciones
+  HU-001/PT-02 · solo_diff: 4 observaciones
+  HU-002/PT-01 · contexto: 6 observaciones
+  HU-002/PT-01 · solo_diff: 5 observaciones
+  HU-002/PT-02 · contexto: 6 observaciones
+  HU-002/PT-02 · solo_diff: 7 observaciones
+  HU-002/PT-03 · solo_diff: 4 observaciones
+  HU-002/PT-03 · contexto: 5 observaciones
+  HU-003/PT-01 · contexto: 2 observaciones
+  HU-003/PT-01 · solo_diff: 3 observaciones
+  HU-003/PT-02 · solo_diff: 3 observaciones
+  HU-003/PT-02 · contexto: 1 observaciones
+  BASE/PT-01 · solo_diff: 3 observaciones
+  BASE/PT-01 · contexto: 4 observaciones
+  BASE/PT-02 · contexto: 4 observaciones
+  BASE/PT-02 · solo_diff: 3 observaciones
+  BASE/PT-03 · contexto: 3 observaciones
+  BASE/PT-03 · solo_diff: 4 observaciones
+  BASE/PT-04 · contexto: 3 observaciones
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 152, in <module>
+    main()
+    ~~~~^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 148, in main
+    asyncio.run(correr(a.corrida, a.proyecto, a.semilla, set(a.referencia or [])))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 122, in correr
+    resultado = await llamar_tool_con_reintento(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        system=system, tool=REVISION_TOOL, mensaje_usuario=mensaje, resultado_cls=ResultadoRevision, max_tokens=8000
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\analisis\_llm.py", line 259, in llamar_tool_con_reintento
+    entrada, truncado = await llamar(
+                        ^^^^^^^^^^^^^
+        system=system, tool=tool, mensaje_usuario=mensaje_usuario, tokens=tokens
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\analisis\_llm.py", line 111, in _llamar_claude_cli
+    salida, uso = await asyncio.to_thread(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+        claude_cli.llamar_estructurado, system=system, esquema=tool["input_schema"], mensaje=mensaje_usuario
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\threads.py", line 26, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\analisis\claude_cli.py", line 118, in llamar_estructurado
+    raise ClaudeCliError(f"Claude Code devolvi� un error: {_mensaje_error(datos)}")
+loom_backend.analisis.claude_cli.ClaudeCliError: Claude Code devolvi� un error: You've hit your session limit � resets 11:40pm (America/Mexico_City)
+salida 1
+# 2026-09-27 23:43 reanudada tras el límite de sesión del CLI (31 de 58 hechas; Mongo reiniciado con Docker)
+  ya hecha: BASE/PT-01 · solo_diff
+  ya hecha: BASE/PT-01 · contexto
+  ya hecha: BASE/PT-02 · contexto
+  ya hecha: BASE/PT-02 · solo_diff
+  ya hecha: BASE/PT-03 · contexto
+  ya hecha: BASE/PT-03 · solo_diff
+  ya hecha: BASE/PT-04 · solo_diff
+  ya hecha: BASE/PT-04 · contexto
+  ya hecha: BASE/PT-05 · solo_diff
+  ya hecha: BASE/PT-05 · contexto
+  ya hecha: HU-001/PT-01 · solo_diff
+  ya hecha: HU-001/PT-01 · contexto
+  ya hecha: HU-001/PT-02 · contexto
+  ya hecha: HU-001/PT-02 · solo_diff
+  ya hecha: HU-002/PT-01 · contexto
+  ya hecha: HU-002/PT-01 · solo_diff
+  ya hecha: HU-002/PT-02 · contexto
+  ya hecha: HU-002/PT-02 · solo_diff
+  ya hecha: HU-002/PT-03 · solo_diff
+  ya hecha: HU-002/PT-03 · contexto
+  ya hecha: HU-003/PT-01 · contexto
+  ya hecha: HU-003/PT-01 · solo_diff
+  ya hecha: HU-003/PT-02 · solo_diff
+  ya hecha: HU-003/PT-02 · contexto
+  ya hecha: BASE/PT-01 · solo_diff
+  ya hecha: BASE/PT-01 · contexto
+  ya hecha: BASE/PT-02 · contexto
+  ya hecha: BASE/PT-02 · solo_diff
+  ya hecha: BASE/PT-03 · contexto
+  ya hecha: BASE/PT-03 · solo_diff
+  ya hecha: BASE/PT-04 · contexto
+  BASE/PT-04 · solo_diff: 2 observaciones
+  BASE/PT-05 · solo_diff: 4 observaciones
+  BASE/PT-05 · contexto: 6 observaciones
+  HU-001/PT-01 · solo_diff: 2 observaciones
+  HU-001/PT-01 · contexto: 4 observaciones
+  HU-001/PT-02 · contexto: 5 observaciones
+  HU-001/PT-02 · solo_diff: 2 observaciones
+  HU-001/PT-03 · solo_diff: 1 observaciones
+  HU-001/PT-03 · contexto: 3 observaciones
+  HU-001/PT-04 · solo_diff: 2 observaciones
+  HU-001/PT-04 · contexto: 0 observaciones
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 152, in <module>
+    main()
+    ~~~~^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 148, in main
+    asyncio.run(correr(a.corrida, a.proyecto, a.semilla, set(a.referencia or [])))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 106, in correr
+    titulo, cuerpo, diff = await asyncio.to_thread(pr_revisado, r["pr"])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\threads.py", line 26, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 75, in pr_revisado
+    pr = json.loads(_gh(f"repos/{dueno_repo}/pulls/{numero}"))
+                    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 67, in _gh
+    raise RuntimeError(f"gh api {args[0]}: {r.stderr[:300]}")
+RuntimeError: gh api repos/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pulls/10: Get "https://api.github.com/repos/CarlosSotoGarcia/loom-piloto-e3c-claude-cli/pulls/10": net/http: TLS handshake timeout
+
+salida 1
+# 2026-09-28 00:20 reanudada tras un TLS handshake timeout de la API de GitHub (42 de 58 hechas; se agregan reintentos a gh api)
+  ya hecha: BASE/PT-01 · solo_diff
+  ya hecha: BASE/PT-01 · contexto
+  ya hecha: BASE/PT-02 · contexto
+  ya hecha: BASE/PT-02 · solo_diff
+  ya hecha: BASE/PT-03 · contexto
+  ya hecha: BASE/PT-03 · solo_diff
+  ya hecha: BASE/PT-04 · solo_diff
+  ya hecha: BASE/PT-04 · contexto
+  ya hecha: BASE/PT-05 · solo_diff
+  ya hecha: BASE/PT-05 · contexto
+  ya hecha: HU-001/PT-01 · solo_diff
+  ya hecha: HU-001/PT-01 · contexto
+  ya hecha: HU-001/PT-02 · contexto
+  ya hecha: HU-001/PT-02 · solo_diff
+  ya hecha: HU-002/PT-01 · contexto
+  ya hecha: HU-002/PT-01 · solo_diff
+  ya hecha: HU-002/PT-02 · contexto
+  ya hecha: HU-002/PT-02 · solo_diff
+  ya hecha: HU-002/PT-03 · solo_diff
+  ya hecha: HU-002/PT-03 · contexto
+  ya hecha: HU-003/PT-01 · contexto
+  ya hecha: HU-003/PT-01 · solo_diff
+  ya hecha: HU-003/PT-02 · solo_diff
+  ya hecha: HU-003/PT-02 · contexto
+  ya hecha: BASE/PT-01 · solo_diff
+  ya hecha: BASE/PT-01 · contexto
+  ya hecha: BASE/PT-02 · contexto
+  ya hecha: BASE/PT-02 · solo_diff
+  ya hecha: BASE/PT-03 · contexto
+  ya hecha: BASE/PT-03 · solo_diff
+  ya hecha: BASE/PT-04 · contexto
+  ya hecha: BASE/PT-04 · solo_diff
+  ya hecha: BASE/PT-05 · solo_diff
+  ya hecha: BASE/PT-05 · contexto
+  ya hecha: HU-001/PT-01 · solo_diff
+  ya hecha: HU-001/PT-01 · contexto
+  ya hecha: HU-001/PT-02 · contexto
+  ya hecha: HU-001/PT-02 · solo_diff
+  ya hecha: HU-001/PT-03 · solo_diff
+  ya hecha: HU-001/PT-03 · contexto
+  ya hecha: HU-001/PT-04 · solo_diff
+  ya hecha: HU-001/PT-04 · contexto
+  HU-002/PT-01 · solo_diff: 3 observaciones
+  HU-002/PT-01 · contexto: 6 observaciones
+  HU-002/PT-02 · solo_diff: 3 observaciones
+  HU-002/PT-02 · contexto: 2 observaciones
+  HU-002/PT-03 · contexto: 3 observaciones
+  HU-002/PT-03 · solo_diff: 1 observaciones
+  HU-002/PT-04 · solo_diff: 3 observaciones
+  HU-002/PT-04 · contexto: 4 observaciones
+  HU-003/PT-01 · contexto: 3 observaciones
+  HU-003/PT-01 · solo_diff: 2 observaciones
+  HU-003/PT-02 · solo_diff: 3 observaciones
+  HU-003/PT-02 · contexto: 3 observaciones
+  HU-003/PT-03 · contexto: 2 observaciones
+  HU-003/PT-03 · solo_diff: 4 observaciones
+  HU-003/PT-04 · solo_diff: 1 observaciones
+  HU-003/PT-04 · contexto: 4 observaciones
+salida 0
+# 2026-09-28 02:26 DESCARTE: las 29 revisiones «contexto» recibieron el md del paquete regenerado con las observaciones de la última revisión del piloto y estado fusionado (contaminación). Se renombran a corrida c1-descartada y se repite solo «contexto» con el md del repositorio de control anterior a la revisión 1. «solo_diff» no se afecta (solo recibe el diff).
+  ya hecha: BASE/PT-01 · solo_diff
+  BASE/PT-01 · contexto: 5 observaciones
+  BASE/PT-02 · contexto: 5 observaciones
+  ya hecha: BASE/PT-02 · solo_diff
+  BASE/PT-03 · contexto: 2 observaciones
+  ya hecha: BASE/PT-03 · solo_diff
+  ya hecha: BASE/PT-04 · solo_diff
+  BASE/PT-04 · contexto: 3 observaciones
+  ya hecha: BASE/PT-05 · solo_diff
+  BASE/PT-05 · contexto: 5 observaciones
+  ya hecha: HU-001/PT-01 · solo_diff
+  HU-001/PT-01 · contexto: 6 observaciones
+  HU-001/PT-02 · contexto: 3 observaciones
+  ya hecha: HU-001/PT-02 · solo_diff
+  HU-002/PT-01 · contexto: 3 observaciones
+  ya hecha: HU-002/PT-01 · solo_diff
+  HU-002/PT-02 · contexto: 4 observaciones
+  ya hecha: HU-002/PT-02 · solo_diff
+  ya hecha: HU-002/PT-03 · solo_diff
+  HU-002/PT-03 · contexto: 2 observaciones
+  HU-003/PT-01 · contexto: 4 observaciones
+  ya hecha: HU-003/PT-01 · solo_diff
+  ya hecha: HU-003/PT-02 · solo_diff
+  HU-003/PT-02 · contexto: 2 observaciones
+  ya hecha: BASE/PT-01 · solo_diff
+  BASE/PT-01 · contexto: 2 observaciones
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 170, in <module>
+    if __name__ == "__main__":
+        ^^^^^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 166, in main
+    sys.stdout.reconfigure(encoding="utf-8")
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\experimentos\revision_contexto.py", line 140, in correr
+    t0 = metricas.ahora()
+                ^^^^^^^^^
+    resultado = await llamar_tool_con_reintento(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        system=system, tool=REVISION_TOOL, mensaje_usuario=mensaje, resultado_cls=ResultadoRevision, max_tokens=8000
+    
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\analisis\_llm.py", line 259, in llamar_tool_con_reintento
+    entrada, truncado = await llamar(
+                        ^^^^^^^^^^^^^
+        system=system, tool=tool, mensaje_usuario=mensaje_usuario, tokens=tokens
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\analisis\_llm.py", line 111, in _llamar_claude_cli
+    salida, uso = await asyncio.to_thread(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+        claude_cli.llamar_estructurado, system=system, esquema=tool["input_schema"], mensaje=mensaje_usuario
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\asyncio\threads.py", line 26, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jncso\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\jsoto\jcsoto-tech-lead\loom\backend\src\loom_backend\analisis\claude_cli.py", line 118, in llamar_estructurado
+    raise ClaudeCliError(f"Claude Code devolvi� un error: {_mensaje_error(datos)}")
+loom_backend.analisis.claude_cli.ClaudeCliError: Claude Code devolvi� un error: You've hit your session limit � resets 4:40am (America/Mexico_City)
+salida 1
+# 2026-09-28 08:45 reanudada tras el límite de sesión del CLI (13 de 29 «contexto» hechas)
+  ya hecha: BASE/PT-01 · solo_diff
+  ya hecha: BASE/PT-01 · contexto
+  ya hecha: BASE/PT-02 · contexto
+  ya hecha: BASE/PT-02 · solo_diff
+  ya hecha: BASE/PT-03 · contexto
+  ya hecha: BASE/PT-03 · solo_diff
+  ya hecha: BASE/PT-04 · solo_diff
+  ya hecha: BASE/PT-04 · contexto
+  ya hecha: BASE/PT-05 · solo_diff
+  ya hecha: BASE/PT-05 · contexto
+  ya hecha: HU-001/PT-01 · solo_diff
+  ya hecha: HU-001/PT-01 · contexto
+  ya hecha: HU-001/PT-02 · contexto
+  ya hecha: HU-001/PT-02 · solo_diff
+  ya hecha: HU-002/PT-01 · contexto
+  ya hecha: HU-002/PT-01 · solo_diff
+  ya hecha: HU-002/PT-02 · contexto
+  ya hecha: HU-002/PT-02 · solo_diff
+  ya hecha: HU-002/PT-03 · solo_diff
+  ya hecha: HU-002/PT-03 · contexto
+  ya hecha: HU-003/PT-01 · contexto
+  ya hecha: HU-003/PT-01 · solo_diff
+  ya hecha: HU-003/PT-02 · solo_diff
+  ya hecha: HU-003/PT-02 · contexto
+  ya hecha: BASE/PT-01 · solo_diff
+  ya hecha: BASE/PT-01 · contexto
+  BASE/PT-02 · contexto: 2 observaciones
+  ya hecha: BASE/PT-02 · solo_diff
+  BASE/PT-03 · contexto: 1 observaciones
+  ya hecha: BASE/PT-03 · solo_diff
+  BASE/PT-04 · contexto: 2 observaciones
+  ya hecha: BASE/PT-04 · solo_diff
+  ya hecha: BASE/PT-05 · solo_diff
+  BASE/PT-05 · contexto: 3 observaciones
+  ya hecha: HU-001/PT-01 · solo_diff
+  HU-001/PT-01 · contexto: 2 observaciones
+  HU-001/PT-02 · contexto: 3 observaciones
+  ya hecha: HU-001/PT-02 · solo_diff
+  ya hecha: HU-001/PT-03 · solo_diff
+  HU-001/PT-03 · contexto: 5 observaciones
+  ya hecha: HU-001/PT-04 · solo_diff
+  HU-001/PT-04 · contexto: 2 observaciones
+  ya hecha: HU-002/PT-01 · solo_diff
+  HU-002/PT-01 · contexto: 2 observaciones
+  ya hecha: HU-002/PT-02 · solo_diff
+  HU-002/PT-02 · contexto: 2 observaciones
+  HU-002/PT-03 · contexto: 3 observaciones
+  ya hecha: HU-002/PT-03 · solo_diff
+  ya hecha: HU-002/PT-04 · solo_diff
+  HU-002/PT-04 · contexto: 3 observaciones
+  HU-003/PT-01 · contexto: 3 observaciones
+  ya hecha: HU-003/PT-01 · solo_diff
+  ya hecha: HU-003/PT-02 · solo_diff
+  HU-003/PT-02 · contexto: 2 observaciones
+  HU-003/PT-03 · contexto: 3 observaciones
+  ya hecha: HU-003/PT-03 · solo_diff
+  ya hecha: HU-003/PT-04 · solo_diff
+  HU-003/PT-04 · contexto: 1 observaciones
+salida 0

@@ -1,0 +1,62 @@
+{
+ "contexto": {
+  "prs": 29,
+  "observaciones": 85,
+  "prs_sin_observaciones": 0,
+  "por_severidad": {
+   "mayor": 21,
+   "menor": 57,
+   "bloqueante": 7
+  },
+  "por_fuente": {
+   "criterio_aceptacion": 13,
+   "buenas_practicas": 39,
+   "arquitectura": 19,
+   "pruebas": 9,
+   "seguridad": 5
+  },
+  "duracion_min_total": 92.4,
+  "costo_nocional_usd": 14.81
+ },
+ "solo_diff": {
+  "prs": 29,
+  "observaciones": 92,
+  "prs_sin_observaciones": 0,
+  "por_severidad": {
+   "menor": 69,
+   "mayor": 21,
+   "bloqueante": 2
+  },
+  "por_fuente": {
+   "seguridad": 20,
+   "buenas_practicas": 50,
+   "arquitectura": 15,
+   "pruebas": 7
+  },
+  "duracion_min_total": 100.0,
+  "costo_nocional_usd": 11.39
+ },
+ "fuera_del_experimento": {
+  "experimento-c-contexto-descartada": {
+   "llamadas": 29,
+   "costo_nocional_usd": 12.9
+  },
+  "experimento-c-contexto-prueba": {
+   "llamadas": 1,
+   "costo_nocional_usd": 0.34
+  },
+  "experimento-c-solo_diff-prueba": {
+   "llamadas": 1,
+   "costo_nocional_usd": 0.6
+  }
+ },
+ "errores": 2,
+ "modelo": [
+  "claude-sonnet-5"
+ ],
+ "modelos_informados_por_el_cli": [
+  "claude-cli",
+  "claude-haiku-4-5-20251001+claude-sonnet-5"
+ ],
+ "diffs_recortados_140k": 3
+}

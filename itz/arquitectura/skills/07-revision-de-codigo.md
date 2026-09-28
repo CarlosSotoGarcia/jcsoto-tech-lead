@@ -91,6 +91,8 @@ contra spec, arquitectura y buenas prácticas, publica las observaciones en GitH
 - [ADR-0028](../decisiones/0028-ciclo-automatizado-de-calidad-como-mecanismo-suficiente.md) — esta
   skill, dentro del ciclo código→revisión→corrección, es el mecanismo de calidad documentado incluso
   sin revisión manual.
+- [ADR-0089](../decisiones/0089-experimento-c-revision-con-contexto-frente-a-solo-el-diff.md) — el
+  experimento C repite la revisión de esta skill solo con el diff para medir cuánto aporta el contexto (H1).
 
 ## Criterios de éxito
 
