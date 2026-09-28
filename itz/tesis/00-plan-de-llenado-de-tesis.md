@@ -485,7 +485,7 @@ Total ≈ 15,900 palabras con anexos (≈ 56 cuartillas); **sin anexos ≈ 45 cu
 - **Los pilotos no son la matriz**: E1c y E3c usan el CLI y modelos distintos entre sí; la tesis debe presentarlos como pilotos completos y dejar E1–E4 como diseño cuya ejecución está pendiente (o reformular el diseño si el tiempo no alcanza, con un ADR).
 - **La plataforma no está congelada**: cada corrida la cambió (E1c: ADR-0071–0084; E3c: 0085–0088). Es un resultado en sí (ciencia del diseño: el artefacto evoluciona con la evaluación), pero hay que decirlo en 4.1.5.
 - **Hallazgo transversal** de los dos pilotos: lo que la revisión de código no ve aparece al ejecutar (E1c: A1–A10; E3c: CI en rojo y 9 fallos de smoke). Sostiene PI5 con dos proyectos.
-- **Seguridad del repositorio**: `jcsoto-tech-lead` es público y el hash de la contraseña de prueba del admin quedó en el historial (commit `246065e`); ya está enmascarado en el archivo. Recomendación: cambiar esa contraseña de prueba.
+- **Seguridad del repositorio**: `jcsoto-tech-lead` es público y el hash de la contraseña de prueba del admin quedó en el historial (commit `246065e`); ya está enmascarado en el archivo. **Resuelto el 2026-09-27:** la contraseña de prueba se cambió en las dos aplicaciones desplegadas (inventarios y taller) y en la configuración de Loom; el hash del historial ya no sirve.
 - **Decisiones abiertas** (§ 10): resueltas o con avance — 2 (P2 es greenfield), 5 (IEEE en uso), 8 (costo estimado), 10 (lista de intervenciones en los registros). Siguen abiertas: 1, 3, 4, 6, 7, 9, 11, 12, 13 y 14.
 
 ### 14.4 Siguiente paso sugerido
