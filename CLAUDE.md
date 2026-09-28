@@ -42,7 +42,11 @@ that `itz/tesis/` reports on. Its design decisions and skill specs live in `itz/
     `documentación/` (which is the frozen, already-approved proposal).
   - `referencias/` — other students' theses, kept as reference models.
   - `tesis/` — the institution's official thesis-structure guide, `Loom - Tesis.docx` (the working copy of that guide: Word track changes on, one content control with placeholder guidance per section — write the thesis there, never edit the original guide), plus `00-plan-de-llenado-de-tesis.md` (working
-    plan: what to write per chapter, evidence needed, Claude-vs-Gemini validation design, open decisions).
+    plan: what to write per chapter, evidence needed, Claude-vs-Gemini validation design, open decisions) and
+    `03-pendientes-de-la-tesis.md` (running register of pending thesis changes — add a row whenever a change leaves
+    something to update, and mark it done with the version that resolved it). Thesis versions (`Loom - Tesis vNN.docx`)
+    are generated from `borrador/vNN/` with `herramientas/llenar_tesis.py` + `herramientas/limpiar_obsoleto.py`, never
+    edited by hand.
 
 ## Working with this repository
 

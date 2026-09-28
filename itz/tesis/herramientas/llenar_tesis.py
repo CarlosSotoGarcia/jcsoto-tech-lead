@@ -76,10 +76,20 @@ def parrafo(texto: str) -> str:
 
 
 def subtitulo(texto: str) -> str:
+    """Subtítulo de nivel 3; admite `*cursiva*` como un párrafo (p. ej. «Las *skills* del pipeline»)."""
+    runs = []
+    for trozo in re.split(r"(\*[^*\n]+\*)", texto):
+        if not trozo:
+            continue
+        cursiva = trozo.startswith("*") and trozo.endswith("*") and len(trozo) > 2
+        contenido = trozo[1:-1] if cursiva else trozo
+        runs.append(
+            f'<w:r><w:rPr>{"<w:i/>" if cursiva else ""}<w:color w:val="000000"/><w:sz w:val="24"/></w:rPr>'
+            f'<w:t xml:space="preserve">{escape(contenido)}</w:t></w:r>'
+        )
     return (
         '<w:p><w:pPr><w:pStyle w:val="Heading3"/><w:ind w:firstLine="0"/><w:jc w:val="left"/>'
-        '<w:rPr><w:color w:val="000000"/><w:sz w:val="24"/></w:rPr></w:pPr>'
-        f'<w:r><w:rPr><w:color w:val="000000"/><w:sz w:val="24"/></w:rPr><w:t xml:space="preserve">{escape(texto)}</w:t></w:r></w:p>'
+        '<w:rPr><w:color w:val="000000"/><w:sz w:val="24"/></w:rPr></w:pPr>' + "".join(runs) + "</w:p>"
     )
 
 

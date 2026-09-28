@@ -474,7 +474,7 @@ Total ≈ 15,900 palabras con anexos (≈ 56 cuartillas); **sin anexos ≈ 45 cu
 2. **Resumen y *Abstract***: se escriben al final.
 3. **Volumen**: capítulo 2 (+14 cuartillas), 3.1 (+6), 4.1 (+5), 4.2 (+10). Sin esto no se llega a 80.
 4. **Resultados de la matriz E1–E4 con API**: bloqueados por saldo (Anthropic) y facturación (Gemini).
-5. **Experimento C** (revisión solo con el *diff*) y **evaluación ciega** de observaciones: sin ellos H1 no se puede contestar.
+5. **Experimento C** (revisión solo con el *diff*) y **evaluación ciega** de observaciones: sin ellos H1 no se puede contestar. **Avance 2026-09-28:** el experimento C ya se corrió (ADR-0089, 29 PRs, 85 frente a 92 observaciones); falta la calificación ciega por una persona.
 6. **Trazabilidad de cifras** (`trazabilidad-de-cifras.md`, § 13 paso 5): no existe.
 7. **Anexos D–H**: ejemplo completo de una HU, rúbricas, capturas finales, datos crudos, manual de instalación.
 8. **Pasadas de estilo** (`redaccion-academica`, `humanizer`): no se han hecho; decisión 14 (voz) sin fijar.
@@ -516,3 +516,16 @@ Cambios respecto a v01 (borradores en `borrador/v02/`):
 **Limpieza (`limpiar_obsoleto.py`):** la copia de trabajo `Loom - Tesis.docx` tenía, **fuera de los controles de contenido**, el capítulo 5 y los anexos del primer piloto (E2, 2026-09-19) y la referencia de ejemplo de la plantilla («Mapachez itz»). v01 los arrastra (su capítulo 5 muestra el nuevo y el viejo, uno tras otro); en v02 se quitaron 92 párrafos, 20 tablas y 11 imágenes. La copia de trabajo no se modificó.
 
 **Pendiente de formato:** entre secciones siguen los párrafos de instrucciones de la plantilla institucional («En ésta sección se le informa al lector…», reglas de formato, «Es la traducción del Resumen…»). Se conservaron porque vienen de la guía oficial; hay que quitarlos antes de entregar (o al pasar a una copia limpia) y confirmarlo con el director.
+
+### 14.6 `Loom - Tesis v03.docx` (2026-09-28)
+
+Generada igual que v02, desde `borrador/v03/`. Cambios respecto a v02:
+
+- **4.1.7 (nuevo):** diseño del experimento de control de la revisión (ADR-0089): mismos 29 PRs, mismo modelo, contexto reconstruido desde el repositorio de control, calificación ciega con clave fuera del repositorio.
+- **5.1.1 y Tabla 5.1:** fila del experimento C; H1 pasa a «calificación pendiente».
+- **5.2.14 (nuevo):** Tabla 5.13 con los conteos por condición (85 frente a 92 observaciones), el descarte de la primera ejecución «contexto» (paquete de Mongo con las observaciones del piloto) y los límites del experimento. El antiguo 5.2.14 pasa a 5.2.15.
+- **6.1.1, 6.1.2, 6.2 y 6.3:** PI2 y H1 con la comparación de control hecha y la calificación pendiente; recomendación nueva sobre reconstruir entradas desde el historial; séptima línea de trabajo futuro (repeticiones y segunda persona evaluadora).
+- **Anexo E:** rúbrica de relevancia de una observación (Tabla E.1).
+- **Herramienta:** los subtítulos aplican cursiva.
+
+≈ 18,150 palabras (≈ 65 cuartillas con anexos), 73 leyendas. **Los pendientes concretos de la tesis se llevan desde ahora en [03-pendientes-de-la-tesis.md](03-pendientes-de-la-tesis.md).**
