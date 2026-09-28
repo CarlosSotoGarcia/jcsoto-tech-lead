@@ -31,7 +31,7 @@ Las pruebas de humo de la HU-001 se corrieron tres veces: las dos primeras dejar
 1. El release suponía `backend/` y `frontend/` en la raíz; este monorepo usa `apps/` con Dockerfiles que se construyen desde la raíz → **ADR-0086**.
 2. El backend Node/Prisma necesita `DATABASE_URL`; el frontend Vite fija la URL de la API al compilar → **ADR-0087**.
 3. Los casos de prueba usan roles en texto libre (32 distintos) y Loom emparejaba cuentas por nombre exacto → **ADR-0088**.
-4. La compuerta de compilación quedó omitida en 21 de 25 ejecuciones: busca `package.json` en la raíz del monorepo y no revisa `apps/` → pendiente de corregir antes de E3/E4.
+4. La compuerta de compilación no se ejecutó en ninguna de sus 21 ejecuciones (todas «omitida»): busca `package.json` en la raíz del monorepo y no revisa `apps/` → pendiente de corregir antes de E3/E4.
 5. Las variables de entorno del Proyecto se escriben a mano y Loom no las contrasta con las que exige el código generado (`JWT_ACCESS_SECRET`, `FRONTEND_URL`).
 6. La corrección desde el botón de la UI no recibe el log del CI; un paquete «Aprobado» con el CI en rojo no tiene cómo corregirse desde la UI.
 7. El CLI de Claude alcanzó su límite de sesión cuatro veces; los procesos cortados quedan «corriendo» en el historial.

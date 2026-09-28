@@ -41,3 +41,18 @@ Llamada mínima de prueba desde Loom antes de correr E3 y E4:
 
 - **Claude API:** 400 «Your credit balance is too low to access the Anthropic API». Hay que cargar saldo (≈ 70 USD sugeridos) antes de correr E3.
 - **Gemini API:** 403 «Lightning dunning decision is deny» para el proyecto de Google 748395755364: la facturación del proyecto está bloqueada por cobro pendiente. Hay que regularizar la cuenta de facturación antes de correr E4.
+
+## Saldo recomendado para la API de Claude: E1 (Inventarios) y E3 (Agenda Taller)
+
+Actualizado el 2026-09-27. E1 se estima con la corrida E1c, que usó el mismo modelo (claude-sonnet-5): 12.38 USD al recalcular sus tokens con los precios configurados y 16.67 USD según el costo que informó el CLI. Las fases baratas de E1c (especificar, casos, arquitectura y descomposición) costaron 1.82 USD; la revisión, 2.44 USD; y las pruebas de humo, 2.19 USD.
+
+| Concepto | Estimación (USD) |
+|---|---|
+| E1, corrida completa (Inventarios, 3 HUs, unos 12 paquetes) | 12 – 17 |
+| E3, corrida completa (Agenda Taller, 3 HUs, unos 17 paquetes) | 24 – 57 |
+| Repeticiones de las fases baratas (2 corridas más de fases 1-2 y descomposición por escenario, regla 3 del plan) | ≈ 4 – 8 |
+| Experimento C (revisión solo con el diff sobre los mismos PR, ≈ una revisión por paquete) | ≈ 3 – 8 |
+| Reintentos, correcciones por CI en rojo y pruebas de humo repetidas (≈ 20 %) | ≈ 8 – 16 |
+| **Total** | **≈ 50 – 105** |
+
+Recomendación: cargar **100 USD** y fijar un límite de gasto mensual en la consola de Anthropic. Con 60 USD alcanza para las dos corridas completas, pero sin margen para repeticiones ni el experimento C.

@@ -68,3 +68,25 @@ fig.tight_layout()
 fig.savefig(SALIDA / "g5-3-costo-por-skill.png", dpi=200)
 plt.close(fig)
 print("gráficas en", SALIDA)
+
+# pruebas de humo de E1c y E3c en porcentaje (corrida final de cada HU); datos de la colección `smoke` al 2026-09-27
+CORRIDAS = ["E1c (44 casos)", "E3c (101 casos)"]
+RESULTADOS = {"Aprobados": [36, 68], "Fallidos": [2, 9], "Bloqueados": [6, 24]}
+TOTALES = [44, 101]
+COLORES_SMOKE = {"Aprobados": "#4a8a5a", "Fallidos": "#b3403a", "Bloqueados": "#c9c9c9"}
+fig, ax = plt.subplots(figsize=(8, 2.6))
+izq = [0.0, 0.0]
+for nombre, valores in RESULTADOS.items():
+    pct = [100 * v / t for v, t in zip(valores, TOTALES)]
+    ax.barh(CORRIDAS, pct, left=izq, color=COLORES_SMOKE[nombre], label=nombre)
+    for i, (p, v) in enumerate(zip(pct, valores)):
+        if p >= 6:
+            ax.text(izq[i] + p / 2, i, f"{v}", ha="center", va="center", fontsize=9, color="white" if nombre != "Bloqueados" else "black")
+    izq = [a + b for a, b in zip(izq, pct)]
+ax.invert_yaxis()
+ax.set_xlim(0, 100)
+ax.set_xlabel("% de casos de prueba")
+ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.35), ncol=3, frameon=False)
+fig.tight_layout()
+fig.savefig(SALIDA / "g5-4-smoke-e1c-e3c.png", dpi=200)
+plt.close(fig)

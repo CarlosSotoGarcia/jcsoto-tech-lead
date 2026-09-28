@@ -105,6 +105,28 @@ debe reportarse como resultado, incluida la parte que todavía no está resuelta
 **Advertencia de validez:** esta etapa mezcla trabajo de la plataforma con corridas del piloto. Los números de arriba sirven para orientar y para el registro de hallazgos, **no** como
 resultados del experimento; los resultados válidos saldrán de la repetición desde cero con la plataforma congelada (§ 9, paso 3).
 
+### 2.6 Corridas desde cero: E1c (2026-09-21) y E3c (2026-09-26/27)
+
+Las dos corridas se hicieron desde un Proyecto limpio, operando Loom desde su interfaz con Playwright, con tres HUs, una sola revisión por paquete y una corrección solo con el CI en rojo. Ambas usaron el **CLI de Claude con suscripción**, no la API: son pilotos completos, no los escenarios E1–E4 de la matriz (regla 6 de § 2.2).
+
+| | E1c — P1 Inventarios | E3c — P2 Agenda Taller |
+|---|---|---|
+| Stack generado | Java/Spring Boot + Angular, monorepo en la raíz | Node/NestJS + Prisma + React/Vite, monorepo con `apps/` |
+| Modelo | claude-sonnet-5 | **claude-opus-5-5** + claude-haiku-4-5 (Loom no fija el modelo del CLI) |
+| Casos de prueba | 44 | 101 |
+| Paquetes fusionados | 12/12 | 17/17 |
+| Observaciones de revisión | 66 (2 bloqueantes, 24 mayores, 40 menores) | 69 en 19 revisiones (12 mayores, 57 menores) |
+| Correcciones | 1 (CI en rojo) | 4 registros (2 paquetes con CI en rojo) |
+| Compuerta de compilación | ejecutada en 10 de 12 paquetes | **omitida en las 21 ejecuciones** (no detecta `apps/`) |
+| Release | correcto al 2.º intento (BD con migraciones previas) | correcto al 3.er intento, tras ADR-0086 y 0087 |
+| Smoke | 36 pasan, 2 fallan, 6 bloqueados de 44 | 68 pasan, 9 fallan, 24 bloqueados de 101 (HU-001 en su 3.ª corrida, tras ADR-0088) |
+| Llamadas / costo nocional | 128 / 16.67 USD | 532 / 120.99 USD |
+| Hallazgos | `01-registro-de-hallazgos-piloto-e1c.md`, Anexo C de la tesis | `02-registro-de-hallazgos-piloto-e3c.md` |
+
+**Lectura:** E3c es la primera evidencia de generalización (PI3/H2): el mismo flujo completó el ciclo en un segundo dominio y un segundo stack, pero **no solo con cambios de configuración**: hizo falta cambiar Loom en tres puntos (ADR-0086, 0087, 0088) y ajustar la configuración a lo que el código generado pedía. Es un resultado parcial y honesto de H2: la arquitectura de *skills* se mantuvo, pero el release y el smoke tenían supuestos atados al stack del primer proyecto.
+
+**Validez:** modelos distintos (Sonnet 5 vs. Opus 5.5), plataforma no congelada (cambió durante E3c) y una sola repetición por proyecto. E1–E4 con la API siguen sin correr: Anthropic sin saldo y Gemini con la facturación bloqueada (2026-09-27); estimación de costo en `evidencia/costos/estimacion-E3-E4.md` (≈ 100 USD recomendados para E1 y E3 con la API de Claude).
+
 ## 3. Métricas y datos: qué existe y qué falta
 
 ### 3.1 Ya se registra hoy
@@ -361,7 +383,7 @@ pase de las 150 cuartillas.
 
 ## 12. Cómo se llena cada sección que no es de resultados
 
-Revisión del `Loom - Tesis.docx` (copia de trabajo, 2026-09-21): de sus 33 controles de contenido, **solo 5.1 y 5.2 tienen texto redactado**; el índice se genera solo y los anexos son marcadores («Pendiente de integrar»); los otros 29 siguen con la guía original de la plantilla.
+Revisión del `Loom - Tesis.docx` (copia de trabajo, 2026-09-21; **ver § 14 para el estado de v01 y v02**): de sus 33 controles de contenido, **solo 5.1 y 5.2 tienen texto redactado**; el índice se genera solo y los anexos son marcadores («Pendiente de integrar»); los otros 29 siguen con la guía original de la plantilla.
 El capítulo 5 ya redactado corresponde a la **primera** etapa del piloto (E2 y E1c) y se reescribirá con los resultados de la repetición desde cero (por eso se deja fuera de este
 apartado). Presupuesto total: **80–150 cuartillas**; con el reparto de abajo se llega a unas **105** sin anexos.
 
@@ -422,3 +444,75 @@ tríadas de adjetivos o sustantivos por costumbre, guion largo como conector uni
 
 - **Coherencia entre lo que se afirma y lo que se implementó:** los ADR y el plan usan «implementado» con cautela; en la tesis, una función solo se describe como resultado si se ejercitó (§ 8). Lo demás va como diseño o trabajo futuro.
 - **Trazabilidad del proceso de redacción:** como la tesis trata de asistentes de IA, conviene guardar qué partes se redactaron con apoyo de IA y qué revisó el autor (decisión 13).
+
+## 14. Revisión del estado de la tesis (2026-09-27)
+
+Revisión de `Loom - Tesis v01.docx` contra la guía (`GUIA PARA ESTRUCTURA DE TESIS.docx`), este plan y los dos registros de hallazgos. La guía pide los mismos 33 controles que tiene la copia de trabajo (portada, oficio, agradecimientos, símbolos, resumen, *abstract*, introducción, capítulos 1 a 6, referencias y anexos): **la estructura está completa**; lo que falta es contenido y actualización.
+
+### 14.1 Qué ya está (v01)
+
+| Sección | Palabras (≈ cuartillas) | Meta (§ 12) | Estado |
+|---|---|---|---|
+| Símbolos y abreviaturas | 114 | — | Listo |
+| Introducción | 540 (≈ 2) | 3 | Borrador completo |
+| 1.1 a 1.7 | 1,686 (≈ 6) | ≈ 11.5 | Borrador completo; 1.5 no menciona el segundo stack |
+| 2 Marco teórico | 1,292 (≈ 4.6) | 18–22 | **Muy corto** |
+| 3.1 Trabajos relacionados | 631 (≈ 2.3) | 8–10 | **Corto**; falta el protocolo de búsqueda |
+| 3.2 Análisis comparativo | 280 (≈ 1) | 3–4 | Corto; celdas «por verificar» |
+| 4.1 Metodología de solución | 705 (≈ 2.5) | 8 | Corto; describe la matriz E1–E4 pero no las corridas reales (E1c, E3c) |
+| 4.2 Metodología implementada | 2,047 (≈ 7.3) + 4 figuras | 18–22 | Corto; sin ADR-0085 a 0088 |
+| 5.1 y 5.2 Resultados | 2,179 (≈ 7.8) + 2 gráficas | — | Solo E1c |
+| 6.1 a 6.3 | 1,731 (≈ 6.2) | 6 | Escritos sobre E1c |
+| Referencias | 31 en IEEE | — | 3 por completar (volumen/páginas) |
+| Anexos | A (ADR), B (skills), C (recorrido E1c, 33 figuras) | — | D a H pendientes |
+
+Total ≈ 15,900 palabras con anexos (≈ 56 cuartillas); **sin anexos ≈ 45 cuartillas**, contra el mínimo de 80 de la guía.
+
+### 14.2 Qué falta
+
+1. **Datos del autor**: título definitivo, nombre, director, fecha (portada y oficio); agradecimientos.
+2. **Resumen y *Abstract***: se escriben al final.
+3. **Volumen**: capítulo 2 (+14 cuartillas), 3.1 (+6), 4.1 (+5), 4.2 (+10). Sin esto no se llega a 80.
+4. **Resultados de la matriz E1–E4 con API**: bloqueados por saldo (Anthropic) y facturación (Gemini).
+5. **Experimento C** (revisión solo con el *diff*) y **evaluación ciega** de observaciones: sin ellos H1 no se puede contestar.
+6. **Trazabilidad de cifras** (`trazabilidad-de-cifras.md`, § 13 paso 5): no existe.
+7. **Anexos D–H**: ejemplo completo de una HU, rúbricas, capturas finales, datos crudos, manual de instalación.
+8. **Pasadas de estilo** (`redaccion-academica`, `humanizer`): no se han hecho; decisión 14 (voz) sin fijar.
+
+### 14.3 Observaciones
+
+- **E3c cambia el capítulo 5 y el 6**: aporta la primera evidencia de PI3/H2 (dos dominios, dos stacks) y cuatro hallazgos de generalización. v01 no lo incluye → se crea **v02**.
+- **Los pilotos no son la matriz**: E1c y E3c usan el CLI y modelos distintos entre sí; la tesis debe presentarlos como pilotos completos y dejar E1–E4 como diseño cuya ejecución está pendiente (o reformular el diseño si el tiempo no alcanza, con un ADR).
+- **La plataforma no está congelada**: cada corrida la cambió (E1c: ADR-0071–0084; E3c: 0085–0088). Es un resultado en sí (ciencia del diseño: el artefacto evoluciona con la evaluación), pero hay que decirlo en 4.1.5.
+- **Hallazgo transversal** de los dos pilotos: lo que la revisión de código no ve aparece al ejecutar (E1c: A1–A10; E3c: CI en rojo y 9 fallos de smoke). Sostiene PI5 con dos proyectos.
+- **Seguridad del repositorio**: `jcsoto-tech-lead` es público y el hash de la contraseña de prueba del admin quedó en el historial (commit `246065e`); ya está enmascarado en el archivo. Recomendación: cambiar esa contraseña de prueba.
+- **Decisiones abiertas** (§ 10): resueltas o con avance — 2 (P2 es greenfield), 5 (IEEE en uso), 8 (costo estimado), 10 (lista de intervenciones en los registros). Siguen abiertas: 1, 3, 4, 6, 7, 9, 11, 12, 13 y 14.
+
+### 14.4 Siguiente paso sugerido
+
+1. v02 con E3c en los capítulos 1.5, 4.1, 4.2, 5 y 6 y un anexo D breve (hecho el 2026-09-27; ver § 14.5).
+2. Corregir la compuerta de compilación para monorepos (B4 del registro E3c) y fijar el modelo del CLI antes de cualquier corrida nueva.
+3. Cerrar con el director las decisiones 3, 4, 6, 7 y 13; con eso se decide si E1–E4 se corren con la API (≈ 100 USD) o si la validación queda en los dos pilotos.
+4. Ampliar capítulo 2 y 3.1 (no dependen de resultados) y crear la trazabilidad de cifras.
+
+### 14.5 Cómo se generó `Loom - Tesis v02.docx`
+
+```
+cp "Loom - Tesis.docx" "Loom - Tesis v02.docx"
+python herramientas/llenar_tesis.py "Loom - Tesis v02.docx" borrador/v02
+python herramientas/limpiar_obsoleto.py "Loom - Tesis v02.docx"
+```
+
+Cambios respecto a v01 (borradores en `borrador/v02/`):
+
+- **1.5:** la validación se hace sobre dos proyectos de dominios y pilas distintos; el modo con avance previo sigue sin probarse.
+- **4.1.2 y 4.1.5:** P2 descrito (agenda de taller, Node + React) y los pilotos E1c/E3c separados de la matriz E1–E4; riesgo de que la plataforma evolucione entre corridas.
+- **4.2.8 y 4.2.9:** ADR-0085 a 0088 (proveedor WIF compartido, servicios en `apps/`, `DATABASE_URL` y URL de la API al compilar, rol por actor principal).
+- **5.1:** reescrito para las dos corridas (tabla de escenarios con E3/E4 configurados y bloqueados; modelos distintos; plataforma no congelada).
+- **5.2.9 a 5.2.14:** corrida E3c, supuestos de Loom que no generalizaron, comparación E1c–E3c (tabla 5.12 y figura 5.3) y lo que no se puede concluir.
+- **6.1 a 6.3:** PI1, PI3 (respuesta parcial), PI5 y H2 (evidencia parcial, en contra en su forma estricta), objetivo 10 cumplido en parte, dos recomendaciones y los pendientes del segundo piloto.
+- **Anexo D:** 11 pantallas del E3c, sin secretos visibles.
+
+**Limpieza (`limpiar_obsoleto.py`):** la copia de trabajo `Loom - Tesis.docx` tenía, **fuera de los controles de contenido**, el capítulo 5 y los anexos del primer piloto (E2, 2026-09-19) y la referencia de ejemplo de la plantilla («Mapachez itz»). v01 los arrastra (su capítulo 5 muestra el nuevo y el viejo, uno tras otro); en v02 se quitaron 92 párrafos, 20 tablas y 11 imágenes. La copia de trabajo no se modificó.
+
+**Pendiente de formato:** entre secciones siguen los párrafos de instrucciones de la plantilla institucional («En ésta sección se le informa al lector…», reglas de formato, «Es la traducción del Resumen…»). Se conservaron porque vienen de la guía oficial; hay que quitarlos antes de entregar (o al pasar a una copia limpia) y confirmarlo con el director.
