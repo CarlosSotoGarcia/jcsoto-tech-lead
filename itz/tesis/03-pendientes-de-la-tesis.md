@@ -4,7 +4,7 @@ Registro vivo de lo que falta actualizar o modificar en la tesis. Se agrega una 
 marca como hecha (con la versión en que se resolvió) cuando se atiende. Complementa el § 14 del plan
 ([00-plan-de-llenado-de-tesis.md](00-plan-de-llenado-de-tesis.md)), que describe el estado general; aquí van las tareas concretas.
 
-Última versión generada: **v03** (2026-09-28), desde `borrador/v03/`.
+Versión de trabajo: **v04**, desde `borrador/v04/`. Por decisión del autor (2026-09-28), los cambios siguientes se hacen sobre `borrador/v04/` y se regenera `Loom - Tesis v04.docx` en su lugar; no se crea una versión nueva salvo que el autor lo pida. La columna «versión» de los hechos anota la fecha cuando el cambio va sobre v04. Desde v04, el paso `herramientas/marcar_instrucciones.py` resalta en amarillo lo que parece instrucción y no texto de la tesis (ver punto 18).
 
 ## Abiertos
 
@@ -12,7 +12,6 @@ marca como hecha (con la versión en que se resolvió) cuando se atiende. Comple
 |---|---|---|---|---|
 | 1 | 5.2.14, 5.1.4, 5.2.15, 6.1.1 (PI2), 6.1.2 (H1), 6.2, resumen | Agregar el resultado de H1: proporción de observaciones relevantes por condición, prueba pareada, bloqueantes y mayores válidas, observaciones compartidas; una gráfica por condición y calificación; aceptar o rechazar H1. Quitar «pendiente» de 5.1.4 («no se valoraron todavía») y de 5.2.15. | Experimento C (v03) | Calificación ciega de la hoja (`evidencia/experimento-c-2026-09-27/evaluacion-ciega/`) y `analizar.py c1` |
 | 2 | Evidencia del experimento C | Tras calificar: versionar `clave/clave-c1.json` y `datos/experimento_c-c1.json`, comprobar sus SHA-256 contra el README y quitarlos del `.gitignore`. | Experimento C (v03) | Punto 1 |
-| 3 | 4.1.7 | Sustituir `[CITA PENDIENTE: pruebas pareadas no paramétricas]` por una referencia verificada (prueba de rangos con signo de Wilcoxon y prueba de signos) y agregarla a `referencias-candidatas.md`. | v03 | — |
 | 4 | 1.4 | Sustituir `[CITA PENDIENTE: carga de trabajo y traspasos en equipos pequeños]` por una referencia verificada o reformular la frase sin ella. | v01 | — |
 | 5 | Anexos | La lista de anexos de `d-anexos-y-referencias.md` (C = *prompts*, D = ejemplo de una HU) choca con los anexos que sí existen (C = recorrido E1c, D = recorrido E3c): en el documento hay dos «Anexo C» y dos «Anexo D». Decidir la numeración final y reordenar. Propuesta: A ADR, B *skills*, C recorrido E1c, D recorrido E3c, E rúbricas, F *prompts*, G ejemplo completo de una HU, H datos crudos, I manual de instalación. | Revisión de v03 | Decisión del autor |
 | 6 | Anexo E | Integrar las otras tres rúbricas (suficiencia de casos de prueba, calidad de un paquete, calidad de la arquitectura y del plan) cuando se apliquen; hoy solo está la de relevancia de observaciones. | v03 | Que se apliquen |
@@ -23,12 +22,13 @@ marca como hecha (con la versión en que se resolvió) cuando se atiende. Comple
 | 11 | 6.3, 4.1.7 | Si hay tiempo: repetir el experimento C sobre una muestra (corrida `c2`) para medir la variabilidad y sumar una segunda persona evaluadora (acuerdo entre calificaciones). | v03 (trabajo futuro) | Punto 1 |
 | 12 | Portada, oficio, agradecimientos | Título definitivo, nombre, director, fecha. | Plan § 14.2 punto 1 | Autor y director |
 | 13 | Resumen y *abstract* | Escribirlos al final. | Plan § 14.2 punto 2 | Puntos 1 y 10 |
-| 14 | 2, 3.1, 4.1, 4.2 | Ampliar volumen: capítulo 2 (+14 cuartillas), 3.1 (+6), 4.1 (+5), 4.2 (+10). v03 tiene ≈ 18,150 palabras (≈ 65 cuartillas con anexos); la guía pide 80 como mínimo. | Plan § 14.2 punto 3 | — |
+| 14 | 2, 3.1, 4.1, 4.2 | Ampliar volumen: 3.1 (+6 cuartillas), 4.1 (+5), 4.2 (+10) y lo que falte del capítulo 2 (v04 lo llevó de 1,296 a ≈ 3,100 palabras; la meta del plan es ≈ 5,000). Temas candidatos para el capítulo 2: ambigüedad de requerimientos, arquitectura de software, ingeniería de *prompts*, generación de pruebas con LLM. v04 tiene ≈ 20,400 palabras (≈ 73 cuartillas con anexos); la guía pide 80 como mínimo. | Plan § 14.2 punto 3 | — |
 | 15 | Todas | Crear `trazabilidad-de-cifras.md`: cada cifra del texto con su fuente (archivo de evidencia, consulta o commit). Incluir las nuevas del experimento C (Tabla 5.13). | Plan § 14.2 punto 6 | — |
 | 16 | Anexos D–H del plan | Ejemplo completo de una HU, capturas finales, datos crudos, manual de instalación. | Plan § 14.2 punto 7 | Punto 5 |
 | 17 | Todas | Pasadas de estilo (`redaccion-academica`, `humanizer`) y fijar la voz (decisión 14). | Plan § 14.2 punto 8 | — |
-| 18 | Todas | Quitar los párrafos de instrucciones de la plantilla institucional antes de entregar, previa confirmación del director. | Plan § 14.5 | Director |
+| 18 | Todas | Quitar o sustituir lo resaltado en amarillo antes de entregar: en v04, 85 párrafos de la guía institucional, 9 de guía en los controles sin llenar (agradecimientos, resumen, *abstract*), 5 notas «Pendiente de integrar» en los anexos y 8 datos de portada y oficio. Confirmar con el director que las instrucciones de la plantilla pueden quitarse. | Plan § 14.5 | Director |
 | 19 | 4.1 o nota metodológica | Declaración del uso de IA en la redacción (decisión 13). | Plan § 10 | Director |
+| 20 | Referencias | Cotejar las entradas en estado `revisar` de `referencias-candidatas.md`: volumen y páginas de Ji *et al.* y Li *et al.*, páginas de Hevner *et al.* y de Tufano *et al.*, volumen y año de Liu *et al.* en TACL y número de la revista de Mäntylä y Lassenius; y las cifras 1.96 %, 19 % y 28.9 % contra sus fuentes. | v04 | — |
 
 ## Hechos
 
@@ -36,3 +36,6 @@ marca como hecha (con la versión en que se resolvió) cuando se atiende. Comple
 |---|---|---|
 | H1 | Experimento C en 4.1.7 (método), 5.2.14 (datos descriptivos, descarte y límites), Tabla 5.1 (fila del experimento), 5.2.15, 6.1.1, 6.1.2, 6.2 (dos recomendaciones), 6.3 (séptima línea) y Anexo E (rúbrica de relevancia). | v03 |
 | H2 | `llenar_tesis.py`: los subtítulos aplican `*cursiva*` (antes salían los asteriscos, p. ej. «4.2.4 Las *skills* del pipeline» en v02). | v03 |
+| H3 | 4.1.7: la cita pendiente de las pruebas pareadas se sustituyó por Wilcoxon (1945) y Arcuri y Briand (2011), verificadas. | v04 |
+| H4 | Capítulo 2 reescrito con estilo humano (sin tics de IA) y ampliado de 1,296 a ≈ 3,100 palabras, con 15 referencias nuevas verificadas (Ouyang, Liu, Lewis, Pearce, ISTQB, Fagan, Sadowski, Mäntylä y Lassenius, Tufano, Fowler, Jansen y Bosch, Runeson y Höst, Arcuri y Briand, Wilcoxon, Zheng). | v04 |
+| H5 | `marcar_instrucciones.py`: resalta en amarillo las instrucciones de la plantilla, la guía de los controles sin llenar, las notas de trabajo y los datos de portada por sustituir. | v04 |

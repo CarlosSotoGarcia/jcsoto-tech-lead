@@ -529,3 +529,20 @@ Generada igual que v02, desde `borrador/v03/`. Cambios respecto a v02:
 - **Herramienta:** los subtítulos aplican cursiva.
 
 ≈ 18,150 palabras (≈ 65 cuartillas con anexos), 73 leyendas. **Los pendientes concretos de la tesis se llevan desde ahora en [03-pendientes-de-la-tesis.md](03-pendientes-de-la-tesis.md).**
+
+### 14.7 `Loom - Tesis v04.docx` (2026-09-28)
+
+```
+cp "Loom - Tesis.docx" "Loom - Tesis v04.docx"
+python herramientas/llenar_tesis.py "Loom - Tesis v04.docx" borrador/v04
+python herramientas/limpiar_obsoleto.py "Loom - Tesis v04.docx"
+python herramientas/marcar_instrucciones.py "Loom - Tesis v04.docx"
+```
+
+- **Capítulo 2:** reescrito con estilo humano y ampliado de 1,296 a ≈ 3,100 palabras, con 15 referencias nuevas verificadas (46 citadas en total).
+- **4.1.7:** la cita pendiente de las pruebas pareadas se resolvió (Wilcoxon; Arcuri y Briand).
+- **Resaltado en amarillo** (paso nuevo): 107 párrafos que parecen instrucción y no texto de la tesis, para quitarlos o sustituirlos antes de entregar.
+
+≈ 20,400 palabras (≈ 73 cuartillas con anexos). Pendientes en [03-pendientes-de-la-tesis.md](03-pendientes-de-la-tesis.md).
+
+**Decisión del autor (2026-09-28):** v04 es la versión de trabajo; los cambios siguientes se hacen sobre `borrador/v04/` y se regenera `Loom - Tesis v04.docx` con los mismos tres comandos, sin crear v05.

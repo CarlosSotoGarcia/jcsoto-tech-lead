@@ -45,8 +45,9 @@ that `itz/tesis/` reports on. Its design decisions and skill specs live in `itz/
     plan: what to write per chapter, evidence needed, Claude-vs-Gemini validation design, open decisions) and
     `03-pendientes-de-la-tesis.md` (running register of pending thesis changes — add a row whenever a change leaves
     something to update, and mark it done with the version that resolved it). Thesis versions (`Loom - Tesis vNN.docx`)
-    are generated from `borrador/vNN/` with `herramientas/llenar_tesis.py` + `herramientas/limpiar_obsoleto.py`, never
-    edited by hand.
+    are generated from `borrador/vNN/` with `herramientas/llenar_tesis.py` + `herramientas/limpiar_obsoleto.py` +
+    `herramientas/marcar_instrucciones.py` (yellow-highlights template instructions and placeholders), never edited by hand.
+    Only cite references verified against their source and listed in `referencias-candidatas.md`.
 
 ## Working with this repository
 
