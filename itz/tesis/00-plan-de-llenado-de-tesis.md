@@ -547,3 +547,4 @@ python herramientas/marcar_instrucciones.py "Loom - Tesis v04.docx"
 
 **Decisión del autor (2026-09-28):** v04 es la versión de trabajo; los cambios siguientes se hacen sobre `borrador/v04/` y se regenera `Loom - Tesis v04.docx` con los mismos tres comandos, sin crear v05.
 - **2026-09-28, sobre v04:** 4.2 ampliada a ≈ 4,500 palabras (descripción de cada *skill*, agente de código, credenciales, cambios en los requisitos, interfaz y Tabla 4.3 de estado de implementación). Total ≈ 22,500 palabras (≈ 80 cuartillas con anexos y referencias, ≈ 65 sin ellos).
+- **2026-09-28, sobre v04:** 3.1 reescrita con protocolo de búsqueda y 12 trabajos nuevos verificados (revisión de código con LLM en la industria, SGCR, generación de pruebas desde código y desde historias de usuario, Agentless, OpenHands); tabla 3.1 actualizada. Total ≈ 24,100 palabras (≈ 86 cuartillas con anexos y referencias, ≈ 69 sin ellos); 58 referencias citadas.
