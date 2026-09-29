@@ -67,6 +67,8 @@ El trabajo sigue un enfoque de ciencia del diseño, cuyo propósito es ampliar l
 
 La investigación avanza en dos etapas. En la primera, el sistema se ejecuta sobre un proyecto experimental para depurarlo: cada error se registra y corrige, y las intervenciones manuales se anotan. En la segunda, con la plataforma congelada en una versión identificada, el ejercicio se repite desde cero y produce los resultados que se reportan. Distinguir ambas etapas evita atribuir al sistema lo que en realidad corrigió una persona durante la depuración.
 
+Cada corrida de un Proyecto es, además, un estudio de caso en el sentido de Runeson y Höst: observa el flujo en su contexto real, con un backlog, repositorios y un ambiente en la nube de verdad [N:runeson-host]. Las dos etapas describen el plan. En la práctica, la plataforma no llegó congelada a las corridas del capítulo 5: cada una encontró supuestos que no se sostenían y se corrigieron durante la corrida, y el modelo del CLI no estaba fijado. El apartado 5.1.4 detalla qué implica eso para la comparación entre corridas.
+
 ### 4.1.2 Proyectos, proveedores y escenarios
 
 Se definen dos proyectos y dos proveedores de IA, que dan cuatro escenarios (tabla 4.1). El proyecto P1 es una aplicación web de control de inventarios con su backlog en Jira. El proyecto P2 (IAT) es una aplicación web para la agenda y la operación de un taller mecánico (clientes, vehículos, citas, órdenes de servicio y cobro), también con su backlog en Jira: 44 historias organizadas en nueve épicas. Para probar la generalización, a P2 se le configuró una pila distinta de la de P1: Node con NestJS y React, frente a Java con Spring Boot y Angular. Cada escenario es una corrida completa de las fases de requerimientos, diseño y desarrollo sobre el mismo backlog, y cambia únicamente el proveedor de IA. Se mantienen las mismas HUs, los mismos repositorios de partida, los mismos *prompts* y la misma cuenta de desarrollo.
@@ -78,31 +80,70 @@ TABLA: Escenarios de validación
 
 Antes de la matriz se corrió un piloto completo por proyecto, E1c y E3c, con el CLI de Claude sobre una suscripción en lugar de la API. Sirvieron para que el flujo funcionara de punta a punta en los dos proyectos y para registrar cada error y cada intervención; sus resultados se reportan en el capítulo 5 como pilotos, no como escenarios de la matriz, porque el costo del CLI con suscripción es nocional y porque Loom no fijaba el modelo que el CLI usaba.
 
-### 4.1.3 Reglas de comparación
+### 4.1.3 Unidades de análisis y muestra
+
+La unidad de análisis cambia según la pregunta. Para la especificación y los casos de prueba (PI1) es la HU. Para la generación y la revisión de código (PI2 y H1) es el paquete de trabajo con su Pull Request y, dentro de él, cada observación de la revisión. Para la generalización (PI3 y H2) es la corrida completa de un Proyecto, y para los defectos que solo aparecen al ejecutar (PI5), cada caso de prueba ejecutado contra el ambiente y cada fallo de la integración continua.
+
+La muestra es intencional. De cada backlog se tomaron las tres primeras HUs del sprint en el orden del tablero, que es el orden de la prioridad de negocio; así, las HUs son las que el equipo del Proyecto habría construido primero, y no las que mejor le convienen a Loom. La tabla 4.2 resume lo que produjeron.
+
+TABLA: Tamaño de la muestra por proyecto
+| Unidad | P1, inventarios (E1c) | P2, agenda de taller (E3c) |
+| HUs procesadas | 3 | 3 |
+| Casos de prueba generados | 44 | 101 |
+| Paquetes de trabajo y Pull Requests | 12 | 17 |
+| Observaciones de la primera revisión en la corrida | 66 | 59 |
+| Observaciones del experimento C (con contexto y solo el diff) | 93 (44 y 49) | 84 (41 y 43) |
+| Llamadas al modelo en la corrida | 128 | 532 |
+
+Con tres HUs por proyecto, las cifras describen cada corrida y no permiten inferir sobre el conjunto de HUs posibles de un backlog. El experimento C es la excepción parcial: compara dos condiciones sobre los mismos 29 Pull Requests, de modo que cada Pull Request es su propio control y la comparación no depende de que las HUs sean representativas.
+
+### 4.1.4 Reglas de comparación
 
 Para que la comparación sea válida se establecen siete reglas: entradas idénticas (el backlog se congela y su texto se guarda antes de correr), un repositorio destino por escenario, repeticiones para acotar la variabilidad, evaluación ciega de las salidas por personas ajenas a la asignación del proveedor, registro de los fallos además de los éxitos (JSON mal formado, truncamientos, reintentos, terminaciones sin pruebas), uso de la API de cada proveedor en los experimentos, y congelación de la versión de Loom y de los modelos utilizados. La modalidad de Claude por línea de comandos con cuenta personal se emplea solo para desarrollo, porque no entrega tokens, tiempos ni costos comparables.
 
-### 4.1.4 Instrumentos
+### 4.1.5 Instrumentos
 
 Los instrumentos son de dos clases. Los automáticos son el registro de métricas por llamada al modelo (proveedor, modelo, tokens de entrada y salida, duración, reintentos, resultado y costo estimado), el registro de rondas de revisión y de corrección de cada Pull Request, el historial de procesos con su hora de inicio y de fin, los informes de las pruebas de humo y el estado de la integración continua. Los manuales son las rúbricas de evaluación humana: suficiencia de los casos de prueba por HU, relevancia de cada observación de la revisión (relevante y correcta, relevante pero mal sustentada, ruido o falsa), calidad de un paquete de código y calidad de la arquitectura y del plan.
 
-### 4.1.5 Validez y confiabilidad
+### 4.1.6 Relación entre preguntas, hipótesis e instrumentos
 
-La validez interna se protege con entradas idénticas entre escenarios y con el registro de la versión de Loom y de los modelos. La validez de constructo depende de que las rúbricas midan lo que declaran; por eso se escriben antes de evaluar y se aplican a ciegas. La validez externa está limitada: los proyectos son propios o de prueba, y un tercer proyecto de otro dominio ampliaría lo que puede generalizarse. La confiabilidad se aborda con repeticiones y con el reporte de la varianza, dado el carácter no determinista de los modelos. Un riesgo específico de este diseño es que las intervenciones manuales durante la corrida contaminen la medición de autonomía; se mitiga con un registro de intervenciones y con la repetición desde cero.
+La tabla 4.3 une cada pregunta de investigación y cada hipótesis con lo que se mide, el instrumento que lo registra y su estado al cierre de este documento. Sirve para comprobar que ninguna hipótesis se da por respondida con datos que no la miden.
 
-Otro riesgo es propio del enfoque de ciencia del diseño: el artefacto evoluciona con cada evaluación. Cada piloto encontró supuestos de Loom que no se sostenían y se corrigieron con un registro de decisión (ADR-0071 a 0084 tras el primer piloto, ADR-0085 a 0088 durante el segundo). Esa evolución es parte del resultado, pero implica que dos corridas solo son comparables si se hicieron con la misma versión de la plataforma, y por eso el commit de Loom y los modelos exactos se registran junto con cada corrida.
-
-### 4.1.6 Datos y ética
-
-El tema se generalizó deliberadamente respecto de cualquier sistema de un empleador, para no requerir autorización de datos de terceros. Los proyectos utilizados son propios o de prueba, los datos de acceso (llaves, contraseñas) no se almacenan en la documentación y las cuentas de prueba tienen credenciales generadas para ese fin.
+TABLA: Preguntas, hipótesis, mediciones e instrumentos
+| Pregunta o hipótesis | Qué se mide | Instrumento y fuente | Estado |
+| PI1 | Proporción de criterios de aceptación con al menos un caso de prueba | Referencia al criterio de origen en cada caso; especificación de la HU | Datos disponibles, cálculo pendiente |
+| PI2 y H1 | Proporción de observaciones relevantes con contexto y con solo el diff, sobre los mismos Pull Requests | Experimento C (apartado 4.1.7); rúbrica aplicada a ciegas | Ejecutado; calificación pendiente |
+| PI3 y H2 | Ciclo completo en dos dominios y dos pilas; cambios que exigió Loom fuera de la configuración | Corridas E1c y E3c; registros de hallazgos; registros de decisión | Evidencia parcial |
+| PI4 y H3 | Calidad, tiempo y costo por proveedor en condiciones equivalentes | Escenarios E1 a E4 con API; colección de métricas | No ejecutado |
+| PI5 | Defectos que superan la revisión y la compilación y aparecen al ejecutar | Integración continua; pruebas de humo; registros de hallazgos | Evidencia en dos proyectos |
 
 ### 4.1.7 Experimento de control de la revisión
 
 La hipótesis H1 compara dos revisiones del mismo cambio, y los pilotos solo produjeron una de ellas. La línea base se obtiene, por eso, de forma retrospectiva: las 29 primeras revisiones de E1c y E3c se repiten sobre los mismos Pull Requests en dos condiciones (ADR-0089). En la condición con contexto, el revisor recibe exactamente lo que recibe la *skill* de revisión: el paquete de trabajo, la arquitectura aprobada del repositorio, la especificación y los casos de prueba de la HU, el título y la descripción del Pull Request, y el *diff*. En la condición de control recibe solo el *diff*. Sus instrucciones conservan las fuentes, las severidades y las reglas de la *skill*, y declaran que no conoce la HU, sus criterios ni la arquitectura.
 
-Tres controles sostienen la comparación. El *diff* es el mismo en las dos condiciones: se reconstruye desde GitHub como el cambio del primer commit del Pull Request, antes de cualquier corrección, y coincide con el que guardó la revisión original. El modelo está fijado (`claude-sonnet-5` por el CLI de Claude Code), con el mismo esquema de salida y el mismo tope de 140,000 caracteres para el *diff*. El contexto, por último, se reconstruye tal como estaba en el momento de la primera revisión, a partir del historial del repositorio de control y no del estado actual de la base de datos. A diferencia de la regla del apartado 4.1.3, el experimento usa el CLI con suscripción y no la API: las dos condiciones corren con el mismo modelo, y el costo, que en esa modalidad es nocional, no forma parte de la hipótesis.
+Tres controles sostienen la comparación. El *diff* es el mismo en las dos condiciones: se reconstruye desde GitHub como el cambio del primer commit del Pull Request, antes de cualquier corrección, y coincide con el que guardó la revisión original. El modelo está fijado (`claude-sonnet-5` por el CLI de Claude Code), con el mismo esquema de salida y el mismo tope de 140,000 caracteres para el *diff*. El contexto, por último, se reconstruye tal como estaba en el momento de la primera revisión, a partir del historial del repositorio de control y no del estado actual de la base de datos. A diferencia de la regla del apartado 4.1.4, el experimento usa el CLI con suscripción y no la API: las dos condiciones corren con el mismo modelo, y el costo, que en esa modalidad es nocional, no forma parte de la hipótesis.
 
-La relevancia no la juzga el sistema. Una persona califica las observaciones de las dos condiciones con la rúbrica del apartado 4.1.4 (relevante y correcta, relevante pero mal sustentada, ruido o falsa). Las ve mezcladas dentro de cada Pull Request, en orden aleatorio, con un identificador anónimo y sin la fuente ni la severidad que les asignó el modelo, porque ambas delatan la condición. La clave que asocia cada identificador con su condición y los datos crudos quedan fuera del repositorio público hasta terminar la calificación; su huella SHA-256 se publica antes, para que después pueda comprobarse que no cambiaron. El análisis reporta la proporción de observaciones relevantes por condición y compara, Pull Request por Pull Request, el número de observaciones relevantes con la prueba de rangos con signo de Wilcoxon [N:wilcoxon] y con la prueba de signos, siguiendo las pautas de Arcuri y Briand para comparar resultados de ejecuciones aleatorias [N:arcuri-briand]. Las observaciones bloqueantes y mayores que resulten válidas se cuentan aparte.
+La relevancia no la juzga el sistema. Una persona califica las observaciones de las dos condiciones con la rúbrica del apartado 4.1.5 (relevante y correcta, relevante pero mal sustentada, ruido o falsa). Las ve mezcladas dentro de cada Pull Request, en orden aleatorio, con un identificador anónimo y sin la fuente ni la severidad que les asignó el modelo, porque ambas delatan la condición. La clave que asocia cada identificador con su condición y los datos crudos quedan fuera del repositorio público hasta terminar la calificación; su huella SHA-256 se publica antes, para que después pueda comprobarse que no cambiaron. El análisis reporta la proporción de observaciones relevantes por condición y compara, Pull Request por Pull Request, el número de observaciones relevantes con la prueba de rangos con signo de Wilcoxon [N:wilcoxon] y con la prueba de signos, siguiendo las pautas de Arcuri y Briand para comparar resultados de ejecuciones aleatorias [N:arcuri-briand]. Las observaciones bloqueantes y mayores que resulten válidas se cuentan aparte.
+
+### 4.1.8 Análisis de los datos
+
+Las corridas piloto se analizan de forma descriptiva: conteos, proporciones y totales de tiempo, tokens y costo, por proyecto, por *skill* y por paquete. Con una sola corrida por proyecto no se hacen pruebas de hipótesis sobre ellas, y las diferencias entre E1c y E3c se reportan sin atribuirlas a una causa cuando el modelo o la versión de la plataforma cambiaron entre las dos (apartado 5.1.4).
+
+Para H1, la calificación ciega produce dos medidas por condición. La proporción estricta cuenta solo las observaciones «relevante y correcta»; la amplia suma las «relevante pero mal sustentada». Además, para cada Pull Request se resta el número de observaciones relevantes sin contexto del número con contexto. Esas 29 diferencias pareadas se comparan con la prueba de rangos con signo de Wilcoxon [N:wilcoxon] y con la prueba de signos exacta, y el tamaño del efecto se reporta con la correlación rango-biserial pareada, que va de −1 a 1 [N:kerby-rank-biserial]. Se propone un nivel de significancia de 0.05 con prueba bilateral, a confirmar con el director antes de conocer los resultados. Se reportan aparte las observaciones bloqueantes y mayores que resultaron válidas y cuántas observaciones relevantes de una condición encontró también la otra. El cálculo está en un guion versionado con la evidencia del experimento, de modo que cualquiera puede repetirlo con la hoja calificada.
+
+El análisis cualitativo se apoya en los registros de hallazgos de cada corrida. Cada hallazgo se anota con su hora y se clasifica en cuatro grupos: defectos del código generado, problemas del proceso o supuestos de Loom que no se sostuvieron, errores de la plataforma o del entorno, e intervenciones de la persona, separando las que se hicieron con la interfaz de Loom de las que se hicieron fuera de ella. Cuando un hallazgo llevó a cambiar Loom, el registro lo liga con su registro de decisión. De ahí salen las respuestas a PI5 y la evidencia sobre H2.
+
+### 4.1.9 Validez y confiabilidad
+
+La validez interna se protege con entradas idénticas entre escenarios y con el registro de la versión de Loom y de los modelos. La validez de constructo depende de que las rúbricas midan lo que declaran; por eso se escriben antes de evaluar y se aplican a ciegas. La validez externa está limitada: los proyectos son propios o de prueba, y un tercer proyecto de otro dominio ampliaría lo que puede generalizarse. La confiabilidad se aborda con repeticiones y con el reporte de la varianza, dado el carácter no determinista de los modelos. Un riesgo específico de este diseño es que las intervenciones manuales durante la corrida contaminen la medición de autonomía; se mitiga con un registro de intervenciones y con la repetición desde cero.
+
+Otro riesgo es propio del enfoque de ciencia del diseño: el artefacto evoluciona con cada evaluación. Cada piloto encontró supuestos de Loom que no se sostenían y se corrigieron con un registro de decisión (ADR-0071 a 0084 tras el primer piloto, ADR-0085 a 0088 durante el segundo). Esa evolución es parte del resultado, pero implica que dos corridas solo son comparables si se hicieron con la misma versión de la plataforma, y por eso el commit de Loom y los modelos exactos se registran junto con cada corrida.
+
+La validez de conclusión del experimento C tiene límites propios. Son 29 pares, cada condición se ejecutó una vez y una sola persona califica, así que no se mide la variabilidad del modelo ni el acuerdo entre evaluadores; las dos cosas quedan como trabajo futuro (apartado 6.3).
+
+### 4.1.10 Datos y ética
+
+El tema se generalizó deliberadamente respecto de cualquier sistema de un empleador, para no requerir autorización de datos de terceros. Los proyectos utilizados son propios o de prueba, los datos de acceso (llaves, contraseñas) no se almacenan en la documentación y las cuentas de prueba tienen credenciales generadas para ese fin.
 
 @@ tesis_4_2
 ### 4.2.1 Visión general y nomenclatura
@@ -137,7 +178,7 @@ Un elemento del backlog se clasifica como HU, con criterios de aceptación y pip
 
 ### 4.2.4 Las *skills* del pipeline
 
-La tabla 4.2 resume las *skills*. Las que analizan devuelven salida estructurada; las que escriben código operan como agentes sobre una copia de trabajo del repositorio.
+La tabla 4.4 resume las *skills*. Las que analizan devuelven salida estructurada; las que escriben código operan como agentes sobre una copia de trabajo del repositorio.
 
 TABLA: *Skills* de Loom
 | N.º | *Skill* | Entrada | Salida |
@@ -238,7 +279,7 @@ El panel de actividad muestra en vivo el registro del proceso que está corriend
 
 ### 4.2.15 Estado de implementación
 
-La tabla 4.3 separa lo que está implementado y se ejercitó en las corridas del capítulo 5, lo que está implementado y no se ejercitó, y lo que solo existe como diseño. Un resultado del capítulo 5 solo se atribuye a una función implementada y ejercitada.
+La tabla 4.5 separa lo que está implementado y se ejercitó en las corridas del capítulo 5, lo que está implementado y no se ejercitó, y lo que solo existe como diseño. Un resultado del capítulo 5 solo se atribuye a una función implementada y ejercitada.
 
 TABLA: Estado de implementación de las funciones de Loom
 | Función | Estado | Observación |

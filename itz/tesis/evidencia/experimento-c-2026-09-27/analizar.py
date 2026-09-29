@@ -5,7 +5,7 @@
 Solo se corre cuando la hoja de evaluación está completa. Genera datos/resultados-<corrida>.json con:
 - proporción de observaciones relevantes por condición (estricta: «relevante y correcta»; amplia: más «mal sustentada»);
 - observaciones relevantes por PR en cada condición y la prueba pareada (Wilcoxon de rangos con signo, aproximación normal,
-  y prueba de signos exacta) sobre los PRs;
+  con la correlación rango-biserial pareada como tamaño del efecto, y prueba de signos exacta) sobre los PRs;
 - bloqueantes y mayores válidas por condición, y cuántas observaciones relevantes de una condición repite la otra (columna «misma que»)."""
 
 import json
@@ -42,7 +42,10 @@ def wilcoxon(diferencias: list[float]) -> dict:
     var = n * (n + 1) * (2 * n + 1) / 24 - sum(t**3 - t for t in empates.values()) / 48
     z = (w_mas - media) / math.sqrt(var) if var > 0 else 0.0
     p = math.erfc(abs(z) / math.sqrt(2))
-    return {"n": n, "W+": w_mas, "z": round(z, 3), "p_bilateral": round(p, 4)}
+    # Tamaño del efecto: correlación rango-biserial pareada, (W+ − W−) / suma de rangos (Kerby, 2014); de −1 a 1.
+    total = n * (n + 1) / 2
+    r = (w_mas - (total - w_mas)) / total
+    return {"n": n, "W+": w_mas, "z": round(z, 3), "p_bilateral": round(p, 4), "r_rango_biserial": round(r, 3)}
 
 
 def signos(diferencias: list[float]) -> dict:
