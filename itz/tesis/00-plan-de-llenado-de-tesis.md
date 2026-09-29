@@ -546,3 +546,4 @@ python herramientas/marcar_instrucciones.py "Loom - Tesis v04.docx"
 ≈ 20,400 palabras (≈ 73 cuartillas con anexos). Pendientes en [03-pendientes-de-la-tesis.md](03-pendientes-de-la-tesis.md).
 
 **Decisión del autor (2026-09-28):** v04 es la versión de trabajo; los cambios siguientes se hacen sobre `borrador/v04/` y se regenera `Loom - Tesis v04.docx` con los mismos tres comandos, sin crear v05.
+- **2026-09-28, sobre v04:** 4.2 ampliada a ≈ 4,500 palabras (descripción de cada *skill*, agente de código, credenciales, cambios en los requisitos, interfaz y Tabla 4.3 de estado de implementación). Total ≈ 22,500 palabras (≈ 80 cuartillas con anexos y referencias, ≈ 65 sin ellos).
