@@ -240,6 +240,7 @@
 - [ADR-0087](decisiones/0087-release-entrega-cadena-de-conexion-y-url-de-la-api-al-compilar.md) — el release entrega `DATABASE_URL` (como secreto) a stacks que no son Java y pasa la URL del backend como build-arg a los frontends que la fijan al compilar.
 - [ADR-0088](decisiones/0088-rol-principal-de-un-caso-de-prueba.md) — el smoke testing asigna la cuenta de prueba por el actor principal del rol del caso (texto libre) y no exige cuenta si ese actor es invitado.
 - [ADR-0089](decisiones/0089-experimento-c-revision-con-contexto-frente-a-solo-el-diff.md) — experimento C (H1): las mismas 29 primeras revisiones de los pilotos se repiten con contexto y solo con el diff, mismo modelo, y una persona califica a ciegas las observaciones.
+- [ADR-0090](decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md) — segunda opinión automática de las observaciones del experimento C con la rúbrica de la persona, a ciegas y sellada hasta que termine la calificación humana; sirve para medir el acuerdo, no para decidir H1.
 
 ## Problema
 

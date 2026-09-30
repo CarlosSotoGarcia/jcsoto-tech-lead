@@ -11,3 +11,4 @@ itz/tesis/evidencia/*/artefactos/**/*.png
 # Experimento C: la clave de la evaluación ciega no se versiona hasta terminar la calificación (su SHA-256 va en el README)
 itz/tesis/evidencia/experimento-c-*/clave/
 itz/tesis/evidencia/experimento-c-*/datos/experimento_c-*.json
+itz/tesis/evidencia/experimento-c-*/segunda-opinion/*.json

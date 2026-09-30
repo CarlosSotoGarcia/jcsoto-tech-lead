@@ -66,9 +66,27 @@ La califica una persona, no el asistente que generó las observaciones. Instrucc
 Limitación conocida del cegado: 50 de las 177 observaciones mencionan la HU, sus criterios, los casos de prueba o la arquitectura
 (35 de «contexto» y 15 de «solo diff»), lo que puede sugerir su origen. La guía pide calificar solo si lo dicho es cierto y útil.
 
+Para calificar por partes, [`evaluacion-ciega/plan-de-sesiones.md`](evaluacion-ciega/plan-de-sesiones.md) reparte los 29 PRs en seis
+sesiones por proyecto y por HU, con los enlaces de cada PR y una bitácora para anotar el tiempo (lo genera `armar_sesiones.py`). El
+contexto incluye desde el 2026-09-29 el documento de arquitectura de cada proyecto (`contexto/arquitectura-E1c.md` y `-E3c.md`);
+la hoja y la clave no cambiaron.
+
 Cuando la hoja esté completa: `python analizar.py c1` → `datos/resultados-c1.json` (proporción de relevantes por condición, prueba
 pareada sobre los 29 PRs, bloqueantes y mayores válidas, observaciones compartidas). Después se versionan la clave y los datos
 crudos y se comprueban sus SHA-256.
+
+## Segunda opinión automática (sellada)
+
+[ADR-0090](../../../arquitectura/decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md). Un modelo distinto del que
+revisó (`claude-opus-5-5`) calificó las mismas 177 observaciones con la misma rúbrica, una llamada nueva por PR, con lo mismo que
+recibe la persona y sin la condición, la fuente ni la severidad. **No decide H1**: sirve para medir el acuerdo con la persona.
+
+- `segunda-opinion/opinion-c1.json`: fuera de git y sin abrir hasta que termine la calificación humana. Corrida del 2026-09-29:
+  29 llamadas, 177 de 177 observaciones calificadas, 11.7 minutos de modelo y 15.73 USD nocionales.
+  SHA-256: `720d6c7b002cd204be7f320a1436ae9a599bec76b7e1d799a1f5e42f23de94f2`.
+- `exportar_opinion.py`: lo exporta de Mongo (`experimento_c_opinion`) sin imprimir calificaciones.
+- `comparar_opiniones.py`: cuando la hoja esté completa, calcula el acuerdo y el kappa de Cohen (cuatro y dos categorías), la
+  matriz de confusión y, como análisis secundario, H1 con la calificación automática → `datos/acuerdo-c1.json`.
 
 ## Archivos
 
@@ -81,6 +99,8 @@ crudos y se comprueban sus SHA-256.
 | `datos/metricas-c1.json` | llamadas al modelo: duración, costo nocional, modelo informado, errores |
 | `datos/resumen-c1.json` | conteos por condición antes de calificar |
 | `logs/corrida-c1.log` | bitácora de la corrida con las interrupciones y el descarte |
+| `armar_sesiones.py` | arma el plan de calificación por sesiones y copia la arquitectura al contexto |
+| `logs/segunda-opinion-c1.log` | bitácora de la segunda opinión automática |
 
 El módulo que corre el experimento está en el repositorio de Loom:
 `loom/backend/src/loom_backend/experimentos/revision_contexto.py` (commit `28ca4e2` del repositorio de Loom).

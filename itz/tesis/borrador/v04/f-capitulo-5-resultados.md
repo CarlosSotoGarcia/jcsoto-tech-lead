@@ -5,7 +5,7 @@ Este capítulo reporta dos corridas completas, una por cada proyecto del capítu
 
 Los dos proyectos se eligieron de dominios distintos y Loom generó para cada uno un stack distinto: Java con Spring Boot y Angular en P1, y Node con NestJS y Prisma y React con Vite en P2. Esa diferencia es la que permite observar la generalización del flujo (PI3), aunque con las reservas del apartado 5.1.4.
 
-Del diseño experimental del capítulo 4 no se ejecutó ningún escenario con las APIs de los proveedores (Tabla 5.1): al momento de las corridas, la API de Anthropic no tenía saldo y la de Gemini tenía la facturación bloqueada. E1c y E3c son pilotos completos con el CLI; no comparan proveedores ni condiciones de contexto. Para H1 se hizo después un experimento de control sobre los Pull Requests de las dos corridas (apartado 5.2.14), cuya calificación ciega está pendiente; H3 sigue sin evaluarse y H2 solo se evalúa en parte (apartado 5.2.15).
+Del diseño experimental del capítulo 4 no se ejecutó ningún escenario con las APIs de los proveedores (Tabla 5.1): al momento de las corridas, la API de Anthropic no tenía saldo y la de Gemini tenía la facturación bloqueada. E1c y E3c son pilotos completos con el CLI; no comparan proveedores ni condiciones de contexto. Para H1 se hizo después un experimento de control sobre los Pull Requests de las dos corridas (apartado 5.2.14), cuya calificación ciega está pendiente; H3 sigue sin evaluarse y H2 solo se evalúa en parte (apartado 5.2.16).
 
 TABLA: Escenarios del diseño experimental y estado
 | Escenario | Proyecto | Proveedor de IA | Estado |
@@ -260,6 +260,26 @@ La primera ejecución de la condición con contexto se descartó. Tomó el paque
 
 El experimento tiene límites propios. Cada condición se ejecutó una sola vez, de modo que la variabilidad del modelo no está medida. Las revisiones se hicieron sobre código que generaron otros modelos (Sonnet 5 en E1c, Opus 5.5 en E3c), y por eso sus observaciones no sustituyen a las de los pilotos. El cegado, además, es imperfecto: una búsqueda de términos encontró que 50 de las 177 observaciones mencionan la HU, sus criterios, los casos de prueba o la arquitectura (35 de la condición con contexto y 15 de la de control), y eso puede sugerir su origen a quien califica.
 
-### 5.2.15 Lo que las corridas no permiten concluir
+### 5.2.15 Cobertura de los criterios de aceptación por los casos de prueba
 
-Las dos corridas muestran que el flujo completa el ciclo de punta a punta en dos proyectos de dominios y stacks distintos, que la regla de integración continua impidió fusionar código roto y que las pruebas de humo encuentran omisiones reales de la aplicación. No permiten todavía responder las preguntas de investigación centrales. Para la hipótesis H1 ya existe la revisión de control (apartado 5.2.14); falta la valoración, por una persona y a ciegas, de la relevancia de sus 177 observaciones. Para H2 hay evidencia parcial: el ciclo se completó en el segundo proyecto, pero no solo con cambios de configuración, y la compuerta de compilación sigue sin generalizar. Para H3 faltan las corridas equivalentes con las APIs de Claude y de Gemini, con el modelo fijado y la plataforma congelada. Estos conjuntos de datos son el trabajo pendiente del capítulo.
+PI1 pregunta en qué medida los casos de prueba generados cubren los criterios de aceptación de una HU. Cada caso guarda el texto del criterio del que deriva, y con esa referencia se contó, para las seis HUs de las dos corridas, cuántos criterios tienen al menos un caso (Tabla 5.14).
+
+TABLA: Cobertura de los criterios de aceptación por HU
+| Proyecto y HU | Criterios explícitos (cubiertos) | Criterios inferidos (cubiertos) | Casos de prueba | Criterios con más de un caso |
+| E1c, HU-001 | 2 (2) | 11 (11) | 14 | 1 |
+| E1c, HU-002 | 2 (2) | 12 (12) | 14 | 0 |
+| E1c, HU-003 | 3 (3) | 9 (9) | 16 | 4 |
+| E3c, HU-001 | 10 (10) | 16 (16) | 35 | 8 |
+| E3c, HU-002 | 9 (9) | 14 (14) | 39 | 14 |
+| E3c, HU-003 | 7 (7) | 15 (15) | 27 | 4 |
+| Total | 33 (33) | 77 (77) | 145 | 31 |
+
+Los 110 criterios quedaron cubiertos, y ninguno de los 145 casos apunta a un criterio que no exista en su HU. En todos, la referencia reproduce el texto del criterio de forma exacta. Loom no obliga a ese resultado. La *skill* entrega al modelo la lista de criterios y le pide al menos un caso por cada uno, pero después no comprueba que todos estén cubiertos. La cobertura completa es un comportamiento del modelo en estas seis HUs y no una garantía del sistema. En E3c, que corrió con otro modelo, los casos por criterio fueron más (1.42 en promedio, frente a 1.13 en E1c) y 26 de sus 71 criterios tienen más de un caso.
+
+El dato tiene tres límites. Mide que cada criterio tiene un caso, no que el caso lo verifique bien; esa suficiencia es la que mide la rúbrica humana del apartado 4.1.5, que todavía no se aplica. Además, 77 de los 110 criterios (70 %) los infirió la *skill* 1 y no venían en la fuente, y en E1c fueron 32 de 39. La cobertura se mide, en buena parte, contra criterios que escribió el propio sistema, y nadie ha valorado aún si esos criterios inferidos son los que el negocio habría pedido. Por último, los 50 supuestos que las seis HUs dejaron abiertos no son criterios y quedan fuera de la cuenta.
+
+Cubrir un criterio tampoco equivale a verificarlo en la aplicación. De los 145 casos, las pruebas de humo aprobaron 104, reprobaron 11 y dejaron 30 bloqueados (apartados 5.2.6 y 5.2.11); un criterio cuyo único caso quedó bloqueado está cubierto y sin comprobar.
+
+### 5.2.16 Lo que las corridas no permiten concluir
+
+Las dos corridas muestran que el flujo completa el ciclo de punta a punta en dos proyectos de dominios y stacks distintos, que la regla de integración continua impidió fusionar código roto y que las pruebas de humo encuentran omisiones reales de la aplicación. No permiten todavía responder las preguntas de investigación centrales. PI1 tiene respuesta en su sentido nominal: todos los criterios tienen al menos un caso de prueba (apartado 5.2.15), y falta valorar si esos casos son suficientes. Para la hipótesis H1 ya existe la revisión de control (apartado 5.2.14); falta la valoración, por una persona y a ciegas, de la relevancia de sus 177 observaciones. Para H2 hay evidencia parcial: el ciclo se completó en el segundo proyecto, pero no solo con cambios de configuración, y la compuerta de compilación sigue sin generalizar. Para H3 faltan las corridas equivalentes con las APIs de Claude y de Gemini, con el modelo fijado y la plataforma congelada. Estos conjuntos de datos son el trabajo pendiente del capítulo.

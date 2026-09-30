@@ -10,6 +10,9 @@ de qué revisión salió. No hace falta saberlo: se califica cada observación p
 - `contexto/Pnn.md`: para cada PR, el enlace al cambio revisado, el paquete de trabajo que debía implementar y, si pertenece a una
   historia de usuario, su especificación y sus casos de prueba.
 - La pestaña «Rúbrica» de la hoja, con las cuatro calificaciones.
+- `contexto/arquitectura-E1c.md` y `contexto/arquitectura-E3c.md`: el documento de arquitectura aprobado de cada proyecto, para juzgar
+  las observaciones que hablan de la arquitectura.
+- `plan-de-sesiones.md`: el orden sugerido para calificar en seis sesiones, con los enlaces de cada PR y una bitácora.
 
 ## Cómo calificar
 
@@ -34,5 +37,6 @@ de qué revisión salió. No hace falta saberlo: se califica cada observación p
 - Algunas observaciones mencionan la HU, sus criterios o la arquitectura y otras no: no lo tomes en cuenta para calificar, solo si lo
   que dicen es cierto y útil.
 - No abras la carpeta `clave/`, el archivo `datos/experimento_c-c1.json` ni la colección `experimento_c` de Mongo hasta terminar:
-  ahí está a qué revisión pertenece cada observación.
+  ahí está a qué revisión pertenece cada observación. Tampoco abras `segunda-opinion/`: es la calificación que hizo un modelo con
+  esta misma rúbrica, y verla antes influiría en la tuya.
 - Si no puedes decidir una observación sin correr el código, elige la calificación más probable y anótalo en «comentario».

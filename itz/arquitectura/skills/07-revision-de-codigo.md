@@ -93,6 +93,8 @@ contra spec, arquitectura y buenas prácticas, publica las observaciones en GitH
   sin revisión manual.
 - [ADR-0089](../decisiones/0089-experimento-c-revision-con-contexto-frente-a-solo-el-diff.md) — el
   experimento C repite la revisión de esta skill solo con el diff para medir cuánto aporta el contexto (H1).
+- [ADR-0090](../decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md) — segunda opinión
+  automática de las observaciones del experimento C, sellada hasta la calificación humana.
 
 ## Criterios de éxito
 

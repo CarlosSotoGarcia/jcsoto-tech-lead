@@ -111,7 +111,7 @@ La tabla 4.3 une cada pregunta de investigación y cada hipótesis con lo que se
 
 TABLA: Preguntas, hipótesis, mediciones e instrumentos
 | Pregunta o hipótesis | Qué se mide | Instrumento y fuente | Estado |
-| PI1 | Proporción de criterios de aceptación con al menos un caso de prueba | Referencia al criterio de origen en cada caso; especificación de la HU | Datos disponibles, cálculo pendiente |
+| PI1 | Proporción de criterios de aceptación con al menos un caso de prueba | Referencia al criterio de origen en cada caso; especificación de la HU | Calculada (apartado 5.2.15); suficiencia de los casos sin valorar |
 | PI2 y H1 | Proporción de observaciones relevantes con contexto y con solo el diff, sobre los mismos Pull Requests | Experimento C (apartado 4.1.7); rúbrica aplicada a ciegas | Ejecutado; calificación pendiente |
 | PI3 y H2 | Ciclo completo en dos dominios y dos pilas; cambios que exigió Loom fuera de la configuración | Corridas E1c y E3c; registros de hallazgos; registros de decisión | Evidencia parcial |
 | PI4 y H3 | Calidad, tiempo y costo por proveedor en condiciones equivalentes | Escenarios E1 a E4 con API; colección de métricas | No ejecutado |
@@ -131,6 +131,8 @@ Las corridas piloto se analizan de forma descriptiva: conteos, proporciones y to
 
 Para H1, la calificación ciega produce dos medidas por condición. La proporción estricta cuenta solo las observaciones «relevante y correcta»; la amplia suma las «relevante pero mal sustentada». Además, para cada Pull Request se resta el número de observaciones relevantes sin contexto del número con contexto. Esas 29 diferencias pareadas se comparan con la prueba de rangos con signo de Wilcoxon [N:wilcoxon] y con la prueba de signos exacta, y el tamaño del efecto se reporta con la correlación rango-biserial pareada, que va de −1 a 1 [N:kerby-rank-biserial]. Se propone un nivel de significancia de 0.05 con prueba bilateral, a confirmar con el director antes de conocer los resultados. Se reportan aparte las observaciones bloqueantes y mayores que resultaron válidas y cuántas observaciones relevantes de una condición encontró también la otra. El cálculo está en un guion versionado con la evidencia del experimento, de modo que cualquiera puede repetirlo con la hoja calificada.
 
+Como análisis secundario, un modelo aplica la misma rúbrica a las mismas 177 observaciones (ADR-0090). Es un modelo distinto del que hizo las revisiones (`claude-opus-5-5`), trabaja con una llamada nueva por Pull Request y recibe lo mismo que la persona, sin la condición, la fuente ni la severidad de cada observación. Su calificación se guarda sellada, fuera del repositorio y sin mostrarse a quien califica, hasta que la persona termina; su huella SHA-256 se publica antes. Con las dos calificaciones se calcula el acuerdo observado y el coeficiente kappa de Cohen, que descuenta el acuerdo esperado por azar [N:cohen-kappa], con las cuatro categorías de la rúbrica y con dos (relevante o no). El resultado de H1 que reporta la tesis es el de la persona. La calificación automática no lo sustituye ni lo corrige: si el acuerdo resulta bajo, eso se reporta como un hallazgo sobre la rúbrica o sobre el modelo como juez.
+
 El análisis cualitativo se apoya en los registros de hallazgos de cada corrida. Cada hallazgo se anota con su hora y se clasifica en cuatro grupos: defectos del código generado, problemas del proceso o supuestos de Loom que no se sostuvieron, errores de la plataforma o del entorno, e intervenciones de la persona, separando las que se hicieron con la interfaz de Loom de las que se hicieron fuera de ella. Cuando un hallazgo llevó a cambiar Loom, el registro lo liga con su registro de decisión. De ahí salen las respuestas a PI5 y la evidencia sobre H2.
 
 ### 4.1.9 Validez y confiabilidad
@@ -139,7 +141,7 @@ La validez interna se protege con entradas idénticas entre escenarios y con el 
 
 Otro riesgo es propio del enfoque de ciencia del diseño: el artefacto evoluciona con cada evaluación. Cada piloto encontró supuestos de Loom que no se sostenían y se corrigieron con un registro de decisión (ADR-0071 a 0084 tras el primer piloto, ADR-0085 a 0088 durante el segundo). Esa evolución es parte del resultado, pero implica que dos corridas solo son comparables si se hicieron con la misma versión de la plataforma, y por eso el commit de Loom y los modelos exactos se registran junto con cada corrida.
 
-La validez de conclusión del experimento C tiene límites propios. Son 29 pares, cada condición se ejecutó una vez y una sola persona califica, así que no se mide la variabilidad del modelo ni el acuerdo entre evaluadores; las dos cosas quedan como trabajo futuro (apartado 6.3).
+La validez de conclusión del experimento C tiene límites propios. Son 29 pares, cada condición se ejecutó una vez y una sola persona califica, así que no se mide la variabilidad del modelo ni el acuerdo entre personas evaluadoras; las dos cosas quedan como trabajo futuro (apartado 6.3). La segunda opinión automática da una medida parcial de acuerdo, con el límite de que el calificador es un modelo de la misma familia que el revisor.
 
 ### 4.1.10 Datos y ética
 

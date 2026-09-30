@@ -63,3 +63,4 @@ Estado: `verificada` = datos contrastados con la página de la fuente (septiembr
 - ferreira-acceptance :: M. Ferreira, L. Viegas, J. P. Faria, and B. Lima, "Acceptance test generation with large language models: An industrial case study," in *Proc. IEEE/ACM Int. Conf. Autom. Softw. Test (AST)*, 2025, arXiv:2504.07244. :: verificada
 - folorunsho-survey :: O. Folorunsho and H. Reza, "AI-driven test case generation from natural language requirements: A survey of techniques and research gaps," arXiv:2606.06563, 2026. :: verificada (preprint)
 - kerby-rank-biserial :: D. S. Kerby, "The simple difference formula: An approach to teaching nonparametric correlation," *Comprehensive Psychol.*, vol. 3, 2014, doi: 10.2466/11.IT.3.1. :: revisar (número de artículo)
+- cohen-kappa :: J. Cohen, "A coefficient of agreement for nominal scales," *Educ. Psychol. Meas.*, vol. 20, no. 1, pp. 37–46, 1960, doi: 10.1177/001316446002000104. :: verificada
