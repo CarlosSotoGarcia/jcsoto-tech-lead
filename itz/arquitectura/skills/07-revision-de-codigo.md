@@ -95,6 +95,8 @@ contra spec, arquitectura y buenas prácticas, publica las observaciones en GitH
   experimento C repite la revisión de esta skill solo con el diff para medir cuánto aporta el contexto (H1).
 - [ADR-0090](../decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md) — segunda opinión
   automática de las observaciones del experimento C, sellada hasta la calificación humana.
+- [ADR-0091](../decisiones/0091-experimento-c-se-reporta-la-evaluacion-automatica.md) — la tesis reporta
+  esa evaluación automática para la corrida c1; la calificación por una persona queda pendiente.
 
 ## Criterios de éxito
 

@@ -1,5 +1,9 @@
 # Guía para calificar las observaciones de revisión (experimento C)
 
+> Aviso (2026-09-29): la tesis ya reporta una evaluación automática de estas mismas observaciones (apartado 5.2.14). Para que tu
+> calificación siga siendo independiente, no leas ese apartado, `datos/resultados-c1-opinion.json` ni el README de esta carpeta
+> antes de terminar.
+
 Vas a calificar observaciones que hizo un revisor automático sobre 29 Pull Requests de dos proyectos generados con Loom. Cada PR
 se revisó más de una vez y en la hoja están mezcladas todas sus observaciones, en orden aleatorio y con un identificador que no dice
 de qué revisión salió. No hace falta saberlo: se califica cada observación por sí misma.

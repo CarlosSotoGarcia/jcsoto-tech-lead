@@ -1,0 +1,1422 @@
+{
+ "corrida": "c1",
+ "semilla_ciega": 7319,
+ "observaciones": {
+  "P01-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P01-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "mayor"
+  },
+  "P01-03": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 4,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P01-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P01-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P01-06": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "bloqueante"
+  },
+  "P01-07": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-01",
+   "n": 3,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P02-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P02-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P03-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P03-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P03-03": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P03-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 3,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P03-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P03-06": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P03-07": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P03-08": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-01",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P04-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P04-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P04-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-04",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P04-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-04",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P05-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P05-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-04",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P05-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P05-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-04",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P06-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-01",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P06-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-01",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P06-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-01",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P06-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P06-05": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-01",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P07-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-04",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P07-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-04",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "bloqueante"
+  },
+  "P07-03": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-04",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P07-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "mayor"
+  },
+  "P07-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-04",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P07-06": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-04",
+   "n": 3,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P08-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-01",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P08-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-01",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P08-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-01",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P08-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-01",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P09-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-04",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P09-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-04",
+   "n": 3,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P09-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "bloqueante"
+  },
+  "P09-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-04",
+   "n": 2,
+   "fuente": "criterio_aceptacion",
+   "severidad": "menor"
+  },
+  "P09-05": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-04",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P09-06": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-04",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P10-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-03",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P10-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P10-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-03",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P10-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-03",
+   "n": 4,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P10-05": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P10-06": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-03",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P11-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 6,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P11-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P11-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P11-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 4,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P11-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P11-06": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "bloqueante"
+  },
+  "P11-07": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P11-08": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P11-09": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P11-10": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P11-11": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-05",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P12-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P12-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-02",
+   "n": 3,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P12-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P12-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-02",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P12-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-02",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P13-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-02",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P13-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P13-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "mayor"
+  },
+  "P13-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-02",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P13-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-02",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P14-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P14-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-02",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P14-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-02",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P14-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-02",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "bloqueante"
+  },
+  "P14-05": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-003/PT-02",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P15-01": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 5,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P15-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 2,
+   "fuente": "criterio_aceptacion",
+   "severidad": "menor"
+  },
+  "P15-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P15-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P15-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P15-06": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P15-07": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "mayor"
+  },
+  "P15-08": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P16-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 4,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P16-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P16-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P16-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P16-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "mayor"
+  },
+  "P16-06": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P16-07": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-05",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P17-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P17-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-01",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P17-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-01",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "mayor"
+  },
+  "P17-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-01",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P17-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-01",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "mayor"
+  },
+  "P18-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-03",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P18-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-03",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P18-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "mayor"
+  },
+  "P18-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-03",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P18-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "BASE/PT-03",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P19-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P19-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-03",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "menor"
+  },
+  "P19-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-03",
+   "n": 3,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P19-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-03",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P20-01": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P20-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P20-03": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P20-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P20-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P20-06": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 1,
+   "fuente": "pruebas",
+   "severidad": "mayor"
+  },
+  "P20-07": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P20-08": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-02",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P21-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-03",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P21-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-03",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P21-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-03",
+   "n": 3,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P21-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-03",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P21-05": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "BASE/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P22-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-02",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P22-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-02",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P22-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-02",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P22-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-02",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P22-05": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-002/PT-02",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P23-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-02",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P23-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-02",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P23-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-02",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "bloqueante"
+  },
+  "P23-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-02",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P23-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P24-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P24-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P24-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 4,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P24-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 3,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P24-05": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P24-06": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 3,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P24-07": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-02",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P25-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "mayor"
+  },
+  "P25-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P25-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P25-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P25-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P25-06": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P25-07": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-03",
+   "n": 2,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P26-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-03",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P26-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-03",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P26-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-03",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P26-04": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-03",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P26-05": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-03",
+   "n": 3,
+   "fuente": "criterio_aceptacion",
+   "severidad": "mayor"
+  },
+  "P26-06": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-001/PT-03",
+   "n": 2,
+   "fuente": "criterio_aceptacion",
+   "severidad": "mayor"
+  },
+  "P27-01": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P27-02": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-01",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "bloqueante"
+  },
+  "P27-03": {
+   "condicion": "contexto",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-01",
+   "n": 2,
+   "fuente": "criterio_aceptacion",
+   "severidad": "mayor"
+  },
+  "P27-04": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-01",
+   "n": 2,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P27-05": {
+   "condicion": "solo_diff",
+   "proyecto_id": "b17137fd304348d7a48532ba5db89270",
+   "referencia": "HU-003/PT-01",
+   "n": 1,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P28-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 4,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P28-02": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 6,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P28-03": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P28-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P28-05": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 3,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P28-06": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 3,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P28-07": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 2,
+   "fuente": "seguridad",
+   "severidad": "mayor"
+  },
+  "P28-08": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 1,
+   "fuente": "criterio_aceptacion",
+   "severidad": "bloqueante"
+  },
+  "P28-09": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 1,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P28-10": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 4,
+   "fuente": "arquitectura",
+   "severidad": "mayor"
+  },
+  "P28-11": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-001/PT-01",
+   "n": 5,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P29-01": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "bloqueante"
+  },
+  "P29-02": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 3,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P29-03": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 6,
+   "fuente": "arquitectura",
+   "severidad": "menor"
+  },
+  "P29-04": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 1,
+   "fuente": "buenas_practicas",
+   "severidad": "mayor"
+  },
+  "P29-05": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  },
+  "P29-06": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 4,
+   "fuente": "seguridad",
+   "severidad": "menor"
+  },
+  "P29-07": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 3,
+   "fuente": "criterio_aceptacion",
+   "severidad": "menor"
+  },
+  "P29-08": {
+   "condicion": "contexto",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 4,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P29-09": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 2,
+   "fuente": "pruebas",
+   "severidad": "mayor"
+  },
+  "P29-10": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 5,
+   "fuente": "buenas_practicas",
+   "severidad": "menor"
+  },
+  "P29-11": {
+   "condicion": "solo_diff",
+   "proyecto_id": "9c764535fb44470a8dc92fc74c8b835e",
+   "referencia": "HU-002/PT-02",
+   "n": 7,
+   "fuente": "pruebas",
+   "severidad": "menor"
+  }
+ }
+}

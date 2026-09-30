@@ -90,3 +90,26 @@ ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.35), ncol=3, frameon=False
 fig.tight_layout()
 fig.savefig(SALIDA / "g5-4-smoke-e1c-e3c.png", dpi=200)
 plt.close(fig)
+
+# experimento C: calificación automática de las observaciones por condición (datos/resultados-c1-opinion.json, 2026-09-29)
+CONDICIONES_C = ["Con contexto (85 observaciones)", "Solo el diff (92 observaciones)"]
+CALIFICACIONES_C = {"Relevante y correcta": [24, 21], "Relevante pero mal sustentada": [4, 7], "Ruido": [45, 53], "Falsa": [12, 11]}
+TOTALES_C = [85, 92]
+COLORES_C = {"Relevante y correcta": "#4a8a5a", "Relevante pero mal sustentada": "#9cc3a5", "Ruido": "#c9c9c9", "Falsa": "#b3403a"}
+fig, ax = plt.subplots(figsize=(8, 2.8))
+izq = [0.0, 0.0]
+for nombre, valores in CALIFICACIONES_C.items():
+    pct = [100 * v / t for v, t in zip(valores, TOTALES_C)]
+    ax.barh(CONDICIONES_C, pct, left=izq, color=COLORES_C[nombre], label=nombre)
+    for i, (p, v) in enumerate(zip(pct, valores)):
+        if p >= 4:
+            ax.text(izq[i] + p / 2, i, f"{v}", ha="center", va="center", fontsize=9,
+                    color="white" if nombre in ("Relevante y correcta", "Falsa") else "black")
+    izq = [a + b for a, b in zip(izq, pct)]
+ax.invert_yaxis()
+ax.set_xlim(0, 100)
+ax.set_xlabel("% de observaciones (calificación automática con claude-opus-5-5)")
+ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.35), ncol=2, frameon=False)
+fig.tight_layout()
+fig.savefig(SALIDA / "g5-5-experimento-c-calificacion-automatica.png", dpi=200)
+plt.close(fig)

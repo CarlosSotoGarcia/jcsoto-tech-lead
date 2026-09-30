@@ -49,19 +49,40 @@ y se repitió con el paquete reconstruido desde el repositorio de control. Los r
 (`experimento_c`, corrida `c1-descartada`) y sus llamadas en `metricas` (`experimento-c-contexto-descartada`); no forman parte del
 análisis. La condición «solo diff» no se afectó: solo recibe el diff.
 
-## Evaluación ciega (pendiente)
+## Resultado con la evaluación automática (2026-09-29)
 
-La califica una persona, no el asistente que generó las observaciones. Instrucciones en
+Por decisión del autor ([ADR-0091](../../../arquitectura/decisiones/0091-experimento-c-se-reporta-la-evaluacion-automatica.md)), la
+tesis reporta la calificación automática de `claude-opus-5-5` (ver *Segunda opinión automática*). Antes de abrirla se comprobó que
+las tres huellas SHA-256 publicadas coincidían. Resultado (`python analizar.py c1 opinion` → `datos/resultados-c1-opinion.json`):
+
+| | Contexto (85) | Solo diff (92) |
+|---|---|---|
+| Relevante y correcta | 24 (28.2 %) | 21 (22.8 %) |
+| Relevante pero mal sustentada | 4 | 7 |
+| Relevantes en sentido amplio | 28 (32.9 %) | 28 (30.4 %) |
+| Ruido | 45 | 53 |
+| Falsa | 12 | 11 |
+| Bloqueantes válidas / total | 4 / 7 | 1 / 2 |
+| Mayores válidas / total | 12 / 21 | 13 / 21 |
+
+Prueba pareada sobre los 29 PRs, relevancia amplia: 7 a favor de contexto, 7 de solo diff, 15 empates; Wilcoxon p = 1.0, r = 0.
+Relevancia estricta: 8, 6 y 15; p = 0.47, r = 0.2. De 18 pares de observaciones equivalentes entre condiciones, 9 tienen las dos
+relevantes: 47 hallazgos relevantes distintos, 28 por condición. **No hay evidencia a favor de H1 con este calificador; H1 no se
+declara rechazada**, porque el instrumento que la decide es la calificación por una persona.
+
+## Evaluación ciega por una persona (pendiente, trabajo futuro)
+
+La califica una persona, no el asistente que generó las observaciones. Desde el 2026-09-29 la clave, los datos crudos y la
+opinión automática están versionados y el resultado automático es público: quien califique no debe consultarlos antes. Instrucciones en
 [`evaluacion-ciega/guia-del-evaluador.md`](evaluacion-ciega/guia-del-evaluador.md).
 
 - `evaluacion-ciega/hoja-de-evaluacion.xlsx`: 177 observaciones en 29 PRs (`P01`–`P29`, en orden aleatorio), mezcladas dentro de cada
   PR, sin fuente ni severidad. Rúbrica: relevante y correcta / relevante pero mal sustentada / ruido / falsa.
 - `evaluacion-ciega/contexto/Pnn.md`: enlace al cambio revisado, paquete (sin observaciones ni estado) y, si aplica, spec y casos de
   prueba de la HU.
-- `clave/clave-c1.json`: une cada identificador con su condición. **No se versiona hasta terminar la calificación** (está en
-  `.gitignore`). SHA-256: `7fc38eaac5e2a21d869c9c3d6676b757b6f199f6b12f5096f370aa706911379f`.
-- `datos/experimento_c-c1.json` también queda fuera de git hasta terminar, porque trae cada observación con su condición.
-  SHA-256: `acc74cb36778da1ebe90edb670b2a1a4723d1aaf5424ad6434dd1e02e9e26cc1`.
+- `clave/clave-c1.json`: une cada identificador con su condición. Estuvo fuera de git hasta el 2026-09-29. SHA-256: `7fc38eaac5e2a21d869c9c3d6676b757b6f199f6b12f5096f370aa706911379f`.
+- `datos/experimento_c-c1.json`: cada observación con su condición; fuera de git hasta el 2026-09-29.
+  SHA-256 (de los bytes del archivo): `acc74cb36778da1ebe90edb670b2a1a4723d1aaf5424ad6434dd1e02e9e26cc1`.
 
 Limitación conocida del cegado: 50 de las 177 observaciones mencionan la HU, sus criterios, los casos de prueba o la arquitectura
 (35 de «contexto» y 15 de «solo diff»), lo que puede sugerir su origen. La guía pide calificar solo si lo dicho es cierto y útil.
@@ -75,13 +96,14 @@ Cuando la hoja esté completa: `python analizar.py c1` → `datos/resultados-c1.
 pareada sobre los 29 PRs, bloqueantes y mayores válidas, observaciones compartidas). Después se versionan la clave y los datos
 crudos y se comprueban sus SHA-256.
 
-## Segunda opinión automática (sellada)
+## Segunda opinión automática
 
 [ADR-0090](../../../arquitectura/decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md). Un modelo distinto del que
 revisó (`claude-opus-5-5`) calificó las mismas 177 observaciones con la misma rúbrica, una llamada nueva por PR, con lo mismo que
-recibe la persona y sin la condición, la fuente ni la severidad. **No decide H1**: sirve para medir el acuerdo con la persona.
+recibe la persona y sin la condición, la fuente ni la severidad. Se hizo como análisis secundario y sellado; por ADR-0091 es la
+evaluación que reporta la tesis, y **sigue sin decidir H1**.
 
-- `segunda-opinion/opinion-c1.json`: fuera de git y sin abrir hasta que termine la calificación humana. Corrida del 2026-09-29:
+- `segunda-opinion/opinion-c1.json`: sellado hasta que se decidió usarlo (mismo día). Corrida del 2026-09-29:
   29 llamadas, 177 de 177 observaciones calificadas, 11.7 minutos de modelo y 15.73 USD nocionales.
   SHA-256: `720d6c7b002cd204be7f320a1436ae9a599bec76b7e1d799a1f5e42f23de94f2`.
 - `exportar_opinion.py`: lo exporta de Mongo (`experimento_c_opinion`) sin imprimir calificaciones.
@@ -95,7 +117,8 @@ recibe la persona y sin la condición, la fuente ni la severidad. **No decide H1
 | `exportar.py` | exporta de Mongo los resultados y arma el paquete ciego |
 | `analizar.py` | cruza la hoja calificada con la clave y calcula los resultados de H1 |
 | `verificar_contexto.py` | compara el contexto del experimento con el que vio la primera revisión real |
-| `datos/experimento_c-c1.json` | las 58 revisiones con sus observaciones (con fuente y severidad); fuera de git hasta calificar |
+| `datos/experimento_c-c1.json` | las 58 revisiones con sus observaciones (con fuente y severidad) |
+| `datos/resultados-c1-opinion.json` | resultado de H1 con la calificación automática |
 | `datos/metricas-c1.json` | llamadas al modelo: duración, costo nocional, modelo informado, errores |
 | `datos/resumen-c1.json` | conteos por condición antes de calificar |
 | `logs/corrida-c1.log` | bitácora de la corrida con las interrupciones y el descarte |

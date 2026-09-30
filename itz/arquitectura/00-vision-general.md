@@ -241,6 +241,7 @@
 - [ADR-0088](decisiones/0088-rol-principal-de-un-caso-de-prueba.md) — el smoke testing asigna la cuenta de prueba por el actor principal del rol del caso (texto libre) y no exige cuenta si ese actor es invitado.
 - [ADR-0089](decisiones/0089-experimento-c-revision-con-contexto-frente-a-solo-el-diff.md) — experimento C (H1): las mismas 29 primeras revisiones de los pilotos se repiten con contexto y solo con el diff, mismo modelo, y una persona califica a ciegas las observaciones.
 - [ADR-0090](decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md) — segunda opinión automática de las observaciones del experimento C con la rúbrica de la persona, a ciegas y sellada hasta que termine la calificación humana; sirve para medir el acuerdo, no para decidir H1.
+- [ADR-0091](decisiones/0091-experimento-c-se-reporta-la-evaluacion-automatica.md) — para la corrida c1 del experimento C, la tesis reporta la evaluación automática (nombrada como tal); H1 no se declara aceptada ni rechazada y la calificación por una persona pasa a trabajo futuro.
 
 ## Problema
 

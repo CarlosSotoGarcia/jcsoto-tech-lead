@@ -1,0 +1,479 @@
+{
+ "corrida": "c1",
+ "calificador": "modelo claude-opus-5-5, a ciegas (segunda opinión automática)",
+ "observaciones": 177,
+ "prs": 29,
+ "por_condicion": {
+  "contexto": {
+   "observaciones": 85,
+   "calificaciones": {
+    "ruido": 45,
+    "relevante y correcta": 24,
+    "falsa": 12,
+    "relevante pero mal sustentada": 4
+   },
+   "proporcion_relevantes_estricta": 0.282,
+   "proporcion_relevantes_amplia": 0.329,
+   "relevantes_por_pr_media_amplia": 0.97,
+   "bloqueantes_y_mayores": {
+    "mayor_no_valida": 9,
+    "bloqueante_valida": 4,
+    "mayor_valida": 12,
+    "bloqueante_no_valida": 3
+   },
+   "relevantes_con_equivalente_en_la_otra_condicion": 9
+  },
+  "solo_diff": {
+   "observaciones": 92,
+   "calificaciones": {
+    "ruido": 53,
+    "relevante pero mal sustentada": 7,
+    "relevante y correcta": 21,
+    "falsa": 11
+   },
+   "proporcion_relevantes_estricta": 0.228,
+   "proporcion_relevantes_amplia": 0.304,
+   "relevantes_por_pr_media_amplia": 0.97,
+   "bloqueantes_y_mayores": {
+    "mayor_valida": 13,
+    "mayor_no_valida": 8,
+    "bloqueante_valida": 1,
+    "bloqueante_no_valida": 1
+   },
+   "relevantes_con_equivalente_en_la_otra_condicion": 9
+  }
+ },
+ "equivalencias_entre_condiciones": {
+  "pares_equivalentes": 18,
+  "pares_con_ambas_relevantes": 9,
+  "hallazgos_relevantes_distintos": 47
+ },
+ "prueba_pareada_estricta": {
+  "wilcoxon": {
+   "n": 14,
+   "W+": 63.0,
+   "z": 0.728,
+   "p_bilateral": 0.4669,
+   "r_rango_biserial": 0.2
+  },
+  "signos": {
+   "a_favor_contexto": 8,
+   "a_favor_solo_diff": 6,
+   "empates": 15,
+   "p_bilateral": 0.7905
+  }
+ },
+ "prueba_pareada_amplia": {
+  "wilcoxon": {
+   "n": 14,
+   "W+": 52.5,
+   "z": 0.0,
+   "p_bilateral": 1.0,
+   "r_rango_biserial": 0.0
+  },
+  "signos": {
+   "a_favor_contexto": 7,
+   "a_favor_solo_diff": 7,
+   "empates": 15,
+   "p_bilateral": 1.0
+  }
+ },
+ "relevantes_y_total_por_proyecto": {
+  "E1c": {
+   "contexto": [
+    18,
+    44
+   ],
+   "solo_diff": [
+    17,
+    49
+   ]
+  },
+  "E3c": {
+   "contexto": [
+    10,
+    41
+   ],
+   "solo_diff": [
+    11,
+    43
+   ]
+  }
+ },
+ "relevantes_y_total_por_fuente": {
+  "buenas_practicas": {
+   "contexto": [
+    11,
+    39
+   ],
+   "solo_diff": [
+    10,
+    50
+   ]
+  },
+  "pruebas": {
+   "contexto": [
+    1,
+    9
+   ],
+   "solo_diff": [
+    1,
+    7
+   ]
+  },
+  "arquitectura": {
+   "contexto": [
+    5,
+    19
+   ],
+   "solo_diff": [
+    5,
+    15
+   ]
+  },
+  "seguridad": {
+   "contexto": [
+    5,
+    5
+   ],
+   "solo_diff": [
+    12,
+    20
+   ]
+  },
+  "criterio_aceptacion": {
+   "contexto": [
+    6,
+    13
+   ],
+   "solo_diff": [
+    0,
+    0
+   ]
+  }
+ },
+ "relevantes_y_total_por_severidad": {
+  "menor": {
+   "contexto": [
+    12,
+    57
+   ],
+   "solo_diff": [
+    14,
+    69
+   ]
+  },
+  "mayor": {
+   "contexto": [
+    12,
+    21
+   ],
+   "solo_diff": [
+    13,
+    21
+   ]
+  },
+  "bloqueante": {
+   "contexto": [
+    4,
+    7
+   ],
+   "solo_diff": [
+    1,
+    2
+   ]
+  }
+ },
+ "por_pr": {
+  "P01": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P02": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 1
+   }
+  },
+  "P03": {
+   "contexto": {
+    "estricta": 2,
+    "amplia": 2
+   },
+   "solo_diff": {
+    "estricta": 3,
+    "amplia": 3
+   }
+  },
+  "P04": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P05": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P06": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P07": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 2,
+    "amplia": 2
+   }
+  },
+  "P08": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 1
+   }
+  },
+  "P09": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 2,
+    "amplia": 3
+   }
+  },
+  "P10": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P11": {
+   "contexto": {
+    "estricta": 2,
+    "amplia": 2
+   },
+   "solo_diff": {
+    "estricta": 2,
+    "amplia": 3
+   }
+  },
+  "P12": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P13": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 1
+   }
+  },
+  "P14": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P15": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 2
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P16": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P17": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 2
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P18": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P19": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P20": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 1
+   }
+  },
+  "P21": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P22": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 1
+   }
+  },
+  "P23": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P24": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P25": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P26": {
+   "contexto": {
+    "estricta": 2,
+    "amplia": 2
+   },
+   "solo_diff": {
+    "estricta": 0,
+    "amplia": 0
+   }
+  },
+  "P27": {
+   "contexto": {
+    "estricta": 0,
+    "amplia": 0
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  },
+  "P28": {
+   "contexto": {
+    "estricta": 5,
+    "amplia": 5
+   },
+   "solo_diff": {
+    "estricta": 4,
+    "amplia": 4
+   }
+  },
+  "P29": {
+   "contexto": {
+    "estricta": 1,
+    "amplia": 1
+   },
+   "solo_diff": {
+    "estricta": 1,
+    "amplia": 1
+   }
+  }
+ }
+}

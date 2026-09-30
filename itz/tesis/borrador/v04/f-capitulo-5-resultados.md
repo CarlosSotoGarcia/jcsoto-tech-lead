@@ -5,7 +5,7 @@ Este capítulo reporta dos corridas completas, una por cada proyecto del capítu
 
 Los dos proyectos se eligieron de dominios distintos y Loom generó para cada uno un stack distinto: Java con Spring Boot y Angular en P1, y Node con NestJS y Prisma y React con Vite en P2. Esa diferencia es la que permite observar la generalización del flujo (PI3), aunque con las reservas del apartado 5.1.4.
 
-Del diseño experimental del capítulo 4 no se ejecutó ningún escenario con las APIs de los proveedores (Tabla 5.1): al momento de las corridas, la API de Anthropic no tenía saldo y la de Gemini tenía la facturación bloqueada. E1c y E3c son pilotos completos con el CLI; no comparan proveedores ni condiciones de contexto. Para H1 se hizo después un experimento de control sobre los Pull Requests de las dos corridas (apartado 5.2.14), cuya calificación ciega está pendiente; H3 sigue sin evaluarse y H2 solo se evalúa en parte (apartado 5.2.16).
+Del diseño experimental del capítulo 4 no se ejecutó ningún escenario con las APIs de los proveedores (Tabla 5.1): al momento de las corridas, la API de Anthropic no tenía saldo y la de Gemini tenía la facturación bloqueada. E1c y E3c son pilotos completos con el CLI; no comparan proveedores ni condiciones de contexto. Para H1 se hizo después un experimento de control sobre los Pull Requests de las dos corridas (apartado 5.2.14), evaluado de forma automática; H3 sigue sin evaluarse y H2 solo se evalúa en parte (apartado 5.2.16).
 
 TABLA: Escenarios del diseño experimental y estado
 | Escenario | Proyecto | Proveedor de IA | Estado |
@@ -15,7 +15,7 @@ TABLA: Escenarios del diseño experimental y estado
 | E3 | P2, agenda de taller | Claude por API | Configurado, no ejecutado (sin saldo en la API) |
 | E3c | P2, agenda de taller | Claude por CLI, claude-opus-5-5 | Ejecutado el 2026-09-26 y 27 |
 | E4 | P2, agenda de taller | Gemini por API | Configurado, no ejecutado (facturación bloqueada) |
-| C (control de la revisión) | P1 y P2, 29 Pull Requests de E1c y E3c | Claude por CLI, claude-sonnet-5 fijado | Ejecutado el 2026-09-27 y 28; calificación ciega pendiente |
+| C (control de la revisión) | P1 y P2, 29 Pull Requests de E1c y E3c | Claude por CLI, claude-sonnet-5 fijado | Ejecutado el 2026-09-27 y 28; evaluación automática el 2026-09-29; calificación por una persona pendiente |
 
 ### 5.1.2 Procedimiento
 
@@ -242,7 +242,7 @@ La diferencia de costo (16.67 contra 120.99 USD nocionales) se explica en buena 
 
 El experimento de control del apartado 4.1.7 se corrió entre el 27 y el 28 de septiembre de 2026: 58 revisiones, dos por cada uno de los 29 Pull Requests, con `claude-sonnet-5`. El modelo ocupó 92.4 minutos en la condición con contexto y 100.0 en la de solo el *diff*, con una entrada media de 121,611 y 76,529 caracteres. Tres *diffs* de E3c superaron el tope de 140,000 caracteres y se recortaron igual en las dos condiciones. La corrida se interrumpió tres veces, dos por el límite de sesión de la suscripción y una por un fallo de red con la API de GitHub, y se reanudó sin repetir las revisiones ya guardadas.
 
-TABLA: Observaciones por condición antes de la calificación ciega
+TABLA: Observaciones por condición antes de calificarlas
 | Cifra | Con contexto | Solo el diff |
 | Observaciones | 85 | 92 |
 | Bloqueantes, mayores y menores | 7, 21 y 57 | 2, 21 y 69 |
@@ -254,15 +254,44 @@ TABLA: Observaciones por condición antes de la calificación ciega
 | Pull Requests sin observaciones | 0 | 0 |
 | Costo nocional informado por el CLI (USD) | 14.81 | 11.39 |
 
-La Tabla 5.13 describe qué produjo cada condición, no cuál revisó mejor. Con contexto hubo menos observaciones (85 contra 92) y más bloqueantes (7 contra 2). Las 13 observaciones sobre criterios de aceptación no tienen contraparte en la condición de control, que no conoce esos criterios. Sin contexto, el modelo dedicó más observaciones a seguridad (20 contra 5) y a buenas prácticas (50 contra 39). Nada de esto dice qué condición encuentra más problemas reales: una observación de seguridad puede ser un hallazgo o ruido, y una bloqueante puede ser falsa. Lo decide la calificación ciega de las 177 observaciones, pendiente al cierre de este capítulo.
+La Tabla 5.13 describe qué produjo cada condición, no cuál revisó mejor. Con contexto hubo menos observaciones (85 contra 92) y más bloqueantes (7 contra 2). Las 13 observaciones sobre criterios de aceptación no tienen contraparte en la condición de control, que no conoce esos criterios. Sin contexto, el modelo dedicó más observaciones a seguridad (20 contra 5) y a buenas prácticas (50 contra 39). Nada de esto dice qué condición encuentra más problemas reales: una observación de seguridad puede ser un hallazgo o ruido, y una bloqueante puede ser falsa. Lo decide la calificación de las 177 observaciones, que se reporta más abajo.
 
 La primera ejecución de la condición con contexto se descartó. Tomó el paquete de trabajo de la base de datos, donde Loom lo regenera después de cada revisión con las observaciones de la última ronda y el estado final del paquete, así que el revisor recibió en su entrada observaciones que el piloto ya había hecho. El problema se detectó al armar la hoja de calificación, antes de calificar, y la condición se repitió con el paquete reconstruido desde el historial del repositorio de control. La ejecución descartada había producido 123 observaciones, 38 más que la válida; no se analizó cuántas de ellas repetían las del piloto. Queda registrada, con su costo de 12.90 USD nocionales, y fuera del análisis. La lección es de método: un experimento retrospectivo sobre un sistema que actualiza sus artefactos tiene que reconstruir las entradas desde el historial de versiones.
 
-El experimento tiene límites propios. Cada condición se ejecutó una sola vez, de modo que la variabilidad del modelo no está medida. Las revisiones se hicieron sobre código que generaron otros modelos (Sonnet 5 en E1c, Opus 5.5 en E3c), y por eso sus observaciones no sustituyen a las de los pilotos. El cegado, además, es imperfecto: una búsqueda de términos encontró que 50 de las 177 observaciones mencionan la HU, sus criterios, los casos de prueba o la arquitectura (35 de la condición con contexto y 15 de la de control), y eso puede sugerir su origen a quien califica.
+La calificación la hizo un modelo distinto del revisor, `claude-opus-5-5`, a ciegas y con la rúbrica de cuatro categorías (apartado 4.1.7). Calificó las 177 observaciones en 29 llamadas, una por Pull Request, en 11.7 minutos. La Tabla 5.14 y la Figura 5.4 muestran el resultado.
+
+TABLA: Calificación automática de las observaciones por condición
+| Calificación | Con contexto | Solo el diff |
+| Relevante y correcta | 24 (28.2 %) | 21 (22.8 %) |
+| Relevante pero mal sustentada | 4 (4.7 %) | 7 (7.6 %) |
+| Ruido | 45 (52.9 %) | 53 (57.6 %) |
+| Falsa | 12 (14.1 %) | 11 (12.0 %) |
+| Total | 85 | 92 |
+| Relevantes en sentido amplio | 28 (32.9 %) | 28 (30.4 %) |
+
+FIGURA: graficas/g5-5-experimento-c-calificacion-automatica.png | Calificación automática de las observaciones del experimento C por condición
+
+La evaluación automática no encuentra evidencia a favor de H1. Las dos condiciones produjeron el mismo número de observaciones relevantes, 28, y la proporción es algo mayor con contexto (32.9 % frente a 30.4 %) porque esa condición hizo menos observaciones. En la comparación pareada, el contexto dio más observaciones relevantes en 7 Pull Requests, menos en otros 7 y las mismas en 15; la prueba de Wilcoxon da p = 1.0 y un tamaño del efecto de 0. Con el criterio estricto la diferencia favorece al contexto (28.2 % frente a 22.8 %; 8 Pull Requests contra 6, con 15 empates), y tampoco es significativa (p = 0.47; correlación rango-biserial de 0.2). Por proyecto el patrón es el mismo: en E1c, 18 de 44 observaciones relevantes con contexto y 17 de 49 sin él; en E3c, 10 de 41 y 11 de 43.
+
+Hay un resultado que pesa más que la comparación. En las dos condiciones, cerca de dos de cada tres observaciones no ameritan un cambio: más de la mitad se calificaron como ruido y alrededor de una de cada ocho como falsa. En 7 de los 29 Pull Requests ninguna de las dos revisiones produjo una observación relevante.
+
+El contexto no aumentó la proporción de observaciones relevantes, pero sí cambió cuáles son (Tabla 5.15). Seis de las 28 observaciones relevantes con contexto señalan incumplimientos de criterios de aceptación, una fuente que la revisión sin contexto no puede usar. Sin contexto, la revisión encontró más problemas de seguridad relevantes (12 frente a 5), aunque con más ruido alrededor: necesitó 20 observaciones de seguridad para 12 relevantes, mientras que las 5 de la otra condición lo fueron todas. De las observaciones bloqueantes resultaron válidas 4 de las 7 con contexto y 1 de las 2 sin él; de las mayores, 12 de 21 y 13 de 21.
+
+TABLA: Observaciones relevantes por la fuente que les asignó el revisor
+| Fuente | Con contexto (relevantes de total) | Solo el diff (relevantes de total) |
+| Criterio de aceptación | 6 de 13 | 0 de 0 |
+| Arquitectura | 5 de 19 | 5 de 15 |
+| Buenas prácticas | 11 de 39 | 10 de 50 |
+| Pruebas | 1 de 9 | 1 de 7 |
+| Seguridad | 5 de 5 | 12 de 20 |
+
+Las dos revisiones encuentran, además, problemas distintos. El calificador marcó 18 pares de observaciones como equivalentes entre condiciones, y solo en 9 de ellos las dos son relevantes. De las 28 observaciones relevantes de cada condición, 19 no tienen equivalente en la otra: entre las dos revisiones suman 47 hallazgos relevantes distintos, y cada una ve 28. Revisar con contexto no sustituyó a revisar sin él; las dos revisiones se complementaron.
+
+El experimento tiene límites propios. El mayor es el calificador: la relevancia la juzgó un modelo de la misma familia que el revisor, y no una persona. El apartado 2.9 describe los sesgos de ese tipo de juez, y todavía no hay una calificación humana para medir cuánto coincide con él, de modo que el resultado debe leerse como una evaluación automática preliminar. Además, cada condición se ejecutó una sola vez y la variabilidad del modelo no está medida. Las revisiones se hicieron sobre código que generaron otros modelos (Sonnet 5 en E1c, Opus 5.5 en E3c), y por eso sus observaciones no sustituyen a las de los pilotos. Por último, una búsqueda de términos encontró que 50 de las 177 observaciones mencionan la HU, sus criterios, los casos de prueba o la arquitectura (35 de la condición con contexto y 15 de la de control), lo que puede sugerir su origen a quien las califica, sea un modelo o una persona.
 
 ### 5.2.15 Cobertura de los criterios de aceptación por los casos de prueba
 
-PI1 pregunta en qué medida los casos de prueba generados cubren los criterios de aceptación de una HU. Cada caso guarda el texto del criterio del que deriva, y con esa referencia se contó, para las seis HUs de las dos corridas, cuántos criterios tienen al menos un caso (Tabla 5.14).
+PI1 pregunta en qué medida los casos de prueba generados cubren los criterios de aceptación de una HU. Cada caso guarda el texto del criterio del que deriva, y con esa referencia se contó, para las seis HUs de las dos corridas, cuántos criterios tienen al menos un caso (Tabla 5.16).
 
 TABLA: Cobertura de los criterios de aceptación por HU
 | Proyecto y HU | Criterios explícitos (cubiertos) | Criterios inferidos (cubiertos) | Casos de prueba | Criterios con más de un caso |
@@ -282,4 +311,4 @@ Cubrir un criterio tampoco equivale a verificarlo en la aplicación. De los 145 
 
 ### 5.2.16 Lo que las corridas no permiten concluir
 
-Las dos corridas muestran que el flujo completa el ciclo de punta a punta en dos proyectos de dominios y stacks distintos, que la regla de integración continua impidió fusionar código roto y que las pruebas de humo encuentran omisiones reales de la aplicación. No permiten todavía responder las preguntas de investigación centrales. PI1 tiene respuesta en su sentido nominal: todos los criterios tienen al menos un caso de prueba (apartado 5.2.15), y falta valorar si esos casos son suficientes. Para la hipótesis H1 ya existe la revisión de control (apartado 5.2.14); falta la valoración, por una persona y a ciegas, de la relevancia de sus 177 observaciones. Para H2 hay evidencia parcial: el ciclo se completó en el segundo proyecto, pero no solo con cambios de configuración, y la compuerta de compilación sigue sin generalizar. Para H3 faltan las corridas equivalentes con las APIs de Claude y de Gemini, con el modelo fijado y la plataforma congelada. Estos conjuntos de datos son el trabajo pendiente del capítulo.
+Las dos corridas muestran que el flujo completa el ciclo de punta a punta en dos proyectos de dominios y stacks distintos, que la regla de integración continua impidió fusionar código roto y que las pruebas de humo encuentran omisiones reales de la aplicación. No permiten todavía responder las preguntas de investigación centrales. PI1 tiene respuesta en su sentido nominal: todos los criterios tienen al menos un caso de prueba (apartado 5.2.15), y falta valorar si esos casos son suficientes. Para la hipótesis H1, la revisión de control y su evaluación automática no muestran una ventaja del contexto en la proporción de observaciones relevantes (apartado 5.2.14); falta que una persona las califique a ciegas para confirmarlo o corregirlo. Para H2 hay evidencia parcial: el ciclo se completó en el segundo proyecto, pero no solo con cambios de configuración, y la compuerta de compilación sigue sin generalizar. Para H3 faltan las corridas equivalentes con las APIs de Claude y de Gemini, con el modelo fijado y la plataforma congelada. Estos conjuntos de datos son el trabajo pendiente del capítulo.

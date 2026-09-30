@@ -1,0 +1,1389 @@
+{
+ "corrida": "c1",
+ "modelos": [
+  "claude-opus-5-5"
+ ],
+ "prs": [
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P01",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T04:58:14.922887+00:00",
+   "entrada_chars": 115398,
+   "duracion_ms": 34441,
+   "calificaciones": [
+    {
+     "id": "P01-01",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que getRequestURI incluye el context-path, pero el diff no configura ninguno y la ruta coincide con el @RequestMapping actual; es una fragilidad hipotética a futuro sin impacto hoy.",
+     "misma_que": ""
+    },
+    {
+     "id": "P01-02",
+     "calificacion": "ruido",
+     "justificacion": "Se basa en texto del PR que no está en el diff y en el nombre de la restricción de V1, que no se puede verificar. La recomendación de ejecutar mvn verify antes de fusionar es genérica.",
+     "misma_que": ""
+    },
+    {
+     "id": "P01-03",
+     "calificacion": "ruido",
+     "justificacion": "jwtService.issue(user) solo firma un JWT en memoria, sin E/S, así que es poco probable que falle de forma transitoria. Además, una transacción de BD no volvería atómica esa emisión.",
+     "misma_que": ""
+    },
+    {
+     "id": "P01-04",
+     "calificacion": "ruido",
+     "justificacion": "Es un matiz menor de documentación: el esquema bearerAuth en OpenAPI no impide llamar sin token, y la descripción de @Operation ya dice que responde 204 aunque el token falte.",
+     "misma_que": ""
+    },
+    {
+     "id": "P01-05",
+     "calificacion": "ruido",
+     "justificacion": "La duplicación de BEARER_PREFIX y regionMatches entre AuthController y JwtAuthenticationFilter es real pero pequeña; es una preferencia de refactor sin impacto funcional.",
+     "misma_que": ""
+    },
+    {
+     "id": "P01-06",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En JwtAuthenticationFilter, shouldNotFilter solo exime a LOGOUT_PATH, y ante ExpiredTokenException o un jti revocado se llama a reject() y se devuelve false sin llamar a chain.doFilter. Antes el filtro solo limpiaba el contexto, así que ahora login y forgot/reset responden 401 si llega un Bearer desactualizado.",
+     "misma_que": ""
+    },
+    {
+     "id": "P01-07",
+     "calificacion": "ruido",
+     "justificacion": "La HU y el PT solo piden auditar el cierre (LOGOUT) y la expiración (SESSION_EXPIRED), y ambos se registran. Auditar los reintentos con un jti revocado es una mejora opcional fuera de alcance.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P02",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T04:57:12.387389+00:00",
+   "entrada_chars": 144594,
+   "duracion_ms": 14183,
+   "calificaciones": [
+    {
+     "id": "P02-01",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "Es cierto: router.tsx deja de importar RestablecerPage y el README de apps/frontend lo quita de la estructura, pero el diff no borra pages/RestablecerPage.tsx, así que queda código muerto. La observación, sin embargo, no lo afirma: lo plantea como condicional («si no se borraron aparte») y especula sobre un test que no se ve en ningún lado.",
+     "misma_que": "P02-02"
+    },
+    {
+     "id": "P02-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El diff cambia la ruta /restablecer a RestablecerContrasenaPage en router.tsx y no incluye la eliminación de pages/RestablecerPage.tsx. El placeholder queda sin ninguna referencia y contradice la estructura que ahora documenta el README. La sugerencia de borrarlo con git rm es concreta y se puede aplicar.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P03",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T04:58:46.146172+00:00",
+   "entrada_chars": 95134,
+   "duracion_ms": 28642,
+   "calificaciones": [
+    {
+     "id": "P03-01",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El controlador pasa `http.getRemoteAddr()` al limitador, y la arquitectura despliega en Cloud Run, detrás del front end de Google. En el diff no se ve configuración de cabeceras reenviadas, así que el límite por IP puede aplicarse a la IP del proxy y no a la del cliente real.",
+     "misma_que": ""
+    },
+    {
+     "id": "P03-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `/api/v1/auth/**` ya cubre la ruta añadida en PUBLIC_PATHS, pero la entrada duplicada no cambia el comportamiento ni causa ningún problema.",
+     "misma_que": ""
+    },
+    {
+     "id": "P03-03",
+     "calificacion": "relevante y correcta",
+     "justificacion": "`request` es @Transactional e invoca `mailer.sendResetLink` de forma síncrona dentro de la transacción, mientras que para cuentas inexistentes o deshabilitadas retorna sin hacer I/O. Eso retiene conexiones de BD y abre un canal lateral de tiempo que permite enumerar cuentas, justo lo que la respuesta genérica busca evitar.",
+     "misma_que": ""
+    },
+    {
+     "id": "P03-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "`issueAndSend` hace SELECT de los tokens vigentes, los marca y luego inserta el nuevo sin bloqueo ni restricción en BD. Dos solicitudes concurrentes pueden dejar dos tokens vigentes, lo que incumple el criterio de que el anterior quede invalidado (TC-007).",
+     "misma_que": ""
+    },
+    {
+     "id": "P03-05",
+     "calificacion": "ruido",
+     "justificacion": "Que salgan dos errores del mismo campo, con el mismo texto, es un detalle cosmético. Además, quitar @Pattern haría que se aceptara 'a@b', que TC-004 exige rechazar, así que la sugerencia en parte es contraproducente.",
+     "misma_que": ""
+    },
+    {
+     "id": "P03-06",
+     "calificacion": "ruido",
+     "justificacion": "Igual que P03-02: la entrada es redundante con `/api/v1/auth/**` y no tiene efecto sobre el comportamiento.",
+     "misma_que": "P03-02"
+    },
+    {
+     "id": "P03-07",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En `enforceRateLimit`, `ipLimiter.tryAcquire` registra el hit antes de consultar el limitador de correo. Si este rechaza la solicitud, la IP ya perdió cupo aunque la solicitud se rechazó en conjunto. El impacto es menor, pero el problema es real y se puede corregir.",
+     "misma_que": ""
+    },
+    {
+     "id": "P03-08",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Señala el mismo envío SMTP bloqueante dentro de la transacción de `request` y propone una corrección válida (AFTER_COMMIT o envío asíncrono). Hay una imprecisión menor: el catch captura RuntimeException, no MailException.",
+     "misma_que": "P03-03"
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P04",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T04:59:07.014970+00:00",
+   "entrada_chars": 90810,
+   "duracion_ms": 18294,
+   "calificaciones": [
+    {
+     "id": "P04-01",
+     "calificacion": "ruido",
+     "justificacion": "Es una verificación especulativa: el paquete depende de PT-02/PT-03, que aportan los DTOs generados, y el diff no afirma en ningún lado que no se corrió el typecheck. No señala un defecto concreto del cambio.",
+     "misma_que": ""
+    },
+    {
+     "id": "P04-02",
+     "calificacion": "ruido",
+     "justificacion": "Preferencia de estilo sobre exhaustividad en VerificarCorreoPage.tsx; el `default` maneja hoy exactamente el caso 'error' (y cubre `new Error`), sin impacto funcional.",
+     "misma_que": ""
+    },
+    {
+     "id": "P04-03",
+     "calificacion": "falsa",
+     "justificacion": "El MutationObserver de TanStack Query solo refleja la última mutación iniciada, así que una respuesta tardía de la anterior no se renderiza (la propia observación lo admite); además el cambio de token en la misma página no es un flujo real.",
+     "misma_que": ""
+    },
+    {
+     "id": "P04-04",
+     "calificacion": "ruido",
+     "justificacion": "La propia observación reconoce que ambas variantes producen TOKEN_INVALIDO y el mismo comportamiento en el frontend; añadir el caso no cambia la cobertura.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P05",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T04:59:25.956138+00:00",
+   "entrada_chars": 99929,
+   "duracion_ms": 16432,
+   "calificaciones": [
+    {
+     "id": "P05-01",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `paths` está vacío, pero en este punto el backend (PT-01) todavía no expone endpoints documentados; /auth/refresh llega con HU-002. El paquete solo pide el script gen:api y el schema generado, y el chequeo de CI que sugiere no forma parte del alcance de este paquete.",
+     "misma_que": ""
+    },
+    {
+     "id": "P05-02",
+     "calificacion": "ruido",
+     "justificacion": "La rama `if (!usuario)` de RequireRole.tsx es una defensa barata que permite usar el guard por separado, y el docstring ya dice que se usa dentro de RequireAuth. No causa ningún problema real.",
+     "misma_que": ""
+    },
+    {
+     "id": "P05-03",
+     "calificacion": "ruido",
+     "justificacion": "App.test.tsx tiene una sola prueba de humo, y lo que busca es justamente comprobar el App real con crearRouter(). La fuga de estado entre pruebas que plantea es hipotética y hoy no ocurre.",
+     "misma_que": ""
+    },
+    {
+     "id": "P05-04",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que el `*` de router.tsx solo vive en PublicLayout, pero el paquete solo pide una página 404 y esta funciona para todos. La diferencia en el AppBar es cosmética, y la sugerencia de poner otro `*` dentro de RequireAuth crearía una ruta en conflicto y mandaría a /login a los anónimos que entren a una ruta desconocida.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P06",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T04:59:55.456813+00:00",
+   "entrada_chars": 204799,
+   "duracion_ms": 26207,
+   "calificaciones": [
+    {
+     "id": "P06-01",
+     "calificacion": "ruido",
+     "justificacion": "La prueba sigue lo que pide TC-021: comparar medianas con un umbral de 100 ms y unas 10 muestras. Las dos ramas ejecutan argon2 real (verify y verificarSenuelo), así que el riesgo de fallos intermitentes que alega es especulativo.",
+     "misma_que": ""
+    },
+    {
+     "id": "P06-02",
+     "calificacion": "ruido",
+     "justificacion": "desbloquear() cambia el estado a ACTIVA y reiniciarIntentos() guarda ultimoLoginEn, así que ninguna de las dos escrituras sobra. Solo se repiten dos campos, y únicamente tras vencer un bloqueo, sin efecto funcional.",
+     "misma_que": ""
+    },
+    {
+     "id": "P06-03",
+     "calificacion": "ruido",
+     "justificacion": "El paquete, la arquitectura y TC-038 exigen la cookie con Secure, por lo que condicionarla a NODE_ENV iría contra la especificación. El caso de acceso por IP de LAN sobre HTTP solo afecta a desarrollo.",
+     "misma_que": ""
+    },
+    {
+     "id": "P06-04",
+     "calificacion": "ruido",
+     "justificacion": "La propia observación reconoce que la lógica es correcta y que no es bloqueante. Lo único que ganaría es ahorrar un round-trip a la base en un camino poco frecuente (bloqueo vencido y contraseña errónea).",
+     "misma_que": ""
+    },
+    {
+     "id": "P06-05",
+     "calificacion": "ruido",
+     "justificacion": "La doble validación (DTO y AuthService.validar) es deliberada y el README la documenta ('DTO y otra vez en el servicio'). El riesgo de que ambas reglas diverjan es una preferencia de mantenimiento sin impacto actual.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P07",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:00:17.534410+00:00",
+   "entrada_chars": 49311,
+   "duracion_ms": 18602,
+   "calificaciones": [
+    {
+     "id": "P07-01",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El diff no incluye frontend/package-lock.json, y el README raíz admite que por eso se usa `npm install`. Las instalaciones no son reproducibles y la arquitectura prevé `npm ci` en CI. La alusión a las «incompatibilidades señaladas arriba» se apoya en una premisa falsa, pero el problema central es real.",
+     "misma_que": "P07-03"
+    },
+    {
+     "id": "P07-02",
+     "calificacion": "falsa",
+     "justificacion": "PrimeNG 17.18.x ya declara como peerDependency Angular `^17 || ^18` (se publicó después de Angular 18 para darle soporte). Por eso `^17.18.10` con Angular 18.2 no produce ERESOLVE. El tema lara-light-blue en resources/themes es el correcto para PrimeNG 17.",
+     "misma_que": ""
+    },
+    {
+     "id": "P07-03",
+     "calificacion": "relevante y correcta",
+     "justificacion": "La arquitectura pide `npm ci` en CI para el frontend, y `npm ci` falla sin lockfile. El PR no incluye package-lock.json, como reconoce el README raíz.",
+     "misma_que": ""
+    },
+    {
+     "id": "P07-04",
+     "calificacion": "falsa",
+     "justificacion": "Parte de la misma premisa incorrecta: PrimeNG 17.18.x admite Angular 18 en sus peerDependencies, así que no hay conflicto ERESOLVE con `@angular/core ^18.2.0`.",
+     "misma_que": "P07-02"
+    },
+    {
+     "id": "P07-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "`isApiUrl` en api-config.service.ts compara con `url.startsWith(this.apiBaseUrl)`, así que `http://api.test.attacker.com` pasaría el chequeo. El comentario del interceptor anuncia que ahí se añadirá el Bearer, por lo que el riesgo de filtrar el token es concreto y la corrección propuesta es adecuada.",
+     "misma_que": ""
+    },
+    {
+     "id": "P07-06",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que la aserción `typeof ... === 'string'` es débil. Sin embargo, la lógica de fallback ya está cubierta con valores concretos en los tests de `resolveApiBaseUrl` del mismo spec, así que el impacto es mínimo.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P08",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:00:40.501282+00:00",
+   "entrada_chars": 208324,
+   "duracion_ms": 20602,
+   "calificaciones": [
+    {
+     "id": "P08-01",
+     "calificacion": "falsa",
+     "justificacion": "La HU deja fuera del alcance, hasta que se confirme, limitar los intentos o poner captcha contra la enumeración en el registro. La arquitectura solo pide throttler para login, solicitud de restablecimiento y reenvío. No hay una convención incumplida en POST /registro.",
+     "misma_que": ""
+    },
+    {
+     "id": "P08-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que en `limpiarWhatsapp` un valor formado solo por guiones o espacios queda como no capturado. Pero WhatsApp es opcional y la HU dice que los separadores se quitan, así que tratarlo como vacío no causa ningún daño real.",
+     "misma_que": ""
+    },
+    {
+     "id": "P08-03",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "Es real que `validar()` no revisa NOMBRE_MAX, CORREO_MAX ni PASSWORD_MAX, que el DTO sí aplica. Pero la observación critica la doble validación, y el paquete la exige de forma explícita (\"se validan en el DTO y en el dominio\"). Hoy el impacto es bajo, porque el DTO se ejecuta siempre antes.",
+     "misma_que": ""
+    },
+    {
+     "id": "P08-04",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `@IsEmail` y la expresión regular de `normalizar-correo.ts` son distintas. Pero el comentario del dominio deja claro que es intencional (\"La validación estricta de formato la hace además el DTO\"). El DTO siempre se ejecuta primero, así que no hay efecto en el comportamiento actual.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P09",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:01:14.103464+00:00",
+   "entrada_chars": 140355,
+   "duracion_ms": 31250,
+   "calificaciones": [
+    {
+     "id": "P09-01",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En MenuUsuario.tsx el Button muestra `{usuario.correo}`, pero `aria-label=\"Menú de usuario\"` reemplaza el nombre accesible, así que el texto visible no forma parte de ese nombre (WCAG 2.5.3). La corrección que propone es concreta y aplicable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P09-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En Logout.test.tsx, el test 'una acción tras 30 min…' se etiqueta con TC-031, pero solo simula un refresh que ya responde SESION_EXPIRADA. No ejercita el reinicio del contador en el minuto 25, así que declara más cobertura de la que da para un TC que el paquete exige.",
+     "misma_que": ""
+    },
+    {
+     "id": "P09-03",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "Es cierto que en TypeScript un `readonly Rol[]` no se puede asignar a `Rol[]`. Pero la declaración de `roles` en RequireRoleProps no aparece en el diff (el hunk empieza después de la interfaz), así que afirmar que el build 'fallará con seguridad' no se puede comprobar con el material revisado.",
+     "misma_que": ""
+    },
+    {
+     "id": "P09-04",
+     "calificacion": "ruido",
+     "justificacion": "La observación misma reconoce que mostrar el aviso solo con SESION_EXPIRADA se ajusta a I7/I8 de la HU, y el README del diff ya documenta ese comportamiento. Pedir que se reescriba el paquete no mejora el código.",
+     "misma_que": ""
+    },
+    {
+     "id": "P09-05",
+     "calificacion": "falsa",
+     "justificacion": "Llamar a `olvidarSesion(false)` en el `.catch()` no es equivalente. Al recargar con SESION_EXPIRADA, el listener `alTerminarSesion` ya marcó `sesionExpirada=true`, y esa llamada lo volvería a poner en false, lo que rompería el aviso que prueba 'al recargar \"Agenda del día\" con la sesión expirada va al login con el aviso'.",
+     "misma_que": ""
+    },
+    {
+     "id": "P09-06",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Identifica bien por qué el `.catch()` de AuthContext.tsx no reutiliza `olvidarSesion`: no debe pisar `sesionExpirada`, que el listener del cliente HTTP ya marcó. Como falta un comentario, una simplificación futura (como la que propone P09-05) reintroduciría el bug.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P10",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:01:36.033719+00:00",
+   "entrada_chars": 67018,
+   "duracion_ms": 19572,
+   "calificaciones": [
+    {
+     "id": "P10-01",
+     "calificacion": "ruido",
+     "justificacion": "La rama `status === 400` en `handleError` de reset-password.component.ts es defensiva: un 400 por Bean Validation es plausible en el backend y reutiliza el mismo tratamiento de `detail`. No es código muerto que haya que corregir, y pedir que se documente en el README aporta poco.",
+     "misma_que": ""
+    },
+    {
+     "id": "P10-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El diff muestra como contexto `function trimmedEmail(control: AbstractControl)` en login.component.ts, y forgot-password.component.ts vuelve a definir el mismo validador. Es una duplicación real dentro de la misma feature y extraerlo a un validador compartido es accionable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P10-03",
+     "calificacion": "falsa",
+     "justificacion": "`Validators.email` no es redundante: su regex rechaza caracteres que `[^\\s@]` de `EMAIL_WITH_DOMAIN` acepta, como paréntesis o comas. Quitarlo debilitaría la validación, y el cast funciona porque el validador solo lee `.value`.",
+     "misma_que": ""
+    },
+    {
+     "id": "P10-04",
+     "calificacion": "ruido",
+     "justificacion": "El token llega desde un enlace de correo, que abre la aplicación con una carga completa. Navegar dentro de la SPA entre dos `/reset-password?token=` distintos no es un flujo realista, así que leerlo del snapshot es suficiente.",
+     "misma_que": ""
+    },
+    {
+     "id": "P10-05",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "La duplicación de `trimmedEmail` con login.component.ts es real. En cambio, la sugerencia de eliminar `Validators.email` y quedarse solo con la regex propia debilitaría la validación, porque esa regex acepta caracteres que Angular rechaza.",
+     "misma_que": "P10-02"
+    },
+    {
+     "id": "P10-06",
+     "calificacion": "ruido",
+     "justificacion": "No señala ningún problema del código del diff. Además, según la arquitectura, el pipeline de CI ya ejecuta npm ci, lint y jest en cada PR, así que la recomendación no añade nada.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P11",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:02:06.661215+00:00",
+   "entrada_chars": 33524,
+   "duracion_ms": 28008,
+   "calificaciones": [
+    {
+     "id": "P11-01",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En deploy.yml, `permissions: id-token: write` está a nivel de workflow, así que el job `changes` también lo recibe aunque no se autentica con OIDC y además ejecuta una acción de terceros (dorny/paths-filter). Pasar ese permiso a los jobs de deploy aplica mínimo privilegio y es fácil de corregir.",
+     "misma_que": ""
+    },
+    {
+     "id": "P11-02",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "El riesgo existe en frontend/Dockerfile, donde `COPY . .` podría arrastrar un node_modules local encima del instalado. En backend no aplica, porque solo copia pom.xml y src; además, el diff no permite confirmar que no exista ya un .dockerignore de paquetes anteriores.",
+     "misma_que": ""
+    },
+    {
+     "id": "P11-03",
+     "calificacion": "relevante y correcta",
+     "justificacion": "ci.yml y deploy.yml usan `dorny/paths-filter@v3`, un tag mutable de una acción de terceros, y en deploy corre con id-token write. Fijarla por SHA es una mitigación concreta del riesgo de cadena de suministro.",
+     "misma_que": "P11-04"
+    },
+    {
+     "id": "P11-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Es el mismo hallazgo que P11-03: `dorny/paths-filter@v3` referenciada por tag mutable en ambos workflows. La sugerencia de fijarla por SHA y mantenerla con Dependabot es accionable.",
+     "misma_que": "P11-03"
+    },
+    {
+     "id": "P11-05",
+     "calificacion": "ruido",
+     "justificacion": "El paquete pide explícitamente actualizar solo el README raíz, y eso se hizo. Además, la observación es condicional (\"si existen\") y no señala ningún defecto concreto.",
+     "misma_que": "P11-09"
+    },
+    {
+     "id": "P11-06",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El propio README del diff admite que falta el lockfile (\"sin él, CI y Dockerfile usan `npm install`\"), y tanto ci.yml como frontend/Dockerfile tienen el fallback. Así, el `npm ci` que piden el paquete y la arquitectura nunca se ejecuta y las instalaciones no son reproducibles.",
+     "misma_que": ""
+    },
+    {
+     "id": "P11-07",
+     "calificacion": "ruido",
+     "justificacion": "Cuando el disparo es manual, los jobs de deploy ignoran las salidas de `changes` con `github.event_name == 'workflow_dispatch'`. Que ese job corra solo gasta unos segundos y no afecta el resultado.",
+     "misma_que": ""
+    },
+    {
+     "id": "P11-08",
+     "calificacion": "ruido",
+     "justificacion": "La arquitectura aprobada define justo este diseño: verificación en cada PR y, en push a main, build, push y deploy (con `mvn -DskipTests package`). Pedir pruebas dentro del deploy va más allá de lo que piden el paquete y la arquitectura.",
+     "misma_que": ""
+    },
+    {
+     "id": "P11-09",
+     "calificacion": "ruido",
+     "justificacion": "El entregable exige documentar el despliegue en el README raíz, y el diff lo hace con detalle. Actualizar los READMEs de cada servicio es una preferencia, no un defecto.",
+     "misma_que": "P11-05"
+    },
+    {
+     "id": "P11-10",
+     "calificacion": "ruido",
+     "justificacion": "Es una optimización menor de tiempo de CI. Además, `cache: 'npm'` de setup-node necesita un lockfile, que hoy no existe, como admite la propia sugerencia.",
+     "misma_que": ""
+    },
+    {
+     "id": "P11-11",
+     "calificacion": "ruido",
+     "justificacion": "Es especulativa: el revisor reconoce que no puede verificar el problema, y la ruta `dist/<proyecto>/browser` es la salida por defecto del application builder de Angular. No aporta ningún defecto demostrado.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P12",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:02:27.111643+00:00",
+   "entrada_chars": 135977,
+   "duracion_ms": 16935,
+   "calificaciones": [
+    {
+     "id": "P12-01",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que HealthService.check registra con logger.error y que AllExceptionsFilter vuelve a registrar el 503 porque status >= 500. Aun así, un log duplicado en un fallo del healthcheck tiene un impacto operativo mínimo y no afecta lo que pide el paquete.",
+     "misma_que": ""
+    },
+    {
+     "id": "P12-02",
+     "calificacion": "ruido",
+     "justificacion": "seed.ts importa emptyToUndefined desde ../src/config/env.schema, pero tsconfig incluye prisma/**, así que compila y funciona. El acoplamiento es una preferencia de organización sin impacto real.",
+     "misma_que": ""
+    },
+    {
+     "id": "P12-03",
+     "calificacion": "ruido",
+     "justificacion": "El paquete pide explícitamente un ValidationPipe con whitelist y transform, y createValidationPipe lo cumple. Añadir forbidNonWhitelisted es una preferencia de diseño, no un defecto.",
+     "misma_que": ""
+    },
+    {
+     "id": "P12-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "La arquitectura aprobada dice «main.ts # … cookie-parser, helmet» y «Se usan helmet y CORS restringido». En el diff, configureApp aplica CORS, cookie-parser, pipes y filtro, pero no helmet, y package.json no incluye esa dependencia.",
+     "misma_que": ""
+    },
+    {
+     "id": "P12-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En seed.ts, el upsert del ADMIN hace update: { rol: ADMIN, estado: ACTIVA }. El README de la raíz indica correr db:seed «la primera vez (y cada vez que lleguen migraciones nuevas)», así que un ADMIN bloqueado o degradado se reactivaría en silencio.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P13",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:02:51.339191+00:00",
+   "entrada_chars": 206248,
+   "duracion_ms": 21897,
+   "calificaciones": [
+    {
+     "id": "P13-01",
+     "calificacion": "falsa",
+     "justificacion": "El paquete de trabajo pide de forma explícita «puedeIniciarSesion(estado), que lanza CUENTA_NO_VERIFICADA». Renombrar la función o separarla en dos contradice el entregable que se pidió, así que no es un defecto del cambio.",
+     "misma_que": ""
+    },
+    {
+     "id": "P13-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `take: MAX_CANDIDATOS_CELULAR` (10) trunca `expedientesRelacionados`. Pero que haya más de 10 expedientes sin cuenta con el mismo celular es un caso marginal, y la decisión de no vincular sigue siendo correcta; el impacto es mínimo.",
+     "misma_que": ""
+    },
+    {
+     "id": "P13-03",
+     "calificacion": "falsa",
+     "justificacion": "Es una especulación sin sustento. El hunk de error-codes.ts empieza en la línea 21 y no muestra los códigos anteriores, y el README ya documenta `409 ... CONFLICTO` como código existente. Además, si faltara, el typecheck y las pruebas del PR fallarían de inmediato; nada en el diff indica que falte.",
+     "misma_que": ""
+    },
+    {
+     "id": "P13-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "La arquitectura pide «throttler por IP y por correo» para el reenvío. El controlador solo aplica `@LimitarFrecuencia(LIMITE_REENVIO_VERIFICACION)`, documentado como «5 solicitudes por IP», y no hay ningún límite por correo en `reenviarVerificacion`.",
+     "misma_que": ""
+    },
+    {
+     "id": "P13-05",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "Es real que domain/estado-cuenta.ts ahora importa una excepción que depende de `HttpStatus` de Nest, y la arquitectura dice que el dominio no tiene dependencias de framework. Pero la sugerencia de sacar el throw de `puedeIniciarSesion` contradice el paquete, que exige que esa función lance CUENTA_NO_VERIFICADA. Lo que corresponde es usar un error de dominio sin acoplarlo a HTTP.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P14",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:03:16.332960+00:00",
+   "entrada_chars": 118639,
+   "duracion_ms": 22644,
+   "calificaciones": [
+    {
+     "id": "P14-01",
+     "calificacion": "ruido",
+     "justificacion": "En idle.service.ts, refreshNow() solo libera `refreshing` en next/error, así que el caso descrito existe, pero es especulativo: la petición HTTP colgada al final falla por la red o el navegador. Además, extend() igual reinicia el plazo con resetTimers(), por lo que la sesión no se pierde por esto.",
+     "misma_que": ""
+    },
+    {
+     "id": "P14-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que expireSession() siempre usa el motivo 'inactividad'. Pero es una decisión documentada en el README («Un 401 del servidor produce el mismo aviso») y va en línea con TC-010, que pide mostrar el aviso de sesión vencida ante un 401. Según la arquitectura, un token solo caduca en servidor si no hubo actividad, así que el mensaje casi siempre es el correcto.",
+     "misma_que": ""
+    },
+    {
+     "id": "P14-03",
+     "calificacion": "ruido",
+     "justificacion": "Scroll y wheel reinician los temporizadores en cada evento, pero ese trabajo corre fuera de la zona de Angular. setWarning no hace nada si el valor sigue en null, y el aviso a otras pestañas ya tiene su propio límite de frecuencia. El costo es despreciable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P14-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "DialogStubComponent en session-timeout-dialog.component.spec.ts declara `selector: 'p-dialog'` sin el prefijo 'app' que exige la regla @angular-eslint/component-selector. El CI ejecuta el lint en cada PR, así que esto lo hace fallar. La sugerencia de desactivar la regla en esa línea es precisa.",
+     "misma_que": ""
+    },
+    {
+     "id": "P14-05",
+     "calificacion": "ruido",
+     "justificacion": "La arquitectura solo define API_BASE_URL como variable del frontend en tiempo de ejecución, y el README y los environments ya documentan que hay que alinear estos tiempos con el backend. Es una mejora opcional de configuración, no un defecto del cambio.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P15",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:03:39.487874+00:00",
+   "entrada_chars": 27223,
+   "duracion_ms": 20950,
+   "calificaciones": [
+    {
+     "id": "P15-01",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que Spring no mapea PORT solo, pero la arquitectura ya fija server.port=${PORT} y el comentario de backend/Dockerfile.dev lo recuerda. Pedir otra nota más no aporta a este PT.",
+     "misma_que": ""
+    },
+    {
+     "id": "P15-02",
+     "calificacion": "ruido",
+     "justificacion": "El PT exige enlazar los README de backend y frontend, y el README raíz ya avisa de que esos proyectos llegan con los paquetes de esqueleto siguientes. Que los enlaces estén rotos por un tiempo es algo esperado en este orden de entrega.",
+     "misma_que": ""
+    },
+    {
+     "id": "P15-03",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En docker-compose.yml, \"${DB_PORT:-5432}:5432\" publica Postgres en todas las interfaces, y la contraseña de ejemplo es débil (change-me-dev). Vincularlo a 127.0.0.1 es un cambio concreto y barato.",
+     "misma_que": ""
+    },
+    {
+     "id": "P15-04",
+     "calificacion": "ruido",
+     "justificacion": "Es correcto: los contextos de build son ./backend y ./frontend, así que el .dockerignore raíz no se usa. Pero es un archivo inerte sin impacto.",
+     "misma_que": "P15-06"
+    },
+    {
+     "id": "P15-05",
+     "calificacion": "ruido",
+     "justificacion": "La propia arquitectura usa la etiqueta maven:3.9-eclipse-temurin-21. Fijarla por digest en una imagen de desarrollo es una preferencia sin impacto real.",
+     "misma_que": ""
+    },
+    {
+     "id": "P15-06",
+     "calificacion": "ruido",
+     "justificacion": "Dice lo mismo que P15-04: el .dockerignore raíz no aplica a ningún build de compose. Es cierto pero de impacto nulo.",
+     "misma_que": "P15-04"
+    },
+    {
+     "id": "P15-07",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "El criterio «compila, corre y pasa sus pruebas» no es verificable hoy, porque faltan pom.xml y package.json. Pero los Dockerfile.dev no copian nada, así que el build no falla: lo que falla es el arranque del contenedor. Además, la afirmación de que «el autor no ejecutó nada» no se puede comprobar en el diff.",
+     "misma_que": ""
+    },
+    {
+     "id": "P15-08",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En docker-compose.yml, el valor por defecto de DB_URL y el DB_URL de .env.example llevan escrito «inventarios» sin relación con DB_NAME. Si se cambia solo DB_NAME, la conexión se rompe. Derivar la URL o documentar la dependencia es accionable, aunque el fallo aparecería en el arranque, no de forma silenciosa.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P16",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:04:08.135892+00:00",
+   "entrada_chars": 73748,
+   "duracion_ms": 26285,
+   "calificaciones": [
+    {
+     "id": "P16-01",
+     "calificacion": "falsa",
+     "justificacion": "El paquete PT-05 exige literalmente 'CMD npx prisma migrate deploy && node dist/main.js' y la arquitectura acepta las migraciones en el arranque; sugerir quitarlas del CMD contradice el entregable pedido.",
+     "misma_que": ""
+    },
+    {
+     "id": "P16-02",
+     "calificacion": "ruido",
+     "justificacion": "El default 'all' es coherente con que el LB sea solo 'recomendado' (con ingress interno y sin LB el servicio quedaría inaccesible), y docs/despliegue.md §7 ya documenta cambiarlo; además el ingress no afecta el comportamiento de la cookie SameSite, y la línea citada no corresponde.",
+     "misma_que": ""
+    },
+    {
+     "id": "P16-03",
+     "calificacion": "ruido",
+     "justificacion": "Riesgo especulativo: dorny/paths-filter soporta eventos que no son de PR comparando contra la rama base o el commit anterior, y la observación no demuestra que el job 'cambios' falle en workflow_dispatch.",
+     "misma_que": ""
+    },
+    {
+     "id": "P16-04",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `npm ci` en la raíz instala ambos workspaces, pero es solo una optimización de tiempo de CI; además el lint y el typecheck usan configuración y dependencias compartidas de la raíz.",
+     "misma_que": ""
+    },
+    {
+     "id": "P16-05",
+     "calificacion": "ruido",
+     "justificacion": "El paquete y la arquitectura piden solo 'build de las imágenes Docker' en CI; un smoke test es una mejora opcional que no se exige.",
+     "misma_que": ""
+    },
+    {
+     "id": "P16-06",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que --set-secrets siempre incluye SMTP_PASS, pero docs/despliegue.md ya lista el secreto como necesario ('si el proveedor no autentica, cualquier valor'), y producción usa smtp por defecto.",
+     "misma_que": ""
+    },
+    {
+     "id": "P16-07",
+     "calificacion": "ruido",
+     "justificacion": "Es especulativa: el diff no incluye apps/backend/package.json y el propio Dockerfile afirma que prod-deps incluye el CLI de Prisma; no se aporta evidencia de que `prisma` sea devDependency.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P17",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:04:35.023223+00:00",
+   "entrada_chars": 73203,
+   "duracion_ms": 24531,
+   "calificaciones": [
+    {
+     "id": "P17-01",
+     "calificacion": "ruido",
+     "justificacion": "`web` es el servidor de Vite: sirve estáticos y no llama a la API al arrancar, porque las peticiones las hace después el navegador. Que `web` arranque antes de que `api` esté lista no causa ningún fallo real en `docker-compose.yml`.",
+     "misma_que": ""
+    },
+    {
+     "id": "P17-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El diff no incluye `package-lock.json`, y ambos `Dockerfile.dev` usan `COPY package-lock.json*` con `npm install` en lugar de `npm ci`. Así las builds no son reproducibles, y el propio README lo deja como pendiente.",
+     "misma_que": ""
+    },
+    {
+     "id": "P17-03",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "El criterio de terminado exige que compile y pase las pruebas, y el PR no trae CI ni evidencia de ejecución. Pero la observación se apoya en una descripción del PR que no está en el contexto y no señala ningún defecto concreto del código.",
+     "misma_que": ""
+    },
+    {
+     "id": "P17-04",
+     "calificacion": "ruido",
+     "justificacion": "Añadir un caso negativo es una mejora menor de cobertura. Además, con `enableCors({ origin: string })` el paquete cors siempre devuelve el origen configurado, así que la primera opción que sugiere (que la cabecera no aparezca) haría fallar el test.",
+     "misma_que": ""
+    },
+    {
+     "id": "P17-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Ambos README indican `cp .env.example .env && npm run start:dev` en el host, pero `apps/backend/package.json` no incluye dotenv ni `@nestjs/config`, y `main.ts` lee `process.env` directamente. Ese `.env` nunca se carga fuera de Docker.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P18",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:04:58.326950+00:00",
+   "entrada_chars": 122943,
+   "duracion_ms": 20554,
+   "calificaciones": [
+    {
+     "id": "P18-01",
+     "calificacion": "falsa",
+     "justificacion": "@nestjs/swagger 7.x (package.json ^7.4.2) no incrusta la inicialización en el HTML: la sirve como archivo externo (swagger-ui-init.js) desde el mismo origen, y eso lo permite el `script-src 'self'` de helmet. El bloqueo que se describe no se da con la versión de este diff.",
+     "misma_que": "P18-03"
+    },
+    {
+     "id": "P18-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "buildThrottlerOptions usa almacenamiento en memoria por proceso, y la arquitectura despliega en Cloud Run, que puede escalar a varias instancias. Así, cada instancia lleva su propio contador y el límite de login o de restablecimiento se multiplica; el README tampoco documenta esta limitación.",
+     "misma_que": ""
+    },
+    {
+     "id": "P18-03",
+     "calificacion": "falsa",
+     "justificacion": "Es la misma afirmación de P18-01. La UI de Swagger en @nestjs/swagger 7 carga swagger-ui-init.js como script externo del mismo origen, así que el CSP por defecto de helmet no la bloquea.",
+     "misma_que": "P18-01"
+    },
+    {
+     "id": "P18-04",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que execution-context.ts vive en src/ y se compilaría a dist, pero es una utilidad inerte de pocas líneas, sin efecto funcional ni de seguridad.",
+     "misma_que": ""
+    },
+    {
+     "id": "P18-05",
+     "calificacion": "ruido",
+     "justificacion": "Que SMTP_USER sin SMTP_PASS acabe en `pass: ''` (mailer.factory.ts) es un caso límite de configuración que se detecta en el primer envío. La validación de fail-fast que propone es una preferencia menor y no corrige un defecto del paquete.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P19",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:05:22.524870+00:00",
+   "entrada_chars": 157067,
+   "duracion_ms": 21644,
+   "calificaciones": [
+    {
+     "id": "P19-01",
+     "calificacion": "ruido",
+     "justificacion": "El riesgo es especulativo. Sin batching, el orden anterior (primero el token y luego setUsuario) también producía un render intermedio 'anonimo' (token sin usuario), así que revertir el orden no mejora nada. En AuthContext.tsx el nuevo orden deja el usuario y la rutaInicial listos antes de que el store externo notifique el cambio de token.",
+     "misma_que": ""
+    },
+    {
+     "id": "P19-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "TC-038 pide redirigir de http:// a https:// al abrir /login, y el diff solo añade resolverBaseUrl y credentials:'include', sin cambios en nginx.conf ni en la SPA. Pedir que el PR aclare que esa parte se resuelve en la infraestructura es razonable y accionable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P19-03",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que el paquete dice src/shared/errores y el código usa src/shared/errors. Pero el archivo ya existía con esa ruta (lo documenta el README del frontend) y la diferencia no tiene impacto funcional.",
+     "misma_que": ""
+    },
+    {
+     "id": "P19-04",
+     "calificacion": "ruido",
+     "justificacion": "Que la app falle al arrancar con una URL http:// inválida en producción es deliberado y está documentado en el README (\"la app no arranca\"). Es un error de configuración del despliegue, no un defecto del cambio; la alternativa sugerida es una preferencia.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P20",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:05:57.788902+00:00",
+   "entrada_chars": 68702,
+   "duracion_ms": 32857,
+   "calificaciones": [
+    {
+     "id": "P20-01",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `handleConstraintViolation` y `handleMethodArgumentNotValid` repiten unas pocas líneas para construir el ProblemDetail. Es una duplicación menor, sin efecto en el comportamiento; solo es una preferencia de refactor.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-02",
+     "calificacion": "falsa",
+     "justificacion": "En la arquitectura aprobada, el modelo AuthEvent define literalmente los atributos `email_intentado` y `tipo`. La migración sigue ese modelo, y renombrar las columnas lo contradiría.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-03",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "El riesgo es real: con H2 en modo PostgreSQL, la migración y `ddl-auto=validate` nunca se comprueban contra el motor que usa producción. Sin embargo, el paquete admite \"o similar\", y los ejemplos que cita (LOWER en CHECK, TIMESTAMPTZ, IDENTITY) son SQL nativo de PostgreSQL. El peligro está en las diferencias de H2, no en esa sintaxis.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-04",
+     "calificacion": "ruido",
+     "justificacion": "`/v3/api-docs.yaml` no está en PUBLIC_PATHS y daría 401. Pero ni el paquete ni la arquitectura piden esa variante, solo `/v3/api-docs` y `/swagger-ui.html`, así que el impacto es marginal.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-05",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "Es cierto que los 401 y 403 que produce la cadena de filtros no pasan por GlobalExceptionHandler, así que no salen como ProblemDetail, que es la convención de la arquitectura. La descripción es imprecisa: `HttpStatusEntryPoint` no llama a `sendError` ni genera la página Whitelabel; solo fija el estado y devuelve el cuerpo vacío. El `sendError` corresponde al AccessDeniedHandler por defecto.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-06",
+     "calificacion": "ruido",
+     "justificacion": "El conversion service de Spring convierte de forma fiable un String separado por comas en `List<String>` cuando se inyecta con `@Value`. El riesgo que plantea es especulativo; lo único cierto es que falta un test multivalor, y eso aporta poco.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-07",
+     "calificacion": "falsa",
+     "justificacion": "`BCryptPasswordEncoder.matches` no lanza excepción cuando el hash almacenado no tiene formato BCrypt: registra el aviso \"Encoded password does not look like BCrypt\" y devuelve false. Por eso `{unset}` produciría un fallo de login normal, no un 500.",
+     "misma_que": ""
+    },
+    {
+     "id": "P20-08",
+     "calificacion": "ruido",
+     "justificacion": "Usar `@Value` para `app.cors.allowed-origins` funciona correctamente. El paquete solo exige las propiedades tipadas JwtProperties y MailConfig, así que pedir un `CorsProperties` es una preferencia de consistencia sin impacto.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P21",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:06:21.683395+00:00",
+   "entrada_chars": 39449,
+   "duracion_ms": 21672,
+   "calificaciones": [
+    {
+     "id": "P21-01",
+     "calificacion": "ruido",
+     "justificacion": "El paquete PT-03 pide expresamente que `/api/v1/auth/**` sea ruta pública, y el diff lo implementa tal cual. La fragilidad futura es especulativa, y la sugerencia incluye rutas que no existen en la arquitectura, como register.",
+     "misma_que": ""
+    },
+    {
+     "id": "P21-02",
+     "calificacion": "ruido",
+     "justificacion": "El test solo pretende comprobar que el patrón no es bloqueado por seguridad, y el verbo no importa porque Spring Security devolvería 401 antes del despacho. Además, `SecurityWebSliceTest.rutasDeAuthSonPublicasYNoRequierenCsrf` ya cubre el caso con POST y 200.",
+     "misma_que": ""
+    },
+    {
+     "id": "P21-03",
+     "calificacion": "falsa",
+     "justificacion": "Si la ruta no fuera pública, el filtro de seguridad respondería 401 antes de llegar al despacho de MVC, así que la aserción `!= 401` sí detecta ese fallo. Un 404 o un 405 solo son posibles si la seguridad dejó pasar la petición, y la sugerencia de excluir también el 403 no cambia nada.",
+     "misma_que": ""
+    },
+    {
+     "id": "P21-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "`ProblemResponseWriter` copia a mano solo cinco campos a un LinkedHashMap, así que omitiría `pd.getProperties()` y duplica el formato de ProblemDetail que ya usa `GlobalExceptionHandler`. Serializar `pd` con el ObjectMapper de Boot es una alternativa accionable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P21-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Señala el mismo problema: la reconstrucción manual en `ProblemResponseWriter` pierde las propiedades de extensión y duplica el mapeo. Las dos alternativas que sugiere son correctas.",
+     "misma_que": "P21-04"
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P22",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:06:48.394023+00:00",
+   "entrada_chars": 203569,
+   "duracion_ms": 24159,
+   "calificaciones": [
+    {
+     "id": "P22-01",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Es cierto que el primer POST por http ya llevó el cuerpo en claro hasta el balanceador antes de la redirección, así que el comentario de `redirigirAHttps` y el README exageran cuando dicen «antes de que viajen credenciales». La garantía de I13 depende del borde o de HSTS, y rechazar en lugar de redirigir es una mejora accionable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P22-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que `refresh` no lleva `@LimitarFrecuencia`, pero la arquitectura solo pide limitar login, restablecimiento y reenvío. El refresh es un token opaco de 32 bytes que no se puede adivinar por fuerza bruta, y el costo por petición es comparable al de cualquier endpoint autenticado.",
+     "misma_que": ""
+    },
+    {
+     "id": "P22-03",
+     "calificacion": "relevante pero mal sustentada",
+     "justificacion": "Es cierto que `redirigirAHttps` refleja `req.headers.host` sin validarlo, y fijar el dominio sería un endurecimiento razonable. Pero el escenario de phishing o redirección abierta no se sostiene: un atacante no puede forzar el Host del navegador de la víctima, Cloud Run enruta por Host y no hay una caché que se pueda envenenar.",
+     "misma_que": ""
+    },
+    {
+     "id": "P22-04",
+     "calificacion": "ruido",
+     "justificacion": "El paquete exige comprobar en cada petición que la sesión no esté revocada y renovar `ultimaActividadEn`, así que la lectura es inevitable. El debounce de la escritura es una microoptimización sin impacto demostrado para este volumen.",
+     "misma_que": ""
+    },
+    {
+     "id": "P22-05",
+     "calificacion": "ruido",
+     "justificacion": "La estructura aprobada para `auth/` no define una subcarpeta `domain/`; solo aparece en `usuarios/`. Mover el archivo es una preferencia de organización sin impacto, y la propia observación reconoce que no bloquea.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P23",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:07:12.656497+00:00",
+   "entrada_chars": 176989,
+   "duracion_ms": 21940,
+   "calificaciones": [
+    {
+     "id": "P23-01",
+     "calificacion": "ruido",
+     "justificacion": "Es una preferencia de nombre sin impacto funcional. El README y el comentario del servicio ya explican que la cuenta debe seguir habilitada con \"misma regla que la solicitud\", así que el reúso es intencional y está documentado.",
+     "misma_que": ""
+    },
+    {
+     "id": "P23-02",
+     "calificacion": "ruido",
+     "justificacion": "Es una sospecha condicional sin evidencia: el diff no muestra el LoggingInterceptor. Si registra la plantilla de ruta, que es lo que afirma el README, no hay fuga. La observación no señala un defecto concreto del cambio.",
+     "misma_que": ""
+    },
+    {
+     "id": "P23-03",
+     "calificacion": "falsa",
+     "justificacion": "No hay indicio de que falte el valor: HU-002 ya audita la revocación y expiración de sesiones, y el código y el e2e de este PR usan SESION_REVOCADA como tipo existente. Además, la afirmación de que \"el PR reconoce que nada se compiló\" no aparece en el diff.",
+     "misma_que": ""
+    },
+    {
+     "id": "P23-04",
+     "calificacion": "falsa",
+     "justificacion": "El paquete PT-02 pide en sus entregables la \"Revocación de todas las sesiones del usuario (Sesion.revocadaEn) desde el repositorio de sesiones de auth/usuarios\". Depender de SesionesRepository exportado por AuthModule está autorizado, no es una desviación, y no crea un ciclo (AuthModule no importa password-recovery).",
+     "misma_que": ""
+    },
+    {
+     "id": "P23-05",
+     "calificacion": "ruido",
+     "justificacion": "Calcular el hash fuera de la transacción es una decisión explícita para no alargarla. Consultar antes el estado del token no evita la carrera y solo ahorra CPU en casos de error que ya limita el throttling de 10 por IP en 60 s. Es una optimización menor sin impacto real.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P24",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:07:35.875311+00:00",
+   "entrada_chars": 68486,
+   "duracion_ms": 20886,
+   "calificaciones": [
+    {
+     "id": "P24-01",
+     "calificacion": "ruido",
+     "justificacion": "Es una preferencia de mantenibilidad. Además, app.routes.ts no define constantes de path, así que la supuesta desconexión con ellas no existe: solo hay literales 'login' y 'home'.",
+     "misma_que": ""
+    },
+    {
+     "id": "P24-02",
+     "calificacion": "ruido",
+     "justificacion": "Se refiere a la descripción del PR, que no aparece en el diff ni en el contexto, y no señala ningún defecto del código. Verificar que la CI pasa ya es parte normal del proceso de fusión.",
+     "misma_que": ""
+    },
+    {
+     "id": "P24-03",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que las ramas catch de token.storage.ts no tienen prueba, pero son defensivas y triviales, y ningún TC del paquete depende de ellas.",
+     "misma_que": ""
+    },
+    {
+     "id": "P24-04",
+     "calificacion": "falsa",
+     "justificacion": "La arquitectura aprobada decide expresamente guardar el token en sessionStorage con cabecera Authorization y descarta la cookie HttpOnly. La observación contradice esa decisión ya documentada.",
+     "misma_que": ""
+    },
+    {
+     "id": "P24-05",
+     "calificacion": "ruido",
+     "justificacion": "Validators.email({ value } as AbstractControl) funciona y las pruebas de formato inválido lo cubren. La fragilidad frente a futuras versiones de Angular es especulativa y de estilo.",
+     "misma_que": ""
+    },
+    {
+     "id": "P24-06",
+     "calificacion": "ruido",
+     "justificacion": "El parpadeo existe: loadFailed se fija antes de que termine navigateByUrl. Pero solo muestra un mensaje de error, no contenido protegido, así que no afecta a TC-008. Además, la línea 55 no existe en home.component.ts, que tiene 50 líneas.",
+     "misma_que": ""
+    },
+    {
+     "id": "P24-07",
+     "calificacion": "ruido",
+     "justificacion": "Plantea la misma preocupación que P24-05 sobre el AbstractControl sintético en trimmedEmail. Funciona correctamente y no tiene impacto real.",
+     "misma_que": "P24-05"
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P25",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:08:00.977092+00:00",
+   "entrada_chars": 104645,
+   "duracion_ms": 22396,
+   "calificaciones": [
+    {
+     "id": "P25-01",
+     "calificacion": "falsa",
+     "justificacion": "El enlace ya existía: la ruta /olvide-contrasena y su placeholder estaban antes del PR (README y OlvideContrasenaPage previos). Además, la prueba 'se llega desde ¿Olvidaste tu contraseña?' de OlvideContrasenaPage.test.tsx fallaría si faltara, así que no falta ningún entregable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P25-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que el esquema zod ya recorta el correo (lo muestra solicitarRestablecimiento.test.ts), pero el .trim() extra en SolicitarRestablecimientoForm.tsx no hace daño y no cambia el comportamiento.",
+     "misma_que": ""
+    },
+    {
+     "id": "P25-03",
+     "calificacion": "ruido",
+     "justificacion": "Es una preferencia de estilo. Envolver el error en { error } sirve para distinguir 'sin error' de un error con valor nulo, y la alternativa que se propone (Symbol o bandera) no es más simple.",
+     "misma_que": ""
+    },
+    {
+     "id": "P25-04",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que ninguna prueba de OlvideContrasenaPage.test.tsx comprueba 'credentials'. Es un campo muerto dentro de un helper de prueba y no afecta a la funcionalidad.",
+     "misma_que": ""
+    },
+    {
+     "id": "P25-05",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que el árbol del apps/frontend/README.md no lista las dos pruebas nuevas, pero la sección de pruebas del mismo README sí las menciona. Es una omisión menor de documentación.",
+     "misma_que": ""
+    },
+    {
+     "id": "P25-06",
+     "calificacion": "ruido",
+     "justificacion": "Por diseño, el formulario muestra un mensaje fijo y no el texto de la respuesta, porque con un 429 no hay mensaje neutro que mostrar. Que se desincronice la redacción con el backend no cambia el comportamiento que piden la HU ni los TC.",
+     "misma_que": ""
+    },
+    {
+     "id": "P25-07",
+     "calificacion": "falsa",
+     "justificacion": "Escribir el literal en la prueba hace justo lo contrario de lo que se dice: si el mensaje cambia en solicitarRestablecimiento.ts, la prueba falla y el cambio se detecta. Si importara la constante, el cambio pasaría sin que ninguna prueba lo notara.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P26",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:08:29.488430+00:00",
+   "entrada_chars": 165205,
+   "duracion_ms": 25401,
+   "calificaciones": [
+    {
+     "id": "P26-01",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que en RegistroForm.tsx `setErrorServidor(null)` solo se llama al volver a enviar, pero es un detalle menor de UX. Ni la HU ni el paquete piden otra cosa, y la alerta desaparece en el siguiente intento.",
+     "misma_que": ""
+    },
+    {
+     "id": "P26-02",
+     "calificacion": "ruido",
+     "justificacion": "`normalizarCorreo` sí existe en correo.ts, y el README solo describe lo que ofrece el módulo. Que el frontend envíe el correo con trim y sin pasarlo a minúsculas no tiene impacto, porque el backend normaliza al comparar (RegistroDto en schema.d.ts).",
+     "misma_que": ""
+    },
+    {
+     "id": "P26-03",
+     "calificacion": "falsa",
+     "justificacion": "En el diff no aparece ninguna admisión de que schema.d.ts se escribió a mano. El archivo conserva la cabecera generada ('Do not make direct changes') y la estructura típica de openapi-typescript. La observación se apoya en algo que no se puede verificar en el cambio.",
+     "misma_que": ""
+    },
+    {
+     "id": "P26-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "router.tsx deja de importar `RegistroPage`, y el diff no incluye la eliminación de pages/RegistroPage.tsx. Además, el README actualizado ya no lo lista entre las páginas, así que queda un placeholder huérfano que conviene borrar.",
+     "misma_que": ""
+    },
+    {
+     "id": "P26-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "TC-026 figura en el 'Se da por terminado cuando' de PT-03 y exige el comportamiento en /login. Sin embargo, en el README del PR /login sigue como 'Iniciar sesión (placeholder)', y lo único que se prueba es el mapeo de CUENTA_NO_VERIFICADA en mensajesError.test.ts, así que este PR no puede hacer que TC-026 pase.",
+     "misma_que": ""
+    },
+    {
+     "id": "P26-06",
+     "calificacion": "ruido",
+     "justificacion": "El punto final de 'Este correo ya tiene una cuenta.' es una diferencia trivial respecto al texto citado en la HU. Una búsqueda por texto parcial o por subcadena en Playwright lo encuentra igual, así que no hay un defecto real.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P27",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:09:02.131321+00:00",
+   "entrada_chars": 174113,
+   "duracion_ms": 29804,
+   "calificaciones": [
+    {
+     "id": "P27-01",
+     "calificacion": "ruido",
+     "justificacion": "Con un correo vacío pueden salir dos mensajes en `campos.correo`, pero eso no rompe nada: el spec del DTO usa `toContain`, el 400 se sigue devolviendo y el frontend valida por su cuenta. Es un detalle de presentación sin impacto funcional.",
+     "misma_que": ""
+    },
+    {
+     "id": "P27-02",
+     "calificacion": "falsa",
+     "justificacion": "La observación es especulativa (\"si el enum solo contempla…\"). `ResultadoAuditoria` viene de `@prisma/client` y el login de HU-002 ya rechaza cuentas pendientes o inactivas, así que lo más probable es que el valor ya exista. Si no existiera, el typecheck del CI fallaría. El diff no da ninguna evidencia del problema.",
+     "misma_que": ""
+    },
+    {
+     "id": "P27-03",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que el camino con cuenta hace un INSERT más dentro de la misma transacción, pero cuesta pocos milisegundos. El e2e de TC-010 mide las medianas con el margen acordado (≤50 ms o 10 %) y el envío del correo ya es asíncrono, como pide la HU. La sugerencia es condicional y no señala un defecto concreto.",
+     "misma_que": ""
+    },
+    {
+     "id": "P27-04",
+     "calificacion": "ruido",
+     "justificacion": "Que el almacenamiento en memoria no se comparte entre réplicas es una limitación que ya existía y que viene de la decisión de arquitectura (@nestjs/throttler, en memoria según el README). Este PR solo la reutiliza, como pide el paquete, y no introduce el problema.",
+     "misma_que": ""
+    },
+    {
+     "id": "P27-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "`limiteSuperado` cuenta el cupo por correo normalizado sin tener en cuenta la IP ni si el correo existe (3 cada 15 min en `password-recovery.limites.ts`). Así, un tercero puede agotar ese cupo y dejar a la víctima sin enlaces sin acercarse a los límites por IP. Es un riesgo real de este diseño y las mitigaciones que propone son accionables.",
+     "misma_que": ""
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P28",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:09:33.114735+00:00",
+   "entrada_chars": 151910,
+   "duracion_ms": 28188,
+   "calificaciones": [
+    {
+     "id": "P28-01",
+     "calificacion": "relevante y correcta",
+     "justificacion": "AuthController pasa http.getRemoteAddr() a la auditoría y el despliegue es en Cloud Run, detrás de un proxy, sin configuración de forward headers en el diff; TC-014 pide registrar el origen. La mención a Docker/nginx es menos precisa, pero la sugerencia sirve.",
+     "misma_que": "P28-02"
+    },
+    {
+     "id": "P28-02",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Detrás del proxy de Cloud Run, getRemoteAddr() devuelve la IP del proxy, y el diff no añade server.forward-headers-strategy. Así, el campo ip de auth_event (TC-014) no reflejaría el origen real del cliente.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-03",
+     "calificacion": "ruido",
+     "justificacion": "Usar el nombre completo de @Schema en UserController es una inconsistencia de estilo que no afecta el funcionamiento.",
+     "misma_que": "P28-06"
+    },
+    {
+     "id": "P28-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "LoginAttemptService guarda los intentos en un ConcurrentHashMap de cada instancia. En Cloud Run puede haber varias instancias y reinicios, así que el bloqueo se puede eludir; el README solo lo documenta.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-05",
+     "calificacion": "relevante y correcta",
+     "justificacion": "SeedUserPasswordInitializer es un @Component sin @Profile y application.yml lee ${SEED_PASSWORD:} en todos los perfiles, así que en prod solo protege una advertencia del README. Es un riesgo real de defensa en profundidad para la cuenta admin.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-06",
+     "calificacion": "ruido",
+     "justificacion": "Es la misma preferencia de estilo sobre el import de Schema; no tiene impacto funcional.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-07",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En AuthService la expresión `found.isPresent() && found.get().isEnabled() && matches(...)` se corta antes de BCrypt cuando la cuenta está deshabilitada, y el decoyHash solo cubre el correo inexistente. Queda un canal lateral de tiempo real que contradice la intención antienumeración.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-08",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El paquete exige que TC-010 pase (invalidar el token al cerrar sesión), pero el diff no añade /auth/logout y la prueba inserta el RevokedToken a mano. La arquitectura asigna el logout a HU-003, así que hay una incoherencia real de alcance.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-09",
+     "calificacion": "relevante y correcta",
+     "justificacion": "El diff edita V1__auth.sql, que ya existía (index 193b390..0f1ff0f), y la convención aprobada exige migraciones inmutables; si V1 ya se aplicó, fallará el checksum de Flyway. También es cierto que las cuentas de prueba se siembran en todos los entornos.",
+     "misma_que": "P28-10"
+    },
+    {
+     "id": "P28-10",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Modificar V1__auth.sql en lugar de crear una V2 viola la convención 'Migraciones Flyway inmutables' de la arquitectura y rompe la validación de checksum donde V1 ya se aplicó.",
+     "misma_que": ""
+    },
+    {
+     "id": "P28-11",
+     "calificacion": "relevante y correcta",
+     "justificacion": "Con el contador de intentos en memoria por instancia, el bloqueo de fuerza bruta se elude cuando hay varias réplicas, y la arquitectura despliega en Cloud Run.",
+     "misma_que": "P28-04"
+    }
+   ]
+  },
+  {
+   "corrida": "c1",
+   "pr_anonimo": "P29",
+   "modelo": "claude-opus-5-5",
+   "proveedor": "claude_cli",
+   "fecha": "2026-09-30T05:10:16.261629+00:00",
+   "entrada_chars": 112904,
+   "duracion_ms": 40556,
+   "calificaciones": [
+    {
+     "id": "P29-01",
+     "calificacion": "falsa",
+     "justificacion": "La arquitectura aprobada define AuthEvent.tipo con LOGIN_OK, LOGIN_FAIL, LOGOUT, RESET_REQUEST y RESET_DONE, y el paquete base ya creó el enum. La observación solo supone, sin evidencia, que la constante falta.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-02",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que SecurityConfig añade una consulta por petición autenticada. Pero es la misma estrategia de consulta a BD que la arquitectura acepta para los jti revocados, y cachear sin un problema de carga medido no aporta.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-03",
+     "calificacion": "ruido",
+     "justificacion": "Con forgot, cada solicitud invalida el token vigente anterior, así que es muy raro que haya dos tokens vigentes a la vez. Además, ambos restablecimientos serían legítimos del mismo titular, por lo que el lost update no tiene impacto práctico.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-04",
+     "calificacion": "relevante y correcta",
+     "justificacion": "En PasswordResetService.reset, notifyChange(user) se ejecuta dentro del método @Transactional, con la fila del token todavía bloqueada por findForUpdateByTokenHash (PESSIMISTIC_WRITE). Una llamada SMTP lenta retiene la conexión y el bloqueo. La sugerencia de enviar el correo en AFTER_COMMIT es correcta y se puede aplicar.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-05",
+     "calificacion": "ruido",
+     "justificacion": "Es cierto que el helper rejected invoca service.reset dos veces. Pero en los casos de rechazo no hay efectos que se acumulen y las aserciones siguen siendo válidas: es una mejora cosmética del test.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-06",
+     "calificacion": "ruido",
+     "justificacion": "La ventana de menos de un segundo es intencional y está documentada y probada. Además, la sugerencia no se puede aplicar: con JWT stateless el servidor no conoce los jti activos del usuario para revocarlos en el momento del reset.",
+     "misma_que": "P29-07"
+    },
+    {
+     "id": "P29-07",
+     "calificacion": "ruido",
+     "justificacion": "Señala el mismo borde de menos de un segundo, que ya está explicado en el javadoc, en el README («Invalidación de sesiones») y en un test dedicado. Su impacto práctico es despreciable.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-08",
+     "calificacion": "falsa",
+     "justificacion": "Esa línea del README describe las pruebas del GlobalExceptionHandler, que existían antes y no cambian. El README sí se actualizó: añade el párrafo de HU-002, que cubre 200, 400, 410 y 422 en PasswordResetControllerTest y documenta las respuestas del endpoint.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-09",
+     "calificacion": "relevante y correcta",
+     "justificacion": "JwtService.parse añade una rama nueva que rechaza los tokens sin iat, y ningún test del diff la ejercita. Añadir el caso en JwtServiceTest es concreto y útil.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-10",
+     "calificacion": "ruido",
+     "justificacion": "Solo afecta a una configuración mal hecha por el operador. Los valores por defecto son coherentes y el paquete no pide validación cruzada entre minLength y maxLength.",
+     "misma_que": ""
+    },
+    {
+     "id": "P29-11",
+     "calificacion": "ruido",
+     "justificacion": "Dice lo mismo que P29-05: la doble invocación en el helper rejected es solo una ineficiencia del test y no tiene impacto funcional.",
+     "misma_que": "P29-05"
+    }
+   ]
+  }
+ ]
+}

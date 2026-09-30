@@ -14,7 +14,7 @@ Anexo C. Prompts de cada skill. Pendiente de integrar: se extraerán del código
 Anexo D. Ejemplo completo de una HU. Pendiente de integrar: se usará la HU de inicio de sesión del proyecto experimental, con su especificación, sus casos de prueba, sus paquetes, los Pull Requests con sus rondas de revisión y el informe de las pruebas de humo.
 
 CAPITULO: E
-Anexo E. Rúbricas de evaluación humana. La rúbrica de relevancia de una observación de revisión es la que aplica el experimento de control del apartado 4.1.7; quien califica recibe también una guía con el procedimiento y las reglas del cegado. Las rúbricas de suficiencia de los casos de prueba, de calidad de un paquete de código y de calidad de la arquitectura y del plan se integrarán cuando se apliquen.
+Anexo E. Rúbricas de evaluación humana. La rúbrica de relevancia de una observación de revisión es la del experimento de control del apartado 4.1.7. La aplicó el modelo de la evaluación automática y es la misma que usará la persona, que recibe además una guía con el procedimiento, las reglas del cegado y un plan de calificación por sesiones. Las rúbricas de suficiencia de los casos de prueba, de calidad de un paquete de código y de calidad de la arquitectura y del plan se integrarán cuando se apliquen.
 
 TABLA: Rúbrica de relevancia de una observación de revisión
 | Calificación | Cuándo se usa |
