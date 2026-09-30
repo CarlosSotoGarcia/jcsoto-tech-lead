@@ -71,7 +71,7 @@ Para autenticar el despliegue sin guardar llaves, la federación de identidad de
 
 Jansen y Bosch propusieron ver la arquitectura de software como el conjunto de decisiones de diseño que la produjeron, y señalaron que, cuando esas decisiones no se registran, su razón se pierde y el costo de cambiar el sistema sube [N:jansen-bosch]. Un registro de decisión de arquitectura (*Architecture Decision Record*, ADR) es la forma ligera de conservarlas: un documento breve con el contexto, la decisión tomada y sus consecuencias, que no se modifica; si la decisión cambia, un registro nuevo sustituye al anterior [N:nygard-adr].
 
-El diseño de Loom se documentó en más de ochenta registros de este tipo, numerados en el orden en que se tomaron. La lista completa está en el Anexo A. Con ellos se puede reconstruir por qué el sistema tiene su forma actual y qué se descartó en el camino, y en esta tesis cumplen además una función de evidencia: cada supuesto que una corrida piloto derribó quedó asociado a un registro fechado.
+El diseño de Loom se documentó en más de noventa registros de este tipo, numerados en el orden en que se tomaron. La lista completa está en el Anexo A. Con ellos se puede reconstruir por qué el sistema tiene su forma actual y qué se descartó en el camino, y en esta tesis cumplen además una función de evidencia: cada supuesto que una corrida piloto derribó quedó asociado a un registro fechado.
 
 ### 2.9 Evaluación experimental en ingeniería de software
 
