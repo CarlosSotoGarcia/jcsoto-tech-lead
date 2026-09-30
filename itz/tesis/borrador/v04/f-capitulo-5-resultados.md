@@ -45,7 +45,7 @@ TABLA: Etapas de la corrida y tiempo de reloj
 | Generar la arquitectura | 5 entidades, 7 decisiones, 7 preguntas abiertas | 2.0 |
 | Descomponer en paquetes | 12 paquetes en 4 grupos; el primer intento (2.5 min) falló | 2.1 |
 | Generar el código de los 12 paquetes | 12 Pull Requests abiertos | 70.7 |
-| Revisar los 12 paquetes | 12 revisiones | 6.5 |
+| Revisar los 12 paquetes | 12 revisiones | 6.6 |
 | Corregir un paquete | 1 corrección (HU-003/PT-02) | 6.2 |
 | Ejecutar el release en Google Cloud | Backend y frontend desplegados (segundo intento) | 8.5 |
 | Pruebas de humo de las 3 HUs | 36 aprobados, 2 fallidos, 6 bloqueados | 13.7 |
@@ -114,7 +114,7 @@ Como referencia, en la segunda etapa del piloto (19 y 20 de septiembre) hubo sei
 
 ### 5.2.8 Costo y uso del modelo
 
-La corrida hizo 128 llamadas al modelo, con 2.15 millones de tokens de entrada y 0.52 millones de salida (además de 14.6 millones de tokens leídos de caché), y un costo nocional de 16.67 USD (Tabla 5.6). La generación de código concentra el 56 % del costo y el 65 % del tiempo de modelo. La revisión es barata (0.20 USD por paquete) frente a la generación (0.77 USD por paquete).
+La corrida hizo 128 llamadas al modelo, con 2.15 millones de tokens de entrada y 0.52 millones de salida (además de 14.6 millones de tokens leídos de caché), y un costo nocional de 16.67 USD (Tabla 5.6). La generación de código concentra el 56 % del costo y el 65 % del tiempo de modelo. La revisión es barata (0.20 USD por paquete) frente a la generación (0.77 USD por paquete). Los tiempos por *skill* de la tabla están redondeados, por lo que su suma difiere en una décima del total.
 
 TABLA: Uso del modelo por skill
 | Skill | Llamadas | Tokens de entrada | Tokens de salida | Tiempo de modelo (min) | Costo (USD) |
@@ -126,7 +126,7 @@ TABLA: Uso del modelo por skill
 | Arquitectura | 1 | 53,454 | 12,504 | 2.0 | 0.34 |
 | Generar casos de prueba | 3 | 46,488 | 10,407 | 1.7 | 0.31 |
 | Leer y especificar HUs | 3 | 49,121 | 6,782 | 1.4 | 0.28 |
-| Total | 128 | 2,146,219 | 516,483 | 81.6 | 16.67 |
+| Total | 128 | 2,146,219 | 516,483 | 81.5 | 16.67 |
 
 
 ### 5.2.9 Segundo proyecto (E3c): ejecución de punta a punta
