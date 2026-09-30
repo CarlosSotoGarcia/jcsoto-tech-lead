@@ -2,16 +2,19 @@
 
     python herramientas/marcar_instrucciones.py "Loom - Tesis vNN.docx"
 
-Se corre después de llenar_tesis.py y limpiar_obsoleto.py. Marca cuatro clases de párrafos:
+Se corre después de llenar_tesis.py y limpiar_obsoleto.py. Marca cinco clases de texto:
 
 1. plantilla: párrafos de la guía institucional fuera de los controles de contenido, desde «AGRADECIMIENTOS» (qué va en cada
    sección, reglas de formato); no marca títulos, leyendas ni campos de índice;
 2. marcador: el texto de guía de los controles que siguen sin llenar («Qué escribir: …» de agradecimientos, resumen, abstract);
 3. nota: notas de trabajo dentro de los controles ya llenos («[POR COMPLETAR: …]», «Pendiente de integrar»);
-4. dato: datos por sustituir en la portada y el oficio (título, nombres, fecha, número de oficio).
+4. dato: datos por sustituir en la portada y el oficio (título, nombres, fecha, número de oficio);
+5. frase: notas de trabajo dentro de un párrafo que sí es texto de la tesis (una cita pendiente, «se integrarán…», «sujetas a
+   validación con el director»). Solo se resalta la frase, no el párrafo.
 
-No borra nada: solo agrega `<w:highlight w:val="yellow"/>` a los runs. Imprime cuántos párrafos marcó de cada clase."""
+No borra nada: solo agrega `<w:highlight w:val="yellow"/>` a los runs. Imprime cuántos párrafos o frases marcó de cada clase."""
 
+import copy
 import re
 import sys
 import zipfile
@@ -25,6 +28,15 @@ _DESPUES_DE_HIGHLIGHT = {W + t for t in ("u", "effect", "bdr", "shd", "fitText",
 _NOTAS = re.compile(r"^\[POR COMPLETAR|Pendiente de integrar")
 _DATOS = re.compile(r"TÍTULO DEFINITIVO|NOMBRE COMPLETO|NOMBRE DEL O LA DIRECTOR|Mes Año|Oficio: XX|Nombre completo del tesista"
                     r"|a \d\d de \w+ del \d{4}")
+
+
+# Notas de trabajo dentro de un párrafo de contenido: se resalta solo lo que casa.
+_FRASES = [
+    re.compile(r"\[(CITA PENDIENTE|POR COMPLETAR|NOTA DE BORRADOR)[^\]]*\]"),
+    re.compile(r"(y )?est[áa]n? sujet[ao]s? a validaci[óo]n con el director[^.]*"),
+    re.compile(r"[^.]*\bse integrar[áa]n?\b[^.]*\."),
+    re.compile(r"[^.]*\b(pendiente de confirmar|por definir con el director|debe confirmarse)\b[^.]*\."),
+]
 
 
 def _texto(p) -> str:
@@ -57,6 +69,53 @@ def _resaltar(p, etree) -> None:
             rpr.append(h)
         else:
             despues.addprevious(h)
+
+
+def _poner_highlight(r, etree) -> None:
+    rpr = r.find(W + "rPr")
+    if rpr is None:
+        rpr = etree.Element(W + "rPr")
+        r.insert(0, rpr)
+    if rpr.find(W + "highlight") is not None:
+        return
+    h = etree.Element(W + "highlight")
+    h.set(W + "val", "yellow")
+    despues = next((c for c in rpr if c.tag in _DESPUES_DE_HIGHLIGHT), None)
+    if despues is None:
+        rpr.append(h)
+    else:
+        despues.addprevious(h)
+
+
+def _resaltar_frases(p, etree) -> list[str]:
+    """Resalta dentro del párrafo lo que casa con `_FRASES`, partiendo los runs donde haga falta. Devuelve lo resaltado."""
+    runs = [r for r in p.iter(W + "r") if len(r.findall(W + "t")) == 1 and all(c.tag in (W + "rPr", W + "t") for c in r)]
+    texto = "".join(r.find(W + "t").text or "" for r in runs)
+    tramos = sorted({(m.start() + len(m.group(0)) - len(m.group(0).lstrip()), m.end()) for pat in _FRASES for m in pat.finditer(texto)})
+    if not tramos:
+        return []
+    inicio = 0
+    for r in runs:
+        t = r.find(W + "t").text or ""
+        a, b = inicio, inicio + len(t)
+        inicio = b
+        cortes = sorted({a, b} | {x for m0, m1 in tramos for x in (m0, m1) if a < x < b})
+        piezas = [(c0, c1) for c0, c1 in zip(cortes, cortes[1:]) if c1 > c0]
+        nuevos = []
+        for c0, c1 in piezas:
+            pieza = copy.deepcopy(r)
+            nodo = pieza.find(W + "t")
+            nodo.text = t[c0 - a:c1 - a]
+            nodo.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+            if any(m0 <= c0 and c1 <= m1 for m0, m1 in tramos):
+                _poner_highlight(pieza, etree)
+            nuevos.append(pieza)
+        if len(nuevos) == 1 and nuevos[0].find(W + "rPr/" + W + "highlight") is None:
+            continue
+        for pieza in nuevos:
+            r.addprevious(pieza)
+        r.getparent().remove(r)
+    return [texto[m0:m1] for m0, m1 in tramos]
 
 
 def main(docx: str) -> None:
@@ -103,6 +162,10 @@ def main(docx: str) -> None:
                     marcar(p, "marcador")
                 elif _NOTAS.search(t):
                     marcar(p, "nota")
+                else:
+                    for frase in _resaltar_frases(p, etree):
+                        marcados["frase"] += 1
+                        ejemplos.setdefault("frase", []).append(frase[:70])
 
     partes["word/document.xml"] = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
     temporal = ruta.with_suffix(".tmp.docx")

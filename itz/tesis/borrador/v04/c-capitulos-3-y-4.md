@@ -44,7 +44,7 @@ La línea más cercana a Loom genera pruebas a partir de los requerimientos. Fer
 Cada línea automatiza bien un tramo. Los agentes de repositorio resuelven *issues* redactados; los sistemas de varios agentes recorren etapas sobre productos nuevos; los revisores industriales comentan Pull Requests con el contexto del cambio y, en el mejor caso, con reglas escritas; los generadores de pruebas trabajan desde el código o, en un caso industrial, desde historias de usuario. Ningún trabajo revisado encadena la historia de usuario con sus casos de prueba, el código, una revisión que conoce esos casos y la arquitectura, y la validación de la aplicación desplegada. Esa es la brecha de diseño que Loom ocupa. Si cerrar la brecha produce mejores resultados es otra pregunta, y la tesis la acota a una parte medible: el efecto del contexto sobre la revisión (H1).
 
 @@ tesis_3_2
-El análisis compara los trabajos anteriores con Loom según los criterios de la tabla 3.1, fijados antes de llenar la tabla para evitar que se elijan a favor de una herramienta. Las celdas de otros trabajos se completan únicamente con lo que sus fuentes afirman; las que no se han comprobado quedan como «por verificar».
+El análisis compara los trabajos anteriores con Loom según los criterios de la tabla 3.1, fijados antes de llenar la tabla para evitar que se elijan a favor de una herramienta. Las celdas de otros trabajos se completan únicamente con lo que sus fuentes afirman; cuando la fuente no dice nada sobre un criterio, la celda lo indica con «No descrito en la fuente».
 
 TABLA: Criterios de comparación
 | Trabajo | Etapas que cubre | Entrada | Proyecto con avance previo | Revisión con la HU y la arquitectura | Validación funcional en un ambiente | Cierre hasta el despliegue |
