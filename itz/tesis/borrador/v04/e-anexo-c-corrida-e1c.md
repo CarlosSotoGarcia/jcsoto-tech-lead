@@ -70,7 +70,7 @@ FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/20-BASE-PT-01-confirmar-acepta
 
 FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/22-BASE-PT-01-fusionado.png | BASE/PT-01 fusionado
 
-La tabla siguiente resume el ciclo de los doce paquetes. La generación de código tardó entre 1.0 y 14.7 minutos por paquete; cada revisión, entre 0.4 y 0.8 minutos.
+La tabla siguiente resume el ciclo de los doce paquetes. Cada proceso de generación tardó entre 1.0 y 14.7 minutos de reloj, contando las compuertas en Docker (el tiempo de modelo, que reporta el capítulo 5, fue de 0.9 a 10.8 minutos); cada revisión, entre 0.4 y 0.8 minutos.
 
 TABLA: Resultado de la revisión de cada paquete de trabajo
 | Paquete | Observaciones | Bloqueantes | Mayores | Menores | PR |
@@ -87,7 +87,7 @@ TABLA: Resultado de la revisión de cada paquete de trabajo
 | HU-003/PT-01 | 2 | 0 | 0 | 2 | #42 |
 | HU-003/PT-02 | 7 | 2 | 3 | 2 | #43 |
 
-Tres situaciones se apartaron del ciclo previsto y quedan registradas como hallazgos de la corrida.
+Tres situaciones se apartaron del ciclo previsto, y quedaron en el registro de hallazgos de la corrida.
 
 Primero, al aceptar BASE/PT-05, que incorpora el flujo de integración continua, Loom rechazó la fusión porque los *checks* de GitHub seguían corriendo (regla ADR-0076); se esperó a que terminaran en verde y se repitió la acción. En los paquetes siguientes el guion espera a los *checks* antes de pulsar el botón.
 
@@ -119,7 +119,7 @@ El primer release construyó las imágenes, pero el backend no arrancó en Cloud
 
 FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/39c-fase4-release-terminado.png | Release terminado y registrado en el Proyecto
 
-Para las pruebas de humo hicieron falta dos ajustes fuera de Loom: se registró la dirección del frontend desplegado como URL del ambiente de desarrollo (desde el formulario de Loom) y se sembraron en la base de datos las tres cuentas de prueba (administrador, usuario final y usuario inactivo), porque el código generado en esta corrida no incluye una pantalla para crear usuarios.
+Para las pruebas de humo hicieron falta dos ajustes. La dirección del frontend desplegado se registró como URL del ambiente de desarrollo en el formulario de Loom. Las tres cuentas de prueba (administrador, usuario final y usuario inactivo) se sembraron directamente en la base de datos, fuera de Loom, porque el código generado en esta corrida no incluye una pantalla para crear usuarios.
 
 FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/40-fase4-url-del-ambiente-de-desarrollo.png | URL del ambiente de desarrollo registrada en el Proyecto
 
@@ -139,7 +139,7 @@ TABLA: Resultado de las pruebas de humo por HU
 | HU-002 | 14 | 10 | 1 | 3 | 5.1 min |
 | HU-003 | 16 | 15 | 1 | 0 | 3.3 min |
 
-Los seis casos bloqueados dependen de datos que la corrida no pudo proporcionar: una cuenta registrada con la contraseña incorrecta, un buzón de correo para verificar el envío, o un escenario que exige forzar un fallo del servicio de correo. Uno de ellos (TC-013 de la HU-002) se bloqueó porque el guion que generó el modelo no era válido (sintaxis inválida en la primera línea). Los dos fallos son consistentes: los casos TC-014 de la HU-002 y TC-016 de la HU-003 esperan una bitácora o auditoría de eventos visible para el administrador, y la aplicación desplegada no la ofrece (al abrir `/auditoria` o `/bitacora` redirige al inicio).
+Los seis casos bloqueados dependen de datos que la corrida no pudo proporcionar: una cuenta registrada con la contraseña incorrecta, un buzón de correo para verificar el envío, o un escenario que exige forzar un fallo del servicio de correo. Uno de ellos (TC-013 de la HU-002) se bloqueó porque el guion que generó el modelo no era válido (sintaxis inválida en la primera línea). Los dos fallos tienen la misma causa: los casos TC-014 de la HU-002 y TC-016 de la HU-003 esperan una bitácora o auditoría de eventos visible para el administrador, y la aplicación desplegada no la ofrece (al abrir `/auditoria` o `/bitacora` redirige al inicio).
 
 FIGURA: evidencia/corrida-E1c-2026-09-21/capturas/43f-HU-002-resultado-del-smoke-testing-completo.png | Resultado de las pruebas de humo de la HU-002: un fallo y tres bloqueos
 
@@ -151,7 +151,7 @@ TABLA: Resumen de la corrida E1c
 | Fase 2: casos de prueba | 44 casos (14, 14 y 16) | 1.8 min |
 | Fase 2: arquitectura | 5 entidades, 7 decisiones, 7 preguntas | 2.0 min |
 | Fase 3: descomposición | 12 paquetes (2 intentos) | 2.1 min (más 2.5 min del intento fallido) |
-| Fase 3: ciclo de 12 paquetes | 12 fusionados; 1 corrección por compuerta y CI en rojo | 0.5 a 14.7 min por paquete |
+| Fase 3: ciclo de 12 paquetes | 12 fusionados; 1 corrección por compuerta y CI en rojo | 1.0 a 14.7 min de generación por paquete |
 | Fase 4: release en Google Cloud | Backend y frontend desplegados (2.º intento) | 8.5 min |
 | Fase 4: pruebas de humo | 36 aprobados, 2 fallidos, 6 bloqueados | 13.7 min en total |
 

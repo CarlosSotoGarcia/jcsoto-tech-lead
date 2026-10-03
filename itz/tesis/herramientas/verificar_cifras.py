@@ -148,6 +148,7 @@ COMPROBACIONES = [
     ("T 5.2", "E1c: revisar los 12 paquetes (min de proceso)", 6.6, round(sum(e1.duracion_procesos("revisar-codigo")), 1), F1 + "procesos.json"),
     ("T 5.2", "E1c: corregir un paquete (min de proceso)", 6.2, round(sum(e1.duracion_procesos("corregir-codigo")), 1), F1 + "procesos.json"),
     ("5.2.3", "E1c: generación por paquete, mínimo y máximo (min de modelo)", [0.9, 10.8], [round(min(GEN_E1.values()), 1), round(max(GEN_E1.values()), 1)], F1 + "metricas.json"),
+    ("Anexo C", "E1c: proceso de generación por paquete, mínimo y máximo (min de reloj)", [1.0, 14.7], [round(min(e1.duracion_procesos("generar-codigo")), 1), round(max(e1.duracion_procesos("generar-codigo")), 1)], F1 + "procesos.json"),
     ("5.2.4", "E1c: duración de una revisión, mínimo y máximo (min)", [0.4, 0.8], [round(min(REV_E1), 1), round(max(REV_E1), 1)], F1 + "revisiones.json"),
     ("5.2.4", "E1c: revisiones que aprobaron y que dejaron observaciones", [2, 10], [sum(r["veredicto"] == "aprobado" for r in e1.primeras), sum(r["veredicto"] == "con_observaciones" for r in e1.primeras)], F1 + "revisiones.json"),
     ("5.2.2", "E1c: reintentos de la descomposición sin paquetes", 3, sum(1 for m in e1.metricas if m.get("tipo") == "reintento"), F1 + "metricas.json (tipo reintento)"),
@@ -256,6 +257,7 @@ def main() -> None:
           "- Tiempos de reloj de las etapas cortas (leer HUs, generar casos, arquitectura, descomponer) y del release de las tablas 5.2 y 5.7: salen de `procesos.json`, pero dependen de qué intento se toma (el que terminó bien); se cotejaron a mano contra la bitácora de cada corrida.",
           "- Conteos de intervenciones de la persona (tablas 5.5 y 5.11) y de lanzamientos de release: provienen de la bitácora (`logs/bitacora.log`) y de los registros de hallazgos, no de una colección.",
           "- Cifras de trabajos ajenos (1.96 %, 12.5 %, 19 %, 55.8 %, reducción de hasta 28.9 %, entre otras): se cotejaron contra el resumen de cada fuente; su estado está en `referencias-candidatas.md`.",
+          "- Costo real de la nube (MXN 69.92, Cloud SQL MXN 69.07) y duración de las 38 construcciones (1.7 a 4.5 min): salen de los informes de facturación de la consola y de `gcloud builds list`; están en `infraestructura-gcp-2026-10-03/README.md`.",
           "- Conteos de palabras y de cuartillas: los imprime `herramientas/llenar_tesis.py` al generar el documento."]
     (RAIZ / "trazabilidad-de-cifras.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print(f"comprobaciones: {len(filas)} | coinciden: {len(filas) - fallas} | no coinciden: {fallas}")

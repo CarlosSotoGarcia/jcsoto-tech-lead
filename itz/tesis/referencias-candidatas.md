@@ -64,3 +64,5 @@ Estado: `verificada` = datos contrastados con la página de la fuente (septiembr
 - folorunsho-survey :: O. Folorunsho and H. Reza, "AI-driven test case generation from natural language requirements: A survey of techniques and research gaps," arXiv:2606.06563, 2026. :: verificada (preprint)
 - kerby-rank-biserial :: D. S. Kerby, "The simple difference formula: An approach to teaching nonparametric correlation," *Comprehensive Psychol.*, vol. 3, art. 11.IT.3.1, 2014, doi: 10.2466/11.IT.3.1. :: verificada
 - cohen-kappa :: J. Cohen, "A coefficient of agreement for nominal scales," *Educ. Psychol. Meas.*, vol. 20, no. 1, pp. 37–46, 1960, doi: 10.1177/001316446002000104. :: verificada
+
+- sedano-waste :: T. Sedano, P. Ralph, and C. Péraire, "Software development waste," in *Proc. Int. Conf. Softw. Eng. (ICSE)*, 2017, pp. 130–140, doi: 10.1109/ICSE.2017.20. :: verificada

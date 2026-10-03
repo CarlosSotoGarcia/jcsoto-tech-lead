@@ -3,7 +3,7 @@
 Generado por `herramientas/verificar_cifras.py`, que recalcula cada cifra desde los archivos versionados en `evidencia/` y la
 compara con el valor que reporta la tesis (v04). No se edita a mano: se corrige el guion o el borrador y se vuelve a generar.
 
-Comprobaciones: 86. Coinciden: 86. No coinciden: 0.
+Comprobaciones: 87. Coinciden: 87. No coinciden: 0.
 
 Las rutas son relativas a `itz/tesis/evidencia/`. «T» es tabla; los números sin «T» son apartados.
 
@@ -39,6 +39,7 @@ Las rutas son relativas a `itz/tesis/evidencia/`. «T» es tabla; los números s
 | T 5.2 | E1c: revisar los 12 paquetes (min de proceso) | 6.6 | 6.6 | `corrida-E1c-2026-09-21/datos/procesos.json` | Coincide |
 | T 5.2 | E1c: corregir un paquete (min de proceso) | 6.2 | 6.2 | `corrida-E1c-2026-09-21/datos/procesos.json` | Coincide |
 | 5.2.3 | E1c: generación por paquete, mínimo y máximo (min de modelo) | [0.9, 10.8] | [0.9, 10.8] | `corrida-E1c-2026-09-21/datos/metricas.json` | Coincide |
+| Anexo C | E1c: proceso de generación por paquete, mínimo y máximo (min de reloj) | [1.0, 14.7] | [1.0, 14.7] | `corrida-E1c-2026-09-21/datos/procesos.json` | Coincide |
 | 5.2.4 | E1c: duración de una revisión, mínimo y máximo (min) | [0.4, 0.8] | [0.4, 0.8] | `corrida-E1c-2026-09-21/datos/revisiones.json` | Coincide |
 | 5.2.4 | E1c: revisiones que aprobaron y que dejaron observaciones | [2, 10] | [2, 10] | `corrida-E1c-2026-09-21/datos/revisiones.json` | Coincide |
 | 5.2.2 | E1c: reintentos de la descomposición sin paquetes | 3 | 3 | `corrida-E1c-2026-09-21/datos/metricas.json (tipo reintento)` | Coincide |
@@ -101,4 +102,5 @@ Las rutas son relativas a `itz/tesis/evidencia/`. «T» es tabla; los números s
 - Tiempos de reloj de las etapas cortas (leer HUs, generar casos, arquitectura, descomponer) y del release de las tablas 5.2 y 5.7: salen de `procesos.json`, pero dependen de qué intento se toma (el que terminó bien); se cotejaron a mano contra la bitácora de cada corrida.
 - Conteos de intervenciones de la persona (tablas 5.5 y 5.11) y de lanzamientos de release: provienen de la bitácora (`logs/bitacora.log`) y de los registros de hallazgos, no de una colección.
 - Cifras de trabajos ajenos (1.96 %, 12.5 %, 19 %, 55.8 %, reducción de hasta 28.9 %, entre otras): se cotejaron contra el resumen de cada fuente; su estado está en `referencias-candidatas.md`.
+- Costo real de la nube (MXN 69.92, Cloud SQL MXN 69.07) y duración de las 38 construcciones (1.7 a 4.5 min): salen de los informes de facturación de la consola y de `gcloud builds list`; están en `infraestructura-gcp-2026-10-03/README.md`.
 - Conteos de palabras y de cuartillas: los imprime `herramientas/llenar_tesis.py` al generar el documento.

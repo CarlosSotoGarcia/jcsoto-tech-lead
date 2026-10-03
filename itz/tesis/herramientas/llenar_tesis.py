@@ -75,6 +75,20 @@ def parrafo(texto: str) -> str:
     return f"<w:p>{corridas(texto)}</w:p>"
 
 
+def vineta(texto: str) -> str:
+    """Elemento de lista con viñeta y sangría francesa."""
+    return ('<w:p><w:pPr><w:spacing w:after="60"/><w:ind w:left="567" w:hanging="283"/></w:pPr>'
+            f'<w:r><w:t xml:space="preserve">• </w:t></w:r>{corridas(texto)}</w:p>')
+
+
+def linea_de_codigo(texto: str) -> str:
+    """Una línea de un bloque literal (p. ej. un prompt): Consolas de 8 puntos, sin sangría ni espacio entre líneas."""
+    rpr = '<w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas" w:cs="Consolas"/><w:sz w:val="16"/></w:rPr>'
+    return ('<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:ind w:left="284" w:firstLine="0"/>'
+            '<w:jc w:val="left"/></w:pPr>'
+            f'<w:r>{rpr}<w:t xml:space="preserve">{escape(texto) if texto else ""}</w:t></w:r></w:p>')
+
+
 def subtitulo(texto: str) -> str:
     """Subtítulo de nivel 3; admite `*cursiva*` como un párrafo (p. ej. «Las *skills* del pipeline»)."""
     runs = []
@@ -216,6 +230,16 @@ def bloques_a_xml(tag: str, texto: str) -> str:
         elif linea.startswith("FIGURA:"):
             ruta, _, titulo = linea[len("FIGURA:"):].partition("|")
             salida.append(figura(capitulo, ruta.strip(), titulo.strip()))
+            i += 1
+        elif linea.startswith("CODIGO:"):
+            # Bloque literal hasta FIN-CODIGO: cada línea en un párrafo de fuente monoespaciada, sin interpretar *…* ni `…`.
+            i += 1
+            while i < len(lineas) and lineas[i].rstrip() != "FIN-CODIGO":
+                salida.append(linea_de_codigo(lineas[i].rstrip("\n")))
+                i += 1
+            i += 1
+        elif linea.startswith("- "):
+            salida.append(vineta(linea[2:].strip()))
             i += 1
         elif linea.startswith("TABLA-ADR:"):
             salida.append(leyenda(capitulo, "Registros de decisión de arquitectura"))

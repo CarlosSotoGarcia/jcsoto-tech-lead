@@ -24,7 +24,7 @@ FIGURA: evidencia/corrida-E3c-2026-09-26/capturas/25k-HU-001-avanzar-hu-terminad
 
 ### D.3 Despliegue
 
-Las variables de entorno del backend se ajustaron a las que exige el código generado, y el release quedó bien en su tercer lanzamiento manual, después de corregir en Loom la ubicación de los servicios (ADR-0086) y la entrega de la cadena de conexión y de la URL de la API (ADR-0087).
+Las variables de entorno del backend se ajustaron a las que exige el código generado, y el release terminó bien en su tercer lanzamiento manual, después de corregir en Loom la ubicación de los servicios (ADR-0086) y la entrega de la cadena de conexión y de la URL de la API (ADR-0087).
 
 FIGURA: evidencia/corrida-E3c-2026-09-26/capturas/40b-fase4-variables-ajustadas-al-codigo-generado.png | Variables de entorno ajustadas a las que exige el backend generado
 
