@@ -30,6 +30,7 @@ Versión de trabajo: **v04**, desde `borrador/v04/`. Por decisión del autor (20
 | 23 | 6.3 y Loom | La *skill* 2 no valida en código que cada criterio tenga un caso, y la referencia al criterio es su texto completo (frágil si el criterio se reescribe). Decidir si se agrega la validación y un identificador estable de criterio, y mencionarlo en 6.3 si queda como trabajo futuro. | v04, 2026-09-29 | — |
 | 24 | 5.2.14 | Si se hace la calificación por una persona (punto 1): reportar el acuerdo con la evaluación automática (porcentaje y kappa de Cohen) y el tiempo de calificación anotado en la bitácora del plan de sesiones. | ADR-0090 | Punto 1 |
 | 25 | 1.6 | Quitar la frase «están sujetas a validación con el director de la tesis» cuando el director valide las hipótesis; es una nota de trabajo dentro del texto. | Revisión de v04, 2026-09-29 | Director |
+| 26 | 5.2.13, 5.2.5, 5.2.11, 1.5 | Llevar a la tesis los datos de la infraestructura (`evidencia/infraestructura-gcp-2026-10-03/`): costo real de la nube de los dos pilotos (MXN 69.92, casi todo Cloud SQL), duración de las construcciones (1.7 a 4.5 min), configuración desplegada y la falta de respaldos automáticos como limitación. Decidir si se reporta el costo facturado de la API de Gemini (MXN 93.53), confirmando antes con el desglose diario que corresponde a la corrida E2. | Inventario de GCP, 2026-10-03 | — |
 
 ## Hechos
 
