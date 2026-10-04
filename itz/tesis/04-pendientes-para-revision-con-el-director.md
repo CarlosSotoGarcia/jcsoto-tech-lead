@@ -47,7 +47,7 @@ la sección de agradecimientos, los datos de portada y oficio por completar, y u
 | 7 | Instrucciones de la plantilla institucional (en amarillo). | Quitarlas en la versión de entrega o conservarlas. | Quitarlas. |
 | 8 | Rúbricas definidas y no aplicadas (suficiencia de los casos de prueba, calidad de un paquete, calidad de la arquitectura; Anexo E). | Aplicarlas antes de entregar, o dejarlas como trabajo futuro. | Dejarlas como trabajo futuro, salvo la de suficiencia si se quiere cerrar PI1. |
 | 9 | Acceso al código de Loom. El repositorio de la plataforma es privado y los anexos lo citan. | Hacerlo público o dar acceso a quienes revisen la tesis. | Dar acceso a quienes revisen. |
-| 10 | Cómputo de cuartillas: si el mínimo de 80 incluye anexos y referencias. | — | Se cumple en los dos casos; basta confirmarlo. |
+| 10 | Cómputo de cuartillas: si el mínimo de 80 incluye anexos y referencias. | Confirmar el criterio. | Se cumple en los dos casos; basta confirmarlo. |
 
 ## 5. Datos que debe completar el autor
 
