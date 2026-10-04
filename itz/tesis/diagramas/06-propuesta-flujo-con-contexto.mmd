@@ -1,0 +1,27 @@
+%%{init: {"flowchart": {"wrappingWidth": 400}}}%%
+flowchart TB
+    HU(["HU con criterios de aceptación"])
+    subgraph R1["Requerimientos y diseño"]
+        direction LR
+        E["Especificación<br/>criterios explícitos<br/>e inferidos"] --> C["Casos de prueba<br/>con su criterio<br/>de origen"] --> AR["Arquitectura<br/>aprobada"] --> PK["Paquetes<br/>de trabajo"]
+    end
+    subgraph R2["Desarrollo e implementación"]
+        direction LR
+        COD["Código con<br/>pruebas (TDD)"] --> G{{"Compuertas:<br/>compila, lint,<br/>pruebas"}} --> REV["Revisión<br/>con contexto"] --> F{{"Fusión con<br/>CI en verde"}} --> DEP["Despliegue<br/>en la nube"] --> SM["Pruebas de humo<br/>contra el ambiente"]
+        SM -->|"casos fallidos:<br/>paquetes de corrección"| COD
+    end
+    CTX[("Contexto común de la HU:<br/>especificación, casos de prueba<br/>y arquitectura aprobada")]
+    PER(["Persona: aprueba la arquitectura<br/>y confirma los supuestos de la HU"])
+    OK(["HU completa y validada"])
+
+    HU --> R1
+    R1 -->|"un paquete a la vez,<br/>en orden de dependencias"| R2
+    CTX -.->|"lo reciben el código, la revisión<br/>y las pruebas de humo"| R2
+    PER -.-> R1
+    PER -.-> R2
+    R2 -->|"todos los casos pasan"| OK
+
+    classDef compuerta fill:#e8f4ea,stroke:#2e7d32,color:#1b4d20
+    classDef persona fill:#fff4d6,stroke:#b8860b,color:#5a4500
+    class G,F compuerta
+    class PER persona

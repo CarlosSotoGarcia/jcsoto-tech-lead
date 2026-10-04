@@ -1,0 +1,16 @@
+flowchart TB
+    PRJ["Proyecto<br/>fuente de HUs, repositorios, ambiente,<br/>modo de arranque, proveedor de IA,<br/>cuentas de prueba por rol y despliegue"]
+    PRJ --> HU["Elemento del backlog:<br/>HU (con criterios) o Actividad"]
+    HU --> ESP["Especificación<br/>criterios explícitos e inferidos<br/>y supuestos"]
+    ESP --> CP["Casos de prueba<br/>Given/When/Then, rol<br/>y criterio de origen"]
+    PRJ --> ARQ["Arquitectura aprobada<br/>(cita las HUs que motivan<br/>cada módulo)"]
+    CP --> PT["Paquete de trabajo<br/>un solo repositorio, entregables,<br/>casos que cubre y dependencias"]
+    ARQ --> PT
+    PT --> PR["Rama y Pull Request<br/>rondas de revisión y corrección"]
+    CP --> SM["Pruebas de humo<br/>resultado y evidencia por caso"]
+    RC[("Repositorio de control (git, uno por Proyecto):<br/>un commit por cada artefacto creado o cambiado")]
+    ESP -.-> RC
+    CP -.-> RC
+    ARQ -.-> RC
+    PT -.-> RC
+    SM -.-> RC

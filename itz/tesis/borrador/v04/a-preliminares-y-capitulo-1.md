@@ -58,7 +58,15 @@ Ese encadenamiento manual deja tres carencias. La primera es la falta de continu
 
 A esto se suma un problema de verificación. Un modelo de lenguaje produce código plausible sin garantía de que compile, pase sus pruebas o arranque en un ambiente real. Al endurecer las pruebas con que se evalúa, la tasa de aciertos de los modelos evaluados se reduce hasta en 28.9 % [N:evalplus]. Una revisión, humana o automática, que solo lee el código no sustituye esa comprobación. El flujo completo necesita compuertas de ejecución y una validación funcional que cierre el ciclo.
 
+La figura 1.1 resume esa situación: la persona lleva la intención de negocio de una herramienta a la siguiente, y cada carencia aparece en un punto distinto del encadenamiento.
+
+FIGURA: diagramas/05-problema-encadenamiento-manual.png | Encadenamiento manual de herramientas de IA aisladas y sus carencias
+
 La pregunta que guía este trabajo es la siguiente: ¿cómo orquestar con IA el ciclo de desarrollo de una funcionalidad a partir de una historia de usuario, entregando como contexto la intención de negocio, de modo que el resultado sea verificable, revisable y generalizable a distintos proyectos y proveedores de IA?
+
+La figura 1.2 muestra, frente a la anterior, el flujo que propone este trabajo. Todas las etapas parten de la misma HU; el código, la revisión y las pruebas de humo reciben su especificación, sus casos de prueba y la arquitectura aprobada; el código pasa por compuertas de ejecución antes de revisarse y solo se fusiona con la integración continua en verde; y las pruebas de humo contra el ambiente desplegado cierran el ciclo. El capítulo 4 describe cada etapa.
+
+FIGURA: diagramas/06-propuesta-flujo-con-contexto.png | Flujo propuesto: contexto común, compuertas de ejecución y validación funcional
 
 @@ tesis_1_2
 Las preguntas de investigación se derivan del problema y de las hipótesis del apartado 1.6. Las cuatro primeras son confirmatorias y la última es exploratoria.

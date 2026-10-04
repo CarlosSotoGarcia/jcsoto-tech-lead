@@ -1,0 +1,7 @@
+%%{init: {"flowchart": {"wrappingWidth": 420}}}%%
+flowchart TB
+    CH(["Cambia la especificación o los casos de prueba de una HU ya usados"]) --> V["Versión nueva: las anteriores se conservan<br/>y guardar sin cambios no crea versión"]
+    V --> DIF["Diferencia por criterio de origen:<br/>casos agregados, eliminados o distintos"]
+    DIF --> DES["Se marca desactualizado lo que dependía de ellos:<br/>casos, arquitectura, código y guion de pruebas"]
+    DES -->|"la HU ya tiene código"| PC["Paquetes de cambio: ajustan el código con pruebas nuevas o adaptadas;<br/>un criterio eliminado indica qué código y qué pruebas quitar"]
+    PC --> CIC(["Ciclo normal de código, revisión y fusión"])

@@ -536,7 +536,9 @@ Generada igual que v02, desde `borrador/v03/`. Cambios respecto a v02:
 cp "Loom - Tesis.docx" "Loom - Tesis v04.docx"
 python herramientas/llenar_tesis.py "Loom - Tesis v04.docx" borrador/v04
 python herramientas/limpiar_obsoleto.py "Loom - Tesis v04.docx"
+python herramientas/quitar_instrucciones.py "Loom - Tesis v04.docx"   # desde 2026-10-03
 python herramientas/marcar_instrucciones.py "Loom - Tesis v04.docx"
+python herramientas/actualizar_indices.py "Loom - Tesis v04.docx"     # desde 2026-10-03; requiere Word
 ```
 
 - **Capítulo 2:** reescrito con estilo humano y ampliado de 1,296 a ≈ 3,100 palabras, con 15 referencias nuevas verificadas (46 citadas en total).

@@ -1,0 +1,18 @@
+%%{init: {"flowchart": {"wrappingWidth": 420}}}%%
+flowchart TB
+    ARQ(["Arquitectura aprobada"]) --> P1["Paso 1, planeación"]
+    P1 --> BASE
+    P1 --> ORD["Orden de las HUs: prioridad de la fuente,<br/>salvo que una dependencia real obligue a adelantar otra"]
+    subgraph BASE["Esqueleto, grupo BASE (de tres a seis paquetes)"]
+        direction LR
+        B1["Primer paquete: entorno de<br/>desarrollo en contenedores<br/>(docker-compose.yml y README)"] --> BM["Paquetes<br/>intermedios"] --> BN["Último paquete:<br/>aplicación desplegable"]
+    end
+    BASE -->|"ninguna HU arranca hasta que<br/>se fusiona el último paquete"| P2
+    ORD --> P2["Paso 2: cada HU se parte en uno a cuatro paquetes de una sola capa"]
+    subgraph EJ["Ejemplo de una HU"]
+        direction LR
+        HB["Paquete de backend"] -->|"lo consume"| HF["Paquete de frontend"]
+    end
+    P2 --> EJ
+    REG["Reglas: todo caso de prueba de la HU queda en algún paquete;<br/>cada paquete toca un solo repositorio; una HU con casos pendientes<br/>y sin paquetes se reintenta hasta tres veces"]
+    EJ -.- REG

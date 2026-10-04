@@ -1,0 +1,27 @@
+flowchart TB
+    HU(["HU con criterios de aceptación"])
+    P(["Persona que desarrolla:<br/>lleva la intención de una<br/>herramienta a la siguiente"])
+    subgraph HOY["Herramientas de IA aisladas, una por etapa"]
+        direction LR
+        A1["Asistente que<br/>sugiere pruebas"]
+        A2["Asistente que<br/>genera código"]
+        A3["Asistente que<br/>revisa el cambio"]
+        A4["Despliegue y<br/>verificación manual"]
+    end
+    HU --> P
+    P -->|"copia la HU"| A1
+    P -->|"copia la HU"| A2
+    P -->|"entrega el diff"| A3
+    P -->|"publica y prueba"| A4
+
+    C1["1. Sin continuidad: nada garantiza que pruebas,<br/>diseño, código y revisión partan de la misma HU"]
+    C2["2. Supone un proyecto nuevo:<br/>ignora el código y la arquitectura existentes"]
+    C3["3. Revisión sin contexto: ve el diff,<br/>no la HU, sus criterios ni la arquitectura"]
+    C4["4. Sin verificación por ejecución: código plausible<br/>que puede no compilar, no pasar sus pruebas o no arrancar"]
+    A1 -.- C1
+    A2 -.- C2
+    A3 -.- C3
+    A4 -.- C4
+
+    classDef carencia fill:#fde8e8,stroke:#c0392b,color:#5a1a14
+    class C1,C2,C3,C4 carencia

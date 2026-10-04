@@ -58,7 +58,7 @@ La descomposición falló en su primer intento: tras tres reintentos internos, e
 
 ### 5.2.3 Generación de código y compuertas
 
-Los 12 paquetes produjeron un Pull Request. La generación tardó entre 0.9 y 10.8 minutos por paquete en tiempo de modelo (Figura 5.1), con una relación clara entre duración y costo, y los paquetes de las HUs cuestan más que los del esqueleto.
+Los 12 paquetes produjeron un Pull Request. La generación tardó entre 0.9 y 10.8 minutos por paquete en tiempo de modelo (Gráfica 5.1), con una relación clara entre duración y costo, y los paquetes de las HUs cuestan más que los del esqueleto.
 
 FIGURA: graficas/g5-1-duracion-y-costo-por-paquete.png | Duración y costo de la generación de código por paquete
 
@@ -74,7 +74,7 @@ La compuerta señaló de antemano que HU-003/PT-02 tenía un problema, y el CI d
 
 ### 5.2.4 Revisión
 
-Las 12 revisiones dejaron 66 observaciones: 2 bloqueantes, 24 mayores y 40 menores, con un promedio de 5.5 por paquete. Dos revisiones aprobaron el paquete (con dos observaciones menores cada una) y diez lo dejaron con observaciones. Cada revisión tardó entre 0.4 y 0.8 minutos y costó 0.20 USD en promedio. Por fuente (Figura 5.2), predominan las de buenas prácticas (23) y las de criterios de aceptación (15), seguidas por pruebas (14), seguridad (9) y arquitectura (5). De las 9 de seguridad, 7 son mayores, y de las 15 de criterios de aceptación, 10 son mayores.
+Las 12 revisiones dejaron 66 observaciones: 2 bloqueantes, 24 mayores y 40 menores, con un promedio de 5.5 por paquete. Dos revisiones aprobaron el paquete (con dos observaciones menores cada una) y diez lo dejaron con observaciones. Cada revisión tardó entre 0.4 y 0.8 minutos y costó 0.20 USD en promedio. Por fuente (Gráfica 5.2), predominan las de buenas prácticas (23) y las de criterios de aceptación (15), seguidas por pruebas (14), seguridad (9) y arquitectura (5). De las 9 de seguridad, 7 son mayores, y de las 15 de criterios de aceptación, 10 son mayores.
 
 FIGURA: graficas/g5-2-observaciones-por-fuente-y-severidad.png | Observaciones de las 12 revisiones por fuente y severidad
 
@@ -216,7 +216,7 @@ TABLA: Intervenciones fuera de la interfaz de Loom en E3c
 
 ### 5.2.13 Comparación de las dos corridas
 
-La Tabla 5.12 pone lado a lado las cifras principales. Sirve para ver la forma de cada corrida, no para comparar calidad, porque el modelo y la versión de la plataforma cambiaron entre ellas.
+La Tabla 5.12 pone lado a lado las cifras principales, y la Gráfica 5.3 compara el resultado de sus pruebas de humo. Sirve para ver la forma de cada corrida, no para comparar calidad, porque el modelo y la versión de la plataforma cambiaron entre ellas.
 
 TABLA: Cifras principales de E1c y E3c
 | Cifra | E1c (P1, inventarios) | E3c (P2, agenda de taller) |
@@ -260,7 +260,7 @@ La Tabla 5.13 describe qué produjo cada condición; por sí sola no dice cuál 
 
 La primera ejecución de la condición con contexto se descartó. Tomó el paquete de trabajo de la base de datos, donde Loom lo regenera después de cada revisión con las observaciones de la última ronda y el estado final del paquete, así que el revisor recibió en su entrada observaciones que el piloto ya había hecho. El problema se detectó al armar la hoja de calificación, antes de calificar, y la condición se repitió con el paquete reconstruido desde el historial del repositorio de control. La ejecución descartada había producido 123 observaciones, 38 más que la válida; no se analizó cuántas de ellas repetían las del piloto. Queda registrada, con su costo de 12.90 USD nocionales, y fuera del análisis. Un experimento retrospectivo sobre un sistema que actualiza sus artefactos tiene que reconstruir las entradas desde el historial de versiones.
 
-La calificación la hizo un modelo distinto del revisor, `claude-opus-5-5`, a ciegas y con la rúbrica de cuatro categorías (apartado 4.1.7). Calificó las 177 observaciones en 29 llamadas, una por Pull Request, en 11.7 minutos. La Tabla 5.14 y la Figura 5.4 muestran el resultado.
+La calificación la hizo un modelo distinto del revisor, `claude-opus-5-5`, a ciegas y con la rúbrica de cuatro categorías (apartado 4.1.7). Calificó las 177 observaciones en 29 llamadas, una por Pull Request, en 11.7 minutos. La Tabla 5.14 y la Gráfica 5.4 muestran el resultado.
 
 TABLA: Calificación automática de las observaciones por condición
 | Calificación | Con contexto | Solo el diff |

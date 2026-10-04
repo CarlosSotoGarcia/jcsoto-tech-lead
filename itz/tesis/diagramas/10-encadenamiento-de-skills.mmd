@@ -1,0 +1,33 @@
+%%{init: {"flowchart": {"wrappingWidth": 400}}}%%
+flowchart TB
+    subgraph A["Requerimientos y diseño"]
+        direction LR
+        F[("Fuente de HUs<br/>Jira o Markdown")] --> S1["1. Descubrimiento<br/>y especificación"]
+        S1 -->|"especificación"| S2["2. Casos<br/>de prueba"]
+        S2 -->|"Proyecto<br/>con código"| S3["3. Diagnóstico<br/>de avance"]
+        S3 -->|"casos<br/>pendientes"| S4["4. Arquitectura"]
+        S2 -->|"Proyecto nuevo"| S4
+        S4 --> AP{{"Una persona<br/>aprueba la<br/>arquitectura"}}
+        AP --> S5["5. Descomposición<br/>en paquetes"]
+    end
+    subgraph B["Desarrollo, por cada paquete elegible"]
+        direction LR
+        S6["6. Generación de<br/>código y Pull Request"] --> S7["7. Revisión<br/>con contexto"]
+        S7 -->|"observaciones"| COR["Corrección sobre<br/>la misma rama"]
+        COR --> S7
+        SUP{{"Una persona<br/>confirma los<br/>supuestos de la HU"}} -.-> S7
+        S7 --> FU{{"Fusión con<br/>CI en verde"}}
+    end
+    subgraph C["Implementación, cuando la HU queda completa"]
+        direction LR
+        S10["10. Release<br/>en Google Cloud"] -->|"ambiente<br/>desplegado"| S8["8. Pruebas<br/>de humo"]
+        S8 -->|"casos fallidos"| S9["9. Correcciones"]
+        S9 -->|"paquetes de<br/>corrección"| RET(["Vuelven a Desarrollo<br/>como paquetes nuevos"])
+    end
+    A -->|"paquetes de trabajo"| B
+    B -->|"último paquete de la HU fusionado"| C
+
+    classDef persona fill:#fff4d6,stroke:#b8860b,color:#5a4500
+    classDef compuerta fill:#e8f4ea,stroke:#2e7d32,color:#1b4d20
+    class AP,SUP persona
+    class FU compuerta

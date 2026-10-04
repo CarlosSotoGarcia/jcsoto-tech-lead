@@ -1,0 +1,26 @@
+%%{init: {"flowchart": {"wrappingWidth": 420}}}%%
+flowchart TB
+    PR(["29 Pull Requests de E1c y E3c, tal como llegaron a su primera revisión"])
+    CTX["Contexto como estaba en la primera revisión,<br/>reconstruido del historial del repositorio de control:<br/>paquete, arquitectura, especificación, casos de prueba,<br/>título y descripción del Pull Request"]
+    DIFF["Diff del primer commit,<br/>reconstruido desde GitHub"]
+    PR --> CTX
+    PR --> DIFF
+    subgraph COND["Mismo modelo (claude-sonnet-5) y mismo esquema de salida"]
+        direction LR
+        RC["Condición con contexto:<br/>contexto y diff"]
+        RS["Condición de control:<br/>solo el diff"]
+    end
+    CTX --> RC
+    DIFF --> RC
+    DIFF --> RS
+    RC --> MEZ["Observaciones de las dos condiciones mezcladas por Pull Request,<br/>en orden aleatorio, con identificador anónimo<br/>y sin condición, fuente ni severidad"]
+    RS --> MEZ
+    MEZ --> SELLO[("Clave y datos crudos fuera del repositorio,<br/>con huella SHA-256 publicada")]
+    MEZ --> CAL["Calificación automática a ciegas con la rúbrica<br/>(claude-opus-5-5, una llamada por Pull Request)"]
+    MEZ -.-> HUM["Calificación por una persona<br/>(pendiente)"]
+    CAL --> AN["Análisis pareado por Pull Request:<br/>Wilcoxon, prueba de signos<br/>y correlación rango-biserial"]
+    HUM -.-> KAP["Acuerdo entre las dos calificaciones:<br/>kappa de Cohen (pendiente)"]
+    CAL -.-> KAP
+
+    classDef pendiente fill:#f2f2f2,stroke:#999999,stroke-dasharray:4 3,color:#666666
+    class HUM,KAP pendiente

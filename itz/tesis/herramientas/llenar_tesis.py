@@ -11,7 +11,8 @@ Cada archivo `.md` de la carpeta puede traer varias secciones, cada una encabeza
     TABLA: Título de la tabla        (sin título: `TABLA:`; se numera Tabla <capítulo>.<n> con campo SEQ)
     | Encabezado 1 | Encabezado 2 |
     | dato | dato |
-    FIGURA: ruta.png | Título        (imagen PNG relativa a itz/tesis, con leyenda Figura <capítulo>.<n>)
+    FIGURA: ruta.png | Título        (imagen PNG relativa a itz/tesis, con leyenda Figura <capítulo>.<n>; si la ruta empieza
+                                      con `graficas/`, la leyenda es Gráfica <capítulo>.<n> y va al índice de gráficas)
     TABLA-ADR:                       (tabla de registros de decisión, generada de itz/arquitectura/decisiones/)
 
 Solo se tocan los controles cuyo tag aparece en los borradores; lo demás del documento queda igual. La guía original nunca se edita.
@@ -26,7 +27,7 @@ from xml.sax.saxutils import escape
 RAIZ = Path(__file__).resolve().parents[1]
 DECISIONES = RAIZ.parent / "arquitectura" / "decisiones"
 _contadores: dict[str, int] = {}
-_figuras: dict[str, int] = {}
+_figuras: dict[tuple[str, str], int] = {}
 _medios: list[tuple[str, bytes]] = []  # (nombre en word/media, contenido)
 BASE_FIGURAS = RAIZ
 
@@ -150,12 +151,13 @@ def figura(capitulo: str, ruta: str, titulo: str) -> str:
     n_medio = len(_medios) + 1
     _medios.append((f"loom_fig{n_medio}.png", datos))
     rid = f"rIdLoomFig{n_medio}"
-    _figuras[capitulo] = _figuras.get(capitulo, 0) + 1
-    n = _figuras[capitulo]
+    rotulo = "Gráfica" if ruta.startswith("graficas/") else "Figura"  # cada rótulo alimenta su propio índice
+    _figuras[(rotulo, capitulo)] = _figuras.get((rotulo, capitulo), 0) + 1
+    n = _figuras[(rotulo, capitulo)]
     imagen = (
         '<w:p><w:pPr><w:keepNext/><w:spacing w:before="120" w:after="60"/><w:ind w:firstLine="0"/><w:jc w:val="center"/></w:pPr><w:r><w:drawing>'
         f'<wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="{ancho}" cy="{alto}"/>'
-        f'<wp:docPr id="{9000 + n_medio}" name="Figura {capitulo}.{n}" descr="{escape(titulo, {chr(34): "&quot;"})}"/>'
+        f'<wp:docPr id="{9000 + n_medio}" name="{rotulo} {capitulo}.{n}" descr="{escape(titulo, {chr(34): "&quot;"})}"/>'
         '<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
         '<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">'
         f'<pic:nvPicPr><pic:cNvPr id="{9000 + n_medio}" name="loom_fig{n_medio}.png"/><pic:cNvPicPr/></pic:nvPicPr>'
@@ -165,9 +167,9 @@ def figura(capitulo: str, ruta: str, titulo: str) -> str:
     )
     pie = (
         '<w:p><w:pPr><w:pStyle w:val="Caption"/><w:ind w:firstLine="0"/><w:jc w:val="center"/><w:rPr><w:b w:val="0"/></w:rPr></w:pPr>'
-        f'<w:r><w:t>Figura {capitulo}.</w:t></w:r>'
+        f'<w:r><w:t>{rotulo} {capitulo}.</w:t></w:r>'
         '<w:r><w:fldChar w:fldCharType="begin"/></w:r>'
-        '<w:r><w:instrText xml:space="preserve"> SEQ Figura \\s 1</w:instrText></w:r>'
+        f'<w:r><w:instrText xml:space="preserve"> SEQ {rotulo} \\s 1</w:instrText></w:r>'
         '<w:r><w:fldChar w:fldCharType="separate"/></w:r>'
         f'<w:r><w:rPr><w:noProof/></w:rPr><w:t>{n}</w:t></w:r>'
         '<w:r><w:fldChar w:fldCharType="end"/></w:r>'

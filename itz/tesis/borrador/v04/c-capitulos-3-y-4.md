@@ -67,7 +67,9 @@ El trabajo sigue un enfoque de ciencia del diseño, cuyo propósito es ampliar l
 
 La investigación avanza en dos etapas. En la primera, el sistema se ejecuta sobre un proyecto experimental para depurarlo: cada error se registra y corrige, y las intervenciones manuales se anotan. En la segunda, con la plataforma congelada en una versión identificada, el ejercicio se repite desde cero y produce los resultados que se reportan. Distinguir ambas etapas evita atribuir al sistema lo que en realidad corrigió una persona durante la depuración.
 
-Cada corrida de un Proyecto es, además, un estudio de caso en el sentido de Runeson y Höst: observa el flujo en su contexto real, con un backlog, repositorios y un ambiente en la nube de verdad [N:runeson-host]. Las dos etapas describen el plan. En la práctica, la plataforma no llegó congelada a las corridas del capítulo 5: cada una encontró supuestos que no se sostenían y se corrigieron durante la corrida, y el modelo del CLI no estaba fijado. El apartado 5.1.4 detalla qué implica eso para la comparación entre corridas.
+Cada corrida de un Proyecto es, además, un estudio de caso en el sentido de Runeson y Höst: observa el flujo en su contexto real, con un backlog, repositorios y un ambiente en la nube de verdad [N:runeson-host]. Las dos etapas describen el plan. En la práctica, la plataforma no llegó congelada a las corridas del capítulo 5: cada una encontró supuestos que no se sostenían y se corrigieron durante la corrida, y el modelo del CLI no estaba fijado. El apartado 5.1.4 detalla qué implica eso para la comparación entre corridas. La figura 4.1 resume las dos etapas y la evidencia que produce cada una.
+
+FIGURA: diagramas/07-etapas-de-la-investigacion.png | Etapas de la investigación y evidencia que produce cada una
 
 ### 4.1.2 Proyectos, proveedores y escenarios
 
@@ -125,7 +127,9 @@ Tres controles sostienen la comparación. El *diff* es el mismo en las dos condi
 
 El diseño prevé que la relevancia la juzgue una persona y no el sistema. Quien califica usa la rúbrica del apartado 4.1.5 (relevante y correcta, relevante pero mal sustentada, ruido o falsa) y ve las observaciones de las dos condiciones mezcladas dentro de cada Pull Request, en orden aleatorio, con un identificador anónimo y sin la fuente ni la severidad que les asignó el modelo, porque ambas delatan la condición. La clave que asocia cada identificador con su condición y los datos crudos se guardaron fuera del repositorio público, con su huella SHA-256 publicada antes de calificar, para poder comprobar después que no cambiaron. Ese paquete ciego está preparado, con un plan de calificación en seis sesiones.
 
-En esta etapa, la calificación que se reporta la hizo un modelo y no una persona (ADR-0090 y ADR-0091). Se usó `claude-opus-5-5`, distinto del que hizo las revisiones, con una llamada nueva por Pull Request. Recibió lo mismo que recibiría la persona (el paquete reconstruido, la arquitectura aprobada, la especificación y los casos de prueba de la HU, y el *diff*) y las observaciones con su identificador anónimo, sin la condición, la fuente ni la severidad. La calificación por una persona queda como trabajo futuro (apartado 6.3); con ella se podrá medir cuánto coinciden las dos.
+En esta etapa, la calificación que se reporta la hizo un modelo y no una persona (ADR-0090 y ADR-0091). Se usó `claude-opus-5-5`, distinto del que hizo las revisiones, con una llamada nueva por Pull Request. Recibió lo mismo que recibiría la persona (el paquete reconstruido, la arquitectura aprobada, la especificación y los casos de prueba de la HU, y el *diff*) y las observaciones con su identificador anónimo, sin la condición, la fuente ni la severidad. La calificación por una persona queda como trabajo futuro (apartado 6.3); con ella se podrá medir cuánto coinciden las dos. La figura 4.2 resume el diseño del experimento.
+
+FIGURA: diagramas/08-experimento-c.png | Diseño del experimento C: dos condiciones de revisión sobre los mismos Pull Requests
 
 El análisis reporta la proporción de observaciones relevantes por condición y compara, Pull Request por Pull Request, el número de observaciones relevantes con la prueba de rangos con signo de Wilcoxon [N:wilcoxon] y con la prueba de signos, siguiendo las pautas de Arcuri y Briand para comparar resultados de ejecuciones aleatorias [N:arcuri-briand]. Las observaciones bloqueantes y mayores que resulten válidas se cuentan aparte.
 
@@ -158,13 +162,13 @@ Loom es un sistema de *skills* de IA con un orquestador que las despacha y una p
 
 El flujo recorre cuatro fases. Requerimientos lee las HUs de la fuente configurada y las especifica. Diseño genera los casos de prueba y la arquitectura, y la persona aprueba la arquitectura. Desarrollo descompone las HUs en paquetes de trabajo, genera el código, lo revisa, lo corrige y lo fusiona. Implementación despliega la aplicación en la nube y valida las HUs con pruebas de humo. Cada fase puede ejecutarse por separado, por lo que un Proyecto puede entrar al flujo en el punto que corresponda a su estado.
 
-La figura 4.1 resume el recorrido de una HU por las cuatro fases.
+La figura 4.3 resume el recorrido de una HU por las cuatro fases.
 
 FIGURA: diagramas/02-flujo-por-fases.png | Flujo de una HU por las cuatro fases de Loom
 
 ### 4.2.2 Arquitectura de la plataforma
 
-La plataforma se implementó como monorepo con un servidor en Python (con validación de datos mediante Pydantic), MongoDB como base de datos documental y una interfaz web en Angular con la biblioteca PrimeNG (ADR-0031). Los procesos largos informan su progreso con eventos enviados por el servidor (SSE), que la interfaz muestra en un panel de actividad. El acceso de las personas requiere inicio de sesión. La figura 4.2 muestra los componentes y sus conexiones con los servicios externos.
+La plataforma se implementó como monorepo con un servidor en Python (con validación de datos mediante Pydantic), MongoDB como base de datos documental y una interfaz web en Angular con la biblioteca PrimeNG (ADR-0031). Los procesos largos informan su progreso con eventos enviados por el servidor (SSE), que la interfaz muestra en un panel de actividad. El acceso de las personas requiere inicio de sesión. La figura 4.4 muestra los componentes y sus conexiones con los servicios externos.
 
 FIGURA: diagramas/01-arquitectura-de-la-plataforma.png | Arquitectura de la plataforma y servicios externos
 
@@ -176,7 +180,9 @@ La cuenta de desarrollo se configura por Proyecto con un usuario de GitHub y un 
 
 ### 4.2.3 Modelo de datos y artefactos por HU
 
-La unidad central es el Proyecto, que reúne la fuente de HUs, los repositorios, el ambiente de desarrollo, el modo de arranque, el proveedor de IA, las cuentas de prueba por rol y la configuración de despliegue. Cada HU produce artefactos en su carpeta del repositorio de control: la especificación con sus criterios explícitos e inferidos y sus supuestos, los casos de prueba con el criterio del que derivan, el plan, las tareas, un archivo por paquete de trabajo y la evidencia de las pruebas de humo. Cada versión de la especificación y de los casos de prueba se guarda y se compara con la anterior.
+La unidad central es el Proyecto, que reúne la fuente de HUs, los repositorios, el ambiente de desarrollo, el modo de arranque, el proveedor de IA, las cuentas de prueba por rol y la configuración de despliegue. Cada HU produce artefactos en su carpeta del repositorio de control: la especificación con sus criterios explícitos e inferidos y sus supuestos, los casos de prueba con el criterio del que derivan, el plan, las tareas, un archivo por paquete de trabajo y la evidencia de las pruebas de humo. Cada versión de la especificación y de los casos de prueba se guarda y se compara con la anterior. La figura 4.5 muestra cómo se encadenan esos artefactos, de la HU al Pull Request y a las pruebas de humo.
+
+FIGURA: diagramas/09-artefactos-por-hu.png | Artefactos de una HU y su trazabilidad en el repositorio de control
 
 El repositorio de control es un repositorio git local, uno por Proyecto y sin remoto (ADR-0035). Cada vez que una *skill* crea o cambia un artefacto, Loom hace un commit con un mensaje que dice qué pasó (por ejemplo, `HU-003/PT-01: en revisión, PR abierto` o `HU-003/PT-01: revisión 1 — aprobado`). La bitácora que muestra la plataforma es ese mismo historial, leído en cada consulta (ADR-0037), y gracias a él se puede recuperar cualquier artefacto tal como estaba en un momento dado. El experimento C lo aprovechó para reconstruir cada paquete como lo vio su primera revisión (apartado 5.2.14).
 
@@ -184,7 +190,7 @@ Un elemento del backlog se clasifica como HU, con criterios de aceptación y pip
 
 ### 4.2.4 Las *skills* del pipeline
 
-La tabla 4.4 resume las *skills*. Las que analizan devuelven salida estructurada; las que escriben código operan como agentes sobre una copia de trabajo del repositorio.
+La tabla 4.4 resume las *skills*. Las que analizan devuelven salida estructurada; las que escriben código operan como agentes sobre una copia de trabajo del repositorio. La figura 4.6, después de la tabla, muestra cómo se pasan sus salidas de una a otra y dónde decide una persona.
 
 TABLA: *Skills* de Loom
 | N.º | *Skill* | Entrada | Salida |
@@ -199,6 +205,8 @@ TABLA: *Skills* de Loom
 | 9 | Generación de correcciones | Casos fallidos de una corrida | Paquetes de corrección |
 | 10 | Generación de release | Configuración de despliegue | Script de despliegue y su disparador |
 
+FIGURA: diagramas/10-encadenamiento-de-skills.png | Encadenamiento de las *skills* y puntos de decisión humana
+
 La *skill* 1 lee la fuente y hace el trabajo de un analista de requerimientos. Con Jira consulta el sprint por su API REST en el orden del tablero, que se guarda como la prioridad de negocio de cada HU (ADR-0048), y aplana la descripción, que Jira entrega en un formato de documento anidado, a texto plano. El modelo recibe cada elemento con un esquema de salida fijo y lo devuelve interpretado: la narrativa de la HU, los criterios explícitos que ya traía, los criterios que infiere y que un analista daría por incluidos (validaciones, permisos, manejo de errores), los supuestos que no puede resolver y la clasificación como HU o como Actividad (ADR-0033). Los criterios inferidos quedan separados de los explícitos, para que una persona vea qué agregó el modelo. La fuente Markdown funciona igual con archivos que se suben a la plataforma (ADR-0058). Cada HU guarda además una huella SHA-256 de su título y su descripción; una revisión que no usa el modelo compara esa huella con la fuente para saber qué HUs son nuevas o cambiaron, y solo esas se regeneran (ADR-0040).
 
 En un Proyecto nuevo, al terminar de leer las HUs, la misma *skill* hace un análisis más, ahora con el papel de arquitecto. Decide si el sistema amerita microservicios (por omisión, un monolito), elige lenguaje, *framework* y herramientas de un catálogo cerrado, la autenticación y la estructura de repositorios, y justifica cada elección con las HUs que la motivan y las alternativas que descartó (ADR-0039). La propuesta precarga la configuración de la fase de Diseño, y la persona la confirma o la cambia.
@@ -209,7 +217,9 @@ La *skill* 3 existe para los Proyectos que ya tienen código. Antes de diseñar,
 
 La *skill* 4 diseña la arquitectura. En su variante fundacional, la única implementada, escribe un documento Markdown por repositorio con secciones fijas: resumen, backend (capas, módulos, estructura de carpetas, persistencia, seguridad), modelo de datos, frontend, despliegue, decisiones con sus alternativas descartadas, y supuestos y preguntas abiertas (ADR-0044). El stack configurado es una restricción; si no hay stack, la *skill* se detiene. Cada módulo, entidad y pantalla cita las HUs que lo motivan, y la sección de despliegue declara por cada servicio su Dockerfile de producción, su puerto y sus variables de entorno (ADR-0063). La arquitectura queda pendiente hasta que una persona la aprueba; si se regenera, la aprobación se pierde.
 
-La *skill* 5 convierte la arquitectura aprobada en paquetes de trabajo, en dos pasos. El primero, de planeación, define el esqueleto (grupo `BASE`, entre tres y seis paquetes) y el orden de las HUs. Su primer paquete deja el entorno de desarrollo en contenedores, con su `docker-compose.yml` y un README que explica cómo levantarlo y probarlo (ADR-0050); el último deja la aplicación desplegable, y ninguna HU arranca hasta que esté fusionado (ADR-0063). El orden de las HUs respeta la prioridad de la fuente salvo que una dependencia real obligue a adelantar otra, y si el modelo propone dependencias circulares se rompen solo las que forman el ciclo (ADR-0045 y ADR-0048). El segundo paso parte cada HU en uno a cuatro paquetes de una sola capa, con sus entregables, los casos de prueba que cubre y sus dependencias; el backend va antes que el frontend que lo consume, y cada paquete toca un solo repositorio. Todo caso de prueba de la HU tiene que quedar en algún paquete. Una respuesta sin paquetes para una HU con casos pendientes no se acepta: se repite hasta tres veces y, si sigue vacía, la descomposición se detiene con un error que nombra la HU (ADR-0062).
+La *skill* 5 convierte la arquitectura aprobada en paquetes de trabajo, en dos pasos. El primero, de planeación, define el esqueleto (grupo `BASE`, entre tres y seis paquetes) y el orden de las HUs. Su primer paquete deja el entorno de desarrollo en contenedores, con su `docker-compose.yml` y un README que explica cómo levantarlo y probarlo (ADR-0050); el último deja la aplicación desplegable, y ninguna HU arranca hasta que esté fusionado (ADR-0063). El orden de las HUs respeta la prioridad de la fuente salvo que una dependencia real obligue a adelantar otra, y si el modelo propone dependencias circulares se rompen solo las que forman el ciclo (ADR-0045 y ADR-0048). El segundo paso parte cada HU en uno a cuatro paquetes de una sola capa, con sus entregables, los casos de prueba que cubre y sus dependencias; el backend va antes que el frontend que lo consume, y cada paquete toca un solo repositorio. Todo caso de prueba de la HU tiene que quedar en algún paquete. Una respuesta sin paquetes para una HU con casos pendientes no se acepta: se repite hasta tres veces y, si sigue vacía, la descomposición se detiene con un error que nombra la HU (ADR-0062). La figura 4.7 resume los dos pasos.
+
+FIGURA: diagramas/11-descomposicion-en-paquetes.png | Descomposición de la arquitectura aprobada en paquetes de trabajo
 
 La *skill* 9 genera correcciones a partir de las pruebas de humo. Toma las HUs con casos fallidos y todos sus paquetes fusionados; los casos bloqueados no cuentan, porque no son un defecto del código. Con la especificación, la arquitectura, los casos fallidos y los archivos que tocó cada paquete, el modelo agrupa los fallos por causa probable y devuelve un paquete de corrección por causa, cada uno con una prueba que falle sin la corrección. Cada caso fallido queda en exactamente una corrección. El paquete de origen se atribuye solo si el modelo devuelve uno que existe, y nunca se inventa. Los casos que pasaban en la corrida anterior se marcan como regresión. Tras tres rondas de corrección sin éxito, la *skill* se niega a seguir y pide que una persona revise (ADR-0061).
 
@@ -225,7 +235,7 @@ La compuerta responde a un hallazgo de las primeras corridas: el agente no ejecu
 
 ### 4.2.6 Revisión, corrección y fusión
 
-La revisión recibe el Pull Request y el contexto completo (especificación, casos de prueba, arquitectura aprobada y el resumen de la implementación). Cada observación lleva una fuente (criterio de aceptación, arquitectura, buenas prácticas, pruebas o seguridad), una severidad (bloqueante, mayor o menor) y, cuando aplica, archivo y línea, y se publica como comentario en el Pull Request. La figura 4.3 resume el ciclo completo de un paquete, desde la generación hasta la fusión.
+La revisión recibe el Pull Request y el contexto completo (especificación, casos de prueba, arquitectura aprobada y el resumen de la implementación). Cada observación lleva una fuente (criterio de aceptación, arquitectura, buenas prácticas, pruebas o seguridad), una severidad (bloqueante, mayor o menor) y, cuando aplica, archivo y línea, y se publica como comentario en el Pull Request. La figura 4.8 resume el ciclo completo de un paquete, desde la generación hasta la fusión.
 
 FIGURA: diagramas/03-ciclo-de-un-paquete.png | Ciclo de un paquete de trabajo: generación, compuertas, revisión, corrección y fusión
 
@@ -251,13 +261,15 @@ El despliegue automático usa GitHub Actions con federación de identidad: el pr
 
 ### 4.2.9 Validación funcional
 
-Las pruebas de humo recorren todos los casos de prueba de una HU cuando toda su ronda de paquetes está fusionada. Un modelo lee el código de la aplicación y los casos y escribe un guion de Playwright con las acciones y las verificaciones de cada caso; el guion se ejecuta contra el ambiente desplegado con la cuenta de prueba del rol que el caso requiere. Como la *skill* de casos de prueba escribe el rol en texto libre, a veces con varios actores («invitado (sin sesión); admin para verificar»), la cuenta se elige por el actor principal y un caso de invitado no la necesita (ADR-0088). Cuando un caso falla, un agente de navegador lo reproduce para distinguir un guion mal escrito de un fallo real de la aplicación. El resultado de cada caso es aprobado, fallido o bloqueado, y el informe con capturas queda como evidencia. Los casos fallidos pueden convertirse en paquetes de corrección que reingresan al ciclo de código y revisión. La figura 4.4 muestra la secuencia del despliegue y de la validación.
+Las pruebas de humo recorren todos los casos de prueba de una HU cuando toda su ronda de paquetes está fusionada. Un modelo lee el código de la aplicación y los casos y escribe un guion de Playwright con las acciones y las verificaciones de cada caso; el guion se ejecuta contra el ambiente desplegado con la cuenta de prueba del rol que el caso requiere. Como la *skill* de casos de prueba escribe el rol en texto libre, a veces con varios actores («invitado (sin sesión); admin para verificar»), la cuenta se elige por el actor principal y un caso de invitado no la necesita (ADR-0088). Cuando un caso falla, un agente de navegador lo reproduce para distinguir un guion mal escrito de un fallo real de la aplicación. El resultado de cada caso es aprobado, fallido o bloqueado, y el informe con capturas queda como evidencia. Los casos fallidos pueden convertirse en paquetes de corrección que reingresan al ciclo de código y revisión. La figura 4.9 muestra la secuencia del despliegue y de la validación.
 
 FIGURA: diagramas/04-liberacion-y-validacion.png | Secuencia de liberación en la nube y validación funcional
 
 ### 4.2.10 Cambios en los requisitos
 
-Cuando la especificación o los casos de prueba de una HU cambian después de haberse usado, Loom guarda una versión nueva sin borrar las anteriores, marca como desactualizado lo que dependía de ellas (casos, arquitectura, código, guion de pruebas) y, para las HUs cuyo código ya existe, genera paquetes de cambio que llevan el código a los casos nuevos.
+Cuando la especificación o los casos de prueba de una HU cambian después de haberse usado, Loom guarda una versión nueva sin borrar las anteriores, marca como desactualizado lo que dependía de ellas (casos, arquitectura, código, guion de pruebas) y, para las HUs cuyo código ya existe, genera paquetes de cambio que llevan el código a los casos nuevos. La figura 4.10 resume ese recorrido.
+
+FIGURA: diagramas/12-cambios-en-los-requisitos.png | Manejo de un cambio en los requisitos de una HU
 
 Las versiones se identifican por el elemento de la fuente (la clave del *issue* en Jira) y no por el identificador interno de la HU, de modo que la numeración continúa aunque el Proyecto se reinicie; guardar sin cambios no crea una versión (ADR-0065). Cada paquete guarda la versión de los casos de prueba con la que se planeó, y cada corrida de pruebas de humo, la versión con la que se hizo. Con eso, la plataforma calcula sin guardar estado propio qué está desactualizado: casos de una especificación que cambió, código planeado con casos anteriores, pruebas de humo hechas con casos anteriores. Como los identificadores de los casos se reasignan al regenerarlos, la diferencia entre versiones se calcula por criterio de aceptación de origen (casos agregados, eliminados o distintos), y una prueba de humo de regresión con un guion viejo se niega en lugar de omitir los casos nuevos (ADR-0066).
 

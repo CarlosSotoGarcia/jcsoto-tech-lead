@@ -46,7 +46,12 @@ that `itz/tesis/` reports on. Its design decisions and skill specs live in `itz/
     `03-pendientes-de-la-tesis.md` (running register of pending thesis changes — add a row whenever a change leaves
     something to update, and mark it done with the version that resolved it). Thesis versions (`Loom - Tesis vNN.docx`)
     are generated from `borrador/vNN/` with `herramientas/llenar_tesis.py` + `herramientas/limpiar_obsoleto.py` +
-    `herramientas/marcar_instrucciones.py` (yellow-highlights template instructions and placeholders), never edited by hand.
+    `herramientas/quitar_instrucciones.py` (drops the template instructions the author removed, listed in
+    `instrucciones_quitadas.json`) + `herramientas/marcar_instrucciones.py` (yellow-highlights template instructions and
+    placeholders) + `herramientas/actualizar_indices.py` (Word fills the table of contents and the figure/graph/table
+    indexes), never edited by hand: if the author edits the .docx, carry the change back into `borrador/` or a script.
+    Diagrams are Mermaid sources in `itz/tesis/diagramas/*.mmd`, rendered to PNG at scale 3 with
+    `npx @mermaid-js/mermaid-cli@11 -p puppeteer.json -i X.mmd -o X.png -s 3 -b white`.
     Only cite references verified against their source and listed in `referencias-candidatas.md`.
 
 ## Working with this repository

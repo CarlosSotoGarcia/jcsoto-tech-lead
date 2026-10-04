@@ -1,0 +1,27 @@
+flowchart LR
+    subgraph ET1["Etapa 1: construcción y depuración"]
+        direction TB
+        B["Construir o ajustar Loom"] --> R["Corrida sobre un<br/>proyecto experimental"]
+        R --> H["Registro de hallazgos<br/>e intervenciones"]
+        H --> ADR["Corrección con un registro<br/>de decisión (ADR)"]
+        ADR --> B
+    end
+    subgraph ET2["Etapa 2: evaluación"]
+        direction TB
+        V["Versión registrada:<br/>commit de Loom y modelos"]
+        V --> P1["Piloto E1c<br/>P1, control de inventarios"]
+        V --> P3["Piloto E3c<br/>P2, agenda de taller"]
+        P1 --> EV1["Cobertura de criterios<br/>(PI1)"]
+        P3 --> EV1
+        P1 --> EV2["Experimento C:<br/>revisión con y sin contexto<br/>(PI2, H1)"]
+        P3 --> EV2
+        P1 --> EV3["Generalización y defectos<br/>al ejecutar (PI3, H2, PI5)"]
+        P3 --> EV3
+        M["Matriz E1 a E4 por API<br/>(PI4, H3): no ejecutada"]
+    end
+    ET1 --> V
+    P1 -. "supuestos que no se sostuvieron<br/>(ADR-0071 a 0088)" .-> ADR
+    P3 -.-> ADR
+
+    classDef pendiente fill:#f2f2f2,stroke:#999999,stroke-dasharray:4 3,color:#666666
+    class M pendiente
