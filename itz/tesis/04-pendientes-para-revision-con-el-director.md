@@ -1,13 +1,16 @@
 # Tesis «Loom»: estado y decisiones pendientes para revisión con el director
 
 Maestría en Sistemas Computacionales, Instituto Tecnológico de Zacatecas. Documento que acompaña a `Loom - Tesis v04.docx`.
-Corte: 3 de octubre de 2026.
+Corte: 3 de octubre de 2026. Versión 2 de este documento; el historial de cambios está al final.
 
 ## 1. Estado del documento
 
 - Están escritos todos los apartados de la guía institucional: introducción, capítulos 1 a 6, resumen, *abstract*, referencias y
   nueve anexos (A a I).
-- Extensión: unas 81 cuartillas sin anexos ni referencias y unas 162 con ellos. La guía pide 80 como mínimo.
+- Extensión, según la paginación de Word: 86 páginas del cuerpo (de la introducción al capítulo 6), 7 de referencias y 102 de
+  anexos, 221 en total. La guía pide 80 cuartillas como mínimo.
+- Figuras: 12 diagramas del problema, del diseño de la investigación y de la solución, además de las capturas de las corridas;
+  los índices de figuras (56), gráficas (4) y tablas (34) están completos.
 - Referencias: 61, en formato IEEE, verificadas una por una contra su fuente.
 - Cifras: 87 de los capítulos 4 a 6 se recalculan desde la evidencia versionada y todas coinciden (`trazabilidad-de-cifras.md`).
 - Evidencia: datos de las corridas, experimentos y guiones en el repositorio público de la tesis
@@ -31,8 +34,9 @@ Corte: 3 de octubre de 2026.
 
 ## 3. Cómo leer el documento
 
-Lo resaltado en amarillo no es texto de la tesis: son las instrucciones de la plantilla institucional (85 párrafos), la guía de
-la sección de agradecimientos, los datos de portada y oficio por completar, y una nota de trabajo en el apartado 1.6.
+Lo resaltado en amarillo no es texto de la tesis: son las páginas de la guía institucional antes del índice, la guía de la
+sección de agradecimientos, los datos de portada y oficio por completar, y una nota de trabajo en el apartado 1.6. Las
+instrucciones que la plantilla traía dentro de cada sección ya se retiraron.
 
 ## 4. Decisiones que se necesitan del director
 
@@ -44,10 +48,10 @@ la sección de agradecimientos, los datos de portada y oficio por completar, y u
 | 4 | Preguntas de investigación e hipótesis (apartados 1.2 y 1.6). El 1.6 todavía dice que están sujetas a su validación. | Validarlas para quitar esa nota, o pedir cambios. | Validar. |
 | 5 | Declaración del uso de IA en la redacción de la tesis. | Nota metodológica en 4.1, apartado en la introducción o anexo. | Una nota breve en 4.1. |
 | 6 | Voz de la tesis. Hoy usa sobre todo construcciones impersonales y «la persona investigadora». | Mantenerla, o pasar a primera persona del plural. | Mantenerla. |
-| 7 | Instrucciones de la plantilla institucional (en amarillo). | Quitarlas en la versión de entrega o conservarlas. | Quitarlas. |
+| 7 | Páginas de la guía institucional que siguen en amarillo antes del índice (concepto de tesis, competencias, formato del informe). Las instrucciones dentro de cada sección ya se retiraron. | Quitarlas en la versión de entrega o conservarlas. | Quitarlas. |
 | 8 | Rúbricas definidas y no aplicadas (suficiencia de los casos de prueba, calidad de un paquete, calidad de la arquitectura; Anexo E). | Aplicarlas antes de entregar, o dejarlas como trabajo futuro. | Dejarlas como trabajo futuro, salvo la de suficiencia si se quiere cerrar PI1. |
 | 9 | Acceso al código de Loom. El repositorio de la plataforma es privado y los anexos lo citan. | Hacerlo público o dar acceso a quienes revisen la tesis. | Dar acceso a quienes revisen. |
-| 10 | Cómputo de cuartillas: si el mínimo de 80 incluye anexos y referencias. | Confirmar el criterio. | Se cumple en los dos casos; basta confirmarlo. |
+| 10 | Cómputo de cuartillas: si el mínimo de 80 incluye anexos y referencias. | Confirmar el criterio. | Se cumple en los dos casos (86 páginas sin ellos); basta confirmarlo. |
 
 ## 5. Datos que debe completar el autor
 
@@ -64,3 +68,10 @@ Si el director lo considera necesario:
 - Que la plataforma valide en código que cada criterio de aceptación tenga al menos un caso de prueba.
 
 El detalle de cada punto, con su origen, está en `itz/tesis/03-pendientes-de-la-tesis.md`.
+
+## 7. Historial de cambios
+
+| Versión | Fecha | Cambios |
+|---|---|---|
+| 1 | 3 de octubre de 2026 | Primera versión: estado del documento, resultados principales y diez decisiones. |
+| 2 | 3 de octubre de 2026 | La extensión se mide con la paginación de Word (la versión 1 la estimaba por palabras: 81 cuartillas sin anexos ni referencias y 162 con ellos). Se retiraron de la tesis las instrucciones de cada sección, por lo que el amarillo ya no incluye los 85 párrafos de instrucciones que mencionaba la versión 1, y la decisión 7 queda acotada a las páginas de la guía. Se agregan los índices de figuras, gráficas y tablas y ocho diagramas nuevos. |
