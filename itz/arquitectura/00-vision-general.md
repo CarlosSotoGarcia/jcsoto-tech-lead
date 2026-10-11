@@ -242,6 +242,8 @@
 - [ADR-0089](decisiones/0089-experimento-c-revision-con-contexto-frente-a-solo-el-diff.md) — experimento C (H1): las mismas 29 primeras revisiones de los pilotos se repiten con contexto y solo con el diff, mismo modelo, y una persona califica a ciegas las observaciones.
 - [ADR-0090](decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md) — segunda opinión automática de las observaciones del experimento C con la rúbrica de la persona, a ciegas y sellada hasta que termine la calificación humana; sirve para medir el acuerdo, no para decidir H1.
 - [ADR-0091](decisiones/0091-experimento-c-se-reporta-la-evaluacion-automatica.md) — para la corrida c1 del experimento C, la tesis reporta la evaluación automática (nombrada como tal); H1 no se declara aceptada ni rechazada y la calificación por una persona pasa a trabajo futuro.
+- [ADR-0092](decisiones/0092-validacion-se-cierra-con-los-pilotos-y-el-experimento-c.md) — la validación de la tesis se cierra con los pilotos E1c y E3c y el experimento C; la matriz E1 a E4 con API y la comparación entre proveedores (PI4) pasan a trabajo futuro.
+- [ADR-0093](decisiones/0093-la-tesis-se-guia-por-preguntas-de-investigacion.md) — la tesis se guía por las preguntas de investigación PI1 a PI5 y quita las hipótesis y las variables; el experimento C responde PI2.
 
 ## Problema
 

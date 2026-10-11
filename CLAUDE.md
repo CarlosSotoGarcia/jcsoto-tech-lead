@@ -52,6 +52,10 @@ that `itz/tesis/` reports on. Its design decisions and skill specs live in `itz/
     indexes), never edited by hand: if the author edits the .docx, carry the change back into `borrador/` or a script.
     Diagrams are Mermaid sources in `itz/tesis/diagramas/*.mmd`, rendered to PNG at scale 3 with
     `npx @mermaid-js/mermaid-cli@11 -p puppeteer.json -i X.mmd -o X.png -s 3 -b white`.
+    `herramientas/secciones_quitadas.json` lists whole sections and page ranges that `quitar_instrucciones.py` removes
+    (1.6/1.7 hypotheses and variables per ADR-0093; the institutional guide pages). `#### ` in a draft makes a level-4
+    heading (used for one subsection per paper in the state of the art). The current working version is recorded at the top
+    of `03-pendientes-de-la-tesis.md`; director feedback lives in `05-observaciones-revision-*.md`.
     Only cite references verified against their source and listed in `referencias-candidatas.md`.
 
 ## Working with this repository

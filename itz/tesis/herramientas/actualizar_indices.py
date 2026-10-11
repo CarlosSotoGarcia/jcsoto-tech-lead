@@ -1,7 +1,7 @@
 """Llena el índice general y los índices de figuras, gráficas y tablas de una versión generada de la tesis.
 
 Uso (al final, después de `marcar_instrucciones.py`; requiere Microsoft Word en Windows):
-    python herramientas/actualizar_indices.py "Loom - Tesis v04.docx"
+    python herramientas/actualizar_indices.py "Loom - Tesis v05.docx"
 
 La plantilla arma el «Índice de Figuras» con el rótulo «Ilustración», pero `llenar_tesis.py` rotula las figuras como «Figura»;
 primero se corrige ese campo en el XML. Después Word, invisible y sin control de cambios, actualiza solo los campos de índice

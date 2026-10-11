@@ -8,6 +8,7 @@ Cada archivo `.md` de la carpeta puede traer varias secciones, cada una encabeza
 
     Párrafo normal, con *cursiva* y `código` en línea.
     ### Subtítulo con su número escrito a mano
+    #### Subtítulo de cuarto nivel (p. ej. un artículo dentro de un subtema del estado del arte)
     TABLA: Título de la tabla        (sin título: `TABLA:`; se numera Tabla <capítulo>.<n> con campo SEQ)
     | Encabezado 1 | Encabezado 2 |
     | dato | dato |
@@ -90,8 +91,8 @@ def linea_de_codigo(texto: str) -> str:
             f'<w:r>{rpr}<w:t xml:space="preserve">{escape(texto) if texto else ""}</w:t></w:r></w:p>')
 
 
-def subtitulo(texto: str) -> str:
-    """Subtítulo de nivel 3; admite `*cursiva*` como un párrafo (p. ej. «Las *skills* del pipeline»)."""
+def subtitulo(texto: str, nivel: int = 3) -> str:
+    """Subtítulo de nivel 3 (`### `) o 4 (`#### `); admite `*cursiva*` como un párrafo (p. ej. «Las *skills* del pipeline»)."""
     runs = []
     for trozo in re.split(r"(\*[^*\n]+\*)", texto):
         if not trozo:
@@ -103,7 +104,7 @@ def subtitulo(texto: str) -> str:
             f'<w:t xml:space="preserve">{escape(contenido)}</w:t></w:r>'
         )
     return (
-        '<w:p><w:pPr><w:pStyle w:val="Heading3"/><w:ind w:firstLine="0"/><w:jc w:val="left"/>'
+        f'<w:p><w:pPr><w:pStyle w:val="Heading{nivel}"/><w:ind w:firstLine="0"/><w:jc w:val="left"/>'
         '<w:rPr><w:color w:val="000000"/><w:sz w:val="24"/></w:rPr></w:pPr>' + "".join(runs) + "</w:p>"
     )
 
@@ -222,6 +223,9 @@ def bloques_a_xml(tag: str, texto: str) -> str:
     while i < len(lineas):
         linea = lineas[i].rstrip()
         if not linea:
+            i += 1
+        elif linea.startswith("#### "):
+            salida.append(subtitulo(linea[5:].strip(), nivel=4))
             i += 1
         elif linea.startswith("### "):
             salida.append(subtitulo(linea[4:].strip()))

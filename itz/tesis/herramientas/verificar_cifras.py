@@ -249,7 +249,7 @@ def main() -> None:
             print("NO COINCIDE:", donde, "|", cifra, "| tesis:", tesis, "| recalculado:", calculado)
     md = ["# Trazabilidad de cifras", "",
           "Generado por `herramientas/verificar_cifras.py`, que recalcula cada cifra desde los archivos versionados en `evidencia/` y la",
-          "compara con el valor que reporta la tesis (v04). No se edita a mano: se corrige el guion o el borrador y se vuelve a generar.", "",
+          "compara con el valor que reporta la tesis (v05). No se edita a mano: se corrige el guion o el borrador y se vuelve a generar.", "",
           f"Comprobaciones: {len(filas)}. Coinciden: {len(filas) - fallas}. No coinciden: {fallas}.", "",
           "Las rutas son relativas a `itz/tesis/evidencia/`. «T» es tabla; los números sin «T» son apartados.", "",
           "| Dónde aparece | Cifra | Valor en la tesis | Valor recalculado | Fuente | Estado |", "|---|---|---|---|---|---|", *filas, "",

@@ -92,7 +92,7 @@ contra spec, arquitectura y buenas prácticas, publica las observaciones en GitH
   skill, dentro del ciclo código→revisión→corrección, es el mecanismo de calidad documentado incluso
   sin revisión manual.
 - [ADR-0089](../decisiones/0089-experimento-c-revision-con-contexto-frente-a-solo-el-diff.md) — el
-  experimento C repite la revisión de esta skill solo con el diff para medir cuánto aporta el contexto (H1).
+  experimento C repite la revisión de esta skill solo con el diff para medir cuánto aporta el contexto (PI2 de la tesis).
 - [ADR-0090](../decisiones/0090-experimento-c-segunda-opinion-automatica-sellada.md) — segunda opinión
   automática de las observaciones del experimento C, sellada hasta la calificación humana.
 - [ADR-0091](../decisiones/0091-experimento-c-se-reporta-la-evaluacion-automatica.md) — la tesis reporta

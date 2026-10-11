@@ -557,3 +557,23 @@ python herramientas/actualizar_indices.py "Loom - Tesis v04.docx"     # desde 20
 - **2026-09-30, sobre v04:** pasada de estilo y de exactitud a la introducción y a los capítulos 1, 5 y 6 (el capítulo 6 cita ya las dos corridas y el experimento de control).
 - **2026-09-30, sobre v04:** referencias cotejadas (ninguna queda en `revisar`) y trazabilidad de cifras (`trazabilidad-de-cifras.md`, 86 cifras recalculadas desde la evidencia, todas coinciden).
 - **2026-10-03, sobre v04:** anexos A a I completos (B, F y G generados con `herramientas/anexos_generados.py`), cita pendiente de 1.4 resuelta, datos de la infraestructura de GCP en 5.2.13 y 1.5. Todo lo que no depende del autor o del director está hecho. Para la revisión con el director: `04-pendientes-para-revision-con-el-director.md` y su versión `Pendientes para revisión con el director.docx`.
+
+### 14.8 `Loom - Tesis v05.docx` (2026-10-11)
+
+```
+cp "Loom - Tesis.docx" "Loom - Tesis v05.docx"
+python herramientas/llenar_tesis.py "Loom - Tesis v05.docx" borrador/v05
+python herramientas/limpiar_obsoleto.py "Loom - Tesis v05.docx"
+python herramientas/quitar_instrucciones.py "Loom - Tesis v05.docx"   # instrucciones, apartados 1.6 y 1.7, páginas de la guía
+python herramientas/marcar_instrucciones.py "Loom - Tesis v05.docx"
+python herramientas/actualizar_indices.py "Loom - Tesis v05.docx"     # requiere Word
+python herramientas/verificar_cifras.py                               # 87 de 87
+```
+
+Atiende la revisión 1 de la directora sobre la v04 ([05-observaciones-revision-1-directora.md](05-observaciones-revision-1-directora.md)):
+sin hipótesis ni variables (ADR-0093), alcance cerrado con los pilotos y el experimento C (ADR-0092), términos definidos en su
+primera mención, Loom fuera de la justificación y del marco teórico, SDD como apartado propio (2.5), estado del arte por subtema
+y por artículo, citas IEEE con el número junto al autor y páginas de la guía institucional fuera. La v05 es la versión de trabajo
+desde el 2026-10-11; la v04 queda como la que revisó la directora. 221 páginas en Word: 90 de cuerpo (introducción a capítulo 6),
+7 de referencias y 102 de anexos.
+

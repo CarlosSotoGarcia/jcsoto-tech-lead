@@ -1,0 +1,13 @@
+{
+ "apartados": [
+  {"titulo": "1.6 Hipótesis (Si es pertinente)", "control": "tesis_1_6", "motivo": "ADR-0093: la tesis se guía por preguntas de investigación"},
+  {"titulo": "1.7 Variables (Si es pertinente)", "control": "tesis_1_7", "motivo": "ADR-0093: las variables formaban parte de las hipótesis"}
+ ],
+ "tramos": [
+  {
+   "desde": "Concepto de Tesis:",
+   "hasta": "Cuando sea necesario hacer una aclaración en una tabla, cuadro, gráfica o figura, se incluirá como pie de tabla, cuadro, gráfica o figura.",
+   "motivo": "Páginas de la guía institucional antes del índice; la directora autorizó quitarlas (revisión 1, 2026-10-08)"
+  }
+ ]
+}
