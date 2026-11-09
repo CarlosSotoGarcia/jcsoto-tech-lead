@@ -19,6 +19,7 @@ Versión de trabajo: **v05**, desde `borrador/v05/`. El autor pidió crear la v0
 | 19 | 4.1 o nota metodológica | **Decidido (2026-10-08): esperar al análisis de similitud;** si el porcentaje es bajo, no se agrega la declaración. Declaración del uso de IA en la redacción (decisión 13). | Plan § 10 | Director |
 | 23 | 6.3 y Loom | La *skill* 2 no valida en código que cada criterio tenga un caso, y la referencia al criterio es su texto completo (frágil si el criterio se reescribe). Decidir si se agrega la validación y un identificador estable de criterio, y mencionarlo en 6.3 si queda como trabajo futuro. | v04, 2026-09-29 | — |
 | 24 | 5.2.14 | Si se hace la calificación por una persona (punto 1): reportar el acuerdo con la evaluación automática (porcentaje y kappa de Cohen) y el tiempo de calificación anotado en la bitácora del plan de sesiones. | ADR-0090 | Punto 1 |
+| 29 | Expediente de titulación | Reunir los requisitos de obtención del grado según la lista de cotejo de la División (`itz/documentación/CheckList_ObtenGrado.docx`): prórroga, idioma, kárdex, carta del comité, cesión de derechos, no conflicto de intereses, producto de alto impacto (aclarar), carta de originalidad (Turnitin inactivo), no adeudo, pago de derechos y autorización de impresión, más los documentos del expediente. Cruce de lo que hay y lo que falta en [06-requisitos-obtencion-de-grado.md](06-requisitos-obtencion-de-grado.md). | Lista de cotejo de la División y segunda revisión de requisitos, 2026-11-09 | Autor, comité, Coordinación y Servicios Escolares |
 
 ## Hechos
 
